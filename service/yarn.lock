@@ -2519,6 +2519,11 @@ cookie@0.4.0:
   resolved "https://registry.npm.taobao.org/cookie/download/cookie-0.4.0.tgz#beb437e7022b3b6d49019d088665303ebe9c14ba"
   integrity sha1-vrQ35wIrO21JAZ0IhmUwPr6cFLo=
 
+cookie@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.npm.taobao.org/cookie/download/cookie-0.3.1.tgz#e7e0a1f9ef43b4c8ba925c5c5a96e806d16873bb"
+  integrity sha1-5+Ch+e9DtMi6klxcWpboBtFoc7s=
+
 cookiejar@^2.1.0:
   version "2.1.2"
   resolved "https://registry.npm.taobao.org/cookiejar/download/cookiejar-2.1.2.tgz#dd8a235530752f988f9a0844f3fc589e3111125c"
@@ -5685,6 +5690,11 @@ multer@1.4.1:
     type-is "^1.6.4"
     xtend "^4.0.0"
 
+mustache@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.npm.taobao.org/mustache/download/mustache-3.0.1.tgz#873855f23aa8a95b150fb96d9836edbc5a1d248a"
+  integrity sha1-hzhV8jqoqVsVD7ltmDbtvFodJIo=
+
 mz@^2.4.0:
   version "2.7.0"
   resolved "https://registry.npm.taobao.org/mz/download/mz-2.7.0.tgz#95008057a56cafadc2bc63dde7f9ff6955948e32"
@@ -7725,6 +7735,11 @@ stack-generator@^2.0.1:
   dependencies:
     stackframe "^1.0.4"
 
+stack-trace@0.0.10:
+  version "0.0.10"
+  resolved "https://registry.npm.taobao.org/stack-trace/download/stack-trace-0.0.10.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fstack-trace%2Fdownload%2Fstack-trace-0.0.10.tgz#547c70b347e8d32b4e108ea1a2a159e5fdde19c0"
+  integrity sha1-VHxws0fo0ytOEI6hoqFZ5f3eGcA=
+
 stack-utils@^1.0.1:
   version "1.0.2"
   resolved "https://registry.npm.taobao.org/stack-utils/download/stack-utils-1.0.2.tgz#33eba3897788558bebfc2db059dc158ec36cebb8"
@@ -8991,6 +9006,15 @@ yn@^3.0.0:
   version "3.1.0"
   resolved "https://registry.npm.taobao.org/yn/download/yn-3.1.0.tgz#fcbe2db63610361afcc5eb9e0ac91e976d046114"
   integrity sha1-/L4ttjYQNhr8xeueCskel20EYRQ=
+
+youch@^2.0.10:
+  version "2.0.10"
+  resolved "https://registry.npm.taobao.org/youch/download/youch-2.0.10.tgz#e0f6312b12304fd330a0c4a0e0925b0123f7d495"
+  integrity sha1-4PYxKxIwT9MwoMSg4JJbASP31JU=
+  dependencies:
+    cookie "^0.3.1"
+    mustache "^3.0.0"
+    stack-trace "0.0.10"
 
 zen-observable-ts@^0.8.19:
   version "0.8.19"

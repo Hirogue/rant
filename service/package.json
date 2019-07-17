@@ -44,7 +44,8 @@
     "rxjs": "^6.3.3",
     "sqlite": "^3.0.3",
     "stacktrace-js": "^2.0.0",
-    "typeorm": "^0.2.18"
+    "typeorm": "^0.2.18",
+    "youch": "^2.0.10"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.5.0",
