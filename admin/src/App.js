@@ -1,20 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { LocaleProvider } from 'antd';
+import moment from 'moment';
+
+import zh_CN from 'antd/lib/locale-provider/zh_CN';
+import 'moment/locale/zh-cn';
 import './App.css';
-import { Button } from 'antd';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <Button type="primary">Learn Rant</Button>
-      </header>
-    </div>
-  );
-}
+import BaseLayout from '@/layouts/BaseLayout';
+import UserLayout from '@/layouts/UserLayout';
 
-export default App;
+moment.locale('zh-cn');
+
+export default () => (
+  <LocaleProvider locale={zh_CN}>
+    <Router>
+      <Switch>
+
+        <Route exact path="/" >
+          <Redirect to="/studio/home" />
+        </Route>
+        <Route exact path="/studio" >
+          <Redirect to="/studio/home" />
+        </Route>
+        <Route path="/studio/:page" component={BaseLayout} />
+
+        <Route exact path="/user" component={UserLayout} >
+          <Redirect to="/user/login" />
+        </Route>
+        <Route path="/user/:page" component={UserLayout} />
+
+      </Switch>
+    </Router>
+  </LocaleProvider>
+);
