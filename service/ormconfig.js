@@ -7,6 +7,6 @@ module.exports = {
     dropSchema: true,
     synchronize: true,
     entities: [resolve('./**/*.model.js')],
-    seeds: [resolve('./**/*.seed.ts')],
-    factories: [resolve('./**/*.factory.ts')],
+    seeds: ['./src/database/seeds/**/*.seed.ts'],
+    factories: ['./src/database/seeds/**/*.factory.ts'],
 };

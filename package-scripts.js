@@ -4,7 +4,8 @@ module.exports = {
   scripts: {
 
     db: {
-      init: "node ./scripts/database/init-db.sh.js"
+      init: "node ./scripts/database/init-db.sh.js",
+      seed: "cd ./service && yarn db:seed"
     },
 
     docker: {
@@ -14,14 +15,14 @@ module.exports = {
     },
 
     install: {
-      default: npsUtils.concurrent.nps('install.server', 'install.admin'),
-      server: 'cd ./service && yarn',
+      default: npsUtils.concurrent.nps('install.service', 'install.admin'),
+      service: 'cd ./service && yarn',
       admin: 'cd ./admin && yarn'
     },
 
     dev: {
-      default: npsUtils.concurrent.nps('dev.server', 'dev.admin'),
-      server: 'cd ./service && yarn dev',
+      default: npsUtils.concurrent.nps('dev.service', 'dev.admin'),
+      service: 'cd ./service && yarn dev',
       admin: 'cd ./admin && yarn dev'
     }
   }
