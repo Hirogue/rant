@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import * as productionConfig from './production';
 
-let config = {
+let Config = {
     port: 8000,
     hostName: '0.0.0.0',
 
@@ -9,8 +9,8 @@ let config = {
 };
 
 if (process.env.NODE_ENV === 'production') {
-    config = _.merge(config, productionConfig.default);
+    Config = _.merge(Config, productionConfig.default);
 }
 
-export { config };
-export default config;
+export { Config };
+export default Config;
