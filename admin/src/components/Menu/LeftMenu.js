@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
 
 import './LeftMenu.less';
@@ -18,7 +17,7 @@ export default (props) => {
         <Menu theme="dark" defaultSelectedKeys={['home']} mode="inline" onSelect={onSelect}>
             <Menu.Item key="home">
                 <Icon type="dashboard" />
-                <span>仪表盘</span>
+                <span>首页看板</span>
             </Menu.Item>
             <Menu.Item key="users">
                 <Icon type="team" />
