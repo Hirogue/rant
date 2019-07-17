@@ -3,6 +3,7 @@ import { RenderModule } from 'nest-next';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { config } from './config';
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -15,9 +16,9 @@ async function bootstrap() {
   const renderer = server.get(RenderModule);
   renderer.register(server, app);
 
-  server.enableCors();
+  server.enableCors(config.cors);
   server.useGlobalPipes(new ValidationPipe());
 
-  await server.listen(8000);
+  await server.listen(config.port, config.hostName);
 }
 bootstrap();
