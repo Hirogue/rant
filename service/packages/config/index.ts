@@ -1,11 +1,16 @@
 import * as _ from 'lodash';
 import * as productionConfig from './production';
 
+const ormConfig = require('../../../ormconfig');
+
 let Config = {
     port: 8000,
     hostName: '0.0.0.0',
+    defaultPassword: '12345678',
 
     cors: {},
+
+    orm: ormConfig
 };
 
 if (process.env.NODE_ENV === 'production') {
