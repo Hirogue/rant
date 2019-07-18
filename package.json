@@ -8,7 +8,7 @@
   "scripts": {
     "r": "nps",
     "dev": "nps dev",
-    "boot": "lerna bootstrap"
+    "boot": "lerna bootstrap && nps install"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
