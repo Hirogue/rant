@@ -1,6 +1,6 @@
 {
   "name": "rant",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "index.js",
   "repository": "git@github.com:rantstack/rant.git",
   "author": "roylin <1002591652@qq.com>",
@@ -8,7 +8,7 @@
   "scripts": {
     "r": "nps",
     "dev": "nps dev",
-    "boot": "lerna bootstrap && nps install"
+    "boot": "lerna bootstrap --hoist && nps install"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
