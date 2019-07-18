@@ -8,11 +8,12 @@
   "scripts": {
     "r": "nps",
     "dev": "nps dev",
-    "ic": "nps install"
+    "boot": "lerna bootstrap"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
     "cz-conventional-changelog": "^2.1.0",
+    "lerna": "^3.15.0",
     "nps": "^5.9.5",
     "nps-utils": "^1.7.0",
     "prettier": "^1.18.2",
