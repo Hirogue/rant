@@ -2,8 +2,11 @@ import * as Nextjs from 'next';
 import { RenderModule } from 'nest-next';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
+import { ExceptionsFilter } from './common/filters';
 import { AppModule } from './app.module';
-import { Logger, Config } from '../packages';
+import { Logger } from './libs/logger';
+import { Config } from '../config';
+
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -17,6 +20,7 @@ async function bootstrap() {
 
   server.enableCors(Config.cors);
   server.useGlobalPipes(new ValidationPipe());
+  server.useGlobalFilters(new ExceptionsFilter());
   server.useGlobalInterceptors(new ClassSerializerInterceptor(new Reflector()));
 
   await server.listen(Config.port, Config.hostName, () => {

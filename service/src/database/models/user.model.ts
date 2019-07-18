@@ -1,8 +1,8 @@
 import * as bcrypt from 'bcryptjs';
 import { Entity, Column, BeforeInsert } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { Base } from './base.model';
-import { Config } from '../../../packages';
+import { Base } from './base';
+import { Config } from '../../../config';
 
 @Entity()
 export class User extends Base {
