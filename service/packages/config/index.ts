@@ -4,7 +4,7 @@ import * as productionConfig from './production';
 const ormConfig = require('../../../ormconfig');
 
 let Config = {
-    port: 8000,
+    port: 3000,
     hostName: '0.0.0.0',
     defaultPassword: '12345678',
 
