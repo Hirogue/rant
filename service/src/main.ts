@@ -1,5 +1,5 @@
 import * as Nextjs from 'next';
-import { RenderModule } from 'nest-next';
+import { RenderModule, RenderService } from 'nest-next';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
 import { ExceptionsFilter } from './common/filters';
@@ -7,11 +7,8 @@ import { AppModule } from './app.module';
 import { Logger } from './libs/logger';
 import { Config } from '../config';
 
-
-const dev = process.env.NODE_ENV !== 'production';
-
 async function bootstrap() {
-  const app = Nextjs({ dev });
+  const app = Nextjs(Config.next);
   await app.prepare();
 
   const server = await NestFactory.create(AppModule, { logger: new Logger() });
@@ -20,7 +17,7 @@ async function bootstrap() {
 
   server.enableCors(Config.cors);
   server.useGlobalPipes(new ValidationPipe());
-  server.useGlobalFilters(new ExceptionsFilter());
+  server.useGlobalFilters(new ExceptionsFilter(server.get(RenderService)));
   server.useGlobalInterceptors(new ClassSerializerInterceptor(new Reflector()));
 
   await server.listen(Config.port, Config.hostName, () => {
