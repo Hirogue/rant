@@ -1,12 +1,13 @@
-import * as Youch from 'youch';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
+import { ApolloError } from 'apollo-server-core';
+import { IncomingMessage, ServerResponse } from 'http';
 import * as moment from 'moment';
+import { ErrorResponse, RenderService } from 'nest-next';
 import { parse as parseUrl } from 'url';
-import { RenderService, ErrorResponse } from 'nest-next';
-import { Catch, ArgumentsHost, HttpException, ExceptionFilter, HttpStatus } from '@nestjs/common';
-import { Logger } from '../../libs/logger';
+import * as Youch from 'youch';
 import Config from '../../../config';
-import { ServerResponse, IncomingMessage } from 'http';
-
+import { Logger } from '../../libs/logger';
+import { ApolloException } from '../exceptions/apollo.exception';
 
 @Catch()
 export class ExceptionsFilter implements ExceptionFilter {
@@ -69,27 +70,36 @@ export class ExceptionsFilter implements ExceptionFilter {
             return;
         }
 
-
-        Logger.error('exception:', exception);
+        Logger.error('exception:', exception.toString());
 
         const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
 
         if (exception instanceof HttpException) {
-            const status = exception.getStatus();
-            Logger.error(
-                `Catch http exception at ${request.method} ${request.url} ${status}`
-            );
 
-            response
-                .status(status)
-                .send({
+            const status = exception.getStatus();
+
+            if (response && request) {
+                Logger.error(
+                    `Catch http exception at ${request.method} ${request.url} ${status}`
+                );
+                response.status(status).send({
                     ...exception,
                     timestamp,
                     path: request.url
                 });
+            }
+
+            if (exception instanceof ApolloException) {
+                throw new ApolloError(exception.getMessage(), status.toString());
+            }
+
+            throw new ApolloError('Unknown Exception', status.toString());
+
         } else {
+
+            Logger.error('INTERNAL_SERVER_ERROR');
+
             if (process.env.NODE_ENV !== 'production' && !request.xhr) {
-                Logger.error('INTERNAL_SERVER_ERROR');
 
                 const youch = new Youch(exception, request);
                 const html = await youch
@@ -106,6 +116,7 @@ export class ExceptionsFilter implements ExceptionFilter {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .send(html);
             } else {
+
                 response
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .send({

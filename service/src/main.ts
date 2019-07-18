@@ -1,11 +1,11 @@
-import * as Nextjs from 'next';
-import { RenderModule, RenderService } from 'nest-next';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
-import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
-import { ExceptionsFilter } from './common/filters';
-import { AppModule } from './app.module';
-import { Logger } from './libs/logger';
+import { RenderModule, RenderService } from 'nest-next';
+import * as Nextjs from 'next';
 import { Config } from '../config';
+import { AppModule } from './app.module';
+import { ExceptionsFilter } from './common/filters';
+import { Logger } from './libs/logger';
 
 async function bootstrap() {
   const app = Nextjs(Config.next);
