@@ -12,11 +12,11 @@ export class AuthService {
         private readonly jwtService: JwtService
     ) { }
 
-    async validateUser(account: string, pass: string): Promise<User | null> {
+    async validateUser(account: string, password: string): Promise<User | null> {
 
         const user = await this.usersService.findOneByAccount(account);
         if (user) {
-            const compareRes = await bcrypt.compare(pass, user.password);
+            const compareRes = await bcrypt.compare(password, user.password);
             return compareRes ? user : null;
         }
         return null;
@@ -25,7 +25,7 @@ export class AuthService {
     async login(user: any) {
         const payload = { sub: 'user_token', ...classToPlain(user) };
         return {
-            access_token: this.jwtService.sign(payload),
+            token: this.jwtService.sign(payload),
         };
     }
 }

@@ -8,6 +8,9 @@ export class LoggerMiddleware implements NestMiddleware {
         const statusCode = res.statusCode;
         const logFormat = `${req.method} ${req.originalUrl} ${req.ip} ${statusCode}`;
 
+        Logger.debug('payload', req['user']);
+        Logger.debug('payload', req.body);
+
         next();
 
         if (statusCode >= 500) {

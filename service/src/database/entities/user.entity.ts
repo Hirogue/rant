@@ -11,12 +11,11 @@ export class User extends Base {
 
     @Field()
     @Column({ unique: true })
-    account: string;
+    account: String;
 
-    @Field()
     @Exclude({ toPlainOnly: true })
     @Column()
-    password: string;
+    password: String;
 
     @BeforeInsert()
     async beforeInsert() {

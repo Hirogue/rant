@@ -99,7 +99,7 @@ export class ExceptionsFilter implements ExceptionFilter {
 
             Logger.error('INTERNAL_SERVER_ERROR');
 
-            if (process.env.NODE_ENV !== 'production' && !request.xhr) {
+            if (process.env.NODE_ENV !== 'production' && !!request && !request.xhr) {
 
                 const youch = new Youch(exception, request);
                 const html = await youch

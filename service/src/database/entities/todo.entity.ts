@@ -8,5 +8,5 @@ export class Todo extends Base {
 
     @Field()
     @Column({ length: 500 })
-    title: string;
+    title: String;
 }
