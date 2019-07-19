@@ -1,24 +1,17 @@
-import { range } from 'lodash';
 import { plainToClass } from 'class-transformer';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Todo } from '../../database/entities';
 import { NewTodoInput, EditTodoInput } from '../dtos';
 import { TodoPaginated } from '../types';
 
 @Injectable()
-export class TodoService implements OnModuleInit {
+export class TodoService {
     constructor(
         @InjectRepository(Todo)
         private readonly todoRepository: Repository<Todo>
     ) { }
-
-    async onModuleInit() {
-        const todoList = range(50).map(i => ({ title: `todo${i}` }));
-
-        await this.todoRepository.save(plainToClass(Todo, todoList));
-    }
 
     async query(payload: any) {
         const qb = this.todoRepository.createQueryBuilder('t');

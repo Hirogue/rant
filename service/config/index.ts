@@ -34,7 +34,7 @@ let Config = {
         type: 'sqlite',
         database: 'db.sql',
         logging: true,
-        dropSchema: true,
+        dropSchema: false,
         synchronize: true,
         entities: [__dirname + '/../**/*.entity{.ts,.js}']
     },
