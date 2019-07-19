@@ -3,8 +3,9 @@ import { plainToClass } from 'class-transformer';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { Todo, TodoPaginated } from '../models';
+import { Todo } from '../../database/entities';
 import { NewTodoInput, EditTodoInput } from '../dtos';
+import { TodoPaginated } from '../types';
 
 @Injectable()
 export class TodoService implements OnModuleInit {

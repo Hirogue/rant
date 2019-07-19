@@ -1,8 +1,9 @@
 import { NotFoundException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Todo } from '../../database/entities';
 import { EditTodoInput, NewTodoInput, TodoArgs } from '../dtos';
-import { Todo, TodoPaginated } from '../models';
 import { TodoService } from '../services';
+import { TodoPaginated } from '../types';
 
 @Resolver(of => Todo)
 export class TodoResolver {

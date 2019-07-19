@@ -2,9 +2,9 @@ import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { RenderModule, RenderService } from 'nest-next';
 import * as Nextjs from 'next';
-import { Config } from '../config';
 import { AppModule } from './app.module';
 import { ExceptionsFilter } from './common/filters';
+import { Config } from '../config';
 import { Logger } from './libs/logger';
 
 async function bootstrap() {

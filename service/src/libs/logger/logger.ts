@@ -1,13 +1,13 @@
-import * as _ from 'lodash';
-import * as path from 'path';
-import * as Log4js from 'log4js';
-import * as Util from 'util';
-import * as Moment from 'moment';
-import * as StackTrace from 'stacktrace-js';
-import Chalk from 'chalk';
 import { LoggerService } from '@nestjs/common';
-import { LoggerLevel } from './logger-level.enum';
+import Chalk from 'chalk';
+import * as _ from 'lodash';
+import * as Log4js from 'log4js';
+import * as Moment from 'moment';
+import * as path from 'path';
+import * as StackTrace from 'stacktrace-js';
+import * as Util from 'util';
 import { ContextTrace } from './context-trace';
+import { LoggerLevel } from './logger-level.enum';
 
 const getInstance = () => {
     Log4js.addLayout('Rant', (logConfig: any) => {

@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import { resolve } from 'path';
 import * as productionConfig from './production';
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -34,10 +33,10 @@ let Config = {
     orm: {
         type: 'sqlite',
         database: 'db.sql',
-        logging: false,
+        logging: true,
         dropSchema: true,
         synchronize: true,
-        entities: [resolve('./**/*.model.js')]
+        entities: [__dirname + '/../**/*.entity{.ts,.js}']
     },
 
     graphql: {
