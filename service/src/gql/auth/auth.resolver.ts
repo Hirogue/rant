@@ -1,11 +1,11 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { AuthService } from '../../auth/auth.service';
-import { Me } from '../../common/decorators';
-import { GqlJwtAuthGuard } from '../../common/guards';
-import { User } from '../../database/entities';
-import { LoginInput } from '../dtos';
-import { Auth } from '../types';
+import { User } from '../../database';
+import { AuthService } from './auth.service';
+import { Auth } from './auth.type';
+import { GqlJwtAuthGuard } from './gql-jwt-auth.guard';
+import { LoginInput } from './login.input';
+import { Me } from './me.decorator';
 
 
 @Resolver(of => Auth)

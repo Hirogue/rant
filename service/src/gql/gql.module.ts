@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
-import { Config } from "../../config";
+import { Config } from "../config";
 import { Todo, User } from "../database/entities";
-import { AuthResolver, TodoResolver } from "./resolvers";
-import { TodoService, UsersService } from "./services";
+import { AuthModule } from "./auth";
+import { UserModule } from "./user";
 
 @Module({
     imports: [
@@ -13,14 +13,9 @@ import { TodoService, UsersService } from "./services";
         GraphQLModule.forRoot({
             ...Config.graphql,
             context: ({ req }) => ({ req }),
-        })
-    ],
-    providers: [
-        UsersService,
-        TodoService,
-        TodoResolver,
-        AuthResolver
-    ],
-    exports: [UsersService]
+        }),
+        UserModule,
+        AuthModule,
+    ]
 })
 export class GqlModule { }

@@ -1,14 +1,14 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { Logger } from '../../libs';
+import { Logger } from './logger';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
+
     use(req: Request, res: Response, next: Function) {
         const statusCode = res.statusCode;
         const logFormat = `${req.method} ${req.originalUrl} ${req.ip} ${statusCode}`;
 
-        Logger.debug('payload', req['user']);
         Logger.debug('payload', req.body);
 
         next();

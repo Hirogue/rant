@@ -6,8 +6,8 @@ import { ErrorResponse, RenderService } from 'nest-next';
 import { parse as parseUrl } from 'url';
 import * as Youch from 'youch';
 import Config from '../../../config';
-import { Logger } from '../../libs/logger';
-import { ApolloException } from '../exceptions/apollo.exception';
+import { Logger } from '../../logger';
+import { ApolloException } from '../exceptions';
 
 @Catch()
 export class ExceptionsFilter implements ExceptionFilter {

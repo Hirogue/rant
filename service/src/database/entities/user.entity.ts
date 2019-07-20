@@ -3,7 +3,7 @@ import { Entity, Column, BeforeInsert } from 'typeorm';
 import { ObjectType, Field } from 'type-graphql';
 import { Exclude } from 'class-transformer';
 import { Base } from './base';
-import { Config } from '../../../config';
+import { Config } from '../../config';
 
 @Entity()
 @ObjectType()

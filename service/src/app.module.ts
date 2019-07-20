@@ -1,19 +1,15 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { RenderModule } from 'nest-next';
-import { AppController } from './app.controller';
-import { CommonModule } from './common/common.module';
-import { LoggerMiddleware } from './common/middlewares';
-import { AuthModule } from './auth/auth.module';
-import { GqlModule } from './gql/gql.module';
+import { LoggerMiddleware } from './common/logger';
+import { CommonModule } from './common';
+import { GqlModule } from './gql';
 
 @Module({
   imports: [
     RenderModule,
     CommonModule,
-    AuthModule,
     GqlModule
   ],
-  controllers: [AppController]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

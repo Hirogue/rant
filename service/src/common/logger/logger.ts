@@ -1,4 +1,4 @@
-import { LoggerService } from '@nestjs/common';
+import { LoggerService as ILoggerService, Injectable } from '@nestjs/common';
 import Chalk from 'chalk';
 import * as _ from 'lodash';
 import * as Log4js from 'log4js';
@@ -87,7 +87,8 @@ const getInstance = () => {
     return logger;
 }
 
-export class Logger implements LoggerService {
+@Injectable()
+export class Logger implements ILoggerService {
 
     static instance = null;
 
