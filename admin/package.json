@@ -45,7 +45,7 @@
   "dependencies": {
     "@ant-design/pro-layout": "^4.5.9",
     "@antv/data-set": "^0.10.2",
-    "@apollo/react-hooks": "^0.1.0-beta.11",
+    "@apollo/react-hooks": "^0.1.0-beta.7",
     "antd": "^3.20.0",
     "apollo-boost": "^0.4.3",
     "classnames": "^2.2.6",

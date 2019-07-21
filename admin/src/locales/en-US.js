@@ -9,6 +9,7 @@ export default {
   'layout.user.link.help': 'Help',
   'layout.user.link.privacy': 'Privacy',
   'layout.user.link.terms': 'Terms',
+  'layout.user.description': 'Mid-platform Solution Based on Nest and Apollo',
   'app.preview.down.block': 'Download this page to your local project',
   ...globalHeader,
   ...menu,

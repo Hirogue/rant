@@ -7,4 +7,6 @@ Logger.useDefaults({
 
 const logger = Logger.get('Rant');
 
+logger.debug('log test ...');
+
 export default logger;
