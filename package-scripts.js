@@ -6,7 +6,7 @@ module.exports = {
     dev: {
       default: npsUtils.concurrent.nps('dev.admin', 'dev.service'),
       admin: "cd ./admin && yarn start",
-      service: "cd ./service && yarn dev",
+      service: "cd ./service && yarn dev"
     },
 
     install: {

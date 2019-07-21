@@ -6,6 +6,7 @@ import { Config } from './config';
 import { AppModule } from './app.module';
 import { ExceptionsFilter } from './common/core';
 import { Logger } from './common/logger';
+import '../local';
 
 async function bootstrap() {
   const app = Nextjs(Config.next);

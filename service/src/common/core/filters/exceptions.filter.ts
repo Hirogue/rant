@@ -78,22 +78,11 @@ export class ExceptionsFilter implements ExceptionFilter {
 
             const status = exception.getStatus();
 
-            if (response && request) {
-                Logger.error(
-                    `Catch http exception at ${request.method} ${request.url} ${status}`
-                );
-                response.status(status).send({
-                    ...exception,
-                    timestamp,
-                    path: request.url
-                });
-            }
-
             if (exception instanceof ApolloException) {
                 throw new ApolloError(exception.getMessage(), status.toString());
             }
 
-            throw new ApolloError('Unknown Exception', status.toString());
+            throw new ApolloError(exception.toString() || 'Unknown Exception', status.toString());
 
         } else {
 
