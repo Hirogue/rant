@@ -123,6 +123,25 @@ export default {
           component: './dashboard/analysis',
         },
         {
+          name: 'contents',
+          icon: 'container',
+          path: '/contents',
+          component: './contents',
+          routes: [
+            {
+              name: 'articles',
+              path: '/contents/articles',
+              component: './contents/articles',
+            },
+          ],
+        },
+        {
+          name: 'products',
+          icon: 'appstore',
+          path: '/products',
+          component: './products',
+        },
+        {
           name: 'users',
           icon: 'team',
           path: '/users',

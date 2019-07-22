@@ -1,3 +1,4 @@
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import {
   Avatar,
   Button,
@@ -13,15 +14,14 @@ import {
   Modal,
   Progress,
   Radio,
+  Result,
   Row,
   Select,
-  Result,
 } from 'antd';
-import React, { Component } from 'react';
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
-import { findDOMNode } from 'react-dom';
 import moment from 'moment';
+import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
 import styles from './style.less';
 
 const FormItem = Form.Item;
@@ -321,7 +321,6 @@ class Users extends Component {
             <Card
               className={styles.listCard}
               bordered={false}
-              title="基本列表"
               style={{
                 marginTop: 24,
               }}
