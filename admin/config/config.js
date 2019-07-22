@@ -93,6 +93,14 @@ export default {
       ],
     },
     {
+      path: '/403',
+      component: './403',
+    },
+    {
+      path: '/404',
+      component: './404',
+    },
+    {
       path: '/',
       component: '../layouts/BasicLayout',
       Routes: ['src/pages/Authorized'],
@@ -100,17 +108,33 @@ export default {
       routes: [
         {
           path: '/',
-          name: 'welcome',
-          icon: 'smile',
-          component: './Welcome',
+          redirect: '/dashboard/workplace',
         },
         {
-          component: './404',
+          name: 'dashboard.workplace',
+          icon: 'home',
+          path: '/dashboard/workplace',
+          component: './dashboard/workplace',
+        },
+        {
+          name: 'dashboard.analysis',
+          icon: 'dashboard',
+          path: '/dashboard/analysis',
+          component: './dashboard/analysis',
+        },
+        {
+          name: 'users',
+          icon: 'team',
+          path: '/users',
+          component: './users',
+        },
+        {
+          name: 'settings',
+          icon: 'setting',
+          path: '/settings',
+          component: './settings',
         },
       ],
-    },
-    {
-      component: './404',
     },
   ],
   // Theme for antd: https://ant.design/docs/react/customize-theme-cn
