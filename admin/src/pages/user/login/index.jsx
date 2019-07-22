@@ -1,40 +1,58 @@
-import { Alert, Checkbox, Icon } from 'antd';
-import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
-import React, { Component, useState } from 'react';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import Link from 'umi/link';
-import { connect } from 'dva';
-import LoginComponents from './components/Login';
 import Logger from '@/utils/logger';
+import { useMutation } from '@apollo/react-hooks';
+import React, { useState } from 'react';
+import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
+import router from 'umi/router';
+import LoginComponents from './components/Login';
+import { M_LOGIN } from './gql';
 import styles from './style.less';
-import { M_LOGIN, Q_ME } from './gql';
+import { getPageQuery } from './utils/utils';
 
-const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginComponents;
-
-const renderMessage = content => (
-  <Alert
-    style={{
-      marginBottom: 24,
-    }}
-    message={content}
-    type="error"
-    showIcon
-  />
-);
+const { Tab, UserName, Password, Submit } = LoginComponents;
 
 export default () => {
   const [loginForm, setLoginForm] = useState(null);
   const [login, { loading }] = useMutation(M_LOGIN, {
-    variables: { loginData: loginForm ? loginForm.props.form.getFieldsValue() : null },
     update: (proxy, { data }) => {
-      Logger.log('-->', data);
+      Logger.log('login data:', data);
 
-      // TODO: handle login
+      const login = data.login;
+
+      if (login && login.token) {
+        localStorage.setItem('token', login.token);
+
+        const urlParams = new URL(window.location.href);
+        const params = getPageQuery();
+        let { redirect } = params;
+
+        if (redirect) {
+          const redirectUrlParams = new URL(redirect);
+
+          if (redirectUrlParams.origin === urlParams.origin) {
+            redirect = redirect.substr(urlParams.origin.length);
+
+            if (redirect.match(/^\/.*#/)) {
+              redirect = redirect.substr(redirect.indexOf('#') + 1);
+            }
+          } else {
+            window.location.href = redirect;
+            return;
+          }
+        }
+
+        Logger.log('redirect:', redirect);
+
+        router.replace(redirect || '/');
+      }
     },
   });
 
   const handleSubmit = (err, values) => {
-    login();
+    if (err) return false;
+
+    login({
+      variables: { loginData: values },
+    });
   };
 
   return (
@@ -50,14 +68,6 @@ export default () => {
             id: 'user-login.login.tab-login-credentials',
           })}
         >
-          {/* {status === 'error' &&
-            loginType === 'account' &&
-            !submitting &&
-            this.renderMessage(
-              formatMessage({
-                id: 'user-login.login.message-invalid-credentials',
-              }),
-            )} */}
           <UserName
             name="account"
             placeholder={`${formatMessage({
@@ -101,7 +111,7 @@ export default () => {
             <FormattedMessage id="user-login.login.forgot-password" />
           </a>
         </div>
-        <Submit loading={loading}>
+        <Submit loading={false}>
           <FormattedMessage id="user-login.login.login" />
         </Submit>
       </LoginComponents>

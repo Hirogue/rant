@@ -6,7 +6,9 @@ const dev = process.env.NODE_ENV !== 'production';
 
 let Config = {
   apollo: {
-    uri: 'http://127.0.0.1:3000/graphql',
+    link: {
+      uri: 'http://127.0.0.1:3000/graphql',
+    },
   },
 
   logger: {
