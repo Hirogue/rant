@@ -11,6 +11,8 @@ export default {
   'user-login.login.sign-in-with': 'Sign in with',
   'user-login.login.signup': 'Sign up',
   'user-login.login.login': 'Login',
+  'user-login.login.result.account.notexist': 'Account does not exist',
+  'user-login.login.result.password.incorrect': 'Incorrect password',
   'user-login.login.input.account.empty': 'Account cannot be empty',
   'user-login.login.input.account.length': 'Incorrect account length',
   'user-login.login.input.password.empty': 'Password cannot be empty',

@@ -17,7 +17,7 @@ let Config = {
 
     jwt: {
         secret: 'secretKey',
-        signOptions: { expiresIn: '360s' },
+        signOptions: { expiresIn: '10d' },
     },
 
     cors: {},

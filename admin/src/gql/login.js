@@ -8,8 +8,8 @@ export const M_LOGIN = gql`
   }
 `;
 
-export const Q_ME = gql`
-  query me {
+export const Q_FETCH_CURRENT_USER = gql`
+  query fetchCurrentUser {
     me {
       id
       account

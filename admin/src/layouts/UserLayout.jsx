@@ -1,11 +1,10 @@
 import SelectLang from '@/components/SelectLang';
-import apolloClient from '@/utils/apollo-client';
+import BlankLayout from '@/layouts/BlankLayout';
 import { DefaultFooter, getMenuData, getPageTitle } from '@ant-design/pro-layout';
-import { ApolloProvider } from '@apollo/react-hooks';
 import { connect } from 'dva';
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
+import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import Link from 'umi/link';
 import logo from '../assets/logo.svg';
 import styles from './UserLayout.less';
@@ -25,7 +24,7 @@ const UserLayout = props => {
   } = props;
   const { breadcrumb } = getMenuData(routes);
   return (
-    <ApolloProvider client={apolloClient}>
+    <BlankLayout>
       <DocumentTitle
         title={getPageTitle({
           pathname: location.pathname,
@@ -55,7 +54,7 @@ const UserLayout = props => {
           <DefaultFooter />
         </div>
       </DocumentTitle>
-    </ApolloProvider>
+    </BlankLayout>
   );
 };
 

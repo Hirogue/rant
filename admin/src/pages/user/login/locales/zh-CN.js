@@ -10,6 +10,8 @@ export default {
   'user-login.login.sign-in-with': '其他登录方式',
   'user-login.login.signup': '注册账户',
   'user-login.login.login': '登录',
+  'user-login.login.result.account.notexist': '账户名不存在',
+  'user-login.login.result.password.incorrect': '密码不正确',
   'user-login.login.input.account.empty': '账户名不能为空',
   'user-login.login.input.account.length': '账户名长度不正确',
   'user-login.login.input.password.empty': '密码不能为空',

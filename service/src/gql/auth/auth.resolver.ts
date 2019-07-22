@@ -1,5 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Logger } from '../../common/logger';
 import { User } from '../../database';
 import { AuthService } from './auth.service';
 import { Auth } from './auth.type';
@@ -17,6 +18,7 @@ export class AuthResolver {
     @Query(returns => User)
     @UseGuards(GqlJwtAuthGuard)
     me(@Me() me) {
+        Logger.log(me)
         return me;
     }
 
