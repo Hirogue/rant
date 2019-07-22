@@ -2,6 +2,7 @@ import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import {
   Avatar,
   Button,
+  Tooltip,
   Card,
   Col,
   DatePicker,
@@ -20,13 +21,14 @@ import {
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { findDOMNode } from 'react-dom';
 import styles from './style.less';
 
 const FormItem = Form.Item;
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
+const ButtonGroup = Button.Group;
 const SelectOption = Select.Option;
 const { Search, TextArea } = Input;
 
@@ -168,10 +170,36 @@ class Users extends Component {
       <div className={styles.extraContent}>
         <RadioGroup defaultValue="all">
           <RadioButton value="all">全部</RadioButton>
-          <RadioButton value="progress">进行中</RadioButton>
-          <RadioButton value="waiting">等待中</RadioButton>
+          <RadioButton value="investor">资金方</RadioButton>
+          <RadioButton value="financer">项目方</RadioButton>
+          <RadioButton value="provider">服务商</RadioButton>
+          <RadioButton value="tourist">游客</RadioButton>
+          <RadioButton value="user">后台用户</RadioButton>
         </RadioGroup>
-        <Search className={styles.extraContentSearch} placeholder="请输入" onSearch={() => ({})} />
+        <Select className={styles.extraStateFilter} defaultValue="lucy">
+          <SelectOption value="jack">Jack</SelectOption>
+          <SelectOption value="lucy">Lucy</SelectOption>
+          <SelectOption value="Yiminghe">yiminghe</SelectOption>
+        </Select>
+        <Search
+          className={styles.extraContentSearch}
+          placeholder="搜索 用户名 | 手机号 | 真实姓名 | 公司"
+          onSearch={() => ({})}
+        />
+        <ButtonGroup className={styles.extraActionList}>
+          <Tooltip title="刷新">
+            <Button icon="reload" />
+          </Tooltip>
+          <Tooltip title="新增">
+            <Button icon="plus" />
+          </Tooltip>
+          <Tooltip title="导入">
+            <Button icon="import" />
+          </Tooltip>
+          <Tooltip title="导出">
+            <Button icon="export" />
+          </Tooltip>
+        </ButtonGroup>
       </div>
     );
     const paginationProps = {
@@ -188,7 +216,7 @@ class Users extends Component {
           <p>{owner}</p>
         </div>
         <div className={styles.listContentItem}>
-          <span>开始时间</span>
+          <span>注册时间</span>
           <p>{moment(createdAt).format('YYYY-MM-DD HH:mm')}</p>
         </div>
         <div className={styles.listContentItem}>
@@ -208,7 +236,7 @@ class Users extends Component {
       <Dropdown
         overlay={
           <Menu onClick={({ key }) => editAndDelete(key, item)}>
-            <Menu.Item key="edit">编辑</Menu.Item>
+            <Menu.Item key="edit">审核</Menu.Item>
             <Menu.Item key="delete">删除</Menu.Item>
           </Menu>
         }
@@ -301,19 +329,34 @@ class Users extends Component {
     };
 
     return (
-      <>
+      <Fragment>
         <PageHeaderWrapper>
           <div className={styles.standardList}>
             <Card bordered={false}>
               <Row>
-                <Col sm={8} xs={24}>
-                  <Info title="我的待办" value="8个任务" bordered />
+                <Col sm={3} xs={24}>
+                  <Info title="用户总数" value="8" bordered />
                 </Col>
-                <Col sm={8} xs={24}>
-                  <Info title="本周任务平均处理时间" value="32分钟" bordered />
+                <Col sm={3} xs={24}>
+                  <Info title="资金方" value="8" bordered />
                 </Col>
-                <Col sm={8} xs={24}>
-                  <Info title="本周完成任务数" value="24个任务" />
+                <Col sm={3} xs={24}>
+                  <Info title="项目方" value="60" bordered />
+                </Col>
+                <Col sm={3} xs={24}>
+                  <Info title="服务商" value="24" bordered />
+                </Col>
+                <Col sm={3} xs={24}>
+                  <Info title="游客" value="8" bordered />
+                </Col>
+                <Col sm={3} xs={24}>
+                  <Info title="后台用户" value="8" bordered />
+                </Col>
+                <Col sm={3} xs={24}>
+                  <Info title="待审核" value="32" bordered />
+                </Col>
+                <Col sm={3} xs={24}>
+                  <Info title="已驳回" value="32" />
                 </Col>
               </Row>
             </Card>
@@ -329,21 +372,6 @@ class Users extends Component {
               }}
               extra={extraContent}
             >
-              <Button
-                type="dashed"
-                style={{
-                  width: '100%',
-                  marginBottom: 8,
-                }}
-                icon="plus"
-                onClick={this.showModal}
-                ref={component => {
-                  // eslint-disable-next-line  react/no-find-dom-node
-                  this.addBtn = findDOMNode(component);
-                }}
-              >
-                添加
-              </Button>
               <List
                 size="large"
                 rowKey="id"
@@ -397,7 +425,7 @@ class Users extends Component {
         >
           {getModalContent()}
         </Modal>
-      </>
+      </Fragment>
     );
   }
 }
