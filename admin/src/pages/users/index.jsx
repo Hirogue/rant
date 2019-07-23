@@ -183,7 +183,7 @@ class Users extends Component {
         </Select>
         <Search
           className={styles.extraContentSearch}
-          placeholder="搜索 用户名 | 手机号 | 真实姓名 | 公司"
+          placeholder="请输入搜索关键词"
           onSearch={() => ({})}
         />
         <ButtonGroup className={styles.extraActionList}>

@@ -2,11 +2,13 @@ import { Avatar, Card, Col, List, Skeleton, Row, Statistic } from 'antd';
 import React, { Component } from 'react';
 import Link from 'umi/link';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { useQuery } from '@apollo/react-hooks';
 import { connect } from 'dva';
 import moment from 'moment';
 import Radar from './components/Radar';
 import EditableLinkGroup from './components/EditableLinkGroup';
 import styles from './style.less';
+import { Q_FETCH_CURRENT_USER } from '@/gql/login';
 
 const links = [
   {
@@ -57,13 +59,10 @@ const PageHeaderContent = ({ currentUser }) => {
       </div>
       <div className={styles.content}>
         <div className={styles.contentTitle}>
-          早安，
-          {currentUser.name}
+          Hi! {currentUser.realname}
           ，祝你开心每一天！
         </div>
-        <div>
-          {currentUser.title} |{currentUser.group}
-        </div>
+        <div>{currentUser.profile}</div>
       </div>
     </div>
   );
@@ -76,9 +75,6 @@ const ExtraContent = () => (
     </div>
     <div className={styles.statItem}>
       <Statistic title="团队内排名" value={8} suffix="/ 24" />
-    </div>
-    <div className={styles.statItem}>
-      <Statistic title="项目访问" value={2223} />
     </div>
   </div>
 );
@@ -272,4 +268,35 @@ class Workplace extends Component {
   }
 }
 
-export default Workplace;
+export default () => {
+  const { loading, data } = useQuery(Q_FETCH_CURRENT_USER, {
+    notifyOnNetworkStatusChange: true,
+  });
+
+  const currentUser = data.me || {};
+
+  return (
+    <PageHeaderWrapper
+      content={<PageHeaderContent currentUser={currentUser} />}
+      extraContent={<ExtraContent />}
+    >
+      <Row gutter={24}>
+        <Col xl={16} lg={24} md={24} sm={24} xs={24}>
+          <Card
+            style={{
+              marginBottom: 24,
+            }}
+            title="快速开始 / 便捷导航"
+            bordered={false}
+            bodyStyle={{
+              padding: 0,
+            }}
+          >
+            <EditableLinkGroup onAdd={() => {}} links={links} linkElement={Link} />
+          </Card>
+        </Col>
+        <Col xl={16} lg={24} md={24} sm={24} xs={24}></Col>
+      </Row>
+    </PageHeaderWrapper>
+  );
+};

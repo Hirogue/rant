@@ -13,6 +13,9 @@ export const Q_FETCH_CURRENT_USER = gql`
     me {
       id
       account
+      avatar
+      realname
+      profile
     }
   }
 `;

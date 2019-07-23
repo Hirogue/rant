@@ -1,9 +1,10 @@
 import * as bcrypt from 'bcryptjs';
-import { Entity, Column, BeforeInsert } from 'typeorm';
-import { ObjectType, Field } from 'type-graphql';
 import { Exclude } from 'class-transformer';
-import { Base } from './base';
+import { Field, ObjectType } from 'type-graphql';
+import { BeforeInsert, Column, Entity } from 'typeorm';
+import { Identity } from '../../common/core/enums';
 import { Config } from '../../config';
+import { Base } from './base';
 
 @Entity()
 @ObjectType()
@@ -16,6 +17,38 @@ export class User extends Base {
     @Exclude({ toPlainOnly: true })
     @Column()
     password: String;
+
+    @Field()
+    @Column({ nullable: true })
+    avatar: String;
+
+    @Field()
+    @Column({ nullable: true })
+    realname: String;
+
+    @Field()
+    @Column({ nullable: true })
+    phone: String;
+
+    @Field()
+    @Column({ nullable: true })
+    idcard: String;
+
+    @Field()
+    @Column({ nullable: true })
+    address: String;
+
+    @Field()
+    @Column({ nullable: true })
+    company: String;
+
+    @Field()
+    @Column({ nullable: true })
+    profile: String;
+
+    @Field()
+    @Column({ type: 'simple-enum', default: Identity.TOURIST })
+    identity: Identity;
 
     @BeforeInsert()
     async beforeInsert() {
