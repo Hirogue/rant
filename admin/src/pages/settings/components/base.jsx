@@ -1,13 +1,15 @@
 import { Button, Form, Input, Select, Upload, message } from 'antd';
 import { FormattedMessage, formatMessage } from 'umi-plugin-react/locale';
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, useState } from 'react';
 import { connect } from 'dva';
 import GeographicView from './GeographicView';
 import PhoneView from './PhoneView';
 import styles from './BaseView.less';
+import { useQuery } from '@apollo/react-hooks';
+import { Q_FETCH_CURRENT_USER } from '@/gql/login';
 
 const FormItem = Form.Item;
-const { Option } = Select; // 头像组件 方便以后独立，增加裁剪之类的功能
+const { Option } = Select;
 
 const AvatarView = ({ avatar }) => (
   <Fragment>
@@ -115,7 +117,7 @@ class BaseView extends Component {
       form: { getFieldDecorator },
     } = this.props;
     return (
-      <div className={styles.baseView} ref={this.getViewDom}>
+      <div className={styles.baseView}>
         <div className={styles.left}>
           <Form layout="vertical" hideRequiredMark>
             <FormItem
@@ -278,11 +280,112 @@ class BaseView extends Component {
           </Form>
         </div>
         <div className={styles.right}>
-          <AvatarView avatar={this.getAvatarURL()} />
+          <AvatarView avatar={getAvatarURL()} />
         </div>
       </div>
     );
   }
 }
 
-export default Form.create()(BaseView);
+const getAvatarURL = currentUser => {
+  if (currentUser) {
+    if (currentUser.avatar) {
+      return currentUser.avatar;
+    }
+
+    const url = 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png';
+    return url;
+  }
+
+  return '';
+};
+
+export default Form.create()(props => {
+  const { form } = props;
+  const { getFieldDecorator } = form;
+
+  const [view, setView] = useState(null);
+  const { loading, data } = useQuery(Q_FETCH_CURRENT_USER, {
+    notifyOnNetworkStatusChange: true,
+  });
+
+  const currentUser = data.me || {};
+
+  const handlerSubmit = e => {
+    e.preventDefault();
+
+    form.validateFields(err => {
+      if (!err) {
+        message.success(
+          formatMessage({
+            id: 'settings.basic.update.success',
+          }),
+        );
+      }
+    });
+  };
+
+  console.log(currentUser);
+
+  return (
+    <div className={styles.baseView} ref={ref => setView(ref)}>
+      <div className={styles.left}>
+        <Form layout="vertical" hideRequiredMark>
+          <FormItem
+            label={formatMessage({
+              id: 'settings.basic.profile',
+            })}
+          >
+            {getFieldDecorator('profile', {
+              initialValue: currentUser.profile,
+              rules: [
+                {
+                  required: true,
+                  message: formatMessage(
+                    {
+                      id: 'settings.basic.profile-message',
+                    },
+                    {},
+                  ),
+                },
+              ],
+            })(
+              <Input.TextArea
+                placeholder={formatMessage({
+                  id: 'settings.basic.profile-placeholder',
+                })}
+                rows={4}
+              />,
+            )}
+          </FormItem>
+          <FormItem
+            label={formatMessage({
+              id: 'settings.basic.address',
+            })}
+          >
+            {getFieldDecorator('address', {
+              initialValue: currentUser.address,
+              rules: [
+                {
+                  required: true,
+                  message: formatMessage(
+                    {
+                      id: 'settings.basic.address-message',
+                    },
+                    {},
+                  ),
+                },
+              ],
+            })(<Input />)}
+          </FormItem>
+          <Button type="primary" onClick={handlerSubmit}>
+            <FormattedMessage id="settings.basic.update" defaultMessage="Update Information" />
+          </Button>
+        </Form>
+      </div>
+      <div className={styles.right}>
+        <AvatarView avatar={getAvatarURL(currentUser)} />
+      </div>
+    </div>
+  );
+});
