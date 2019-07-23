@@ -3,7 +3,20 @@ import { IdentityMaps, UserStatusMaps } from '@/utils/global';
 import Logger from '@/utils/logger';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useQuery } from '@apollo/react-hooks';
-import { Avatar, Button, Card, Col, Input, Radio, Row, Select, Spin, Table, Tooltip } from 'antd';
+import {
+  Avatar,
+  Button,
+  Card,
+  Statistic,
+  Col,
+  Input,
+  Radio,
+  Row,
+  Select,
+  Spin,
+  Table,
+  Tooltip,
+} from 'antd';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
 import React, { Fragment } from 'react';
@@ -65,8 +78,7 @@ const extraContent = refetch => (
 
 const Info = ({ title, value, bordered }) => (
   <div className={styles.headerInfo}>
-    <span>{title}</span>
-    <p>{value}</p>
+    <Statistic title={title} value={value} />
     {bordered && <em />}
   </div>
 );
@@ -93,7 +105,7 @@ const columns = [
   {
     title: '状态',
     dataIndex: 'status',
-    render: val => val,
+    render: val => UserStatusMaps[val],
   },
   {
     title: '注册时间',
