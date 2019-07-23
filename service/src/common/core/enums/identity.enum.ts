@@ -1,4 +1,4 @@
-export enum Identity {
+export enum IdentityEnum {
     USER = 'user',
     INVESTOR = 'investor',
     FINANCER = 'financer',
