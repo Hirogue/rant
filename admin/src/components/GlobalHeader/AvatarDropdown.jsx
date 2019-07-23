@@ -7,12 +7,18 @@ import React from 'react';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
+import { router } from 'umi';
 
 const onMenuClick = e => {
   switch (e.key) {
+    case 'settings':
+      router.push('/settings');
+      break;
     case 'logout':
       logout();
+      break;
     default:
+      break;
   }
 };
 
