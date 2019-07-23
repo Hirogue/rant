@@ -27,7 +27,7 @@ export class UsersResolver {
     }
 
     @Mutation(returns => Boolean)
-    async update(data: UpdateUserInput) {
-        return await this.usersService.save();
+    async update(@Args('updateUserData') data: UpdateUserInput) {
+        return await this.usersService.update(data);
     }
 }

@@ -7,19 +7,21 @@ import { Auth } from './auth.type';
 import { GqlJwtAuthGuard } from './gql-jwt-auth.guard';
 import { LoginInput } from './login.input';
 import { Me } from './me.decorator';
+import { UsersService } from '../user';
 
 
 @Resolver(of => Auth)
 export class AuthResolver {
     constructor(
-        private readonly authService: AuthService
+        private readonly authService: AuthService,
+        private readonly usersService: UsersService,
     ) { }
 
     @Query(returns => User)
     @UseGuards(GqlJwtAuthGuard)
-    me(@Me() me) {
-        Logger.log(me)
-        return me;
+    async me(@Me() me) {
+        Logger.log('current user', me);
+        return await this.usersService.findOne(me.id);
     }
 
     @Mutation(returns => Auth)

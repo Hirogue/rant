@@ -16,6 +16,7 @@ export const Q_FETCH_CURRENT_USER = gql`
       avatar
       realname
       profile
+      address
     }
   }
 `;

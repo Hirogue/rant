@@ -53,3 +53,9 @@ export const Q_GET_USERS = gql`
     }
   }
 `;
+
+export const M_UPDATE_USER = gql`
+  mutation updateUser($updateUserData: UpdateUserInput!) {
+    update(updateUserData: $updateUserData)
+  }
+`;

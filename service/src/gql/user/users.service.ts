@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Brackets, Repository } from 'typeorm';
 import { IdentityEnum, UserStatusEnum } from '../../common/core/enums';
+import { Logger } from '../../common/logger';
 import { User } from '../../database/entities';
 import { BaseService } from '../core/base.service';
+import { UpdateUserInput } from './update-user.input';
 import { UserPaginatedArgs } from './user-paginated.args';
 
 @Injectable()
@@ -79,7 +81,14 @@ export class UsersService extends BaseService<User> {
         return await this.userRepository.findOne({ account });
     }
 
-    async save() {
+    async findOne(condition: any) {
+        return await this.userRepository.findOne(condition);
+    }
 
+    async update(data: UpdateUserInput) {
+        const res = await this.userRepository.createQueryBuilder()
+            .update().set(data.payload as any).where('id = :id', { id: data.id })
+            .execute();
+        return !!res;
     }
 }
