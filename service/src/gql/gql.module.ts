@@ -5,6 +5,7 @@ import { Config } from "../config";
 import { Todo, User } from "../database/entities";
 import { AuthModule } from "./auth";
 import { UserModule } from "./user";
+import { JsonScalar } from "./core/json.scalar";
 
 @Module({
     imports: [
@@ -12,10 +13,11 @@ import { UserModule } from "./user";
         TypeOrmModule.forFeature([User, Todo]),
         GraphQLModule.forRoot({
             ...Config.graphql,
-            context: ({ req }) => ({ req }),
+            context: ({ req }) => ({ req })
         }),
         UserModule,
         AuthModule,
-    ]
+    ],
+    providers: [JsonScalar]
 })
 export class GqlModule { }

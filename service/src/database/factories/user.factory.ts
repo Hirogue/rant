@@ -13,6 +13,7 @@ define(User, (faker: typeof Faker, settings: { identity: IdentityEnum }) => {
     user.profile = faker.lorem.sentence();
     user.company = faker.company.companyName();
     user.identity = settings.identity || IdentityEnum.TOURIST;
+    user.ex_info = { idcrdFaceA: '', idcrdFaceB: '' };
 
     if (settings.identity != IdentityEnum.TOURIST && settings.identity != IdentityEnum.USER) {
         user.status = faker.random.number({ min: 0, max: 4 });

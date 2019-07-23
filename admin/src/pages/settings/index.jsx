@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
-import { FormattedMessage } from 'umi-plugin-react/locale';
 import { GridContent } from '@ant-design/pro-layout';
 import { Menu } from 'antd';
-import { connect } from 'dva';
+import React, { useState } from 'react';
+import { FormattedMessage } from 'umi-plugin-react/locale';
 import BaseView from './components/base';
 import BindingView from './components/binding';
 import NotificationView from './components/notification';
@@ -11,144 +10,61 @@ import styles from './style.less';
 
 const { Item } = Menu;
 
-@connect(({ settings }) => ({
-  currentUser: settings.currentUser,
-}))
-class Settings extends Component {
-  main = undefined;
+const menuMap = {
+  base: <FormattedMessage id="settings.menuMap.basic" defaultMessage="Basic Settings" />,
+  security: <FormattedMessage id="settings.menuMap.security" defaultMessage="Security Settings" />,
+  binding: <FormattedMessage id="settings.menuMap.binding" defaultMessage="Account Binding" />,
+  notification: (
+    <FormattedMessage
+      id="settings.menuMap.notification"
+      defaultMessage="New Message Notification"
+    />
+  ),
+};
 
-  constructor(props) {
-    super(props);
-    const menuMap = {
-      base: <FormattedMessage id="settings.menuMap.basic" defaultMessage="Basic Settings" />,
-      security: (
-        <FormattedMessage id="settings.menuMap.security" defaultMessage="Security Settings" />
-      ),
-      binding: <FormattedMessage id="settings.menuMap.binding" defaultMessage="Account Binding" />,
-      notification: (
-        <FormattedMessage
-          id="settings.menuMap.notification"
-          defaultMessage="New Message Notification"
-        />
-      ),
-    };
-    this.state = {
-      mode: 'inline',
-      menuMap,
-      selectKey: 'base',
-    };
+const getMenu = () => {
+  return Object.keys(menuMap).map(item => <Item key={item}>{menuMap[item]}</Item>);
+};
+
+const renderChildren = selectKey => {
+  switch (selectKey) {
+    case 'base':
+      return <BaseView />;
+
+    case 'security':
+      return <SecurityView />;
+
+    case 'binding':
+      return <BindingView />;
+
+    case 'notification':
+      return <NotificationView />;
+
+    default:
+      break;
   }
 
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'settings/fetchCurrent',
-    });
-    window.addEventListener('resize', this.resize);
-    this.resize();
-  }
+  return null;
+};
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.resize);
-  }
+export default () => {
+  const [mode, setModel] = useState('inline');
+  const [main, setMain] = useState(null);
+  const [selectKey, setSelectKey] = useState('base');
 
-  getMenu = () => {
-    const { menuMap } = this.state;
-    return Object.keys(menuMap).map(item => <Item key={item}>{menuMap[item]}</Item>);
-  };
-
-  getRightTitle = () => {
-    const { selectKey, menuMap } = this.state;
-    return menuMap[selectKey];
-  };
-
-  selectKey = key => {
-    this.setState({
-      selectKey: key,
-    });
-  };
-
-  resize = () => {
-    if (!this.main) {
-      return;
-    }
-
-    requestAnimationFrame(() => {
-      if (!this.main) {
-        return;
-      }
-
-      let mode = 'inline';
-      const { offsetWidth } = this.main;
-
-      if (this.main.offsetWidth < 641 && offsetWidth > 400) {
-        mode = 'horizontal';
-      }
-
-      if (window.innerWidth < 768 && offsetWidth > 400) {
-        mode = 'horizontal';
-      }
-
-      this.setState({
-        mode,
-      });
-    });
-  };
-
-  renderChildren = () => {
-    const { selectKey } = this.state;
-
-    switch (selectKey) {
-      case 'base':
-        return <BaseView />;
-
-      case 'security':
-        return <SecurityView />;
-
-      case 'binding':
-        return <BindingView />;
-
-      case 'notification':
-        return <NotificationView />;
-
-      default:
-        break;
-    }
-
-    return null;
-  };
-
-  render() {
-    const { currentUser } = this.props;
-
-    if (!currentUser.userid) {
-      return '';
-    }
-
-    const { mode, selectKey } = this.state;
-    return (
-      <GridContent>
-        <div
-          className={styles.main}
-          ref={ref => {
-            if (ref) {
-              this.main = ref;
-            }
-          }}
-        >
-          <div className={styles.leftMenu}>
-            <Menu mode={mode} selectedKeys={[selectKey]} onClick={({ key }) => this.selectKey(key)}>
-              {this.getMenu()}
-            </Menu>
-          </div>
-          <div className={styles.right}>
-            <div className={styles.title}>{this.getRightTitle()}</div>
-            {this.renderChildren()}
-          </div>
+  return (
+    <GridContent>
+      <div className={styles.main} ref={ref => setMain(ref)}>
+        <div className={styles.leftMenu}>
+          <Menu mode={mode} selectedKeys={[selectKey]} onClick={({ key }) => setSelectKey(key)}>
+            {getMenu()}
+          </Menu>
         </div>
-      </GridContent>
-    );
-  }
-}
-
-export default Settings;
+        <div className={styles.right}>
+          <div className={styles.title}>{menuMap[selectKey]}</div>
+          {renderChildren(selectKey)}
+        </div>
+      </div>
+    </GridContent>
+  );
+};

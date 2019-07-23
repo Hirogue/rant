@@ -1,7 +1,7 @@
 import { queryCity, queryCurrent, queryProvince, query as queryUsers } from './service';
 
 const Model = {
-  namespace: 'settings',
+  namespace: 'settingss',
   state: {
     currentUser: {},
     province: [],

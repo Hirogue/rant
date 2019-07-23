@@ -78,4 +78,8 @@ export class UsersService extends BaseService<User> {
     async findOneByAccount(account: string): Promise<User | undefined> {
         return await this.userRepository.findOne({ account });
     }
+
+    async save() {
+
+    }
 }

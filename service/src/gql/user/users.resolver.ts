@@ -6,6 +6,7 @@ import { UsersService } from './users.service';
 import { UserPaginated } from './user-paginated.type';
 import { UserStatistics } from './user-statistics.type';
 import { UserPaginatedArgs } from './user-paginated.args';
+import { UpdateUserInput } from './update-user.input';
 
 
 @Resolver(of => User)
@@ -23,5 +24,10 @@ export class UsersResolver {
     @Query(returns => UserStatistics)
     async userStatistics() {
         return await this.usersService.statistics();
+    }
+
+    @Mutation(returns => Boolean)
+    async update(data: UpdateUserInput) {
+        return await this.usersService.save();
     }
 }

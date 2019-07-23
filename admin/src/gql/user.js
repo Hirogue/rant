@@ -48,6 +48,7 @@ export const Q_GET_USERS = gql`
         profile
         identity
         status
+        exInfo
       }
     }
   }
