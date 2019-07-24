@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Brackets, Repository } from "typeorm";
+import { Brackets, Repository, Db } from "typeorm";
 import { Product } from "../../database";
 import { ProductPaginatedArgs } from "./product-paginated.args";
 import { BaseService } from "../core/base.service";
@@ -17,6 +17,8 @@ export class ProductService extends BaseService<Product> {
 
     async query(args: ProductPaginatedArgs) {
         const qb = this.productRepository.createQueryBuilder('t');
+
+        qb.leftJoinAndSelect('t.category', 'category');
 
         if (!args.page || args.page < 1) {
             args.page = 1;

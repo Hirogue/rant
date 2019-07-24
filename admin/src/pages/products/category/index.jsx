@@ -1,4 +1,4 @@
-import { Q_GET_PRODUCT_CATEGORIES } from '@/gql/product-category';
+import { Q_GET_PRODUCT_CATEGORIES } from '@/gql/product';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useQuery } from '@apollo/react-hooks';
 import { Button, Card, Input, Spin, Table, Tooltip } from 'antd';
