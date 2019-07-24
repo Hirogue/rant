@@ -9,7 +9,7 @@ import { UpdateUserInput } from './update-user.input';
 import { UserPaginatedArgs } from './user-paginated.args';
 
 @Injectable()
-export class UsersService extends BaseService<User> {
+export class UserService extends BaseService<User> {
 
     constructor(
         @InjectRepository(User)

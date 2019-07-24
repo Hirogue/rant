@@ -5,18 +5,18 @@ import { classToPlain } from 'class-transformer';
 import { ApolloException } from '../../common/core';
 import { Logger } from '../../common/logger';
 import { User } from '../../database/entities';
-import { UsersService } from '../user';
+import { UserService } from '../user';
 
 @Injectable()
 export class AuthService {
     constructor(
-        private readonly usersService: UsersService,
+        private readonly userService: UserService,
         private readonly jwtService: JwtService
     ) { }
 
     async validateUser(account: string, password: string): Promise<User | null> {
 
-        const user = await this.usersService.findOneByAccount(account);
+        const user = await this.userService.findOneByAccount(account);
 
         if (!user) throw new ApolloException('user-login.login.result.account.notexist');
 
