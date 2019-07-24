@@ -156,7 +156,17 @@ export default {
           name: 'users',
           icon: 'team',
           path: '/users',
-          component: './users',
+          routes: [
+            {
+              name: 'list',
+              path: '/users/list',
+              component: './users/list',
+            },
+            {
+              path: '/users/detail/:id',
+              component: './users/detail',
+            },
+          ],
         },
         {
           name: 'settings',

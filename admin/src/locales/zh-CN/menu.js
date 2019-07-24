@@ -10,6 +10,7 @@ export default {
   'menu.dashboard.monitor': '监控页',
   'menu.dashboard.workplace': '工作台',
   'menu.users': '用户管理',
+  'menu.users.list': '用户列表',
   'menu.exception.403': '403',
   'menu.exception.404': '404',
   'menu.exception.500': '500',

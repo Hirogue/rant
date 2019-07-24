@@ -15,6 +15,27 @@ export const Q_GET_USER_STATISTICS = gql`
   }
 `;
 
+export const Q_GET_USER = gql`
+  query getUser($id: String!) {
+    user(id: $id) {
+      id
+      create_at
+      update_at
+      account
+      avatar
+      realname
+      phone
+      idcard
+      address
+      company
+      profile
+      identity
+      status
+      ex_info
+    }
+  }
+`;
+
 export const Q_GET_USERS = gql`
   query getUsers(
     $page: Int = 0
@@ -48,7 +69,7 @@ export const Q_GET_USERS = gql`
         profile
         identity
         status
-        exInfo
+        ex_info
       }
     }
   }

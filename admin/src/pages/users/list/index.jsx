@@ -1,27 +1,16 @@
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import { Q_GET_USERS, Q_GET_USER_STATISTICS } from '@/gql/user';
-import Logger from '@/utils/logger';
 import { IdentityMaps, UserStatusMaps } from '@/utils/global';
+import Logger from '@/utils/logger';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useQuery } from '@apollo/react-hooks';
-import Highlighter from 'react-highlight-words';
-import {
-  Avatar,
-  Button,
-  Card,
-  Col,
-  Input,
-  Radio,
-  Row,
-  Select,
-  Spin,
-  Statistic,
-  Tooltip,
-} from 'antd';
+import { Avatar, Button, Card, Col, Input, Radio, Row, Select, Spin, Statistic, Tooltip } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useState } from 'react';
+import Highlighter from 'react-highlight-words';
 import styles from './style.less';
+import { Link } from 'umi';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -108,6 +97,15 @@ const renderColumns = keyowrd => [
     dataIndex: 'create_at',
     render: val => moment(val).format('YYYY-MM-DD HH:mm:ss'),
   },
+  {
+    title: '操作',
+    dataIndex: 'id',
+    render: (val, row) => {
+      return <Fragment>
+        <Link to={`/users/detail/${val}`}>详情</Link>
+      </Fragment>
+    }
+  }
 ];
 
 export default () => {

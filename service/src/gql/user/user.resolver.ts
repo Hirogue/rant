@@ -21,6 +21,11 @@ export class UserResolver {
         return await this.userService.query(args);
     }
 
+    @Query(returns => User)
+    async user(@Args('id') id: string) {
+        return await this.userService.findOne(id);
+    }
+
     @Query(returns => UserStatistics)
     async userStatistics() {
         return await this.userService.statistics();

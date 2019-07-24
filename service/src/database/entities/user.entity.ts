@@ -55,14 +55,9 @@ export class User extends Base {
     @Column({ type: 'simple-enum', default: UserStatusEnum.NORMAL })
     status: UserStatusEnum;
 
-    @Column({ type: 'simple-json', nullable: true })
-    ex_info: any;
-
     @Field({ nullable: true })
-    @Expose()
-    get exInfo(): JsonScalar {
-        return this.ex_info || {};
-    }
+    @Column({ type: 'simple-json', nullable: true })
+    ex_info: JsonScalar;
 
     @BeforeInsert()
     async beforeInsert() {

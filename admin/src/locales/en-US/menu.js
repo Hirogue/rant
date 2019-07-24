@@ -10,6 +10,7 @@ export default {
   'menu.dashboard.monitor': 'Monitor',
   'menu.dashboard.workplace': 'Workplace',
   'menu.users': 'Users Management',
+  'menu.users.list': 'Users List',
   'menu.exception.403': '403',
   'menu.exception.404': '404',
   'menu.exception.500': '500',
