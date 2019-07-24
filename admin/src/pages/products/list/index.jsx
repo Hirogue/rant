@@ -1,48 +1,21 @@
+import StandardRow from '@/components/StandardRow';
 import { Q_GET_PRODUCTS } from '@/gql/product';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useQuery } from '@apollo/react-hooks';
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  List,
-  Pagination,
-  Row,
-  Select,
-  Tooltip,
-  Typography,
-} from 'antd';
+import { Button, Card, Col, Input, List, Pagination, Row, Select, Tooltip, Typography } from 'antd';
 import moment from 'moment';
-import React, { Fragment } from 'react';
-import StandardFormRow from '@/components/StandardFormRow';
+import React from 'react';
 import styles from './style.less';
 
 const ButtonGroup = Button.Group;
 const { Search } = Input;
 const { Option } = Select;
-const FormItem = Form.Item;
 const { Title, Paragraph } = Typography;
 
-const formItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 16,
-    },
-  },
-};
-
-export default Form.create()(props => {
+export default props => {
   const { loading, data, refetch } = useQuery(Q_GET_PRODUCTS, {
     notifyOnNetworkStatusChange: true,
   });
-
-  const { form } = props;
-  const { getFieldDecorator } = form;
 
   const { products } = data;
 
@@ -102,38 +75,35 @@ export default Form.create()(props => {
 
   return (
     <PageHeaderWrapper>
+      <StandardRow grid last>
+        <Row gutter={16}>
+          <Col lg={5}>
+            <ButtonGroup className={styles.extraActionList}>
+              <Tooltip title="刷新">
+                <Button icon="reload" onClick={() => refetch()} />
+              </Tooltip>
+              <Tooltip title="新增">
+                <Button icon="file-add" />
+              </Tooltip>
+              <Tooltip title="删除">
+                <Button icon="delete" />
+              </Tooltip>
+              <Tooltip title="导入">
+                <Button icon="import" />
+              </Tooltip>
+            </ButtonGroup>
+          </Col>
+          <Col lg={8}>
+            <Search
+              className={styles.extraContentSearch}
+              placeholder="请输入搜索关键词"
+              onSearch={keyword => refetch({ page: 0, keyword })}
+            />
+          </Col>
+        </Row>
+      </StandardRow>
+
       <div className={styles.coverCardList}>
-        <Card bordered={false}>
-          <Form layout="inline">
-            <StandardFormRow grid last>
-              <Row gutter={16}>
-                <Col lg={5}>
-                  <ButtonGroup className={styles.extraActionList}>
-                    <Tooltip title="刷新">
-                      <Button icon="reload" onClick={() => refetch()} />
-                    </Tooltip>
-                    <Tooltip title="新增">
-                      <Button icon="file-add" />
-                    </Tooltip>
-                    <Tooltip title="删除">
-                      <Button icon="delete" />
-                    </Tooltip>
-                    <Tooltip title="导入">
-                      <Button icon="import" />
-                    </Tooltip>
-                  </ButtonGroup>
-                </Col>
-                <Col lg={8}>
-                  <Search
-                    className={styles.extraContentSearch}
-                    placeholder="请输入搜索关键词"
-                    onSearch={keyword => refetch({ page: 0, keyword })}
-                  />
-                </Col>
-              </Row>
-            </StandardFormRow>
-          </Form>
-        </Card>
         <div className={styles.cardList}>
           {cardList}
           <Pagination {...paginationProps} />
@@ -141,4 +111,4 @@ export default Form.create()(props => {
       </div>
     </PageHeaderWrapper>
   );
-});
+};

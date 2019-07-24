@@ -1,35 +1,12 @@
 import { Q_GET_PRODUCT_CATEGORIES } from '@/gql/product';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useQuery } from '@apollo/react-hooks';
-import { Button, Card, Input, Spin, Table, Tooltip } from 'antd';
+import StandardRow from '@/components/StandardRow';
+import { Button, Card, Row, Col, Input, Spin, Table, Tooltip } from 'antd';
 import styles from './style.less';
 
 const ButtonGroup = Button.Group;
 const { Search } = Input;
-
-const extraContent = refetch => (
-  <div className={styles.extraContent}>
-    <Search
-      className={styles.extraContentSearch}
-      placeholder="请输入搜索关键词"
-      onSearch={keyword => refetch({ page: 0, keyword })}
-    />
-    <ButtonGroup className={styles.extraActionList}>
-      <Tooltip title="刷新">
-        <Button icon="reload" onClick={() => refetch()} />
-      </Tooltip>
-      <Tooltip title="新增">
-        <Button icon="file-add" />
-      </Tooltip>
-      <Tooltip title="删除">
-        <Button icon="delete" />
-      </Tooltip>
-      <Tooltip title="导入">
-        <Button icon="import" />
-      </Tooltip>
-    </ButtonGroup>
-  </div>
-);
 
 const columns = [
   {
@@ -64,6 +41,34 @@ export default () => {
 
   return (
     <PageHeaderWrapper>
+      <StandardRow grid last>
+        <Row gutter={16}>
+          <Col lg={5}>
+            <ButtonGroup className={styles.extraActionList}>
+              <Tooltip title="刷新">
+                <Button icon="reload" onClick={() => refetch()} />
+              </Tooltip>
+              <Tooltip title="新增">
+                <Button icon="file-add" />
+              </Tooltip>
+              <Tooltip title="删除">
+                <Button icon="delete" />
+              </Tooltip>
+              <Tooltip title="导入">
+                <Button icon="import" />
+              </Tooltip>
+            </ButtonGroup>
+          </Col>
+          <Col lg={8}>
+            <Search
+              className={styles.extraContentSearch}
+              placeholder="请输入搜索关键词"
+              onSearch={keyword => refetch({ page: 0, keyword })}
+            />
+          </Col>
+        </Row>
+      </StandardRow>
+
       <div className={styles.standardList}>
         <Card
           className={styles.listCard}
@@ -74,7 +79,6 @@ export default () => {
           bodyStyle={{
             padding: '0 32px 40px 32px',
           }}
-          extra={extraContent(refetch)}
         >
           <Spin spinning={loading} size="large">
             <Table
