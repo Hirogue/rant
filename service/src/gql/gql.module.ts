@@ -6,6 +6,7 @@ import { Todo, User } from "../database/entities";
 import { AuthModule } from "./auth";
 import { UserModule } from "./user";
 import { JsonScalar } from "./core/json.scalar";
+import { ProductModule } from "./product";
 
 @Module({
     imports: [
@@ -17,6 +18,7 @@ import { JsonScalar } from "./core/json.scalar";
         }),
         UserModule,
         AuthModule,
+        ProductModule
     ],
     providers: [JsonScalar]
 })

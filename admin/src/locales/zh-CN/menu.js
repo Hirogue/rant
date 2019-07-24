@@ -23,6 +23,8 @@ export default {
   'menu.contents': '内容管理',
   'menu.contents.articles': '文章管理',
   'menu.products': '产品管理',
+  'menu.products.list': '产品列表',
+  'menu.products.category': '产品分类',
   'menu.profile': '详情页',
   'menu.profile.basic': '基础详情页',
   'menu.profile.advanced': '高级详情页',

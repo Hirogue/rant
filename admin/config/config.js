@@ -139,7 +139,18 @@ export default {
           name: 'products',
           icon: 'appstore',
           path: '/products',
-          component: './products',
+          routes: [
+            {
+              name: 'list',
+              path: '/products/list',
+              component: './products/list',
+            },
+            {
+              name: 'category',
+              path: '/products/category',
+              component: './products/category',
+            },
+          ],
         },
         {
           name: 'users',

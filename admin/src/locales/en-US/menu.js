@@ -23,6 +23,8 @@ export default {
   'menu.contents': 'Contents management',
   'menu.contents.articles': 'Articles Management',
   'menu.products': 'Products Management',
+  'menu.products.list': 'Product List',
+  'menu.products.category': 'Product Category',
   'menu.profile': 'Profile',
   'menu.profile.basic': 'Basic Profile',
   'menu.profile.advanced': 'Advanced Profile',
