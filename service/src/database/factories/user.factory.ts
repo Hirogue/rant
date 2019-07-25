@@ -1,6 +1,6 @@
 import * as Faker from 'faker';
 import { define } from "typeorm-seeding";
-import { IdentityEnum } from '../../common/core/enums';
+import { IdentityEnum } from '../../core';
 import { User } from "../entities";
 
 define(User, (faker: typeof Faker, settings: { identity: IdentityEnum }) => {

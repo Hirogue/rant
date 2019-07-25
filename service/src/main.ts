@@ -1,5 +1,6 @@
 import { ClassSerializerInterceptor } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as compression from 'compression';
 import * as helmet from 'helmet';
 import { RenderModule, RenderService } from 'nest-next';
@@ -7,9 +8,9 @@ import * as Nextjs from 'next';
 import * as serveStatic from 'serve-static';
 import '../local';
 import { AppModule } from './app.module';
-import { ExceptionsFilter, ValidationPipe } from './common/core';
-import { Logger } from './common/logger';
 import { Config } from './config';
+import { ExceptionsFilter, ValidationPipe } from './core';
+import { Logger } from './logger';
 
 async function bootstrap() {
   const app = Nextjs(Config.next);
@@ -18,6 +19,15 @@ async function bootstrap() {
   const server = await NestFactory.create(AppModule, { logger: new Logger() });
 
   (server.get(RenderModule)).register(server, app);
+
+  const options = new DocumentBuilder()
+    .setTitle('Rant')
+    .setDescription('The rant API description')
+    .setVersion('0.0.1')
+    .build();
+
+  const document = SwaggerModule.createDocument(server, options);
+  SwaggerModule.setup('docs', server, document);
 
   server.enableCors(Config.cors);
 

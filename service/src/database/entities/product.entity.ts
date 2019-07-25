@@ -1,7 +1,7 @@
 import { Expose } from "class-transformer";
 import { Field, ObjectType, Int } from "type-graphql";
 import { Column, Entity, ManyToOne } from "typeorm";
-import { JsonScalar } from "../../gql/core/json.scalar";
+// import { JsonScalar } from "../../common/core/json.scalar";
 import { Base } from "./base";
 import { ProductCategory } from "./product-category.entity";
 
@@ -40,11 +40,11 @@ export class Product extends Base {
     @Column({ type: 'simple-json', nullable: true })
     flows: any;
 
-    @Field({ nullable: true })
-    @Expose()
-    get flowsJson(): JsonScalar {
-        return this.flows || {};
-    }
+    // @Field({ nullable: true })
+    // @Expose()
+    // get flowsJson(): JsonScalar {
+    //     return this.flows || {};
+    // }
 
     @Field(type => ProductCategory, { nullable: true })
     @ManyToOne(type => ProductCategory, target => target.products)

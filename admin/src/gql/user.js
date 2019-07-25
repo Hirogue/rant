@@ -1,5 +1,19 @@
 import gql from 'graphql-tag';
 
+export const USER_TYPR = `id
+create_at
+update_at
+account
+avatar
+realname
+phone
+idcard
+address
+company
+profile
+identity
+status`;
+
 export const Q_GET_USER_STATISTICS = gql`
   query getUserStatistics {
     userStatistics {
@@ -18,20 +32,7 @@ export const Q_GET_USER_STATISTICS = gql`
 export const Q_GET_USER = gql`
   query getUser($id: String!) {
     user(id: $id) {
-      id
-      create_at
-      update_at
-      account
-      avatar
-      realname
-      phone
-      idcard
-      address
-      company
-      profile
-      identity
-      status
-      ex_info
+      ${USER_TYPR}
     }
   }
 `;
@@ -56,20 +57,7 @@ export const Q_GET_USERS = gql`
       totalPage
       hasMore
       items {
-        id
-        create_at
-        update_at
-        account
-        avatar
-        realname
-        phone
-        idcard
-        address
-        company
-        profile
-        identity
-        status
-        ex_info
+        ${USER_TYPR}
       }
     }
   }

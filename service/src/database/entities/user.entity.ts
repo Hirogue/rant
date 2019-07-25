@@ -1,11 +1,10 @@
 import * as bcrypt from 'bcryptjs';
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude } from 'class-transformer';
 import { Field, ObjectType } from 'type-graphql';
 import { BeforeInsert, Column, Entity } from 'typeorm';
-import { UserStatusEnum, IdentityEnum } from '../../common/core/enums';
+import { UserStatusEnum, IdentityEnum } from '../../core/enums';
 import { Config } from '../../config';
 import { Base } from './base';
-import { JsonScalar } from '../../gql/core/json.scalar';
 
 @Entity()
 @ObjectType()
@@ -54,10 +53,6 @@ export class User extends Base {
     @Field()
     @Column({ type: 'simple-enum', default: UserStatusEnum.NORMAL })
     status: UserStatusEnum;
-
-    @Field({ nullable: true })
-    @Column({ type: 'simple-json', nullable: true })
-    ex_info: JsonScalar;
 
     @BeforeInsert()
     async beforeInsert() {

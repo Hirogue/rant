@@ -1,7 +1,7 @@
 import { Connection } from "typeorm";
 import * as Faker from 'faker';
 import { Factory, Seeder } from "typeorm-seeding";
-import { IdentityEnum } from "../../common/core/enums";
+import { IdentityEnum } from "../../core";
 import { User } from "../entities";
 
 export default class CreateUsers implements Seeder {
