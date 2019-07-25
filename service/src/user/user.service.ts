@@ -9,9 +9,7 @@ import { UserPaginatedArgs } from './user-paginated.args';
 @Injectable()
 export class UserService extends BaseService<User> {
 
-    constructor(
-        @InjectRepository(User) repo
-    ) {
+    constructor(@InjectRepository(User) repo) {
         super(repo);
     }
 

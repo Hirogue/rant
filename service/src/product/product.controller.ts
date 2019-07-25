@@ -19,7 +19,5 @@ import { ApiUseTags } from "@nestjs/swagger";
 @ApiUseTags('product')
 @Controller('api/product')
 export class ProductController {
-    constructor(
-        public service: ProductService
-    ) { }
+    constructor(public service: ProductService) { }
 }
