@@ -7,6 +7,7 @@ import { ApolloLink, from } from 'apollo-link';
 import { onError } from 'apollo-link-error';
 import { HttpLink } from 'apollo-link-http';
 import { formatMessage } from 'umi-plugin-react/locale';
+import { router } from 'umi';
 
 Logger.log('config apollo:', Config.apollo);
 
@@ -18,7 +19,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   // add the authorization to the headers
   operation.setContext({
     headers: {
-      authorization: 'Bearer ' + localStorage.getItem('token') || null,
+      authorization: 'Bearer ' + localStorage.getItem('token'),
     },
   });
 
@@ -36,9 +37,18 @@ const errorHandler = onError(error => {
       id: result.message,
     });
 
-    Logger.log('error message:', errorMsg);
-    message.error(errorMsg);
+    const errorCode = parseInt(result.extensions ? result.extensions.code : 0);
 
+    Logger.log('error message:', errorMsg);
+    Logger.log('error code:', errorCode);
+
+    if (401 === errorCode) {
+      message.error(formatMessage({ id: 'errors.invalid.auth' }));
+      router.replace('/user/login');
+      return false;
+    }
+
+    message.error(errorMsg);
     return false;
   }
 });

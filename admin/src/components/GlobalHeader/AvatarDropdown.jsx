@@ -27,7 +27,11 @@ export default props => {
     notifyOnNetworkStatusChange: true,
   });
 
-  const currentUser = data.me || {};
+  let currentUser = {};
+
+  if (data) {
+    currentUser = data.me || {};
+  }
 
   Logger.log('current user:', currentUser);
 

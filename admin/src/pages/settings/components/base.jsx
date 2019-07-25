@@ -1,48 +1,16 @@
+import ImageCropper from '@/components/ImageCropper';
 import { Q_FETCH_CURRENT_USER } from '@/gql/login';
 import { M_UPDATE_USER } from '@/gql/user';
+import { post } from '@/utils/fetch';
 import Logger from '@/utils/logger';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Button, Form, Input, message, Select, Upload } from 'antd';
-import { connect } from 'dva';
-import React, { Component, Fragment, useState } from 'react';
+import { Button, Form, Input, message, Select } from 'antd';
+import React, { useState } from 'react';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import styles from './BaseView.less';
-import GeographicView from './GeographicView';
-import PhoneView from './PhoneView';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-
-const AvatarView = ({ avatar }) => (
-  <Fragment>
-    <div className={styles.avatar_title}>
-      <FormattedMessage id="settings.basic.avatar" defaultMessage="Avatar" />
-    </div>
-    <div className={styles.avatar}>
-      <img src={avatar} alt="avatar" />
-    </div>
-    <Upload fileList={[]}>
-      <div className={styles.button_view}>
-        <Button icon="upload">
-          <FormattedMessage id="settings.basic.change-avatar" defaultMessage="Change avatar" />
-        </Button>
-      </div>
-    </Upload>
-  </Fragment>
-);
-
-const getAvatarURL = currentUser => {
-  if (currentUser) {
-    if (currentUser.avatar) {
-      return currentUser.avatar;
-    }
-
-    const url = 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png';
-    return url;
-  }
-
-  return '';
-};
 
 export default Form.create()(props => {
   const { form } = props;
@@ -84,6 +52,28 @@ export default Form.create()(props => {
         });
       }
     });
+  };
+
+  const onAvatarUpload = async file => {
+    Logger.log('upload file:', file);
+
+    const data = new FormData();
+    data.append('file', file);
+
+    const res = await post('http://127.0.0.1:3000/storage', data);
+
+    Logger.log('res:', res);
+
+    if (!!res && res[0] && res[0].relativePath) {
+      updateUser({
+        variables: {
+          updateUserData: {
+            id: currentUser.id,
+            payload: JSON.stringify({ avatar: res[0].relativePath }),
+          },
+        },
+      });
+    }
   };
 
   return (
@@ -143,7 +133,17 @@ export default Form.create()(props => {
         </Form>
       </div>
       <div className={styles.right}>
-        <AvatarView avatar={getAvatarURL(currentUser)} />
+        <div className={styles.avatar_title}>
+          <FormattedMessage id="settings.basic.avatar" defaultMessage="Avatar" />
+        </div>
+        <div className={styles.avatar}>
+          <ImageCropper
+            url={currentUser.avatar}
+            onUpload={onAvatarUpload}
+            width={128}
+            height={128}
+          />
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver } from '@nestjs/graphql';
 import { Product } from '../../database';
 import { GqlJwtAuthGuard } from '../auth/gql-jwt-auth.guard';
 import { ProductPaginated } from './product-paginated.type';

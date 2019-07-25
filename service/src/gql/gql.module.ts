@@ -14,7 +14,7 @@ import { ProductModule } from "./product";
         TypeOrmModule.forFeature([User, Todo]),
         GraphQLModule.forRoot({
             ...Config.graphql,
-            context: ({ req }) => ({ req })
+            context: ({ req }) => ({ req }),
         }),
         UserModule,
         AuthModule,

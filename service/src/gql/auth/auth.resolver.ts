@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, HttpStatus } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Logger } from '../../common/logger';
 import { User } from '../../database';
@@ -8,6 +8,7 @@ import { GqlJwtAuthGuard } from './gql-jwt-auth.guard';
 import { LoginInput } from './login.input';
 import { Me } from './me.decorator';
 import { UserService } from '../user';
+import { ApolloException } from '../../common/core';
 
 
 @Resolver(of => Auth)
@@ -21,7 +22,8 @@ export class AuthResolver {
     @UseGuards(GqlJwtAuthGuard)
     async me(@Me() me) {
         Logger.log('current user', me);
-        return await this.userService.findOne(me.id);
+
+        return await this.userService.findOne(me.id);;
     }
 
     @Mutation(returns => Auth)

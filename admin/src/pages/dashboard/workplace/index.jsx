@@ -273,7 +273,11 @@ export default () => {
     notifyOnNetworkStatusChange: true,
   });
 
-  const currentUser = data.me || {};
+  let currentUser = {};
+
+  if (data) {
+    currentUser = data.me || {};
+  }
 
   return (
     <PageHeaderWrapper

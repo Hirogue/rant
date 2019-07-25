@@ -6,6 +6,7 @@ const dev = process.env.NODE_ENV !== 'production';
 let Config = {
     port: 3000,
     hostName: '0.0.0.0',
+    serverUrl: 'http://127.0.0.1:3000',
     defaultPassword: '12345678',
 
     passport: {
@@ -44,6 +45,12 @@ let Config = {
         playground: true,
         installSubscriptionHandlers: true,
         autoSchemaFile: 'schema.gql',
+        typePaths: [__dirname + '/../**/*.graphql'],
+    },
+
+    static: {
+        root: '/static',
+        uploads: '/uploads'
     }
 };
 

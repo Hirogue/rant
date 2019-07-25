@@ -8,6 +8,8 @@ export const logout = () => {
   localStorage.removeItem('token');
 
   router.replace('/user/login');
+
+  return false;
 };
 
 export const IdentityMaps = {
