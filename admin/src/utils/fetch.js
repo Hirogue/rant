@@ -3,6 +3,7 @@ import { merge } from 'lodash';
 import { router } from 'umi';
 import { formatMessage } from 'umi-plugin-locale';
 import Logger from './logger';
+import Config from '@/config';
 
 export const createFetch = (url, config) => {
   let defaultConfig = {
@@ -10,7 +11,7 @@ export const createFetch = (url, config) => {
       authorization: 'Bearer ' + localStorage.getItem('token'),
     },
   };
-  return fetch(url, merge(defaultConfig, config))
+  return fetch(Config.basePath + url, merge(defaultConfig, config))
     .then(res => {
       const data = !!res ? res.json() : {};
 

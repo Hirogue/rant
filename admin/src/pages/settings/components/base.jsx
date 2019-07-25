@@ -58,9 +58,10 @@ export default Form.create()(props => {
     Logger.log('upload file:', file);
 
     const data = new FormData();
+    data.append('fileName', file.name);
     data.append('file', file);
 
-    const res = await post('http://127.0.0.1:3000/storage', data);
+    const res = await post('/api/storage', data);
 
     Logger.log('res:', res);
 

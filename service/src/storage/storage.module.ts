@@ -1,14 +1,14 @@
 import { Module } from "@nestjs/common";
 import { MulterModule } from '@nestjs/platform-express';
-import * as multer from 'multer';
-import * as shortid from 'shortid';
+import { exists, mkdir } from "fs";
 import * as moment from 'moment';
+import * as multer from 'multer';
+import { resolve } from "path";
+import * as shortid from 'shortid';
+import { promisify } from "util";
 import { Logger } from "../common/logger";
 import Config from "../config";
 import { StorageController } from "./storage.controller";
-import { promisify } from "util";
-import { exists, mkdir } from "fs";
-import { resolve } from "path";
 
 const existsAsync = promisify(exists);
 const mkdirAsync = promisify(mkdir);
@@ -26,8 +26,9 @@ const storage = multer.diskStorage({
             await mkdirAsync(dirPath);
         }
 
-        const finalName = `${dirName}/${shortid.generate()}-${file.originalname}`;
+        const finalName = `${dirName}/${shortid.generate()}-${req['body'].fileName || file.originalname}`;
 
+        Logger.log('upload file:', file);
         Logger.log('upload finalPath:', dirPath + finalName);
 
         cb(null, finalName);

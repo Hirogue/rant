@@ -4,10 +4,14 @@ import productionConfig from './production';
 
 const dev = process.env.NODE_ENV !== 'production';
 
+const basePath = 'http://127.0.0.1:3000';
+
 let Config = {
+  basePath,
+
   apollo: {
     link: {
-      uri: 'http://127.0.0.1:3000/graphql',
+      uri: `${basePath}/graphql`,
     },
   },
 

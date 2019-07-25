@@ -1,12 +1,15 @@
 import { ClassSerializerInterceptor } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
+import * as compression from 'compression';
+import * as helmet from 'helmet';
 import { RenderModule, RenderService } from 'nest-next';
 import * as Nextjs from 'next';
-import { Config } from './config';
+import * as serveStatic from 'serve-static';
+import '../local';
 import { AppModule } from './app.module';
 import { ExceptionsFilter, ValidationPipe } from './common/core';
 import { Logger } from './common/logger';
-import '../local';
+import { Config } from './config';
 
 async function bootstrap() {
   const app = Nextjs(Config.next);
@@ -17,6 +20,10 @@ async function bootstrap() {
   (server.get(RenderModule)).register(server, app);
 
   server.enableCors(Config.cors);
+
+  server.use(helmet());
+  server.use(compression());
+  server.use('/static', serveStatic('static'));
 
   server.useGlobalPipes(new ValidationPipe());
   server.useGlobalFilters(new ExceptionsFilter(server.get(RenderService)));
