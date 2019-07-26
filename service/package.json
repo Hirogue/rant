@@ -37,6 +37,7 @@
     "@nestjsx/crud-typeorm": "^4.1.0",
     "antd": "^3.20.3",
     "apollo-boost": "^0.4.3",
+    "apollo-datasource-rest": "^0.6.1",
     "apollo-server-express": "^2.7.0",
     "bcryptjs": "^2.4.3",
     "chalk": "^2.4.2",

@@ -14,9 +14,3 @@ Node.js Enterprise Development Template Project
 ```
 $ yarn && yarn ic && yarn dev
 ```
-
-## Preview
-
-[![rant-graphql](./previews/graphql.jpg)](#)
-
-[![rant-service](./previews/service.jpg)](#)

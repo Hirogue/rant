@@ -9,9 +9,9 @@ export abstract class Base {
 
     @Field()
     @CreateDateColumn()
-    create_at: Date;
+    create_at: string;
 
     @Field()
     @UpdateDateColumn()
-    update_at: Date;
+    update_at: string;
 }

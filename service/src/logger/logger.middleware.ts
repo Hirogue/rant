@@ -9,8 +9,8 @@ export class LoggerMiddleware implements NestMiddleware {
         const statusCode = res.statusCode;
         const logFormat = `${req.method} ${req.originalUrl} ${req.ip} ${statusCode}`;
 
-        Logger.debug('payload', req.body);
-
+        // Logger.debug('payload', req.body);
+        
         next();
 
         if (statusCode >= 500) {
@@ -18,7 +18,7 @@ export class LoggerMiddleware implements NestMiddleware {
         } else if (statusCode >= 400) {
             Logger.warn(logFormat);
         } else {
-            Logger.log(logFormat);
+            !req.originalUrl.startsWith('/graphql') && Logger.log(logFormat);
         }
     }
 }

@@ -5,7 +5,7 @@ import { Product } from './product.entity';
 
 @Entity()
 @Tree('materialized-path')
-@ObjectType()
+// @ObjectType()
 export class ProductCategory extends Base {
     @Field()
     @Column()

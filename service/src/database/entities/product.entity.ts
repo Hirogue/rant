@@ -6,7 +6,7 @@ import { Base } from "./base";
 import { ProductCategory } from "./product-category.entity";
 
 @Entity()
-@ObjectType()
+// @ObjectType()
 export class Product extends Base {
 
     @Field()

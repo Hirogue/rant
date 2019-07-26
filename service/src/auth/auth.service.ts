@@ -3,12 +3,13 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { classToPlain } from 'class-transformer';
 import { ApolloException } from '../core';
-import { Logger } from '../logger';
 import { User } from '../database/entities';
+import { Logger } from '../logger';
 import { UserService } from '../user';
 
 @Injectable()
 export class AuthService {
+
     constructor(
         private readonly userService: UserService,
         private readonly jwtService: JwtService
@@ -16,7 +17,7 @@ export class AuthService {
 
     async validateUser(account: string, password: string): Promise<User | null> {
 
-        const user = await this.userService.findOneByAccount(account);
+        const user = await this.userService.findOne({ account });
 
         if (!user) throw new ApolloException('user-login.login.result.account.notexist');
 

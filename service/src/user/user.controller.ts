@@ -8,12 +8,19 @@ import { UserService } from "./user.service";
 @Crud({
     model: {
         type: User,
-    }
+    },
+    params: {
+        id: {
+            field: 'id',
+            type: 'uuid',
+            primary: true,
+        },
+    },
 })
 @ApiUseTags('user')
-@ApiBearerAuth()
+// @ApiBearerAuth()
 @Controller('/api/user')
-@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
 export class UserController {
     constructor(public service: UserService) { }
 }

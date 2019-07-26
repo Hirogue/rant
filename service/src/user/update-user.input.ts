@@ -8,6 +8,6 @@ export class UpdateUserInput {
     @Field()
     id: String;
 
-    @Field()
-    payload: JsonScalar;
+    // @Field()
+    // payload: JsonScalar;
 }

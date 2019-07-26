@@ -6,8 +6,8 @@ import * as multer from 'multer';
 import { resolve } from "path";
 import * as shortid from 'shortid';
 import { promisify } from "util";
-import Config from "../config";
 import { Logger } from "../logger";
+import Config from "../config";
 import { StorageController } from "./storage.controller";
 
 const existsAsync = promisify(exists);

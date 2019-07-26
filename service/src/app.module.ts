@@ -7,9 +7,7 @@ import { LoggerMiddleware, LoggerModule } from './logger';
 import { StorageModule } from './storage';
 import { UserModule } from './user';
 import { AuthModule } from './auth';
-import { ProductModule } from './product';
-import { ArticleModule } from './article';
-import { CoreModule } from './core';
+import { CoreModule, BaseDataSource } from './core';
 
 @Module({
   imports: [
@@ -17,6 +15,7 @@ import { CoreModule } from './core';
     GraphQLModule.forRoot({
       ...Config.graphql,
       context: ({ req }) => ({ req }),
+      dataSources: () => ({ api: new BaseDataSource() })
     }),
     CoreModule,
     RenderModule,
@@ -24,9 +23,7 @@ import { CoreModule } from './core';
     StorageModule,
     UserModule,
     AuthModule,
-    ProductModule,
-    ArticleModule,
-  ],
+  ]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -1,5 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Me } from '../core';
 import { User } from '../database';
 import { Logger } from '../logger';
 import { UserService } from '../user';
@@ -7,7 +8,6 @@ import { AuthService } from './auth.service';
 import { Auth } from './auth.type';
 import { GqlJwtAuthGuard } from './gql-jwt-auth.guard';
 import { LoginInput } from './login.input';
-import { Me } from './me.decorator';
 
 
 @Resolver(of => Auth)
@@ -22,7 +22,7 @@ export class AuthResolver {
     async me(@Me() me) {
         Logger.log('current user', me);
 
-        return await this.userService.findOne(me.id);;
+        return await this.userService.findOne(me.id);
     }
 
     @Mutation(returns => Auth)
