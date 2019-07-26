@@ -4,6 +4,5 @@ export * from './filters';
 export * from './pipes';
 export * from './enums';
 export * from './scalars';
-export * from './types';
 export * from './aspects';
 export * from './decorators';

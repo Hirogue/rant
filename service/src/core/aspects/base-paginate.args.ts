@@ -2,7 +2,7 @@ import { Min, Max } from 'class-validator';
 import { ArgsType, Field, Int } from 'type-graphql';
 
 @ArgsType()
-export class BaseQueryArgs {
+export class BasePaginateArgs {
 
     @Field({ nullable: true })
     filter?: string;
@@ -10,7 +10,7 @@ export class BaseQueryArgs {
     @Field({ nullable: true })
     or?: string;
 
-    @Field({ nullable: true })
+    @Field({ nullable: true, defaultValue: 'create_at,DESC' })
     sort?: string;
 
     @Field({ nullable: true })

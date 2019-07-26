@@ -1,5 +1,5 @@
 import { Field, InputType } from 'type-graphql';
-import { JsonScalar } from '../core';
+import { JsonScalar } from '../../core';
 
 
 @InputType()
