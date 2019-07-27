@@ -18,9 +18,9 @@ import { UserService } from "./user.service";
     },
 })
 @ApiUseTags('user')
-// @ApiBearerAuth()
+@ApiBearerAuth()
 @Controller('/api/user')
-// @UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'))
 export class UserController {
     constructor(public service: UserService) { }
 }

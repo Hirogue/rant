@@ -1,4 +1,4 @@
-import { Q_GET_USER } from '@/gql/user';
+import { Q_GET_USER } from '@/pages/users/list/gql/user';
 import { IdentityMaps, UserStatusMaps } from '@/utils/global';
 import Logger from '@/utils/logger';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';

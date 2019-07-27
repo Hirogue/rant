@@ -1,6 +1,8 @@
 import Logger from '@/utils/logger';
 import { IdentityEnum } from '@/utils/enum';
 import { router } from 'umi';
+import { isArray, isEmpty } from 'lodash';
+import { RequestQueryBuilder } from '@nestjsx/crud-request';
 
 export const logout = () => {
   Logger.log('logout');
@@ -10,6 +12,51 @@ export const logout = () => {
   router.replace('/user/login');
 
   return false;
+};
+
+export const mergeParams = (params, partialParams) => {
+  Logger.debug('params:', params);
+  Logger.debug('partialParams:', partialParams);
+
+  let newParams = { ...params };
+
+  const keys = Object.keys(partialParams);
+
+  keys.forEach(key => {
+    if (partialParams[key]) {
+      newParams[key] = partialParams[key];
+
+      if (['filter', 'or', 'join', 'sort'].includes[key]) {
+        if (!!params[key]) {
+          Logger.log(`params ${key}:`, params[key]);
+
+          const oldParams = params[key]
+            .filter(item => partialParams[key].findIndex(temp => temp.field === item.field) < 0)
+            .map(item => item);
+
+          if (oldParams.length > 0) {
+            newParams[key] = [...newParams[key], ...oldParams];
+          }
+        }
+      }
+
+      if (isArray(newParams[key])) {
+        if (['filter', 'or'].includes(key)) {
+          newParams[key] = newParams[key].filter(item => !isEmpty(item.value));
+        }
+
+        if (['join', 'sort'].includes(key)) {
+          newParams[key] = newParams[key].filter(item => !isEmpty(item.field));
+        }
+      }
+    }
+  });
+
+  return newParams;
+};
+
+export const buildingQuery = params => {
+  return RequestQueryBuilder.create(params).query();
 };
 
 export const IdentityMaps = {

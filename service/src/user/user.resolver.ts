@@ -1,7 +1,7 @@
 import { Inject, UseGuards } from '@nestjs/common';
 import { Args, CONTEXT, Query, Resolver } from '@nestjs/graphql';
 import { GqlJwtAuthGuard } from '../auth/gql-jwt-auth.guard';
-import { BaseResolver, BasePaginateArgs } from '../core';
+import { BaseResolver } from '../core';
 import { User } from '../database';
 import { UserPaginate } from './dtos';
 import { UserService } from './user.service';
@@ -19,13 +19,13 @@ export class UserResolver extends BaseResolver {
     }
 
     @Query(returns => UserPaginate)
-    async users(@Args() args: BasePaginateArgs) {
-        return await this.api.find(API_URL, args);
+    async users(@Args('queryString') queryString: string) {
+        return await this.api.find(API_URL, queryString);
     }
 
     @Query(returns => User)
-    async user(@Args('id') id: string) {
-        return await this.api.findOne(API_URL, id);
+    async user(@Args('id') id: string, @Args('queryString') queryString: string) {
+        return await this.api.findOne(API_URL, id, queryString);
     }
 
     // @Query(returns => UserStatistics)

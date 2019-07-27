@@ -1,6 +1,6 @@
 import ImageCropper from '@/components/ImageCropper';
-import { Q_FETCH_CURRENT_USER } from '@/gql/login';
-import { M_UPDATE_USER } from '@/gql/user';
+import { Q_FETCH_CURRENT_USER } from '@/gql/common';
+import { M_UPDATE_USER } from '@/pages/users/list/gql/user';
 import { post } from '@/utils/fetch';
 import Logger from '@/utils/logger';
 import { useMutation, useQuery } from '@apollo/react-hooks';

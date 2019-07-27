@@ -1,6 +1,5 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
 import { Config } from '../../config';
-import { Logger } from '../../logger';
 
 export class BaseDataSource extends RESTDataSource {
     constructor() {
@@ -12,31 +11,27 @@ export class BaseDataSource extends RESTDataSource {
         request.headers.set('Authorization', this.context.req.headers.authorization);
     }
 
-    async find(url: string, args: any) {
-        const res = await this.get(url, args);
-
-        Logger.log(`${url}#find:`, args);
-
-        return res;
+    async find(url: string, queryString: string) {
+        return await this.get(`${url}?${queryString}`);
     }
 
-    async findOne(url: string, id: string) {
-        return await this.get(`${url}/${id}`);
+    async findOne(url: string, id: string, queryString: string) {
+        return await this.get(`${url}/${id}`, queryString);
     }
 
-    async update(url: string, id: string) {
+    async update(url: string, id: string, params: any) {
         return await this.patch(`${url}/${id}`);
     }
 
-    async replace(url: string, id: string) {
+    async replace(url: string, id: string, params: any) {
         return await this.put(`${url}/${id}`);
     }
 
-    async create(url: string) {
+    async create(url: string, params: any) {
         return await this.post(url);
     }
 
-    async bulk(url: string) {
+    async bulk(url: string, params: any) {
         return await this.post(url);
     }
 

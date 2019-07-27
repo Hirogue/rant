@@ -41,24 +41,15 @@ export const Q_GET_USER = gql`
 
 export const Q_GET_USERS = gql`
   query getUsers(
-    $page: Int = 0
-    $pageSize: Int = 10
-    $identity: String
-    $keyword: String
-    $status: Int = -1
+    $queryString: String! = ""
   ) {
-    users(
-      page: $page
-      pageSize: $pageSize
-      identity: $identity
-      keyword: $keyword
-      status: $status
+    users(     
+      queryString: $queryString  
     ) {
       total
       page
-      totalPage
-      hasMore
-      items {
+      pageCount    
+      data {
         ${USER_TYPE}
       }
     }

@@ -8,7 +8,7 @@ import moment from 'moment';
 import Radar from './components/Radar';
 import EditableLinkGroup from './components/EditableLinkGroup';
 import styles from './style.less';
-import { Q_FETCH_CURRENT_USER } from '@/gql/login';
+import { Q_FETCH_CURRENT_USER } from '@/gql/common';
 
 const links = [
   {

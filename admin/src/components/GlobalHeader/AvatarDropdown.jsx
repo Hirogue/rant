@@ -1,13 +1,13 @@
-import { Q_FETCH_CURRENT_USER } from '@/gql/login';
+import { Q_FETCH_CURRENT_USER } from '@/gql/common';
 import { logout } from '@/utils/global';
 import Logger from '@/utils/logger';
 import { useQuery } from '@apollo/react-hooks';
 import { Avatar, Icon, Menu, Spin } from 'antd';
 import React from 'react';
+import { router } from 'umi';
 import { FormattedMessage } from 'umi-plugin-react/locale';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
-import { router } from 'umi';
 
 const onMenuClick = e => {
   switch (e.key) {
