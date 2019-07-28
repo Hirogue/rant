@@ -1,17 +1,16 @@
+import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import { buildingQuery, IdentityMaps, UserStatusMaps } from '@/utils/global';
 import Logger from '@/utils/logger';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { useQuery } from '@apollo/react-hooks';
-import { Avatar, Button, Card, Col, Row, Spin, Statistic, Skeleton, Tooltip } from 'antd';
+import { useMutation, useQuery } from '@apollo/react-hooks';
+import { Avatar, Card, Col, Row, Skeleton, Spin, Statistic, message } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'umi';
-import { Q_GET_USERS, Q_GET_USER_STATISTICS } from './gql/user';
+import { M_DELETE_USER, Q_GET_USERS, Q_GET_USER_STATISTICS } from './gql/user';
 import styles from './style.less';
-
-const ButtonGroup = Button.Group;
 
 const Info = ({ title, value, bordered }) => (
   <div className={styles.headerInfo}>
@@ -64,10 +63,24 @@ const renderStatistics = () => {
 export default () => {
   const defaultVariables = { page: 0, limit: 10 };
   const [variables, setVariables] = useState(defaultVariables);
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const { loading, data, refetch } = useQuery(Q_GET_USERS, {
     notifyOnNetworkStatusChange: true,
     variables: { queryString: buildingQuery(defaultVariables) },
+  });
+
+  const [deleteUser] = useMutation(M_DELETE_USER, {
+    update: (proxy, { data }) => {
+      Logger.log('login data:', data);
+
+      if (data.deleteUser) {
+        message.success('删除成功');
+        refetch();
+      } else {
+        message.error('删除失败');
+      }
+    },
   });
 
   useEffect(() => {
@@ -150,6 +163,23 @@ export default () => {
     showTotal: total => `共 ${total} 条记录`,
   };
 
+  const actions = [
+    { name: '刷新', icon: 'reload', action: () => refetch() },
+    { name: '新增', icon: 'file-add', action: () => refetch() },
+    {
+      name: '删除',
+      icon: 'delete',
+      action: () => {
+        deleteUser({ variables: { ids: selectedRows.map(item => item.id).join(',') } });
+      },
+      disabled: selectedRows.length <= 0,
+      confirm: true,
+      confirmTitle: `确定要删除吗?`,
+    },
+    { name: '导入', icon: 'import', action: () => refetch() },
+    { name: '导出', icon: 'export', action: () => refetch() },
+  ];
+
   return (
     <Fragment>
       <PageHeaderWrapper>
@@ -157,20 +187,7 @@ export default () => {
         <StandardRow>
           <Row gutter={16}>
             <Col lg={4}>
-              <ButtonGroup>
-                <Tooltip title="刷新">
-                  <Button icon="reload" onClick={() => refetch()} />
-                </Tooltip>
-                <Tooltip title="新增">
-                  <Button icon="file-add" />
-                </Tooltip>
-                <Tooltip title="导入">
-                  <Button icon="import" />
-                </Tooltip>
-                <Tooltip title="导出">
-                  <Button icon="export" />
-                </Tooltip>
-              </ButtonGroup>
+              <StandardActions actions={actions} />
             </Col>
           </Row>
         </StandardRow>
@@ -182,6 +199,7 @@ export default () => {
           pagination={pagination}
           state={variables}
           onChange={values => setVariables({ ...values })}
+          onRowSelectionChange={selectedRows => setSelectedRows(selectedRows)}
         />
       </PageHeaderWrapper>
     </Fragment>

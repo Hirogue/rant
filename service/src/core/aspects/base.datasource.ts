@@ -35,7 +35,7 @@ export class BaseDataSource extends RESTDataSource {
         return await this.post(url);
     }
 
-    async remove(url: string, id: string) {
-        return await this.delete(`${url}/${id}`);
+    async remove(url: string, ids: string) {
+        return await this.delete(url, { ids });
     }
 }

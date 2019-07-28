@@ -1,7 +1,8 @@
 import { Controller, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { ApiUseTags, ApiBearerAuth } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiUseTags } from "@nestjs/swagger";
 import { Crud } from "@nestjsx/crud";
+import { BaseController } from "../core";
 import { User } from "../database";
 import { UserService } from "./user.service";
 
@@ -21,6 +22,8 @@ import { UserService } from "./user.service";
 @ApiBearerAuth()
 @Controller('/api/user')
 @UseGuards(AuthGuard('jwt'))
-export class UserController {
-    constructor(public service: UserService) { }
+export class UserController extends BaseController<User> {
+    constructor(public service: UserService) {
+        super(service)
+    }
 }

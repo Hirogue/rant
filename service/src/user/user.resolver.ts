@@ -1,5 +1,5 @@
 import { Inject, UseGuards } from '@nestjs/common';
-import { Args, CONTEXT, Query, Resolver } from '@nestjs/graphql';
+import { Args, CONTEXT, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlJwtAuthGuard } from '../auth/gql-jwt-auth.guard';
 import { BaseResolver } from '../core';
 import { User } from '../database';
@@ -26,6 +26,11 @@ export class UserResolver extends BaseResolver {
     @Query(returns => User)
     async user(@Args('id') id: string, @Args('queryString') queryString: string) {
         return await this.api.findOne(API_URL, id, queryString);
+    }
+
+    @Mutation(returns => Boolean)
+    async deleteUser(@Args('ids') ids: string) {
+        return !!await this.api.remove(API_URL, ids);
     }
 
     // @Query(returns => UserStatistics)

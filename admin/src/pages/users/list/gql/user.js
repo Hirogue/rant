@@ -41,7 +41,7 @@ export const Q_GET_USER = gql`
 
 export const Q_GET_USERS = gql`
   query getUsers(
-    $queryString: String! = ""
+    $queryString: String!
   ) {
     users(     
       queryString: $queryString  
@@ -58,6 +58,12 @@ export const Q_GET_USERS = gql`
 
 export const M_UPDATE_USER = gql`
   mutation updateUser($updateUserData: UpdateUserInput!) {
-    update(updateUserData: $updateUserData)
+    updateUser(updateUserData: $updateUserData)
+  }
+`;
+
+export const M_DELETE_USER = gql`
+  mutation deleteUser($ids: String!) {
+    deleteUser(ids: $ids)
   }
 `;
