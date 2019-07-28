@@ -3,8 +3,7 @@ import { Args, CONTEXT, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlJwtAuthGuard } from '../auth/gql-jwt-auth.guard';
 import { BaseResolver } from '../core';
 import { User } from '../database';
-import { UserPaginate } from './dtos';
-import { UserService } from './user.service';
+import { UserPaginate } from './user.paginate.type';
 
 const API_URL = 'user';
 
@@ -12,8 +11,7 @@ const API_URL = 'user';
 @UseGuards(GqlJwtAuthGuard)
 export class UserResolver extends BaseResolver {
     constructor(
-        @Inject(CONTEXT) context,
-        private readonly userService: UserService
+        @Inject(CONTEXT) context
     ) {
         super(context);
     }
@@ -33,13 +31,8 @@ export class UserResolver extends BaseResolver {
         return !!await this.api.remove(API_URL, ids);
     }
 
-    // @Query(returns => UserStatistics)
-    // async userStatistics() {
-    //     return await this.userService.statistics();
-    // }
-
-    // @Mutation(returns => Boolean)
-    // async update(@Args('updateUserData') data: UpdateUserInput) {
-    //     return await this.userService.update(data);
-    // }
+    @Mutation(returns => Boolean)
+    async updateUser(@Args('id') id: string, @Args('data') data: User) {
+        return !!await this.api.update(API_URL, id, data);
+    }
 }

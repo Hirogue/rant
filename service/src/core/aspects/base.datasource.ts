@@ -19,20 +19,21 @@ export class BaseDataSource extends RESTDataSource {
         return await this.get(`${url}/${id}`, queryString);
     }
 
-    async update(url: string, id: string, params: any) {
-        return await this.patch(`${url}/${id}`);
+    async update(url: string, id: string, body: any) {
+        console.log('--->', body);
+        return await this.patch(`${url}/${id}`, { ...body });
     }
 
-    async replace(url: string, id: string, params: any) {
-        return await this.put(`${url}/${id}`);
+    async replace(url: string, id: string, body: any) {
+        return await this.put(`${url}/${id}`, body);
     }
 
-    async create(url: string, params: any) {
-        return await this.post(url);
+    async create(url: string, body: any) {
+        return await this.post(url, body);
     }
 
-    async bulk(url: string, params: any) {
-        return await this.post(url);
+    async bulk(url: string, body: any) {
+        return await this.post(url, body);
     }
 
     async remove(url: string, ids: string) {

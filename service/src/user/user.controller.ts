@@ -21,7 +21,7 @@ import { UserService } from "./user.service";
 @ApiUseTags('user')
 @ApiBearerAuth()
 @Controller('/api/user')
-@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
 export class UserController extends BaseController<User> {
     constructor(public service: UserService) {
         super(service)

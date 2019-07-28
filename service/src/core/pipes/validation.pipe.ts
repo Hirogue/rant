@@ -17,9 +17,9 @@ export class ValidationPipe implements PipeTransform {
         const object = plainToClass(metatype, value);
         const errors = await validate(object);
 
-        Logger.error('errors:', errors);
-
         if (errors.length > 0) {
+
+            Logger.error('errors:', errors);
 
             const error = errors.shift();
             const constraints = error.constraints

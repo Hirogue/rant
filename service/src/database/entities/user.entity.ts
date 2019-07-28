@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
-import { Field, ObjectType } from 'type-graphql';
+import { Field, ObjectType, InputType } from 'type-graphql';
 import { BeforeInsert, Column, Entity } from 'typeorm';
 import { UserStatusEnum, IdentityEnum } from '../../core/enums';
 import { Config } from '../../config';
@@ -8,13 +8,15 @@ import { Base } from './base';
 
 @Entity()
 @ObjectType()
+@InputType('UserInput')
 export class User extends Base {
 
-    @Field()
+    @Field({ nullable: true })
     @Column({ unique: true })
     account: String;
 
     @Exclude({ toPlainOnly: true })
+    @Field({ nullable: true })
     @Column()
     password: String;
 
@@ -46,11 +48,11 @@ export class User extends Base {
     @Column({ nullable: true })
     profile: String;
 
-    @Field()
+    @Field({ nullable: true })
     @Column({ type: 'simple-enum', default: IdentityEnum.TOURIST })
     identity: IdentityEnum;
 
-    @Field()
+    @Field({ nullable: true })
     @Column({ type: 'simple-enum', default: UserStatusEnum.NORMAL })
     status: UserStatusEnum;
 
