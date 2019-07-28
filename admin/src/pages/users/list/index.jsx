@@ -9,7 +9,7 @@ import { Avatar, Card, Col, Row, Skeleton, Spin, Statistic, message } from 'antd
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'umi';
-import { M_DELETE_USER, Q_GET_USERS, Q_GET_USER_STATISTICS } from './gql/user';
+import { M_DELETE_USER, Q_GET_USERS, Q_GET_USER_STATISTICS } from '../gql/user';
 import styles from './style.less';
 
 const Info = ({ title, value, bordered }) => (
@@ -102,6 +102,17 @@ export default () => {
 
   const columns = [
     {
+      title: '详情',
+      dataIndex: 'id',
+      render: (val, row) => {
+        return (
+          <Fragment>
+            <Link to={`/users/detail/${val}`}>详情</Link>
+          </Fragment>
+        );
+      },
+    },
+    {
       title: '头像',
       dataIndex: 'avatar',
       render: val => <Avatar src={val} />,
@@ -140,17 +151,6 @@ export default () => {
       render: val => moment(val).format('YYYY-MM-DD HH:mm:ss'),
       sorter: true,
     },
-    {
-      title: '操作',
-      dataIndex: 'id',
-      render: (val, row) => {
-        return (
-          <Fragment>
-            <Link to={`/users/detail/${val}`}>详情</Link>
-          </Fragment>
-        );
-      },
-    },
   ];
 
   const pagination = {
@@ -183,7 +183,6 @@ export default () => {
   return (
     <Fragment>
       <PageHeaderWrapper>
-        {/* {renderStatistics()} */}
         <StandardRow>
           <Row gutter={16}>
             <Col lg={4}>

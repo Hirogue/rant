@@ -1,4 +1,6 @@
-import { Q_GET_USER } from '@/pages/users/list/gql/user';
+import ImageCropper from '@/components/ImageCropper';
+import StandardTabList from '@/components/StandardTabList';
+import { uploadOne } from '@/utils/fetch';
 import { IdentityMaps, UserStatusMaps } from '@/utils/global';
 import Logger from '@/utils/logger';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
@@ -16,6 +18,7 @@ import {
   Icon,
   Menu,
   Popover,
+  Skeleton,
   Statistic,
   Steps,
   Table,
@@ -23,9 +26,9 @@ import {
 } from 'antd';
 import classNames from 'classnames';
 import { connect } from 'dva';
-import moment from 'moment';
 import React, { Component, Fragment } from 'react';
 import { router, withRouter } from 'umi';
+import { Q_GET_USER } from '../gql/user';
 import styles from './style.less';
 
 const { Step } = Steps;
@@ -468,6 +471,25 @@ const renderDescription = user => (
   </RouteContext.Consumer>
 );
 
+const onAvatarUpload = async file => {
+  Logger.log('upload file:', file);
+
+  const res = await uploadOne(file);
+
+  Logger.log('res:', res);
+
+  if (!!res && res.relativePath) {
+    // updateUser({
+    //   variables: {
+    //     updateUserData: {
+    //       id: currentUser.id,
+    //       payload: JSON.stringify({ avatar: res[0].relativePath }),
+    //     },
+    //   },
+    // });
+  }
+};
+
 export default withRouter(props => {
   const {
     match: {
@@ -480,10 +502,25 @@ export default withRouter(props => {
     variables: { id },
   });
 
-  const user = data.user || {};
+  const { user } = data;
+
+  if (!user) return <Skeleton loading={loading} />;
 
   Logger.log('user id:', id);
   Logger.log('user:', user);
+
+  const tabList = {
+    base: {
+      name: '基础信息',
+      render: () => '基础信息',
+    },
+    avatar: {
+      name: '头像',
+      render: () => (
+        <ImageCropper url={user.avatar} onUpload={onAvatarUpload} width={128} height={128} />
+      ),
+    },
+  };
 
   return (
     <PageHeaderWrapper
@@ -497,7 +534,11 @@ export default withRouter(props => {
         </div>
       }
     >
-      <div className={styles.main}></div>
+      <div className={styles.main}>
+        <GridContent>
+          <StandardTabList defaultKey="base" tabList={tabList} />
+        </GridContent>
+      </div>
     </PageHeaderWrapper>
   );
 });

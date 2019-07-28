@@ -11,10 +11,12 @@ export class StorageController {
     @UseInterceptors(AnyFilesInterceptor())
     local(@UploadedFiles() files) {
 
-        return files.map(file => ({
+        const fileList = files.map(file => ({
             ...file,
             relativePath: `${Config.serverUrl}${Config.static.root}${Config.static.uploads}/${file.filename}`
         }));
+
+        return fileList.length === 1 ? fileList[0] : fileList;
     }
 
 }

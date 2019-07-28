@@ -27,3 +27,11 @@ export const createFetch = (url, config) => {
 };
 
 export const post = async (url, data) => createFetch(url, { method: 'POST', body: data });
+
+export const uploadOne = async (file, fileName) => {
+  const data = new FormData();
+  data.append('fileName', fileName || file.name);
+  data.append('file', file);
+
+  return await post('/api/storage', data);
+};

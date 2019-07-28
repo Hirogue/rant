@@ -32,8 +32,8 @@ export const Q_GET_USER_STATISTICS = gql`
 `;
 
 export const Q_GET_USER = gql`
-  query getUser($id: String!) {
-    user(id: $id) {
+  query getUser($id: String!, $queryString: String! = "") {
+    user(id: $id, queryString: $queryString) {
       ${USER_TYPE}
     }
   }

@@ -1,7 +1,7 @@
 import ImageCropper from '@/components/ImageCropper';
 import { Q_FETCH_CURRENT_USER } from '@/gql/common';
-import { M_UPDATE_USER } from '@/pages/users/list/gql/user';
-import { post } from '@/utils/fetch';
+import { M_UPDATE_USER } from '@/pages/users/gql/user';
+import { uploadOne } from '@/utils/fetch';
 import Logger from '@/utils/logger';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { Button, Form, Input, message, Select } from 'antd';
@@ -57,20 +57,16 @@ export default Form.create()(props => {
   const onAvatarUpload = async file => {
     Logger.log('upload file:', file);
 
-    const data = new FormData();
-    data.append('fileName', file.name);
-    data.append('file', file);
-
-    const res = await post('/api/storage', data);
+    const res = await uploadOne(file);
 
     Logger.log('res:', res);
 
-    if (!!res && res[0] && res[0].relativePath) {
+    if (!!res && res.relativePath) {
       updateUser({
         variables: {
           updateUserData: {
             id: currentUser.id,
-            payload: JSON.stringify({ avatar: res[0].relativePath }),
+            payload: JSON.stringify({ avatar: res.relativePath }),
           },
         },
       });
