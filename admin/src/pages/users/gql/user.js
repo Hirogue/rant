@@ -57,8 +57,8 @@ export const Q_GET_USERS = gql`
 `;
 
 export const M_UPDATE_USER = gql`
-  mutation updateUser($updateUserData: UpdateUserInput!) {
-    updateUser(updateUserData: $updateUserData)
+  mutation updateUser($id: String!, $data: UserInput!) {
+    updateUser(id: $id, data: $data)
   }
 `;
 

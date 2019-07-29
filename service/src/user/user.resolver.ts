@@ -1,20 +1,20 @@
 import { Inject, UseGuards } from '@nestjs/common';
 import { Args, CONTEXT, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GqlJwtAuthGuard } from '../auth/gql-jwt-auth.guard';
-import { BaseResolver } from '../core';
+import { BaseResolver, BasePaginate } from '../core';
 import { User } from '../database';
-import { UserPaginate } from './user.paginate.type';
+import { ObjectType } from 'type-graphql';
 
 const API_URL = 'user';
+
+@ObjectType()
+export class UserPaginate extends BasePaginate(User) { }
 
 @Resolver(of => User)
 @UseGuards(GqlJwtAuthGuard)
 export class UserResolver extends BaseResolver {
-    constructor(
-        @Inject(CONTEXT) context
-    ) {
-        super(context);
-    }
+
+    constructor(@Inject(CONTEXT) context) { super(context); }
 
     @Query(returns => UserPaginate)
     async users(@Args('queryString') queryString: string) {
@@ -34,5 +34,10 @@ export class UserResolver extends BaseResolver {
     @Mutation(returns => Boolean)
     async updateUser(@Args('id') id: string, @Args('data') data: User) {
         return !!await this.api.update(API_URL, id, data);
+    }
+
+    @Mutation(returns => Boolean)
+    async createUser(@Args('data') data: User) {
+        return !!await this.api.create(API_URL, data);
     }
 }

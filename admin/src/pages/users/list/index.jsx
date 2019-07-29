@@ -8,7 +8,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import { Avatar, Card, Col, Row, Skeleton, Spin, Statistic, message } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
-import { Link } from 'umi';
+import { Link, router } from 'umi';
 import { M_DELETE_USER, Q_GET_USERS, Q_GET_USER_STATISTICS } from '../gql/user';
 import styles from './style.less';
 
@@ -165,7 +165,7 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => refetch() },
+    { name: '新增', icon: 'file-add', action: () => router.push('/users/create') },
     {
       name: '删除',
       icon: 'delete',

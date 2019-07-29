@@ -166,6 +166,10 @@ export default {
               path: '/users/detail/:id',
               component: './users/detail',
             },
+            {
+              path: '/users/create',
+              component: './users/detail',
+            },
           ],
         },
         {

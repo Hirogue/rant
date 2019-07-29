@@ -1,5 +1,6 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
 import { Config } from '../../config';
+import { ApolloException } from '../exceptions';
 
 export class BaseDataSource extends RESTDataSource {
     constructor() {
@@ -12,31 +13,58 @@ export class BaseDataSource extends RESTDataSource {
     }
 
     async find(url: string, queryString: string) {
-        return await this.get(`${url}?${queryString}`);
+        try {
+            return await this.get(`${url}?${queryString}`);
+        } catch (err) {
+            throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
+        }
     }
 
     async findOne(url: string, id: string, queryString: string) {
-        return await this.get(`${url}/${id}`, queryString);
+        try {
+            return await this.get(`${url}/${id}`, queryString);
+        } catch (err) {
+            throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
+        }
     }
 
     async update(url: string, id: string, body: any) {
-        console.log('--->', body);
-        return await this.patch(`${url}/${id}`, { ...body });
+        try {
+            return await this.patch(`${url}/${id}`, body);
+        } catch (err) {
+            throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
+        }
     }
 
     async replace(url: string, id: string, body: any) {
-        return await this.put(`${url}/${id}`, body);
+        try {
+            return await this.put(`${url}/${id}`, body);
+        } catch (err) {
+            throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
+        }
     }
 
     async create(url: string, body: any) {
-        return await this.post(url, body);
+        try {
+            return await this.post(url, body);
+        } catch (err) {
+            throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
+        }
     }
 
     async bulk(url: string, body: any) {
-        return await this.post(url, body);
+        try {
+            return await this.post(url, body);
+        } catch (err) {
+            throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
+        }
     }
 
     async remove(url: string, ids: string) {
-        return await this.delete(url, { ids });
+        try {
+            return await this.delete(url, { ids });
+        } catch (err) {
+            throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
+        }
     }
 }
