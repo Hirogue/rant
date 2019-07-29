@@ -16,29 +16,6 @@ export const USER_TYPE = `
   status
 `;
 
-export const Q_GET_USER_STATISTICS = gql`
-  query getUserStatistics {
-    userStatistics {
-      all
-      users
-      investors
-      financers
-      providers
-      tourists
-      pendingCount
-      rejectCount
-    }
-  }
-`;
-
-export const Q_GET_USER = gql`
-  query getUser($id: String!, $queryString: String! = "") {
-    user(id: $id, queryString: $queryString) {
-      ${USER_TYPE}
-    }
-  }
-`;
-
 export const Q_GET_USERS = gql`
   query getUsers(
     $queryString: String!
@@ -52,6 +29,14 @@ export const Q_GET_USERS = gql`
       data {
         ${USER_TYPE}
       }
+    }
+  }
+`;
+
+export const Q_GET_USER = gql`
+  query getUser($id: String!, $queryString: String! = "") {
+    user(id: $id, queryString: $queryString) {
+      ${USER_TYPE}
     }
   }
 `;
