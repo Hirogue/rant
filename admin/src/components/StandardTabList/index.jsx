@@ -3,8 +3,7 @@ import { useState } from 'react';
 import styles from './index.less';
 
 export default props => {
-  const { tabList, defaultKey } = props;
-  const [tapKey, setTapKey] = useState(defaultKey);
+  const { tabList, activeTabKey, onActiveTabKeyChange } = props;
 
   const keyMaps = Object.keys(tabList).map(key => ({ key, tab: tabList[key]['name'] }));
 
@@ -13,10 +12,10 @@ export default props => {
       className={styles.tabsCard}
       bordered={false}
       tabList={keyMaps}
-      activeTabKey={tapKey}
-      onTabChange={key => setTapKey(key)}
+      activeTabKey={activeTabKey}
+      onTabChange={onActiveTabKeyChange}
     >
-      {tabList[tapKey]['render'] && tabList[tapKey]['render']()}
+      {tabList[activeTabKey]['render'] && tabList[activeTabKey]['render']()}
     </Card>
   );
 };

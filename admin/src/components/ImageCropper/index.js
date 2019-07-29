@@ -69,17 +69,6 @@ export default class ImageCropper extends React.Component {
     } // W3C
     window.onmousewheel = document.onmousewheel = scrollFunc; // IE/Opera/Chrome
   }
-  componentWillReceiveProps(nextProps) {
-    const { scale, width, height, borderRadius } = this.props;
-
-    this.setState(state => ({
-      ...state,
-      scale: scale || 1,
-      width: width || 400,
-      height: height || 200,
-      borderRadius: borderRadius || 0,
-    }));
-  }
 
   beforeUpload = imageFile => {
     this.setState({ imageFile });

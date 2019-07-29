@@ -62,6 +62,14 @@ export const M_UPDATE_USER = gql`
   }
 `;
 
+export const M_CREATE_USER = gql`
+  mutation createUser($data: UserInput!) {
+    createUser(data: $data) {
+      id
+    }
+  }
+`;
+
 export const M_DELETE_USER = gql`
   mutation deleteUser($ids: String!) {
     deleteUser(ids: $ids)

@@ -44,10 +44,8 @@ export default Form.create()(props => {
       if (!err) {
         updateUser({
           variables: {
-            updateUserData: {
-              id: currentUser.id,
-              payload: JSON.stringify(values),
-            },
+            id: currentUser.id,
+            data: values,
           },
         });
       }
@@ -64,10 +62,8 @@ export default Form.create()(props => {
     if (!!res && res.relativePath) {
       updateUser({
         variables: {
-          updateUserData: {
-            id: currentUser.id,
-            payload: JSON.stringify({ avatar: res.relativePath }),
-          },
+          id: currentUser.id,
+          data: { avatar: res.relativePath },
         },
       });
     }

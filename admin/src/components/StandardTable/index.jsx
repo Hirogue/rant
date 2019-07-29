@@ -61,7 +61,7 @@ export default props => {
         highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
         searchWords={[searchTexts[dataIndex]]}
         autoEscape
-        textToHighlight={text.toString()}
+        textToHighlight={text ? text.toString() : ''}
       />
     ),
   });

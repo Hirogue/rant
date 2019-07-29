@@ -36,8 +36,8 @@ export class UserResolver extends BaseResolver {
         return !!await this.api.update(API_URL, id, data);
     }
 
-    @Mutation(returns => Boolean)
+    @Mutation(returns => User)
     async createUser(@Args('data') data: User) {
-        return !!await this.api.create(API_URL, data);
+        return await this.api.create(API_URL, data);
     }
 }

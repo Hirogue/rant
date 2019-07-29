@@ -30,7 +30,7 @@ export class BaseDataSource extends RESTDataSource {
 
     async update(url: string, id: string, body: any) {
         try {
-            return await this.patch(`${url}/${id}`, body);
+            return await this.patch(`${url}/${id}`, { ...body });
         } catch (err) {
             throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
         }
@@ -38,7 +38,7 @@ export class BaseDataSource extends RESTDataSource {
 
     async replace(url: string, id: string, body: any) {
         try {
-            return await this.put(`${url}/${id}`, body);
+            return await this.put(`${url}/${id}`, { ...body });
         } catch (err) {
             throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
         }
@@ -46,7 +46,7 @@ export class BaseDataSource extends RESTDataSource {
 
     async create(url: string, body: any) {
         try {
-            return await this.post(url, body);
+            return await this.post(url, { ...body });
         } catch (err) {
             throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
         }
@@ -54,7 +54,7 @@ export class BaseDataSource extends RESTDataSource {
 
     async bulk(url: string, body: any) {
         try {
-            return await this.post(url, body);
+            return await this.post(url, { ...body });
         } catch (err) {
             throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
         }

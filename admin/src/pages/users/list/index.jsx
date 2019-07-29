@@ -61,7 +61,7 @@ const renderStatistics = () => {
 };
 
 export default () => {
-  const defaultVariables = { page: 0, limit: 10 };
+  const defaultVariables = { page: 0, limit: 10, sort: [{ field: 'create_at', order: 'DESC' }] };
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
 
@@ -128,6 +128,11 @@ export default () => {
       search: true,
     },
     {
+      title: '手机号',
+      dataIndex: 'phone',
+      search: true,
+    },
+    {
       title: '身份',
       dataIndex: 'identity',
       render: val => IdentityMaps[val],
@@ -185,7 +190,7 @@ export default () => {
       <PageHeaderWrapper>
         <StandardRow>
           <Row gutter={16}>
-            <Col lg={4}>
+            <Col lg={6}>
               <StandardActions actions={actions} />
             </Col>
           </Row>
