@@ -153,6 +153,12 @@ export default {
           ],
         },
         {
+          name: 'org',
+          icon: 'apartment',
+          path: '/org',
+          component: './org',
+        },
+        {
           name: 'users',
           icon: 'team',
           path: '/users',

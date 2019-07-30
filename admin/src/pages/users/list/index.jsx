@@ -5,7 +5,7 @@ import { buildingQuery, IdentityMaps, UserStatusMaps } from '@/utils/global';
 import Logger from '@/utils/logger';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Avatar, Card, Col, Row, Skeleton, Spin, Statistic, message } from 'antd';
+import { Avatar, Card, Col, message, Row, Skeleton, Spin, Statistic } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';

@@ -2,12 +2,13 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { RenderModule } from 'nest-next';
+import { AuthModule } from './auth';
 import { Config } from "./config";
+import { BaseDataSource, CoreModule } from './core';
 import { LoggerMiddleware, LoggerModule } from './logger';
+import { OrgModule } from './org';
 import { StorageModule } from './storage';
 import { UserModule } from './user';
-import { AuthModule } from './auth';
-import { CoreModule, BaseDataSource } from './core';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { CoreModule, BaseDataSource } from './core';
     RenderModule,
     LoggerModule,
     StorageModule,
+    OrgModule,
     UserModule,
     AuthModule,
   ]

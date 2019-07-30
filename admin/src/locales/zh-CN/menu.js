@@ -9,6 +9,7 @@ export default {
   'menu.dashboard.analysis': '分析页',
   'menu.dashboard.monitor': '监控页',
   'menu.dashboard.workplace': '工作台',
+  'menu.org': '组织架构',
   'menu.users': '用户管理',
   'menu.users.list': '用户列表',
   'menu.exception.403': '403',

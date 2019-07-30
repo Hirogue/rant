@@ -9,6 +9,7 @@ export default {
   'menu.dashboard.analysis': 'Analysis',
   'menu.dashboard.monitor': 'Monitor',
   'menu.dashboard.workplace': 'Workplace',
+  'menu.org': 'Org Management',
   'menu.users': 'Users Management',
   'menu.users.list': 'Users List',
   'menu.exception.403': '403',
