@@ -12,6 +12,14 @@ export abstract class BaseTreeService<T> extends BaseService<T> {
         return await this.repository.findOne(id);
     }
 
+    async findChildren(id: string) {
+
+        return await this.repository.createQueryBuilder('t')
+            .leftJoin('t.parent', 'p')
+            .where(`p.id = :id`, { id })
+            .getMany();
+    }
+
     /**
      * 返回数据库中所有树，包括所有孩子，孩子的孩子等。
      */

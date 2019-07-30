@@ -51,7 +51,8 @@ let Config = {
     static: {
         root: '/static',
         uploads: '/uploads'
-    }
+    },
+
 };
 
 if (!dev) {

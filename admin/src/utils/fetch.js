@@ -26,6 +26,20 @@ export const createFetch = (url, config) => {
     .catch(error => Logger.error(error));
 };
 
+export const get = async (url, params) => {
+  let queryString = null;
+
+  if (params) {
+    const searchParams = new URLSearchParams();
+
+    Object.keys(params).forEach(key => searchParams.append(key, params[key]));
+
+    queryString = searchParams.toString();
+  }
+
+  return createFetch(`${url}${queryString ? '?' + queryString : ''}`, { method: 'GET' });
+};
+
 export const post = async (url, data) => createFetch(url, { method: 'POST', body: data });
 
 export const uploadOne = async (file, fileName) => {

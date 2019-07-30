@@ -16,7 +16,7 @@ import { OrgService } from "./org.service";
             type: 'uuid',
             primary: true,
         },
-    },
+    }
 })
 @ApiUseTags('org')
 @ApiBearerAuth()

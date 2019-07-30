@@ -28,6 +28,14 @@ export class BaseDataSource extends RESTDataSource {
         }
     }
 
+    async findChildren(url: string, parentId: string) {
+        try {
+            return await this.get(`${url}/tree/children/${parentId}`);
+        } catch (err) {
+            throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
+        }
+    }
+
     async findDescendants(url: string, parentId: string) {
         try {
             return await this.get(`${url}/tree/descendants/${parentId}`);

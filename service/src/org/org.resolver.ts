@@ -15,6 +15,21 @@ export class OrgPaginate extends BasePaginate(Org) { }
 export class OrgResolver extends BaseResolver {
     constructor(@Inject(CONTEXT) context) { super(context); }
 
+    @Query(returns => [Org])
+    async orgRoots() {
+        return await this.api.findRoots(API_URL);
+    }
+
+    @Query(returns => [Org])
+    async orgTrees() {
+        return await this.api.findTrees(API_URL);
+    }
+
+    @Query(returns => [Org])
+    async orgChildren(@Args('id') id: string) {
+        return await this.api.findChildren(API_URL, id);
+    }
+
     @Query(returns => Org)
     async org(@Args('id') id: string, @Args('queryString') queryString: string) {
         return await this.api.findOne(API_URL, id, queryString);
@@ -25,9 +40,9 @@ export class OrgResolver extends BaseResolver {
         return !!await this.api.remove(API_URL, ids);
     }
 
-    @Mutation(returns => Boolean)
+    @Mutation(returns => Org)
     async updateOrg(@Args('id') id: string, @Args('data') data: Org) {
-        return !!await this.api.update(API_URL, id, data);
+        return await this.api.update(API_URL, id, data);
     }
 
     @Mutation(returns => Org)

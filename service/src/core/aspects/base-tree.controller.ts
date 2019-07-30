@@ -22,39 +22,45 @@ export abstract class BaseTreeController<T> extends BaseController<T> {
         return this.service.findRoots();
     }
 
+    @Get(`${PREFIX}/children/:id`)
+    @ApiOperation({ title: 'Gets all children of the given entity. Returns them all in a flat array.' })
+    async children(@Param('id') id: string) {
+        return this.service.findChildren(id);
+    }
+
     @Get(`${PREFIX}/descendants/:id`)
-    @ApiOperation({ title: 'Gets all children (descendants) of the given entity. Returns them all in a flat array.' })
-    async descendants(@Param() id: string) {
+    @ApiOperation({ title: 'Gets all descendants of the given entity. Returns them all in a flat array.' })
+    async descendants(@Param('id') id: string) {
         return this.service.findDescendants(id);
     }
 
     @Get(`${PREFIX}/descendantsTree/:id`)
-    @ApiOperation({ title: ' Gets all children (descendants) of the given entity. Returns them in a tree - nested into each other.' })
-    async descendantsTree(@Param() id: string) {
+    @ApiOperation({ title: ' Gets all descendants of the given entity. Returns them in a tree - nested into each other.' })
+    async descendantsTree(@Param('id') id: string) {
         return this.service.findDescendantsTree(id);
     }
 
     @Get(`${PREFIX}/countDescendants/:id`)
     @ApiOperation({ title: 'Gets number of descendants of the entity.' })
-    async countDescendants(@Param() id: string) {
+    async countDescendants(@Param('id') id: string) {
         return this.service.countDescendants(id);
     }
 
     @Get(`${PREFIX}/ancestors/:id`)
     @ApiOperation({ title: 'Gets all parent (ancestors) of the given entity. Returns them all in a flat array.' })
-    async ancestors(@Param() id: string) {
+    async ancestors(@Param('id') id: string) {
         return this.service.findAncestors(id);
     }
 
     @Get(`${PREFIX}/ancestorsTree/:id`)
     @ApiOperation({ title: 'Gets all parent (ancestors) of the given entity. Returns them in a tree - nested into each other.' })
-    async ancestorsTree(@Param() id: string) {
+    async ancestorsTree(@Param('id') id: string) {
         return this.service.findAncestorsTree(id);
     }
 
     @Get(`${PREFIX}/countAncestors/:id`)
     @ApiOperation({ title: 'Gets the number of ancestors of the entity.' })
-    async countAncestors(@Param() id: string) {
+    async countAncestors(@Param('id') id: string) {
         return this.service.countAncestors(id);
     }
 }

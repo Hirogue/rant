@@ -17,6 +17,17 @@ import { UserService } from "./user.service";
             primary: true,
         },
     },
+    query: {
+        limit: 10,
+        maxLimit: 100,
+        cache: 10 * 1000,
+        sort: [
+            {
+                field: 'create_at',
+                order: 'DESC',
+            },
+        ]
+    }
 })
 @ApiUseTags('user')
 @ApiBearerAuth()

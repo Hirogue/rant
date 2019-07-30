@@ -231,154 +231,13 @@ const BasicForm = Form.create()(props => {
             initialValue: target.profile,
           })(<TextArea placeholder="请填写简介" rows={4} />)}
         </FormItem>
-        {/* <FormItem {...formItemLayout} label={<FormattedMessage id="form-basic.date.label" />}>
-          {getFieldDecorator('date', {
-            rules: [
-              {
-                required: true,
-                message: formatMessage({
-                  id: 'form-basic.date.required',
-                }),
-              },
-            ],
-          })(
-            <RangePicker
-              style={{
-                width: '100%',
-              }}
-              placeholder={[
-                formatMessage({
-                  id: 'form-basic.placeholder.start',
-                }),
-                formatMessage({
-                  id: 'form-basic.placeholder.end',
-                }),
-              ]}
-            />,
-          )}
-        </FormItem>
-        <FormItem {...formItemLayout} label={<FormattedMessage id="form-basic.goal.label" />}>
-          {getFieldDecorator('goal', {
-            rules: [
-              {
-                required: true,
-                message: formatMessage({
-                  id: 'form-basic.goal.required',
-                }),
-              },
-            ],
-          })(
-            <TextArea
-              style={{
-                minHeight: 32,
-              }}
-              placeholder={formatMessage({
-                id: 'form-basic.goal.placeholder',
-              })}
-              rows={4}
-            />,
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={<FormattedMessage id="form-basic.standard.label" />}
-        >
-          {getFieldDecorator('standard', {
-            rules: [
-              {
-                required: true,
-                message: formatMessage({
-                  id: 'form-basic.standard.required',
-                }),
-              },
-            ],
-          })(
-            <TextArea
-              style={{
-                minHeight: 32,
-              }}
-              placeholder={formatMessage({
-                id: 'form-basic.standard.placeholder',
-              })}
-              rows={4}
-            />,
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={
-            <span>
-              <FormattedMessage id="form-basic.client.label" />
-              <em className={styles.optional}>
-                <FormattedMessage id="form-basic.form.optional" />
-                <Tooltip title={<FormattedMessage id="form-basic.label.tooltip" />}>
-                  <Icon
-                    type="info-circle-o"
-                    style={{
-                      marginRight: 4,
-                    }}
-                  />
-                </Tooltip>
-              </em>
-            </span>
-          }
-        >
-          {getFieldDecorator('client')(
-            <Input
-              placeholder={formatMessage({
-                id: 'form-basic.client.placeholder',
-              })}
-            />,
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={
-            <span>
-              <FormattedMessage id="form-basic.invites.label" />
-              <em className={styles.optional}>
-                <FormattedMessage id="form-basic.form.optional" />
-              </em>
-            </span>
-          }
-        >
-          {getFieldDecorator('invites')(
-            <Input
-              placeholder={formatMessage({
-                id: 'form-basic.invites.placeholder',
-              })}
-            />,
-          )}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label={
-            <span>
-              <FormattedMessage id="form-basic.weight.label" />
-              <em className={styles.optional}>
-                <FormattedMessage id="form-basic.form.optional" />
-              </em>
-            </span>
-          }
-        >
-          {getFieldDecorator('weight')(
-            <InputNumber
-              placeholder={formatMessage({
-                id: 'form-basic.weight.placeholder',
-              })}
-              min={0}
-              max={100}
-            />,
-          )}
-          <span className="ant-form-text">%</span>
-        </FormItem> */}
         <FormItem
           {...submitFormLayout}
           style={{
             marginTop: 32,
           }}
         >
-          <Button type="primary" htmlType="submit" loading={false}>
+          <Button type="primary" htmlType="submit">
             保存
           </Button>
         </FormItem>
@@ -449,8 +308,6 @@ export default withRouter(props => {
 
   const [createUser] = useMutation(M_CREATE_USER, {
     update: (proxy, { data }) => {
-      Logger.log('create result data:', data);
-
       if (data && data.createUser) {
         message.success('保存成功');
         router.replace(`/users/detail/${data.createUser.id}`);
