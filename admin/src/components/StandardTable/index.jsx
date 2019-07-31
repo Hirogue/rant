@@ -1,7 +1,7 @@
-import { mergeParams } from '@/utils/global';
+import { mergeParams, getTreeData } from '@/utils/global';
 import Logger from '@/utils/logger';
 import { CondOperator } from '@nestjsx/crud-request';
-import { Button, Card, Divider, Icon, Input, Table } from 'antd';
+import { Button, Card, Divider, Icon, Input, Table, TreeSelect } from 'antd';
 import { isEmpty } from 'lodash';
 import React, { useState } from 'react';
 import Highlighter from 'react-highlight-words';
@@ -26,7 +26,6 @@ export default props => {
     onChange: (selectedRowKeys, selectedRows) => {
       setSelectedCount(selectedRowKeys.length);
       onRowSelectionChange && onRowSelectionChange(selectedRows);
-      Logger.log('selectedRows:', selectedRows);
     },
   };
 
@@ -66,12 +65,43 @@ export default props => {
     ),
   });
 
+  const renderColumnTreeSelectorProps = data => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div style={{ padding: 8 }}>
+        <TreeSelect
+          style={{ width: 300 }}
+          value={selectedKeys}
+          allowClear
+          multiple
+          showSearch
+          treeNodeFilterProp="title"
+          dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+          treeData={getTreeData(data.treeFilters)}
+          treeDefaultExpandAll
+          onChange={value => setSelectedKeys(value ? value : [])}
+        />
+        <Button type="link" onClick={() => confirm()} size="small">
+          确定
+        </Button>
+        <Button type="link" onClick={() => clearFilters()} size="small">
+          重置
+        </Button>
+      </div>
+    ),
+  });
+
   const searchKeys = [];
   const tableColumns = columns.map(item => {
     if (item.search) {
       delete item.search;
       searchKeys.push(item.dataIndex);
       return { ...item, ...renderColumnSearchProps(item.dataIndex) };
+    }
+
+    if (item.treeSelector) {
+      delete item.treeSelector;
+
+      return { ...item, ...renderColumnTreeSelectorProps(item) };
     }
 
     return item;

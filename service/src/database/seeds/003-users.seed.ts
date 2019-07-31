@@ -7,11 +7,16 @@ import { User, Org } from "../entities";
 export default class CreateUsers implements Seeder {
     public async run(factory: Factory, connection: Connection): Promise<any> {
 
-        const org1 = await connection.getRepository(Org).findOne({ where: { title: '董事会' } });
+        const org1 = await connection.getRepository(Org).findOne({ where: { title: '后台' } });
         const org2 = await connection.getRepository(Org).findOne({ where: { title: '基金部' } });
         const org3 = await connection.getRepository(Org).findOne({ where: { title: '投资业务部' } });
         const org4 = await connection.getRepository(Org).findOne({ where: { title: '风险管理部' } });
         const org5 = await connection.getRepository(Org).findOne({ where: { title: '财务部' } });
+
+        const org6 = await connection.getRepository(Org).findOne({ where: { title: '游客' } });
+        const org7 = await connection.getRepository(Org).findOne({ where: { title: '项目方' } });
+        const org8 = await connection.getRepository(Org).findOne({ where: { title: '资金方' } });
+        const org9 = await connection.getRepository(Org).findOne({ where: { title: '服务商' } });
 
         const superAdmin = new User();
         superAdmin.account = 'SuperAdmin';
@@ -23,14 +28,15 @@ export default class CreateUsers implements Seeder {
 
         await connection.getRepository(User).save(superAdmin);
 
-        await factory(User)({ identity: IdentityEnum.TOURIST }).seedMany(10);
         await factory(User)({ identity: IdentityEnum.USER, org: org2 }).seedMany(4);
         await factory(User)({ identity: IdentityEnum.USER, org: org3 }).seedMany(4);
         await factory(User)({ identity: IdentityEnum.USER, org: org4 }).seedMany(5);
         await factory(User)({ identity: IdentityEnum.USER, org: org5 }).seedMany(2);
-        await factory(User)({ identity: IdentityEnum.FINANCER }).seedMany(5);
-        await factory(User)({ identity: IdentityEnum.INVESTOR }).seedMany(5);
-        await factory(User)({ identity: IdentityEnum.PROVIDER }).seedMany(3);
+
+        await factory(User)({ identity: IdentityEnum.TOURIST, org: org6 }).seedMany(10);
+        await factory(User)({ identity: IdentityEnum.FINANCER, org: org7 }).seedMany(5);
+        await factory(User)({ identity: IdentityEnum.INVESTOR, org: org8 }).seedMany(5);
+        await factory(User)({ identity: IdentityEnum.PROVIDER, org: org9 }).seedMany(10);
 
     }
 }

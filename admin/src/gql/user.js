@@ -1,31 +1,39 @@
 import gql from 'graphql-tag';
-import { F_USER_FIELDS, F_ORG_FIELDS } from './fragment';
+import { F_USER_FIELDS, F_ORG_FIELDS, F_ORG_RECURSIVE } from './fragment';
 
 export const Q_GET_USERS = gql`
   ${F_USER_FIELDS}
+  ${F_ORG_FIELDS}
+  ${F_ORG_RECURSIVE}
 
-  query getUsers(
-    $queryString: String!
-  ) {
-    users(     
-      queryString: $queryString  
-    ) {
+  query getUsers($queryString: String!) {
+    users(queryString: $queryString) {
       total
       page
-      pageCount    
+      pageCount
       data {
         ...UserFields
       }
+    }
+
+    orgTrees {
+      ...OrgRecursive
     }
   }
 `;
 
 export const Q_GET_USER = gql`
   ${F_USER_FIELDS}
+  ${F_ORG_FIELDS}
+  ${F_ORG_RECURSIVE}
 
   query getUser($id: String!, $queryString: String! = "") {
     user(id: $id, queryString: $queryString) {
       ...UserFields
+    }
+
+    orgTrees {
+      ...OrgRecursive
     }
   }
 `;
@@ -38,7 +46,7 @@ export const M_UPDATE_USER = gql`
 
 export const M_CREATE_USER = gql`
   ${F_USER_FIELDS}
-  
+
   mutation createUser($data: UserInput!) {
     createUser(data: $data) {
       ...UserFields

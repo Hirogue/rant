@@ -5,38 +5,42 @@ import { Org } from "../entities";
 export default class CreateOrgs implements Seeder {
     public async run(factory: Factory, connection: Connection): Promise<any> {
 
-        const org1 = await factory(Org)({ title: '董事会' }).seed();
+        await factory(Org)({ title: '游客' }).seed();
+
+        const org0 = await factory(Org)({ title: '客户' }).seed();
+
+        await factory(Org)({ title: '项目方', parent: org0 }).seed();
+        await factory(Org)({ title: '资金方', parent: org0 }).seed();
+        await factory(Org)({ title: '服务商', parent: org0 }).seed();
+
+        const org1 = await factory(Org)({ title: '后台' }).seed();
+
         const org2 = await factory(Org)({ title: '总经办', parent: org1 }).seed();
 
         await factory(Org)({
-            title: '子基金部',
+            title: '基金一部',
             parent: await factory(Org)({ title: '基金部', parent: org2 }).seed()
-        }).seedMany(10);
+        }).seed();
 
         await factory(Org)({
-            title: '子财务部',
-            parent: await factory(Org)({ title: '财务部', parent: org2 }).seed()
-        }).seedMany(10);
+            title: '基金二部',
+            parent: await factory(Org)({ title: '基金部', parent: org2 }).seed()
+        }).seed();
 
         await factory(Org)({
-            title: '子并购业务部',
-            parent: await factory(Org)({ title: '并购业务部', parent: org2 }).seed()
-        }).seedMany(10);
+            title: '基金三部',
+            parent: await factory(Org)({ title: '基金部', parent: org2 }).seed()
+        }).seed();
 
         await factory(Org)({
-            title: '子综合管理部',
-            parent: await factory(Org)({ title: '综合管理部', parent: org2 }).seed()
-        }).seedMany(10);
-
-        await factory(Org)({
-            title: '子投资业务部',
+            title: '投资业务一部',
             parent: await factory(Org)({ title: '投资业务部', parent: org2 }).seed()
-        }).seedMany(10);
+        }).seed();
 
         await factory(Org)({
-            title: '子风险管理部',
-            parent: await factory(Org)({ title: '风险管理部', parent: org2 }).seed()
-        }).seedMany(10);
+            title: '投资业务二部',
+            parent: await factory(Org)({ title: '投资业务部', parent: org2 }).seed()
+        }).seed();
 
     }
 }

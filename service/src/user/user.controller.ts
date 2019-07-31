@@ -28,7 +28,7 @@ import { UserService } from "./user.service";
             },
         ],
         join: {
-            org: { eager: true }
+            org: {}
         }
     }
 })

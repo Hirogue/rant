@@ -9,8 +9,9 @@ import { Avatar, Card, Col, message, Row, Skeleton, Spin, Statistic } from 'antd
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
-import { M_DELETE_USER, Q_GET_USERS, Q_GET_USER_STATISTICS } from '@/gql';
+import { M_DELETE_USER, Q_GET_USERS, Q_GET_USER_STATISTICS, Q_GET_ORG_TREES } from '@/gql';
 import styles from './style.less';
+import gql from 'graphql-tag';
 
 const Info = ({ title, value, bordered }) => (
   <div className={styles.headerInfo}>
@@ -61,7 +62,12 @@ const renderStatistics = () => {
 };
 
 export default () => {
-  const defaultVariables = { page: 0, limit: 10, sort: [{ field: 'create_at', order: 'DESC' }] };
+  const defaultVariables = {
+    page: 0,
+    limit: 10,
+    join: [{ field: 'org' }],
+    sort: [{ field: 'create_at', order: 'DESC' }],
+  };
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
 
@@ -93,7 +99,7 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { users } = data;
+  const { users, orgTrees } = data;
 
   if (!users) return <Skeleton loading={loading} active avatar />;
 
@@ -133,9 +139,11 @@ export default () => {
       search: true,
     },
     {
-      title: '部门',
-      dataIndex: 'org.title',
-      search: true,
+      title: '所属',
+      dataIndex: 'org.id',
+      render: (val, record) => (record.org ? record.org.title : ''),
+      treeSelector: true,
+      treeFilters: orgTrees,
     },
     {
       title: '身份',

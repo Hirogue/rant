@@ -1,7 +1,8 @@
 import ImageCropper from '@/components/ImageCropper';
 import StandardTabList from '@/components/StandardTabList';
+import { M_CREATE_USER, M_UPDATE_USER, Q_GET_USER } from '@/gql';
 import { uploadOne } from '@/utils/fetch';
-import { IdentityMaps, UserStatusMaps } from '@/utils/global';
+import { buildingQuery, getTreeData, IdentityMaps, UserStatusMaps } from '@/utils/global';
 import Logger from '@/utils/logger';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
@@ -20,11 +21,10 @@ import {
   Select,
   Skeleton,
   Statistic,
+  TreeSelect,
 } from 'antd';
 import React, { Fragment, useState } from 'react';
 import { router, withRouter } from 'umi';
-import { formatMessage } from 'umi-plugin-react/locale';
-import { M_UPDATE_USER, Q_GET_USER, M_CREATE_USER } from '@/gql';
 import styles from './style.less';
 
 const FormItem = Form.Item;
@@ -109,7 +109,7 @@ const onAvatarUpload = async (file, target, mutation) => {
 };
 
 const BasicForm = Form.create()(props => {
-  const { target, mutation, form } = props;
+  const { orgTrees, target, mutation, form } = props;
 
   const { getFieldDecorator, getFieldValue } = form;
 
@@ -155,8 +155,6 @@ const BasicForm = Form.create()(props => {
           e.preventDefault();
           form.validateFields((err, values) => {
             if (!err) {
-              console.log('Received values of form: ', values);
-
               const variables = { data: values };
 
               if (target.id) {
@@ -179,13 +177,36 @@ const BasicForm = Form.create()(props => {
             ],
           })(<Input disabled={!!target.account} placeholder="请填写账户名" />)}
         </FormItem>
+        <FormItem {...formItemLayout} label="姓名">
+          {getFieldDecorator('realname', {
+            initialValue: target.realname,
+          })(<Input placeholder="请填写姓名" />)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="手机号">
+          {getFieldDecorator('phone', {
+            initialValue: target.phone,
+          })(<Input placeholder="请填写手机号" />)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="所属">
+          {getFieldDecorator('org.id', {
+            initialValue: target.org ? target.org.id : null,
+            rules: [
+              {
+                required: true,
+                message: '请选择所属组织',
+              },
+            ],
+          })(<TreeSelect showSearch treeNodeFilterProp="title" treeData={orgTrees} />)}
+        </FormItem>
         <FormItem {...formItemLayout} label="身份">
           {getFieldDecorator('identity', {
             initialValue: target.identity,
           })(
             <Select>
               {Object.keys(IdentityMaps).map(key => (
-                <Option value={key}>{IdentityMaps[key]}</Option>
+                <Option key={key} value={key}>
+                  {IdentityMaps[key]}
+                </Option>
               ))}
             </Select>,
           )}
@@ -196,20 +217,12 @@ const BasicForm = Form.create()(props => {
           })(
             <Select>
               {Object.keys(UserStatusMaps).map(key => (
-                <Option value={parseInt(key)}>{UserStatusMaps[key]}</Option>
+                <Option key={key} value={parseInt(key)}>
+                  {UserStatusMaps[key]}
+                </Option>
               ))}
             </Select>,
           )}
-        </FormItem>
-        <FormItem {...formItemLayout} label="姓名">
-          {getFieldDecorator('realname', {
-            initialValue: target.realname,
-          })(<Input placeholder="请填写姓名" />)}
-        </FormItem>
-        <FormItem {...formItemLayout} label="手机号">
-          {getFieldDecorator('phone', {
-            initialValue: target.phone,
-          })(<Input placeholder="请填写手机号" />)}
         </FormItem>
         <FormItem {...formItemLayout} label="身份证">
           {getFieldDecorator('idcard', {
@@ -246,11 +259,13 @@ const BasicForm = Form.create()(props => {
   );
 });
 
-const renderContent = (data, mutation, tabKey, setTabKey) => {
+const renderContent = (orgTrees, data, mutation, tabKey, setTabKey) => {
   let tabList = {
     basic: {
       name: '基础信息',
-      render: () => <BasicForm target={data || {}} mutation={mutation} />,
+      render: () => (
+        <BasicForm orgTrees={getTreeData(orgTrees)} target={data || {}} mutation={mutation} />
+      ),
     },
   };
 
@@ -298,13 +313,18 @@ const renderContent = (data, mutation, tabKey, setTabKey) => {
 };
 
 export default withRouter(props => {
+  const [tabKey, setTabKey] = useState('basic');
+
   const {
     match: {
       params: { id },
     },
   } = props;
 
-  const [tabKey, setTabKey] = useState('basic');
+  const { loading, data, refetch } = useQuery(Q_GET_USER, {
+    notifyOnNetworkStatusChange: true,
+    variables: { id: id || '', queryString: buildingQuery({ join: [{ field: 'org' }] }) },
+  });
 
   const [createUser] = useMutation(M_CREATE_USER, {
     update: (proxy, { data }) => {
@@ -313,13 +333,6 @@ export default withRouter(props => {
         router.replace(`/users/detail/${data.createUser.id}`);
       }
     },
-  });
-
-  if (!id) return renderContent(null, createUser, tabKey, setTabKey);
-
-  const { loading, data, refetch } = useQuery(Q_GET_USER, {
-    notifyOnNetworkStatusChange: true,
-    variables: { id },
   });
 
   const [updateUser] = useMutation(M_UPDATE_USER, {
@@ -335,7 +348,7 @@ export default withRouter(props => {
 
   if (loading || !data) return <Skeleton loading={loading} />;
 
-  const user = data.user || {};
+  const { user, orgTrees } = data;
 
-  return renderContent(user, updateUser, tabKey, setTabKey);
+  return renderContent(orgTrees, id ? user : null, id ? updateUser : createUser, tabKey, setTabKey);
 });

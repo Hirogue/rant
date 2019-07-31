@@ -8,11 +8,11 @@ import { User } from "./user.entity";
 @ObjectType()
 @InputType('OrgInput')
 export class Org extends Base {
-    @Field()
+    @Field({ nullable: true })
     @Column()
     title: string;
 
-    @Field(type => Int)
+    @Field(type => Int, { nullable: true })
     @Column({ default: 0 })
     sort: number;
 

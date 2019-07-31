@@ -1,22 +1,6 @@
 import { Tree, Input, Divider, message } from 'antd';
 import { Fragment } from 'react';
-
-const getTreeData = (data, root) =>
-  data.map(item => {
-    item.__typename && delete item.__typename;
-
-    if (item.children) {
-      return {
-        ...item,
-        key: item.id,
-        children: getTreeData(item.children, root || item),
-        dataRef: item,
-        root,
-      };
-    }
-
-    return { ...item, key: item.id, children: [], dataRef: item, root };
-  });
+import { getTreeData } from '@/utils/global';
 
 export default props => {
   const { checkedKeys, treeData, onCheck, onSelect, onDrop } = props;

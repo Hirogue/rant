@@ -14,6 +14,25 @@ export const logout = () => {
   return false;
 };
 
+export const getTreeData = (data, root) =>
+  data.map(item => {
+    item.__typename && delete item.__typename;
+    item.key = item.id;
+    item.root = root;
+    item.value = item.id;
+
+    if (item.children) {
+      return {
+        ...item,
+        key: item.id,
+        children: getTreeData(item.children, root || item),
+        dataRef: item,
+      };
+    }
+
+    return { ...item, children: [], dataRef: item };
+  });
+
 export const mergeParams = (params, partialParams) => {
   Logger.debug('params:', params);
   Logger.debug('partialParams:', partialParams);
