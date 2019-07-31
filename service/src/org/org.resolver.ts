@@ -13,7 +13,7 @@ export class OrgPaginate extends BasePaginate(Org) { }
 @Resolver(of => Org)
 @UseGuards(GqlJwtAuthGuard)
 export class OrgResolver extends BaseResolver {
-    constructor(@Inject(CONTEXT) context) { super(context); }
+    constructor(@Inject(CONTEXT) context) { super(context) }
 
     @Query(returns => [Org])
     async orgTrees() {

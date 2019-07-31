@@ -18,8 +18,8 @@ import {
   Skeleton,
   Tree,
 } from 'antd';
-import { useState, useEffect } from 'react';
-import { M_DELETE_ORG, M_UPDATE_ORG, Q_GET_ORG_TREES, M_CREATE_ORG } from './gql';
+import { useEffect, useState } from 'react';
+import { M_CREATE_ORG, M_DELETE_ORG, M_UPDATE_ORG, Q_GET_ORG_TREES } from './gql';
 
 const { TreeNode } = Tree;
 const FormItem = Form.Item;
@@ -64,7 +64,7 @@ const InfoForm = Form.create()(props => {
               if (isUpdate) {
                 variables.id = target.id;
               } else {
-                variables.data.parent = { id: target.id, title: target.title, sort: target.sort };
+                variables.data.parent = target;
               }
 
               mutation({ variables });
@@ -187,8 +187,20 @@ export default () => {
           <Col lg={8}>
             <StandardTree
               treeData={orgTrees}
+              checkedKeys={checkedKeys}
               onCheck={checkedKeys => setCheckedKeys(checkedKeys)}
-              onSelect={e => setSelectedNode(e.selected ? e.node.props : null)}
+              onSelect={e => setSelectedNode(e.selected ? e.node.props.dataRef : null)}
+              onDrop={(current, target) => {
+                updateOrg({
+                  variables: {
+                    id: current.id,
+                    data: {
+                      ...current,
+                      parent: target,
+                    },
+                  },
+                });
+              }}
             />
           </Col>
           <Col lg={15} offset={1}>

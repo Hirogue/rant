@@ -6,7 +6,7 @@ import { Org } from '../database/entities';
 
 @Injectable()
 export class OrgService extends BaseTreeService<Org> {
-    constructor(@InjectRepository(Org) repo: TreeRepository<Org>) {
+    constructor(@InjectRepository(Org) protected readonly repo: TreeRepository<Org>) {
         super(repo);
     }
 }
