@@ -22,7 +22,7 @@ export default props => {
           setCheckedKeys(keys);
           onCheck(keys);
         }}
-        onSelect={(key, e) => e.node && onSelect(e.node.props)}
+        onSelect={(key, e) => onSelect(e)}
         treeData={getTreeData(treeData)}
       />
     </Fragment>

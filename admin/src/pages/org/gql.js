@@ -71,3 +71,19 @@ export const M_UPDATE_ORG = gql`
     }
   }
 `;
+
+export const M_CREATE_ORG = gql`
+  ${F_ORG_FILEDS}
+
+  mutation createOrg($data: OrgInput!) {
+    createOrg(data: $data) {
+      ...OrgFields
+    }
+  }
+`;
+
+export const M_DELETE_ORG = gql`
+  mutation deleteOrg($ids: String!) {
+    deleteOrg(ids: $ids)
+  }
+`;

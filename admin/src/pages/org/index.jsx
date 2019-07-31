@@ -1,31 +1,31 @@
-import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import StandardActions from '@/components/StandardActions';
+import StandardPanel from '@/components/StandardPanel';
 import StandardRow from '@/components/StandardRow';
+import StandardTree from '@/components/StandardTree';
+import { PageHeaderWrapper } from '@ant-design/pro-layout';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import {
-  Row,
-  Col,
-  Card,
-  Tree,
-  Input,
+  Affix,
   Button,
-  Skeleton,
-  InputNumber,
+  Card,
+  Col,
   Divider,
   Form,
+  Input,
+  InputNumber,
   message,
-  Spin,
+  Row,
+  Skeleton,
+  Tree,
 } from 'antd';
-import StandardActions from '@/components/StandardActions';
-import StandardTree from '@/components/StandardTree';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import { Q_GET_ORG, M_UPDATE_ORG, Q_GET_ORG_TREES } from './gql';
-import { arrayToTree } from '@/utils/global';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { M_DELETE_ORG, M_UPDATE_ORG, Q_GET_ORG_TREES, M_CREATE_ORG } from './gql';
 
 const { TreeNode } = Tree;
 const FormItem = Form.Item;
 
 const formItemLayout = {
-  labelCol: { span: 4 },
+  labelCol: { span: 5 },
   wrapperCol: { span: 8 },
 };
 
@@ -42,90 +42,128 @@ const submitFormLayout = {
   },
 };
 
+const InfoForm = Form.create()(props => {
+  const { target, mutation, form, isUpdate } = props;
+  const { getFieldDecorator, resetFields } = form;
+
+  useEffect(() => {
+    if (!isUpdate) {
+      resetFields();
+    }
+  }, [mutation]);
+
+  return (
+    <Card bordered={false}>
+      <Form
+        onSubmit={e => {
+          e.preventDefault();
+          form.validateFields((err, values) => {
+            if (!err) {
+              const variables = { data: values };
+
+              if (isUpdate) {
+                variables.id = target.id;
+              } else {
+                variables.data.parent = { id: target.id, title: target.title, sort: target.sort };
+              }
+
+              mutation({ variables });
+            }
+          });
+        }}
+      >
+        {target && !isUpdate ? (
+          <FormItem {...formItemLayout} label="父节点">
+            <Input disabled value={target.title} />
+          </FormItem>
+        ) : (
+          ''
+        )}
+        <FormItem {...formItemLayout} label="组织名称">
+          {getFieldDecorator('title', {
+            initialValue: target && isUpdate ? target.title : '',
+            rules: [
+              {
+                required: true,
+                message: '组织名称不能为空',
+              },
+            ],
+          })(<Input placeholder="请填写组织名称" />)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="排序">
+          {getFieldDecorator('sort', {
+            initialValue: target && isUpdate ? target.sort : 0,
+            rules: [
+              {
+                required: true,
+                message: '排序不能为空',
+              },
+            ],
+          })(<InputNumber min={0} placeholder="请填写排序" />)}
+        </FormItem>
+        <FormItem
+          {...submitFormLayout}
+          style={{
+            marginTop: 32,
+          }}
+        >
+          <Button type="primary" htmlType="submit">
+            保存
+          </Button>
+        </FormItem>
+      </Form>
+    </Card>
+  );
+});
+
 export default () => {
   const [checkedKeys, setCheckedKeys] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
+  const [panelVisible, setPanelVisible] = useState(false);
   const { loading, data, refetch, client } = useQuery(Q_GET_ORG_TREES, {
     notifyOnNetworkStatusChange: true,
+  });
+  const [updateOrg] = useMutation(M_UPDATE_ORG, {
+    update: (cache, { data }) => {
+      if (data) {
+        refetch();
+        setSelectedNode(data.updateOrg);
+        message.success('保存成功');
+      }
+    },
+  });
+  const [createOrg] = useMutation(M_CREATE_ORG, {
+    update: (cache, { data }) => {
+      if (data) {
+        refetch();
+        setPanelVisible(false);
+        message.success('新增成功');
+      }
+    },
+  });
+  const [deleteOrg] = useMutation(M_DELETE_ORG, {
+    update: (cache, { data }) => {
+      if (data) {
+        refetch();
+        setCheckedKeys([]);
+        setSelectedNode(null);
+        message.success('删除成功');
+      }
+    },
   });
 
   const { orgTrees } = data;
 
   if (!orgTrees) return <Skeleton />;
 
-  const TreeInfoForm = Form.create()(props => {
-    const { form } = props;
-    const { getFieldDecorator } = form;
-
-    const [updateOrg, { loading }] = useMutation(M_UPDATE_ORG, {
-      update: (cache, { data }) => {
-        if (data) {
-          refetch();
-          setSelectedNode(data.updateOrg);
-          message.success('保存成功');
-        }
-      },
-    });
-
-    const { org } = data;
-
-    return (
-      <Card bordered={false} loading={loading}>
-        <Form
-          onSubmit={e => {
-            e.preventDefault();
-            form.validateFields((err, values) => {
-              if (!err) {
-                updateOrg({ variables: { id: selectedNode.id, data: values } });
-              }
-            });
-          }}
-        >
-          <FormItem {...formItemLayout} label="组织名称">
-            {getFieldDecorator('title', {
-              initialValue: selectedNode ? selectedNode.title : '',
-              rules: [
-                {
-                  required: true,
-                  message: '组织名称不能为空',
-                },
-              ],
-            })(<Input placeholder="请填写组织名称" />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="排序">
-            {getFieldDecorator('sort', {
-              initialValue: selectedNode ? selectedNode.sort : 0,
-              rules: [
-                {
-                  required: true,
-                  message: '排序不能为空',
-                },
-              ],
-            })(<InputNumber min={0} placeholder="请填写排序" />)}
-          </FormItem>
-          <FormItem
-            {...submitFormLayout}
-            style={{
-              marginTop: 32,
-            }}
-          >
-            <Button type="primary" htmlType="submit" loading={loading}>
-              保存
-            </Button>
-          </FormItem>
-        </Form>
-      </Card>
-    );
-  });
-
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => '' },
+    { name: '新增', icon: 'file-add', action: () => setPanelVisible(true) },
     {
       name: '删除',
       icon: 'delete',
       action: () => {
-        // deleteUser({ variables: { ids: selectedRows.map(item => item.id).join(',') } });
+        deleteOrg({ variables: { ids: checkedKeys.join(',') } });
       },
       disabled: checkedKeys.length <= 0,
       confirm: true,
@@ -138,7 +176,9 @@ export default () => {
       <StandardRow>
         <Row>
           <Col lg={6}>
-            <StandardActions actions={actions} />
+            <Affix offsetTop={100}>
+              <StandardActions actions={actions} />
+            </Affix>
           </Col>
         </Row>
       </StandardRow>
@@ -148,15 +188,26 @@ export default () => {
             <StandardTree
               treeData={orgTrees}
               onCheck={checkedKeys => setCheckedKeys(checkedKeys)}
-              onSelect={e => !!e && setSelectedNode(e)}
+              onSelect={e => setSelectedNode(e.selected ? e.node.props : null)}
             />
           </Col>
           <Col lg={15} offset={1}>
             <Divider orientation="left">详情</Divider>
-            {selectedNode ? <TreeInfoForm /> : ''}
+            {selectedNode ? (
+              <InfoForm isUpdate={true} mutation={updateOrg} target={selectedNode} />
+            ) : (
+              ''
+            )}
           </Col>
         </Row>
       </StandardRow>
+      <StandardPanel
+        title={selectedNode ? '新增子节点' : '新增根节点'}
+        visible={panelVisible}
+        onCancel={() => setPanelVisible(false)}
+      >
+        <InfoForm mutation={createOrg} target={selectedNode} />
+      </StandardPanel>
     </PageHeaderWrapper>
   );
 };

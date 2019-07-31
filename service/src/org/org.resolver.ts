@@ -16,11 +16,6 @@ export class OrgResolver extends BaseResolver {
     constructor(@Inject(CONTEXT) context) { super(context); }
 
     @Query(returns => [Org])
-    async orgRoots() {
-        return await this.api.findRoots(API_URL);
-    }
-
-    @Query(returns => [Org])
     async orgTrees() {
         return await this.api.findTrees(API_URL);
     }
