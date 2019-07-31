@@ -33,8 +33,6 @@ export default props => {
     currentUser = data.me || {};
   }
 
-  Logger.log('current user:', currentUser);
-
   if (loading || !currentUser) {
     return (
       <Spin

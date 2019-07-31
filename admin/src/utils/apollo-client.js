@@ -6,10 +6,9 @@ import ApolloClient from 'apollo-client';
 import { ApolloLink, from } from 'apollo-link';
 import { onError } from 'apollo-link-error';
 import { HttpLink } from 'apollo-link-http';
+import apolloLogger from 'apollo-link-logger';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { router } from 'umi';
-
-Logger.log('config apollo:', Config.apollo);
 
 const httpLink = new HttpLink({
   ...Config.apollo.link,
@@ -54,7 +53,7 @@ const errorHandler = onError(error => {
 });
 
 const client = new ApolloClient({
-  link: from([authMiddleware, errorHandler, httpLink]),
+  link: from([apolloLogger, authMiddleware, errorHandler, httpLink]),
   cache: new InMemoryCache(),
 });
 

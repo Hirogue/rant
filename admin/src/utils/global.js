@@ -5,8 +5,6 @@ import { isArray, isEmpty } from 'lodash';
 import { RequestQueryBuilder } from '@nestjsx/crud-request';
 
 export const logout = () => {
-  Logger.log('logout');
-
   localStorage.removeItem('token');
 
   router.replace('/user/login');
@@ -34,9 +32,6 @@ export const getTreeData = (data, root) =>
   });
 
 export const mergeParams = (params, partialParams) => {
-  Logger.debug('params:', params);
-  Logger.debug('partialParams:', partialParams);
-
   let newParams = { ...params };
 
   const keys = Object.keys(partialParams);

@@ -23,8 +23,6 @@ export default Form.create()(props => {
 
   const [updateUser] = useMutation(M_UPDATE_USER, {
     update: (proxy, { data }) => {
-      Logger.log('update user data:', data);
-
       refetch();
 
       message.success(
@@ -53,11 +51,7 @@ export default Form.create()(props => {
   };
 
   const onAvatarUpload = async file => {
-    Logger.log('upload file:', file);
-
     const res = await uploadOne(file);
-
-    Logger.log('res:', res);
 
     if (!!res && res.relativePath) {
       updateUser({

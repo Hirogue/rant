@@ -116,10 +116,6 @@ export default props => {
       order = sorter.order === 'ascend' ? 'ASC' : 'DESC';
     }
 
-    Logger.log('onTableChange pagination:', pagination);
-    Logger.log('onTableChange filters:', filters);
-    Logger.log('onTableChange sorter:', sort, order);
-
     if (onChange) {
       const searchTextObj = {};
       const filterParams = Object.keys(filters).map(key => {

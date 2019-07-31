@@ -14,8 +14,6 @@ export default () => {
   const [loginForm, setLoginForm] = useState(null);
   const [login, { loading }] = useMutation(M_LOGIN, {
     update: (proxy, { data }) => {
-      Logger.log('login data:', data);
-
       const login = data.login;
 
       if (login && login.token) {

@@ -28,9 +28,6 @@ const storage = multer.diskStorage({
 
         const finalName = `${dirName}/${shortid.generate()}-${req['body'].fileName || file.originalname}`;
 
-        Logger.log('upload file:', file);
-        Logger.log('upload finalPath:', dirPath + finalName);
-
         cb(null, finalName);
     }
 });

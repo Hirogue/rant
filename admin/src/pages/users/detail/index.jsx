@@ -90,11 +90,7 @@ const renderDescription = user => (
 );
 
 const onAvatarUpload = async (file, target, mutation) => {
-  Logger.log('upload file:', file);
-
   const res = await uploadOne(file);
-
-  Logger.log('res:', res);
 
   if (!!res && res.relativePath) {
     mutation({
@@ -337,8 +333,6 @@ export default withRouter(props => {
 
   const [updateUser] = useMutation(M_UPDATE_USER, {
     update: (proxy, { data }) => {
-      Logger.log('update result data:', data);
-
       if (data) {
         refetch();
         message.success('保存成功');

@@ -20,8 +20,6 @@ export class AuthResolver {
     @Query(returns => User)
     @UseGuards(GqlJwtAuthGuard)
     async me(@Me() me) {
-        Logger.log('current user', me);
-
         return await this.userService.findOne(me.id);
     }
 

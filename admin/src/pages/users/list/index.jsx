@@ -78,8 +78,6 @@ export default () => {
 
   const [deleteUser] = useMutation(M_DELETE_USER, {
     update: (proxy, { data }) => {
-      Logger.log('login data:', data);
-
       if (data.deleteUser) {
         message.success('删除成功');
         refetch();
@@ -90,11 +88,7 @@ export default () => {
   });
 
   useEffect(() => {
-    Logger.log('variables:', variables);
-
     const queryString = buildingQuery(variables);
-
-    Logger.log('queryString:', queryString);
 
     refetch({ queryString });
   }, [variables]);
