@@ -1,6 +1,6 @@
+import { M_LOGIN } from '@/gql';
 import Logger from '@/utils/logger';
 import { useMutation } from '@apollo/react-hooks';
-import { M_LOGIN } from './gql/login';
 import React, { useState } from 'react';
 import { router } from 'umi';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';

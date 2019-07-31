@@ -1,4 +1,4 @@
-import { Q_FETCH_CURRENT_USER } from '@/gql/common';
+import { Q_FETCH_CURRENT_USER } from '@/gql';
 import { logout } from '@/utils/global';
 import Logger from '@/utils/logger';
 import { useQuery } from '@apollo/react-hooks';

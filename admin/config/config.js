@@ -135,23 +135,23 @@ export default {
             },
           ],
         },
-        {
-          name: 'products',
-          icon: 'appstore',
-          path: '/products',
-          routes: [
-            {
-              name: 'list',
-              path: '/products/list',
-              component: './products/list',
-            },
-            {
-              name: 'category',
-              path: '/products/category',
-              component: './products/category',
-            },
-          ],
-        },
+        // {
+        //   name: 'products',
+        //   icon: 'appstore',
+        //   path: '/products',
+        //   routes: [
+        //     {
+        //       name: 'list',
+        //       path: '/products/list',
+        //       component: './products/list',
+        //     },
+        //     {
+        //       name: 'category',
+        //       path: '/products/category',
+        //       component: './products/category',
+        //     },
+        //   ],
+        // },
         {
           name: 'org',
           icon: 'apartment',

@@ -19,7 +19,7 @@ import {
   Tree,
 } from 'antd';
 import { useEffect, useState } from 'react';
-import { M_CREATE_ORG, M_DELETE_ORG, M_UPDATE_ORG, Q_GET_ORG_TREES } from './gql';
+import { M_CREATE_ORG, M_DELETE_ORG, M_UPDATE_ORG, Q_GET_ORG_TREES } from '@/gql';
 
 const { TreeNode } = Tree;
 const FormItem = Form.Item;

@@ -9,7 +9,7 @@ import { Avatar, Card, Col, message, Row, Skeleton, Spin, Statistic } from 'antd
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
-import { M_DELETE_USER, Q_GET_USERS, Q_GET_USER_STATISTICS } from '../gql/user';
+import { M_DELETE_USER, Q_GET_USERS, Q_GET_USER_STATISTICS } from '@/gql';
 import styles from './style.less';
 
 const Info = ({ title, value, bordered }) => (
@@ -130,6 +130,11 @@ export default () => {
     {
       title: '手机号',
       dataIndex: 'phone',
+      search: true,
+    },
+    {
+      title: '部门',
+      dataIndex: 'org.title',
       search: true,
     },
     {

@@ -26,7 +26,10 @@ import { UserService } from "./user.service";
                 field: 'create_at',
                 order: 'DESC',
             },
-        ]
+        ],
+        join: {
+            org: { eager: true }
+        }
     }
 })
 @ApiUseTags('user')

@@ -1,22 +1,9 @@
 import gql from 'graphql-tag';
-
-export const USER_TYPE = `
-  id
-  create_at
-  update_at
-  account
-  avatar
-  realname
-  phone
-  idcard
-  address
-  company
-  profile
-  identity
-  status
-`;
+import { F_USER_FIELDS, F_ORG_FIELDS } from './fragment';
 
 export const Q_GET_USERS = gql`
+  ${F_USER_FIELDS}
+
   query getUsers(
     $queryString: String!
   ) {
@@ -27,16 +14,18 @@ export const Q_GET_USERS = gql`
       page
       pageCount    
       data {
-        ${USER_TYPE}
+        ...UserFields
       }
     }
   }
 `;
 
 export const Q_GET_USER = gql`
+  ${F_USER_FIELDS}
+
   query getUser($id: String!, $queryString: String! = "") {
     user(id: $id, queryString: $queryString) {
-      ${USER_TYPE}
+      ...UserFields
     }
   }
 `;
@@ -48,9 +37,11 @@ export const M_UPDATE_USER = gql`
 `;
 
 export const M_CREATE_USER = gql`
+  ${F_USER_FIELDS}
+  
   mutation createUser($data: UserInput!) {
     createUser(data: $data) {
-      id
+      ...UserFields
     }
   }
 `;

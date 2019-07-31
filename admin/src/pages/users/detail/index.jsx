@@ -24,7 +24,7 @@ import {
 import React, { Fragment, useState } from 'react';
 import { router, withRouter } from 'umi';
 import { formatMessage } from 'umi-plugin-react/locale';
-import { M_UPDATE_USER, Q_GET_USER, M_CREATE_USER } from '../gql/user';
+import { M_UPDATE_USER, Q_GET_USER, M_CREATE_USER } from '@/gql';
 import styles from './style.less';
 
 const FormItem = Form.Item;

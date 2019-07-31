@@ -5,6 +5,7 @@ import { RenderModule } from 'nest-next';
 import { AuthModule } from './auth';
 import { Config } from "./config";
 import { BaseDataSource, CoreModule } from './core';
+import { HomeModule } from './home';
 import { LoggerMiddleware, LoggerModule } from './logger';
 import { OrgModule } from './org';
 import { StorageModule } from './storage';
@@ -22,6 +23,7 @@ import { UserModule } from './user';
     RenderModule,
     LoggerModule,
     StorageModule,
+    HomeModule,
     OrgModule,
     UserModule,
     AuthModule,
