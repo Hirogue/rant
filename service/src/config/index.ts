@@ -37,7 +37,8 @@ let Config = {
         logging: true,
         dropSchema: false,
         synchronize: true,
-        entities: [__dirname + '/../**/*.entity{.ts,.js}']
+        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        subscribers: [__dirname + '/../**/*.subscriber{.ts,.js}']
     },
 
     graphql: {

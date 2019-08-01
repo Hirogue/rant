@@ -1,4 +1,5 @@
 import ImageCropper from '@/components/ImageCropper';
+import RichText from '@/components/RichText';
 import StandardTabList from '@/components/StandardTabList';
 import { M_CREATE_ARTICLE, M_UPDATE_ARTICLE, Q_GET_ARTICLE } from '@/gql';
 import { uploadOne } from '@/utils/fetch';
@@ -24,9 +25,9 @@ import moment from 'moment';
 import React, { Fragment, useState } from 'react';
 import { router, withRouter } from 'umi';
 import styles from './style.less';
-import RichText from '@/components/RichText';
 
 const FormItem = Form.Item;
+const { TextArea } = Input;
 
 const action = (
   <RouteContext.Consumer>
@@ -193,6 +194,11 @@ const BasicForm = Form.create()(props => {
           {getFieldDecorator('publish_at', {
             initialValue: moment(target.publish_at),
           })(<DatePicker showTime />)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="摘要">
+          {getFieldDecorator('summary', {
+            initialValue: target.summary,
+          })(<TextArea disabled placeholder="请填写摘要" rows={4} />)}
         </FormItem>
         <FormItem
           {...submitFormLayout}

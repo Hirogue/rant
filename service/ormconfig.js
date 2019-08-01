@@ -6,7 +6,7 @@ module.exports = {
     synchronize: true,
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
     migrations: [],
-    subscribers: [],
+    subscribers: [__dirname + '/**/*.subscriber{.ts,.js}'],
     seeds: ['/**/*.seed.ts'],
     factories: ['/**/*.factory.ts'],
 };

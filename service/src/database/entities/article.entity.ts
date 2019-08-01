@@ -52,4 +52,5 @@ export class Article extends Base {
     @Field(type => ArticleCategory, { nullable: true })
     @ManyToOne(type => ArticleCategory, target => target.articles)
     category: ArticleCategory;
+
 }
