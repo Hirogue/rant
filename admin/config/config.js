@@ -123,15 +123,19 @@ export default {
           component: './dashboard/analysis',
         },
         {
-          name: 'contents',
+          name: 'articles',
           icon: 'container',
-          path: '/contents',
-          component: './contents',
+          path: '/articles',
           routes: [
+            // {
+            //   name: 'articles',
+            //   path: '/contents/articles/list',
+            //   component: './contents/articles/list',
+            // },
             {
-              name: 'articles',
-              path: '/contents/articles',
-              component: './contents/articles',
+              name: 'category',
+              path: '/articles/category',
+              component: './articles/category',
             },
           ],
         },

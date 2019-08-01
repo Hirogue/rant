@@ -6,7 +6,6 @@ import * as multer from 'multer';
 import { resolve } from "path";
 import * as shortid from 'shortid';
 import { promisify } from "util";
-import { Logger } from "../logger";
 import Config from "../config";
 import { StorageController } from "./storage.controller";
 

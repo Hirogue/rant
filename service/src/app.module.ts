@@ -2,6 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { RenderModule } from 'nest-next';
+import { ArticleModule } from './artilce';
 import { AuthModule } from './auth';
 import { Config } from "./config";
 import { BaseDataSource, CoreModule } from './core';
@@ -27,6 +28,7 @@ import { UserModule } from './user';
     OrgModule,
     UserModule,
     AuthModule,
+    ArticleModule
   ]
 })
 export class AppModule implements NestModule {

@@ -1,8 +1,7 @@
 import Logger from '@/utils/logger';
-import { IdentityEnum } from '@/utils/enum';
-import { router } from 'umi';
-import { isArray, isEmpty } from 'lodash';
 import { RequestQueryBuilder } from '@nestjsx/crud-request';
+import { isArray, isEmpty } from 'lodash';
+import { router } from 'umi';
 
 export const logout = () => {
   localStorage.removeItem('token');
@@ -15,20 +14,26 @@ export const logout = () => {
 export const getTreeData = (data, root) =>
   data.map(item => {
     item.__typename && delete item.__typename;
-    item.key = item.id;
-    item.root = root;
-    item.value = item.id;
 
     if (item.children) {
       return {
         ...item,
         key: item.id,
+        value: item.id,
+        root,
         children: getTreeData(item.children, root || item),
         dataRef: item,
       };
     }
 
-    return { ...item, children: [], dataRef: item };
+    return {
+      ...item,
+      key: item.id,
+      value: item.id,
+      root,
+      children: [],
+      dataRef: item,
+    };
   });
 
 export const mergeParams = (params, partialParams) => {

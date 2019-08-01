@@ -2,6 +2,12 @@ import StandardActions from '@/components/StandardActions';
 import StandardPanel from '@/components/StandardPanel';
 import StandardRow from '@/components/StandardRow';
 import StandardTree from '@/components/StandardTree';
+import {
+  M_CREATE_ARTICLE_CATEGORY,
+  M_DELETE_ARTICLE_CATEGORY,
+  M_UPDATE_ARTICLE_CATEGORY,
+  Q_GET_ARTICLE_CATEGORY_TREES,
+} from '@/gql';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import {
@@ -19,7 +25,6 @@ import {
   Tree,
 } from 'antd';
 import { useEffect, useState } from 'react';
-import { M_CREATE_ORG, M_DELETE_ORG, M_UPDATE_ORG, Q_GET_ORG_TREES } from '@/gql';
 
 const { TreeNode } = Tree;
 const FormItem = Form.Item;
@@ -66,8 +71,6 @@ const InfoForm = Form.create()(props => {
               } else {
                 variables.data.parent = target;
               }
-
-              console.log(target);
 
               mutation({ variables });
             }
@@ -122,19 +125,19 @@ export default () => {
   const [checkedKeys, setCheckedKeys] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [panelVisible, setPanelVisible] = useState(false);
-  const { loading, data, refetch, client } = useQuery(Q_GET_ORG_TREES, {
+  const { loading, data, refetch, client } = useQuery(Q_GET_ARTICLE_CATEGORY_TREES, {
     notifyOnNetworkStatusChange: true,
   });
-  const [updateOrg] = useMutation(M_UPDATE_ORG, {
+  const [updateArticleCategory] = useMutation(M_UPDATE_ARTICLE_CATEGORY, {
     update: (cache, { data }) => {
       if (data) {
         refetch();
-        setSelectedNode(data.updateOrg);
+        setSelectedNode(data.updateArticleCategory);
         message.success('保存成功');
       }
     },
   });
-  const [createOrg] = useMutation(M_CREATE_ORG, {
+  const [createArticleCategory] = useMutation(M_CREATE_ARTICLE_CATEGORY, {
     update: (cache, { data }) => {
       if (data) {
         refetch();
@@ -143,7 +146,7 @@ export default () => {
       }
     },
   });
-  const [deleteOrg] = useMutation(M_DELETE_ORG, {
+  const [deleteArticleCategory] = useMutation(M_DELETE_ARTICLE_CATEGORY, {
     update: (cache, { data }) => {
       if (data) {
         refetch();
@@ -154,9 +157,9 @@ export default () => {
     },
   });
 
-  const { orgTrees } = data;
+  const { articleCategoryTrees } = data;
 
-  if (!orgTrees) return <Skeleton />;
+  if (!articleCategoryTrees) return <Skeleton />;
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
@@ -165,7 +168,7 @@ export default () => {
       name: '删除',
       icon: 'delete',
       action: () => {
-        deleteOrg({ variables: { ids: checkedKeys.join(',') } });
+        deleteArticleCategory({ variables: { ids: checkedKeys.join(',') } });
       },
       disabled: checkedKeys.length <= 0,
       confirm: true,
@@ -188,12 +191,12 @@ export default () => {
         <Row>
           <Col lg={8}>
             <StandardTree
-              treeData={orgTrees}
+              treeData={articleCategoryTrees}
               checkedKeys={checkedKeys}
               onCheck={checkedKeys => setCheckedKeys(checkedKeys)}
               onSelect={e => setSelectedNode(e.selected ? e.node.props.dataRef : null)}
               onDrop={(current, target) => {
-                updateOrg({
+                updateArticleCategory({
                   variables: {
                     id: current.id,
                     data: {
@@ -208,7 +211,7 @@ export default () => {
           <Col lg={15} offset={1}>
             <Divider orientation="left">详情</Divider>
             {selectedNode ? (
-              <InfoForm isUpdate={true} mutation={updateOrg} target={selectedNode} />
+              <InfoForm isUpdate={true} mutation={updateArticleCategory} target={selectedNode} />
             ) : (
               ''
             )}
@@ -220,7 +223,7 @@ export default () => {
         visible={panelVisible}
         onCancel={() => setPanelVisible(false)}
       >
-        <InfoForm mutation={createOrg} target={selectedNode} />
+        <InfoForm mutation={createArticleCategory} target={selectedNode} />
       </StandardPanel>
     </PageHeaderWrapper>
   );

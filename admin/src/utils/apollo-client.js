@@ -26,19 +26,19 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 });
 
 const errorHandler = onError(error => {
-  Logger.error(error);
+  Logger.error('error:', error);
 
   const { graphQLErrors } = error;
 
   if (graphQLErrors && graphQLErrors.length > 0) {
     const result = graphQLErrors.shift();
+    Logger.log('error result:', result);
+
     const errorMsg = formatMessage({
       id: result.message,
     });
 
     const errorCode = parseInt(result.extensions ? result.extensions.code : 0);
-
-    Logger.log('error message:', errorMsg);
     Logger.log('error code:', errorCode);
 
     if (401 === errorCode) {

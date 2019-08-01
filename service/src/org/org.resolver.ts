@@ -20,11 +20,6 @@ export class OrgResolver extends BaseResolver {
         return await this.api.findTrees(API_URL);
     }
 
-    @Query(returns => [Org])
-    async orgChildren(@Args('id') id: string) {
-        return await this.api.findChildren(API_URL, id);
-    }
-
     @Query(returns => Org)
     async org(@Args('id') id: string, @Args('queryString') queryString: string) {
         return await this.api.findOne(API_URL, id, queryString);

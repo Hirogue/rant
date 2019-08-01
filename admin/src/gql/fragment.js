@@ -1,5 +1,46 @@
 import gql from 'graphql-tag';
 
+export const F_ARTICLE_CATEGORY_FIELDS = gql`
+  fragment ArticleCategoryFields on ArticleCategory {
+    id
+    title
+    sort
+  }
+`;
+
+export const F_ARTICLE_CATEGORYRECURSIVE = gql`
+  fragment ArticleCategoryRecursive on ArticleCategory {
+    ...ArticleCategoryFields
+    children {
+      ...ArticleCategoryFields
+      children {
+        ...ArticleCategoryFields
+        children {
+          ...ArticleCategoryFields
+          children {
+            ...ArticleCategoryFields
+            children {
+              ...ArticleCategoryFields
+              children {
+                ...ArticleCategoryFields
+                children {
+                  ...ArticleCategoryFields
+                  children {
+                    ...ArticleCategoryFields
+                    children {
+                      ...ArticleCategoryFields
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const F_ORG_FIELDS = gql`
   fragment OrgFields on Org {
     id

@@ -2,13 +2,17 @@ import { Controller, Post, UploadedFiles, UseGuards, UseInterceptors } from "@ne
 import { AuthGuard } from "@nestjs/passport";
 import { AnyFilesInterceptor } from "@nestjs/platform-express";
 import Config from "../config";
+import { ApiUseTags, ApiOperation } from "@nestjs/swagger";
 
+@ApiUseTags('storage')
 @Controller('api/storage')
 @UseGuards(AuthGuard('jwt'))
 export class StorageController {
 
+
     @Post()
     @UseInterceptors(AnyFilesInterceptor())
+    @ApiOperation({ title: 'Uplaod files to local storage' })
     local(@UploadedFiles() files) {
 
         const fileList = files.map(file => ({
