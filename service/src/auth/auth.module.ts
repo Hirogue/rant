@@ -6,6 +6,7 @@ import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { UserModule } from '../user';
+import { LocalStrategy } from './local.strategy';
 
 @Global()
 @Module({
@@ -14,7 +15,7 @@ import { UserModule } from '../user';
     JwtModule.register(Config.jwt as JwtModuleOptions),
     UserModule
   ],
-  providers: [JwtStrategy, AuthService, AuthResolver],
+  providers: [JwtStrategy, LocalStrategy, AuthService, AuthResolver],
   exports: [AuthService, AuthResolver]
 })
 export class AuthModule { }

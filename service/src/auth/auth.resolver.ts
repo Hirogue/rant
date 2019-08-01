@@ -20,7 +20,7 @@ export class AuthResolver {
     @UseGuards(GqlJwtAuthGuard)
     async me(@Me() me) {
         const result = await this.userService.findOne(me.id);
-        
+
         if (!result) throw new ApolloException('errors.invalid.auth', HttpStatus.UNAUTHORIZED);
 
         return result;
