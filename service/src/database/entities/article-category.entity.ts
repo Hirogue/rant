@@ -1,6 +1,7 @@
 import { Field, InputType, Int, ObjectType } from "type-graphql";
-import { Column, Entity, Tree, TreeChildren, TreeParent } from "typeorm";
+import { Column, Entity, Tree, TreeChildren, TreeParent, OneToMany } from "typeorm";
 import { Base } from "./base";
+import { Article } from "./article.entity";
 
 @Entity()
 @Tree('materialized-path')
@@ -22,4 +23,8 @@ export class ArticleCategory extends Base {
     @Field(type => [ArticleCategory]!, { nullable: true })
     @TreeChildren()
     children: ArticleCategory[];
+
+    @Field(type => [Article], { nullable: true })
+    @OneToMany(type => Article, target => target.category)
+    articles: Article[];
 }

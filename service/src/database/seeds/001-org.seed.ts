@@ -17,29 +17,33 @@ export default class CreateOrgs implements Seeder {
 
         const org2 = await factory(Org)({ title: '总经办', parent: org1 }).seed();
 
+        const org3 = await factory(Org)({ title: '基金部', parent: org2 }).seed();
+
+        const org4 = await factory(Org)({ title: '投资业务部', parent: org2 }).seed();
+
         await factory(Org)({
             title: '基金一部',
-            parent: await factory(Org)({ title: '基金部', parent: org2 }).seed()
+            parent: org3
         }).seed();
 
         await factory(Org)({
             title: '基金二部',
-            parent: await factory(Org)({ title: '基金部', parent: org2 }).seed()
+            parent: org3
         }).seed();
 
         await factory(Org)({
             title: '基金三部',
-            parent: await factory(Org)({ title: '基金部', parent: org2 }).seed()
+            parent: org3
         }).seed();
 
         await factory(Org)({
             title: '投资业务一部',
-            parent: await factory(Org)({ title: '投资业务部', parent: org2 }).seed()
+            parent: org4
         }).seed();
 
         await factory(Org)({
             title: '投资业务二部',
-            parent: await factory(Org)({ title: '投资业务部', parent: org2 }).seed()
+            parent: org4
         }).seed();
 
     }
