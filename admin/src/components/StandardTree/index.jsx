@@ -10,7 +10,12 @@ export default props => {
       <Divider orientation="left">{`已选中 ${checkedKeys.length} 项`}</Divider>
       <Tree
         checkable
-        onCheck={keys => onCheck(keys)}
+        checkStrictly
+        checkedKeys={checkedKeys}
+        onCheck={e => {
+          console.log(e);
+          onCheck(e.checked);
+        }}
         onSelect={(key, e) => onSelect(e)}
         draggable={true}
         onDrop={e => {
