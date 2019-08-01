@@ -24,6 +24,7 @@ import moment from 'moment';
 import React, { Fragment, useState } from 'react';
 import { router, withRouter } from 'umi';
 import styles from './style.less';
+import RichText from '@/components/RichText';
 
 const FormItem = Form.Item;
 
@@ -232,6 +233,15 @@ const renderContent = (articleCategoryTrees, data, mutation, tabKey, setTabKey) 
             onUpload={file => onUpload(file, data, mutation)}
             width={441.6}
             height={270}
+          />
+        ),
+      },
+      text: {
+        name: '正文',
+        render: () => (
+          <RichText
+            html={data.text}
+            onSave={text => mutation({ variables: { id: data.id, data: { text } } })}
           />
         ),
       },

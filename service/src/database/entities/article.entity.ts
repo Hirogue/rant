@@ -18,7 +18,7 @@ export class Article extends Base {
     author: string;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     source: string;
 
     @Field({ nullable: true })
@@ -38,11 +38,11 @@ export class Article extends Base {
     sort: number;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     summary: string;
 
     @Field({ nullable: true })
-    @Column({ type: 'text' })
+    @Column({ type: 'text', default: '' })
     text: string;
 
     @Field({ nullable: true })
