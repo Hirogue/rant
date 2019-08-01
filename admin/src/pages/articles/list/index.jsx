@@ -1,11 +1,11 @@
 import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
-import { M_DELETE_USER, Q_GET_ARTICLES } from '@/gql';
-import { buildingQuery, IdentityMaps, UserStatusMaps } from '@/utils/global';
+import { M_DELETE_ARTICLE, M_UPDATE_ARTICLE, Q_GET_ARTICLES } from '@/gql';
+import { buildingQuery } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Avatar, Col, message, Switch, Row, Skeleton } from 'antd';
+import { Affix, Col, message, Row, Skeleton, Switch } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
@@ -25,13 +25,23 @@ export default () => {
     variables: { queryString: buildingQuery(defaultVariables) },
   });
 
-  const [deleteUser] = useMutation(M_DELETE_USER, {
+  const [deleteArticle] = useMutation(M_DELETE_ARTICLE, {
     update: (proxy, { data }) => {
-      if (data.deleteUser) {
+      if (data.deleteArticle) {
         message.success('删除成功');
         refetch();
       } else {
         message.error('删除失败');
+      }
+    },
+  });
+  const [updateArticle] = useMutation(M_UPDATE_ARTICLE, {
+    update: (proxy, { data }) => {
+      if (data.updateArticle) {
+        message.success('操作成功');
+        refetch();
+      } else {
+        message.error('操作失败');
       }
     },
   });
@@ -84,14 +94,32 @@ export default () => {
     {
       title: '是否置顶',
       dataIndex: 'is_top',
-      render: val => <Switch checkedChildren="是" unCheckedChildren="否" checked={!!val} />,
+      render: (val, record) => (
+        <Switch
+          checkedChildren="是"
+          unCheckedChildren="否"
+          checked={!!val}
+          onChange={checked =>
+            updateArticle({ variables: { id: record.id, data: { is_top: checked } } })
+          }
+        />
+      ),
       filterMultiple: false,
       filters: [{ text: '是', value: true }, { text: '否', value: false }],
     },
     {
       title: '是否发布',
       dataIndex: 'is_published',
-      render: val => <Switch checkedChildren="是" unCheckedChildren="否" checked={!!val} />,
+      render: (val, record) => (
+        <Switch
+          checkedChildren="是"
+          unCheckedChildren="否"
+          checked={!!val}
+          onChange={checked =>
+            updateArticle({ variables: { id: record.id, data: { is_published: checked } } })
+          }
+        />
+      ),
       filterMultiple: false,
       filters: [{ text: '是', value: true }, { text: '否', value: false }],
     },
@@ -133,7 +161,7 @@ export default () => {
       name: '删除',
       icon: 'delete',
       action: () => {
-        deleteUser({ variables: { ids: selectedRows.map(item => item.id).join(',') } });
+        deleteArticle({ variables: { ids: selectedRows.map(item => item.id).join(',') } });
       },
       disabled: selectedRows.length <= 0,
       confirm: true,
@@ -149,7 +177,9 @@ export default () => {
         <StandardRow>
           <Row gutter={16}>
             <Col lg={6}>
-              <StandardActions actions={actions} />
+              <Affix style={{ display: 'inline-block' }} offsetTop={80}>
+                <StandardActions actions={actions} />
+              </Affix>
             </Col>
           </Row>
         </StandardRow>

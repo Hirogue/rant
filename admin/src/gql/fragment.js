@@ -23,6 +23,8 @@ export const F_ARTICLE_FIELDS = gql`
     summary
     text
     publish_at
+    update_at
+    create_at
     category {
       ...ArticleCategoryFields
     }

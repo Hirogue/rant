@@ -1,17 +1,15 @@
 import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
+import { M_DELETE_USER, Q_GET_USERS, Q_GET_USER_STATISTICS } from '@/gql';
 import { buildingQuery, IdentityMaps, UserStatusMaps } from '@/utils/global';
-import Logger from '@/utils/logger';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Avatar, Card, Col, message, Row, Skeleton, Spin, Statistic } from 'antd';
+import { Affix, Avatar, Card, Col, message, Row, Skeleton, Spin, Statistic } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
-import { M_DELETE_USER, Q_GET_USERS, Q_GET_USER_STATISTICS, Q_GET_ORG_TREES } from '@/gql';
 import styles from './style.less';
-import gql from 'graphql-tag';
 
 const Info = ({ title, value, bordered }) => (
   <div className={styles.headerInfo}>
@@ -198,7 +196,9 @@ export default () => {
         <StandardRow>
           <Row gutter={16}>
             <Col lg={6}>
-              <StandardActions actions={actions} />
+              <Affix style={{ display: 'inline-block' }} offsetTop={80}>
+                <StandardActions actions={actions} />
+              </Affix>
             </Col>
           </Row>
         </StandardRow>

@@ -133,6 +133,14 @@ export default {
               component: './articles/list',
             },
             {
+              path: '/articles/detail/:id',
+              component: './articles/detail',
+            },
+            {
+              path: '/articles/create',
+              component: './articles/detail',
+            },
+            {
               name: 'category',
               path: '/articles/category',
               component: './articles/category',

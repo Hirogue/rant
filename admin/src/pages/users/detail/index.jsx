@@ -283,7 +283,7 @@ const renderContent = (orgTrees, data, mutation, tabKey, setTabKey) => {
 
   return (
     <PageHeaderWrapper
-      title={data ? '编辑用户' : '新增用户'}
+      title={data ? '编辑' : '新增'}
       extra={action}
       className={styles.pageHeader}
       content={data ? <PageHeaderContent user={data} /> : null}
