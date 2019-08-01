@@ -23,12 +23,16 @@ import { ArticleService } from "./article.service";
         cache: 10 * 1000,
         sort: [
             {
+                field: 'sort',
+                order: 'DESC',
+            },
+            {
                 field: 'create_at',
                 order: 'DESC',
             },
         ],
         join: {
-            org: {}
+            category: {}
         }
     }
 })

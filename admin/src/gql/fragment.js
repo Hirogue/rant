@@ -8,6 +8,27 @@ export const F_ARTICLE_CATEGORY_FIELDS = gql`
   }
 `;
 
+export const F_ARTICLE_FIELDS = gql`
+  ${F_ARTICLE_CATEGORY_FIELDS}
+
+  fragment ArticleFields on Article {
+    id
+    title
+    author
+    source
+    cover
+    is_top
+    is_published
+    sort
+    summary
+    text
+    publish_at
+    category {
+      ...ArticleCategoryFields
+    }
+  }
+`;
+
 export const F_ARTICLE_CATEGORYRECURSIVE = gql`
   fragment ArticleCategoryRecursive on ArticleCategory {
     ...ArticleCategoryFields

@@ -127,11 +127,11 @@ export default {
           icon: 'container',
           path: '/articles',
           routes: [
-            // {
-            //   name: 'articles',
-            //   path: '/contents/articles/list',
-            //   component: './contents/articles/list',
-            // },
+            {
+              name: 'list',
+              path: '/articles/list',
+              component: './articles/list',
+            },
             {
               name: 'category',
               path: '/articles/category',

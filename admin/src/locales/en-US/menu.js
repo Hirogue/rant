@@ -23,6 +23,7 @@ export default {
   'menu.form.step-form.result': 'Step Form(finished)',
   'menu.form.advanced-form': 'Advanced Form',
   'menu.articles': 'Articles Management',
+  'menu.articles.list': 'Articles List',
   'menu.articles.category': 'Articles Categories Management',
   'menu.products': 'Products Management',
   'menu.products.list': 'Product List',

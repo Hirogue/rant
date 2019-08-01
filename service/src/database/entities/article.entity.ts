@@ -1,7 +1,8 @@
-import { Base } from "./base";
+import * as moment from 'moment';
+import { Field, InputType, Int, ObjectType } from "type-graphql";
 import { Column, Entity, ManyToOne } from "typeorm";
 import { ArticleCategory } from "./article-category.entity";
-import { Field, InputType, ObjectType, Int } from "type-graphql";
+import { Base } from "./base";
 
 @Entity()
 @ObjectType()
@@ -26,7 +27,11 @@ export class Article extends Base {
 
     @Field({ nullable: true })
     @Column({ type: 'boolean', default: false })
-    istop: boolean;
+    is_top: boolean;
+
+    @Field({ nullable: true })
+    @Column({ type: 'boolean', default: false })
+    is_published: boolean;
 
     @Field(type => Int, { nullable: true })
     @Column({ default: 0 })
@@ -39,6 +44,10 @@ export class Article extends Base {
     @Field({ nullable: true })
     @Column({ type: 'text' })
     text: string;
+
+    @Field({ nullable: true })
+    @Column({ type: 'datetime', nullable: true, default: moment().format('YYYY-MM-DD HH:mm:ss') })
+    publish_at: string;
 
     @Field(type => ArticleCategory, { nullable: true })
     @ManyToOne(type => ArticleCategory, target => target.articles)

@@ -23,6 +23,7 @@ export default {
   'menu.form.step-form.result': '分步表单（完成）',
   'menu.form.advanced-form': '高级表单',
   'menu.articles': '文章管理',
+  'menu.articles.list': '文章列表',
   'menu.articles.category': '文章分类',
   'menu.products': '产品管理',
   'menu.products.list': '产品列表',

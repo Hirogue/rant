@@ -4,7 +4,7 @@ import { Factory, Seeder } from "typeorm-seeding";
 import { IdentityEnum } from "../../core";
 import { User, Org } from "../entities";
 
-export default class CreateUsers implements Seeder {
+export default class implements Seeder {
     public async run(factory: Factory, connection: Connection): Promise<any> {
 
         const org1 = await connection.getRepository(Org).findOne({ where: { title: '后台' } });
