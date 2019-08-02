@@ -19,7 +19,7 @@ import {
   Tree,
 } from 'antd';
 import { useEffect, useState } from 'react';
-import { M_CREATE_ORG, M_DELETE_ORG, M_UPDATE_ORG, Q_GET_ORG_TREES } from '@/gql';
+import { M_CREATE_AREA, M_DELETE_AREA, M_UPDATE_AREA, Q_GET_AREA_TREES } from '@/gql';
 
 const { TreeNode } = Tree;
 const FormItem = Form.Item;
@@ -120,19 +120,19 @@ export default () => {
   const [checkedKeys, setCheckedKeys] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [panelVisible, setPanelVisible] = useState(false);
-  const { loading, data, refetch, client } = useQuery(Q_GET_ORG_TREES, {
+  const { loading, data, refetch, client } = useQuery(Q_GET_AREA_TREES, {
     notifyOnNetworkStatusChange: true,
   });
-  const [updateOrg] = useMutation(M_UPDATE_ORG, {
+  const [updateArea] = useMutation(M_UPDATE_AREA, {
     update: (cache, { data }) => {
       if (data) {
         refetch();
-        setSelectedNode(data.updateOrg);
+        setSelectedNode(data.updateArea);
         message.success('保存成功');
       }
     },
   });
-  const [createOrg] = useMutation(M_CREATE_ORG, {
+  const [createArea] = useMutation(M_CREATE_AREA, {
     update: (cache, { data }) => {
       if (data) {
         refetch();
@@ -141,7 +141,7 @@ export default () => {
       }
     },
   });
-  const [deleteOrg] = useMutation(M_DELETE_ORG, {
+  const [deleteArea] = useMutation(M_DELETE_AREA, {
     update: (cache, { data }) => {
       if (data) {
         refetch();
@@ -152,9 +152,9 @@ export default () => {
     },
   });
 
-  const { orgTrees } = data;
+  const { areaTrees } = data;
 
-  if (!orgTrees) return <Skeleton />;
+  if (!areaTrees) return <Skeleton />;
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
@@ -163,7 +163,7 @@ export default () => {
       name: '删除',
       icon: 'delete',
       action: () => {
-        deleteOrg({ variables: { ids: checkedKeys.join(',') } });
+        deleteArea({ variables: { ids: checkedKeys.join(',') } });
       },
       disabled: checkedKeys.length <= 0,
       confirm: true,
@@ -186,12 +186,12 @@ export default () => {
         <Row>
           <Col lg={8}>
             <StandardTree
-              treeData={orgTrees}
+              treeData={areaTrees}
               checkedKeys={checkedKeys}
               onCheck={checkedKeys => setCheckedKeys(checkedKeys)}
               onSelect={e => setSelectedNode(e.selected ? e.node.props.dataRef : null)}
               onDrop={(current, target) => {
-                updateOrg({
+                updateArea({
                   variables: {
                     id: current.id,
                     data: {
@@ -206,7 +206,7 @@ export default () => {
           <Col lg={15} offset={1}>
             <Divider orientation="left">详情</Divider>
             {selectedNode ? (
-              <InfoForm isUpdate={true} mutation={updateOrg} target={selectedNode} />
+              <InfoForm isUpdate={true} mutation={updateArea} target={selectedNode} />
             ) : (
               ''
             )}
@@ -218,7 +218,7 @@ export default () => {
         visible={panelVisible}
         onCancel={() => setPanelVisible(false)}
       >
-        <InfoForm mutation={createOrg} target={selectedNode} />
+        <InfoForm mutation={createArea} target={selectedNode} />
       </StandardPanel>
     </PageHeaderWrapper>
   );

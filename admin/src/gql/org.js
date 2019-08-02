@@ -1,5 +1,45 @@
 import gql from 'graphql-tag';
-import { F_ORG_FIELDS, F_ORG_RECURSIVE } from './fragment';
+
+export const F_ORG_FIELDS = gql`
+  fragment OrgFields on Org {
+    id
+    title
+    sort
+  }
+`;
+
+export const F_ORG_RECURSIVE = gql`
+  fragment OrgRecursive on Org {
+    ...OrgFields
+    children {
+      ...OrgFields
+      children {
+        ...OrgFields
+        children {
+          ...OrgFields
+          children {
+            ...OrgFields
+            children {
+              ...OrgFields
+              children {
+                ...OrgFields
+                children {
+                  ...OrgFields
+                  children {
+                    ...OrgFields
+                    children {
+                      ...OrgFields
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 
 export const Q_GET_ORG_TREES = gql`
   ${F_ORG_FIELDS}

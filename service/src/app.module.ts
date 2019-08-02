@@ -11,6 +11,7 @@ import { LoggerMiddleware, LoggerModule } from './logger';
 import { OrgModule } from './org';
 import { StorageModule } from './storage';
 import { UserModule } from './user';
+import { AreaModule } from './area';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UserModule } from './user';
     LoggerModule,
     StorageModule,
     HomeModule,
+    AreaModule,
     OrgModule,
     UserModule,
     AuthModule,

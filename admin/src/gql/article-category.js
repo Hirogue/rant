@@ -1,5 +1,45 @@
 import gql from 'graphql-tag';
-import { F_ARTICLE_CATEGORY_FIELDS, F_ARTICLE_CATEGORYRECURSIVE } from './fragment';
+
+export const F_ARTICLE_CATEGORY_FIELDS = gql`
+  fragment ArticleCategoryFields on ArticleCategory {
+    id
+    title
+    sort
+  }
+`;
+
+export const F_ARTICLE_CATEGORYRECURSIVE = gql`
+  fragment ArticleCategoryRecursive on ArticleCategory {
+    ...ArticleCategoryFields
+    children {
+      ...ArticleCategoryFields
+      children {
+        ...ArticleCategoryFields
+        children {
+          ...ArticleCategoryFields
+          children {
+            ...ArticleCategoryFields
+            children {
+              ...ArticleCategoryFields
+              children {
+                ...ArticleCategoryFields
+                children {
+                  ...ArticleCategoryFields
+                  children {
+                    ...ArticleCategoryFields
+                    children {
+                      ...ArticleCategoryFields
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 
 export const Q_GET_ARTICLE_CATEGORY_TREES = gql`
   ${F_ARTICLE_CATEGORY_FIELDS}

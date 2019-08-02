@@ -12,6 +12,8 @@ export default {
   'menu.org': '组织架构',
   'menu.users': '用户管理',
   'menu.users.list': '用户列表',
+  'menu.metadata': '元数据',
+  'menu.metadata.area': '地区',
   'menu.exception.403': '403',
   'menu.exception.404': '404',
   'menu.exception.500': '500',

@@ -1,5 +1,28 @@
 import gql from 'graphql-tag';
-import { F_USER_FIELDS, F_ORG_FIELDS, F_ORG_RECURSIVE } from './fragment';
+import { F_ORG_FIELDS, F_ORG_RECURSIVE } from './org';
+
+export const F_USER_FIELDS = gql`
+  ${F_ORG_FIELDS}
+
+  fragment UserFields on User {
+    id
+    create_at
+    update_at
+    account
+    avatar
+    realname
+    phone
+    idcard
+    address
+    company
+    profile
+    identity
+    status
+    org {
+      ...OrgFields
+    }
+  }
+`;
 
 export const Q_GET_USERS = gql`
   ${F_USER_FIELDS}

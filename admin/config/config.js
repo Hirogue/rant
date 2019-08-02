@@ -191,6 +191,18 @@ export default {
           ],
         },
         {
+          name: 'metadata',
+          icon: 'database',
+          path: '/metadata',
+          routes: [
+            {
+              name: 'area',
+              path: '/metadata/area',
+              component: './area',
+            },
+          ],
+        },
+        {
           name: 'settings',
           icon: 'setting',
           path: '/settings',

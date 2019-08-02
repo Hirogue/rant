@@ -14,7 +14,6 @@ export class ArticleSubscriber implements EntitySubscriberInterface<Article> {
     }
 
     beforeUpdate(event: UpdateEvent<Article>) {
-        const text = extractionTextInHtml(event.entity.text);
         event.entity.summary = textInterception(extractionTextInHtml(event.entity.text), 40);
     }
 }

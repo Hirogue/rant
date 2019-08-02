@@ -1,11 +1,12 @@
 import * as bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
 import { Field, ObjectType, InputType } from 'type-graphql';
-import { BeforeInsert, Column, Entity, ManyToOne } from 'typeorm';
+import { BeforeInsert, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { UserStatusEnum, IdentityEnum } from '../../core/enums';
 import { Config } from '../../config';
 import { Base } from './base';
 import { Org } from './org.entity';
+import { Provider } from './provider.entity';
 
 @Entity()
 @ObjectType()
@@ -60,6 +61,10 @@ export class User extends Base {
     @Field(type => Org, { nullable: true })
     @ManyToOne(type => Org, target => target.users)
     org: Org;
+
+    @Field(type => [Provider!], { nullable: true })
+    @OneToMany(type => Provider, target => target.creator)
+    providers: Provider[];
 
     @BeforeInsert()
     async beforeInsert() {
