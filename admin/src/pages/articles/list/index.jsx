@@ -52,12 +52,12 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { articles, articleCategoryTrees } = data;
+  const { queryArticle, articleCategoryTrees } = data;
 
-  if (!articles) return <Skeleton loading={loading} active avatar />;
+  if (!queryArticle) return <Skeleton loading={loading} active avatar />;
 
-  const dataSource = articles.data;
-  const total = articles.total;
+  const dataSource = queryArticle.data;
+  const total = queryArticle.total;
 
   const columns = [
     {

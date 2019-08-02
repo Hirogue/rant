@@ -3,13 +3,13 @@ import { CONTEXT, Resolver } from '@nestjs/graphql';
 import { ObjectType } from 'type-graphql';
 import { GqlJwtAuthGuard } from '../auth/gql-jwt-auth.guard';
 import { BasePaginate, BaseResolver } from '../core';
-import { Article } from '../database';
+import { Provider } from '../database';
 
 @ObjectType()
-export class ArticlePaginate extends BasePaginate(Article) { }
+export class ProviderPaginate extends BasePaginate(Provider) { }
 
-@Resolver(of => Article)
+@Resolver(of => Provider)
 @UseGuards(GqlJwtAuthGuard)
-export class ArticleResolver extends BaseResolver(Article, ArticlePaginate) {
-    constructor(@Inject(CONTEXT) context) { super(context, 'article'); }
+export class ProviderResolver extends BaseResolver(Provider, ProviderPaginate) {
+    constructor(@Inject(CONTEXT) context) { super(context, 'provider'); }
 }

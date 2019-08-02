@@ -28,8 +28,8 @@ export const Q_GET_ARTICLES = gql`
   ${F_ARTICLE_FIELDS}
   ${F_ARTICLE_CATEGORYRECURSIVE}
 
-  query getArticles($queryString: String!) {
-    articles(queryString: $queryString) {
+  query queryArticle($queryString: String!) {
+    queryArticle(queryString: $queryString) {
       total
       page
       pageCount
@@ -60,8 +60,12 @@ export const Q_GET_ARTICLE = gql`
 `;
 
 export const M_UPDATE_ARTICLE = gql`
+  ${F_ARTICLE_FIELDS}
+
   mutation updateArticle($id: String!, $data: ArticleInput!) {
-    updateArticle(id: $id, data: $data)
+    updateArticle(id: $id, data: $data) {
+      ...ArticleFields
+    }
   }
 `;
 

@@ -3,7 +3,7 @@ import { ClassType } from "type-graphql";
 import { camelCase } from "lodash";
 import { Args, Mutation, Query } from "@nestjs/graphql";
 
-export function BaseResolver<TEntity, TPaginate>(
+export function BaseTreeResolver<TEntity, TPaginate>(
     TEntityClass: ClassType<TEntity>, TPaginateClass: ClassType<TPaginate>
 ): any {
 
@@ -15,6 +15,12 @@ export function BaseResolver<TEntity, TPaginate>(
             protected readonly root: string
         ) {
             this.api = context.dataSources.api;
+            this.root = root;
+        }
+
+        @Query(returns => [TEntityClass], { name: camelCase(TEntityClass.name) + 'Trees' })
+        async trees() {
+            return await this.api.findTrees(this.root);
         }
 
         @Query(returns => TPaginateClass, { name: 'query' + TEntityClass.name })

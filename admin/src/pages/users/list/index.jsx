@@ -91,12 +91,12 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { users, orgTrees } = data;
+  const { queryUser, orgTrees } = data;
 
-  if (!users) return <Skeleton loading={loading} active avatar />;
+  if (!queryUser) return <Skeleton loading={loading} active avatar />;
 
-  const dataSource = users.data;
-  const total = users.total;
+  const dataSource = queryUser.data;
+  const total = queryUser.total;
 
   const columns = [
     {
