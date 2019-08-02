@@ -147,20 +147,43 @@ export default {
             },
           ],
         },
-        // {
-        //   name: 'products',
-        //   icon: 'appstore',
-        //   path: '/products',
-        //   routes: [
+        {
+          name: 'providers',
+          icon: 'idcard',
+          path: '/providers',
+          routes: [
+            {
+              name: 'list',
+              path: '/providers/list',
+              component: './providers/list',
+            },
+            {
+              path: '/providers/detail/:id',
+              component: './providers/detail',
+            },
+            {
+              path: '/providers/create',
+              component: './providers/detail',
+            },
+            {
+              name: 'category',
+              path: '/providers/category',
+              component: './providers/category',
+            },
+          ],
+        },
         //     {
-        //       name: 'list',
-        //       path: '/products/list',
-        //       component: './products/list',
+        //       path: '/articles/detail/:id',
+        //       component: './articles/detail',
+        //     },
+        //     {
+        //       path: '/articles/create',
+        //       component: './articles/detail',
         //     },
         //     {
         //       name: 'category',
-        //       path: '/products/category',
-        //       component: './products/category',
+        //       path: '/articles/category',
+        //       component: './articles/category',
         //     },
         //   ],
         // },

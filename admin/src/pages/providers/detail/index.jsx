@@ -1,7 +1,7 @@
 import ImageCropper from '@/components/ImageCropper';
 import RichText from '@/components/RichText';
 import StandardTabList from '@/components/StandardTabList';
-import { M_CREATE_ARTICLE, M_UPDATE_ARTICLE, Q_GET_ARTICLE } from '@/gql';
+import { M_CREATE_PROVIDER, M_UPDATE_PROVIDER, Q_GET_PROVIDER } from '@/gql';
 import { uploadOne } from '@/utils/fetch';
 import { buildingQuery, getTreeData } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
@@ -66,7 +66,7 @@ const onUpload = async (file, target, mutation) => {
       variables: {
         id: target.id,
         data: {
-          cover: res.relativePath,
+          logo: res.relativePath,
         },
       },
     });
@@ -74,7 +74,7 @@ const onUpload = async (file, target, mutation) => {
 };
 
 const BasicForm = Form.create()(props => {
-  const { articleCategoryTrees, target, mutation, form } = props;
+  const { providerCategoryTrees, areaTrees, target, mutation, form } = props;
 
   const { getFieldDecorator, getFieldValue } = form;
 
@@ -131,27 +131,21 @@ const BasicForm = Form.create()(props => {
           });
         }}
       >
-        <FormItem {...formItemLayout} label="标题">
-          {getFieldDecorator('title', {
-            initialValue: target.title,
+        <FormItem {...formItemLayout} label="名称">
+          {getFieldDecorator('name', {
+            initialValue: target.name,
             rules: [
               {
                 required: true,
-                message: '标题不能为空',
+                message: '名称不能为空',
               },
             ],
-          })(<Input placeholder="请填写标题" />)}
+          })(<Input placeholder="请填写名称" />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="作者">
-          {getFieldDecorator('author', {
-            initialValue: target.author,
-            rules: [
-              {
-                required: true,
-                message: '作者不能为空',
-              },
-            ],
-          })(<Input placeholder="请填写作者" />)}
+        <FormItem {...formItemLayout} label="简称">
+          {getFieldDecorator('slogan', {
+            initialValue: target.slogan,
+          })(<Input placeholder="请填写简称" />)}
         </FormItem>
         <FormItem {...formItemLayout} label="分类">
           {getFieldDecorator('category.id', {
@@ -162,43 +156,23 @@ const BasicForm = Form.create()(props => {
                 message: '请选择分类',
               },
             ],
-          })(<TreeSelect showSearch treeNodeFilterProp="title" treeData={articleCategoryTrees} />)}
+          })(<TreeSelect showSearch treeNodeFilterProp="title" treeData={providerCategoryTrees} />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="来源">
-          {getFieldDecorator('source', {
-            initialValue: target.source,
-          })(<Input placeholder="请填写来源" />)}
+        <FormItem {...formItemLayout} label="地区">
+          {getFieldDecorator('area.id', {
+            initialValue: target.area ? target.area.id : null,
+            rules: [
+              {
+                required: true,
+                message: '请选择地区',
+              },
+            ],
+          })(<TreeSelect showSearch treeNodeFilterProp="title" treeData={areaTrees} />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="排序">
-          {getFieldDecorator('sort', {
-            initialValue: target.sort,
-          })(<InputNumber min={0} placeholder="请填写排序" />)}
-        </FormItem>
-        <FormItem {...formItemLayout} label="是否置顶">
-          {getFieldDecorator('is_top', {
-            initialValue: target.is_top,
-          })(<Switch checkedChildren="是" unCheckedChildren="否" defaultChecked={target.is_top} />)}
-        </FormItem>
-        <FormItem {...formItemLayout} label="是否发布">
-          {getFieldDecorator('is_published', {
-            initialValue: target.is_published,
-          })(
-            <Switch
-              checkedChildren="是"
-              unCheckedChildren="否"
-              defaultChecked={target.is_published}
-            />,
-          )}
-        </FormItem>
-        <FormItem {...formItemLayout} label="发布时间">
-          {getFieldDecorator('publish_at', {
-            initialValue: moment(target.publish_at),
-          })(<DatePicker showTime />)}
-        </FormItem>
-        <FormItem {...formItemLayout} label="摘要">
-          {getFieldDecorator('summary', {
-            initialValue: target.summary,
-          })(<TextArea disabled placeholder="请填写摘要" rows={4} />)}
+        <FormItem {...formItemLayout} label="简介">
+          {getFieldDecorator('introduction', {
+            initialValue: target.introduction,
+          })(<TextArea placeholder="请填写简介" rows={4} />)}
         </FormItem>
         <FormItem
           {...submitFormLayout}
@@ -215,13 +189,14 @@ const BasicForm = Form.create()(props => {
   );
 });
 
-const renderContent = (articleCategoryTrees, data, mutation, tabKey, setTabKey) => {
+const renderContent = (providerCategoryTrees, areaTrees, data, mutation, tabKey, setTabKey) => {
   let tabList = {
     basic: {
       name: '基础信息',
       render: () => (
         <BasicForm
-          articleCategoryTrees={getTreeData(articleCategoryTrees)}
+          providerCategoryTrees={getTreeData(providerCategoryTrees)}
+          areaTrees={getTreeData(areaTrees)}
           target={data || {}}
           mutation={mutation}
         />
@@ -232,22 +207,13 @@ const renderContent = (articleCategoryTrees, data, mutation, tabKey, setTabKey) 
   if (data) {
     tabList = Object.assign(tabList, {
       cover: {
-        name: '封面',
+        name: 'logo',
         render: () => (
           <ImageCropper
-            url={data.cover}
+            url={data.logo}
             onUpload={file => onUpload(file, data, mutation)}
-            width={441.6}
-            height={270}
-          />
-        ),
-      },
-      text: {
-        name: '正文',
-        render: () => (
-          <RichText
-            html={data.text}
-            onSave={text => mutation({ variables: { id: data.id, data: { text } } })}
+            width={148}
+            height={62.31}
           />
         ),
       },
@@ -284,21 +250,24 @@ export default withRouter(props => {
     },
   } = props;
 
-  const { loading, data, refetch } = useQuery(Q_GET_ARTICLE, {
+  const { loading, data, refetch } = useQuery(Q_GET_PROVIDER, {
     notifyOnNetworkStatusChange: true,
-    variables: { id: id || '', queryString: buildingQuery({ join: [{ field: 'category' }] }) },
+    variables: {
+      id: id || '',
+      queryString: buildingQuery({ join: [{ field: 'category' }, { field: 'area' }] }),
+    },
   });
 
-  const [createArticle] = useMutation(M_CREATE_ARTICLE, {
+  const [createProvider] = useMutation(M_CREATE_PROVIDER, {
     update: (proxy, { data }) => {
-      if (data && data.createArticle) {
+      if (data && data.createProvider) {
         message.success('保存成功');
-        router.replace(`/articles/detail/${data.createArticle.id}`);
+        router.replace(`/providers/detail/${data.createProvider.id}`);
       }
     },
   });
 
-  const [updateArticle] = useMutation(M_UPDATE_ARTICLE, {
+  const [updateProvider] = useMutation(M_UPDATE_PROVIDER, {
     update: (proxy, { data }) => {
       if (data) {
         refetch();
@@ -309,12 +278,13 @@ export default withRouter(props => {
 
   if (loading || !data) return <Skeleton loading={loading} />;
 
-  const { article, articleCategoryTrees } = data;
+  const { provider, providerCategoryTrees, areaTrees } = data;
 
   return renderContent(
-    articleCategoryTrees,
-    id ? article : null,
-    id ? updateArticle : createArticle,
+    providerCategoryTrees,
+    areaTrees,
+    id ? provider : null,
+    id ? updateProvider : createProvider,
     tabKey,
     setTabKey,
   );
