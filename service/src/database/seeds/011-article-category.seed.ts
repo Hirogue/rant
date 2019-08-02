@@ -8,5 +8,6 @@ export default class implements Seeder {
         await factory(ArticleCategory)({ title: '江旅资讯' }).seed();
         await factory(ArticleCategory)({ title: '投融研报' }).seed();
         await factory(ArticleCategory)({ title: '投融学堂' }).seed();
+        await factory(ArticleCategory)({ title: '通知公告' }).seed();
     }
 }
