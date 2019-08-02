@@ -7,3 +7,5 @@ export * from './article';
 export * from './area';
 export * from './provider-category';
 export * from './provider';
+export * from './product-category';
+export * from './product';

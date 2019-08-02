@@ -10,7 +10,8 @@ import { BaseDataSource, CoreModule } from './core';
 import { HomeModule } from './home';
 import { LoggerMiddleware, LoggerModule } from './logger';
 import { OrgModule } from './org';
-import { ProviderModule } from './provider/provider.module';
+import { ProductModule } from './product';
+import { ProviderModule } from './provider';
 import { StorageModule } from './storage';
 import { UserModule } from './user';
 
@@ -32,7 +33,8 @@ import { UserModule } from './user';
     UserModule,
     AuthModule,
     ArticleModule,
-    ProviderModule
+    ProviderModule,
+    ProductModule
   ]
 })
 export class AppModule implements NestModule {

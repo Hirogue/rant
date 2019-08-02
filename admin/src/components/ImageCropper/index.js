@@ -161,7 +161,7 @@ export default class ImageCropper extends React.Component {
           title="图片裁剪"
           okText="确认"
           cancelText="取消"
-          width={width < 400 ? 400 : width + 100}
+          width={width < 200 ? 400 : width + 100}
           height={height}
           onOk={this.toUpload}
           onCancel={this.toCloseModal}

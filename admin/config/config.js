@@ -149,7 +149,7 @@ export default {
         },
         {
           name: 'providers',
-          icon: 'idcard',
+          icon: 'audit',
           path: '/providers',
           routes: [
             {
@@ -172,21 +172,31 @@ export default {
             },
           ],
         },
-        //     {
-        //       path: '/articles/detail/:id',
-        //       component: './articles/detail',
-        //     },
-        //     {
-        //       path: '/articles/create',
-        //       component: './articles/detail',
-        //     },
-        //     {
-        //       name: 'category',
-        //       path: '/articles/category',
-        //       component: './articles/category',
-        //     },
-        //   ],
-        // },
+        {
+          name: 'products',
+          icon: 'book',
+          path: '/products',
+          routes: [
+            {
+              name: 'list',
+              path: '/products/list',
+              component: './products/list',
+            },
+            {
+              path: '/products/detail/:id',
+              component: './products/detail',
+            },
+            {
+              path: '/products/create',
+              component: './products/detail',
+            },
+            {
+              name: 'category',
+              path: '/products/category',
+              component: './products/category',
+            },
+          ],
+        },
         {
           name: 'org',
           icon: 'apartment',
