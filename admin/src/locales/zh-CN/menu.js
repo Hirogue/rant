@@ -20,6 +20,7 @@ export default {
   'menu.users.list': '用户列表',
   'menu.metadata': '元数据',
   'menu.metadata.area': '地区',
+  'menu.metadata.industry': '行业',
   'menu.exception.403': '403',
   'menu.exception.404': '404',
   'menu.exception.500': '500',

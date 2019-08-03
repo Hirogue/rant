@@ -14,6 +14,7 @@ import { ProductModule } from './product';
 import { ProviderModule } from './provider';
 import { StorageModule } from './storage';
 import { UserModule } from './user';
+import { IndustryModule } from './industry';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { UserModule } from './user';
     StorageModule,
     HomeModule,
     AreaModule,
+    IndustryModule,
     OrgModule,
     UserModule,
     AuthModule,

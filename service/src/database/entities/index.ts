@@ -7,3 +7,4 @@ export * from './provider.entity';
 export * from './provider-category.entity';
 export * from './product.entity';
 export * from './product-category.entity';
+export * from './industry.entity';

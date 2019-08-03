@@ -233,6 +233,11 @@ export default {
               path: '/metadata/area',
               component: './area',
             },
+            {
+              name: 'industry',
+              path: '/metadata/industry',
+              component: './industry',
+            },
           ],
         },
         {
