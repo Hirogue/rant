@@ -1,9 +1,9 @@
 import { Field, InputType, ObjectType } from "type-graphql";
 import { Column, Entity, ManyToOne } from "typeorm";
 import { Base } from "./base";
-import { User } from "./user.entity";
+import { Metadata } from "./metadata.entity";
 import { ProviderCategory } from "./provider-category.entity";
-import { Area } from "./area.entity";
+import { User } from "./user.entity";
 
 @Entity()
 @ObjectType()
@@ -30,9 +30,9 @@ export class Provider extends Base {
     @ManyToOne(type => ProviderCategory, target => target.providers)
     category: ProviderCategory;
 
-    @Field(type => Area, { nullable: true })
-    @ManyToOne(type => Area, target => target.providers)
-    area: Area;
+    @Field(type => Metadata, { nullable: true })
+    @ManyToOne(type => Metadata, target => target.providers)
+    area: Metadata;
 
     @Field(type => User, { nullable: true })
     @ManyToOne(type => User, target => target.providers)

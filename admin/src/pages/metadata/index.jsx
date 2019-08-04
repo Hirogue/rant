@@ -20,10 +20,10 @@ import {
 } from 'antd';
 import { useEffect, useState } from 'react';
 import {
-  M_CREATE_INDUSTRY,
-  M_DELETE_INDUSTRY,
-  M_UPDATE_INDUSTRY,
-  Q_GET_INDUSTRY_TREES,
+  M_CREATE_METADATA,
+  M_DELETE_METADATA,
+  M_UPDATE_METADATA,
+  Q_GET_METADATA_TREES,
 } from '@/gql';
 
 const { TreeNode } = Tree;
@@ -82,8 +82,8 @@ const InfoForm = Form.create()(props => {
             <Input disabled value={target.title} />
           </FormItem>
         ) : (
-          ''
-        )}
+            ''
+          )}
         <FormItem {...formItemLayout} label="组织名称">
           {getFieldDecorator('title', {
             initialValue: target && isUpdate ? target.title : '',
@@ -125,19 +125,19 @@ export default () => {
   const [checkedKeys, setCheckedKeys] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [panelVisible, setPanelVisible] = useState(false);
-  const { loading, data, refetch, client } = useQuery(Q_GET_INDUSTRY_TREES, {
+  const { loading, data, refetch, client } = useQuery(Q_GET_METADATA_TREES, {
     notifyOnNetworkStatusChange: true,
   });
-  const [updateIndustry] = useMutation(M_UPDATE_INDUSTRY, {
+  const [updateMetadata] = useMutation(M_UPDATE_METADATA, {
     update: (cache, { data }) => {
       if (data) {
         refetch();
-        setSelectedNode(data.updateIndustry);
+        setSelectedNode(data.updateMetadata);
         message.success('保存成功');
       }
     },
   });
-  const [createIndustry] = useMutation(M_CREATE_INDUSTRY, {
+  const [createMetadata] = useMutation(M_CREATE_METADATA, {
     update: (cache, { data }) => {
       if (data) {
         refetch();
@@ -146,7 +146,7 @@ export default () => {
       }
     },
   });
-  const [deleteIndustry] = useMutation(M_DELETE_INDUSTRY, {
+  const [deleteMetadata] = useMutation(M_DELETE_METADATA, {
     update: (cache, { data }) => {
       if (data) {
         refetch();
@@ -157,9 +157,9 @@ export default () => {
     },
   });
 
-  const { industryTrees } = data;
+  const { metadataTrees } = data;
 
-  if (!industryTrees) return <Skeleton />;
+  if (!metadataTrees) return <Skeleton />;
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
@@ -168,7 +168,7 @@ export default () => {
       name: '删除',
       icon: 'delete',
       action: () => {
-        deleteIndustry({ variables: { ids: checkedKeys.join(',') } });
+        deleteMetadata({ variables: { ids: checkedKeys.join(',') } });
       },
       disabled: checkedKeys.length <= 0,
       confirm: true,
@@ -191,12 +191,12 @@ export default () => {
         <Row>
           <Col lg={8}>
             <StandardTree
-              treeData={industryTrees}
+              treeData={metadataTrees}
               checkedKeys={checkedKeys}
               onCheck={checkedKeys => setCheckedKeys(checkedKeys)}
               onSelect={e => setSelectedNode(e.selected ? e.node.props.dataRef : null)}
               onDrop={(current, target) => {
-                updateIndustry({
+                updateMetadata({
                   variables: {
                     id: current.id,
                     data: {
@@ -209,12 +209,14 @@ export default () => {
             />
           </Col>
           <Col lg={15} offset={1}>
-            <Divider orientation="left">详情</Divider>
-            {selectedNode ? (
-              <InfoForm isUpdate={true} mutation={updateIndustry} target={selectedNode} />
-            ) : (
-              ''
-            )}
+            <Affix offsetTop={100}>
+              <Divider orientation="left">详情</Divider>
+              {selectedNode ? (
+                <InfoForm isUpdate={true} mutation={updateMetadata} target={selectedNode} />
+              ) : (
+                  ''
+                )}
+            </Affix>
           </Col>
         </Row>
       </StandardRow>
@@ -223,7 +225,7 @@ export default () => {
         visible={panelVisible}
         onCancel={() => setPanelVisible(false)}
       >
-        <InfoForm mutation={createIndustry} target={selectedNode} />
+        <InfoForm mutation={createMetadata} target={selectedNode} />
       </StandardPanel>
     </PageHeaderWrapper>
   );

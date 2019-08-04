@@ -12,10 +12,7 @@ export default props => {
         checkable
         checkStrictly
         checkedKeys={checkedKeys}
-        onCheck={e => {
-          console.log(e);
-          onCheck(e.checked);
-        }}
+        onCheck={e => onCheck(e.checked)}
         onSelect={(key, e) => onSelect(e)}
         draggable={true}
         onDrop={e => {

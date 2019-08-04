@@ -1,6 +1,6 @@
 import * as Faker from 'faker';
 import { define } from "typeorm-seeding";
-import { Provider, ProviderCategory, Area, User } from '../entities';
+import { Metadata, Provider, ProviderCategory, User } from '../entities';
 
 interface IProviderSetting {
     name?: string;
@@ -9,7 +9,7 @@ interface IProviderSetting {
     introduction?: string;
     category: ProviderCategory;
     creator: User;
-    area: Area;
+    area: Metadata;
 }
 
 define(Provider, (faker: typeof Faker, settings: IProviderSetting) => {

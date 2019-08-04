@@ -227,28 +227,7 @@ export default {
           name: 'metadata',
           icon: 'database',
           path: '/metadata',
-          routes: [
-            {
-              name: 'capital-type',
-              path: '/metadata/capital-type',
-              component: './capital-type',
-            },
-            {
-              name: 'amount',
-              path: '/metadata/amount',
-              component: './amount',
-            },
-            {
-              name: 'area',
-              path: '/metadata/area',
-              component: './area',
-            },
-            {
-              name: 'industry',
-              path: '/metadata/industry',
-              component: './industry',
-            },
-          ],
+          component: './metadata',
         },
         {
           name: 'settings',

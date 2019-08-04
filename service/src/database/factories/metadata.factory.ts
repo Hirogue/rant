@@ -1,16 +1,16 @@
 import * as Faker from 'faker';
 import { define } from "typeorm-seeding";
-import { Area } from "../entities";
+import { Metadata } from "../entities";
 
-interface IAreaSetting {
+interface IMetadataSetting {
     title: string;
     sort?: number;
-    parent?: Area;
-    children?: Area[];
+    parent?: Metadata;
+    children?: Metadata[];
 }
 
-define(Area, (faker: typeof Faker, settings: IAreaSetting) => {
-    const target = new Area();
+define(Metadata, (faker: typeof Faker, settings: IMetadataSetting) => {
+    const target = new Metadata();
     target.title = settings.title;
     target.sort = settings.sort || 0;
     target.parent = settings.parent;

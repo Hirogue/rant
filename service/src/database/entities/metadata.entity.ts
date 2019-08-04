@@ -1,12 +1,13 @@
 import { Field, InputType, Int, ObjectType } from "type-graphql";
 import { Column, Entity, Tree, TreeChildren, TreeParent } from "typeorm";
 import { Base } from "./base";
+import { Provider } from "./provider.entity";
 
 @Entity()
 @Tree('materialized-path')
 @ObjectType()
-@InputType('IndustryInput')
-export class Industry extends Base {
+@InputType('MetadataInput')
+export class Metadata extends Base {
     @Field({ nullable: true })
     @Column()
     title: string;
@@ -15,12 +16,14 @@ export class Industry extends Base {
     @Column({ default: 0 })
     sort: number;
 
-    @Field(type => Industry, { nullable: true })
+    @Field(type => Metadata, { nullable: true })
     @TreeParent()
-    parent: Industry;
+    parent: Metadata;
 
-    @Field(type => [Industry]!, { nullable: true })
+    @Field(type => [Metadata]!, { nullable: true })
     @TreeChildren()
-    children: Industry[];
+    children: Metadata[];
 
+    @Field(type => [Provider]!, { nullable: true })
+    providers: Provider[];
 }

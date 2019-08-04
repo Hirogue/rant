@@ -52,7 +52,7 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { queryProvider, providerCategoryTrees, areaTrees } = data;
+  const { queryProvider, providerCategoryTrees, metadataTrees } = data;
 
   if (!queryProvider) return <Skeleton loading={loading} active avatar />;
 
@@ -98,7 +98,7 @@ export default () => {
       dataIndex: 'area.id',
       render: (val, record) => (record.area ? record.area.title : ''),
       treeSelector: true,
-      treeFilters: areaTrees,
+      treeFilters: metadataTrees,
     },
     {
       title: '创建人',

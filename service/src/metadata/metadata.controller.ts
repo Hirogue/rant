@@ -2,13 +2,13 @@ import { Controller, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { ApiBearerAuth, ApiUseTags } from "@nestjs/swagger";
 import { Crud } from "@nestjsx/crud";
+import { Metadata } from "../database";
 import { BaseTreeController } from "../core";
-import { CapitalType } from "../database";
-import { CapitalTypeService } from "./capital-type.service";
+import { MetadataService } from "./metadata.service";
 
 @Crud({
     model: {
-        type: CapitalType,
+        type: Metadata,
     },
     params: {
         id: {
@@ -18,12 +18,12 @@ import { CapitalTypeService } from "./capital-type.service";
         },
     }
 })
-@ApiUseTags('capital-type')
+@ApiUseTags('metadata')
 @ApiBearerAuth()
-@Controller('/api/capital-type')
+@Controller('/api/metadata')
 @UseGuards(AuthGuard('jwt'))
-export class CapitalTypeController extends BaseTreeController<CapitalType> {
-    constructor(public service: CapitalTypeService) {
+export class MetadataController extends BaseTreeController<Metadata> {
+    constructor(public service: MetadataService) {
         super(service)
     }
 }

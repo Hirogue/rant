@@ -3,13 +3,13 @@ import { CONTEXT } from "@nestjs/graphql";
 import { ObjectType, Resolver } from "type-graphql";
 import { GqlJwtAuthGuard } from "../auth";
 import { BasePaginate, BaseTreeResolver } from "../core";
-import { Area } from "../database";
+import { Metadata } from "../database";
 
 @ObjectType()
-export class AreaPaginate extends BasePaginate(Area) { }
+export class MetadataPaginate extends BasePaginate(Metadata) { }
 
-@Resolver(of => Area)
+@Resolver(of => Metadata)
 @UseGuards(GqlJwtAuthGuard)
-export class AreaResolver extends BaseTreeResolver(Area, AreaPaginate) {
-    constructor(@Inject(CONTEXT) context) { super(context, 'area') }
+export class MetadataResolver extends BaseTreeResolver(Metadata, MetadataPaginate) {
+    constructor(@Inject(CONTEXT) context) { super(context, 'metadata') }
 }

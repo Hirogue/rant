@@ -1,7 +1,7 @@
 import { sample } from "lodash";
 import { Connection } from "typeorm";
 import { Factory, Seeder } from "typeorm-seeding";
-import { Provider, ProviderCategory, User, Area } from "../entities";
+import { Provider, ProviderCategory, User, Metadata } from "../entities";
 
 export default class implements Seeder {
     public async run(factory: Factory, connection: Connection): Promise<any> {
@@ -16,7 +16,8 @@ export default class implements Seeder {
 
         const user = await connection.getRepository(User).findOne({ where: { account: 'SuperAdmin' } });
 
-        const areaList = await connection.getRepository(Area).find();
+        const area = await connection.getTreeRepository(Metadata).findOne({ title: '地区' });
+        const areaList = await connection.getTreeRepository(Metadata).findDescendants(area);
 
         await factory(Provider)({ category: cate1, creator: user, area: sample(areaList) }).seedMany(15);
         await factory(Provider)({ category: cate2, creator: user, area: sample(areaList) }).seedMany(15);
