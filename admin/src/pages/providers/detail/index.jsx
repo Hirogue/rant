@@ -74,7 +74,7 @@ const onUpload = async (file, target, mutation) => {
 };
 
 const BasicForm = Form.create()(props => {
-  const { providerCategoryTrees, areaTrees, target, mutation, form } = props;
+  const { providerCategoryTrees, metadataDescendantsTree, target, mutation, form } = props;
 
   const { getFieldDecorator, getFieldValue } = form;
 
@@ -167,7 +167,9 @@ const BasicForm = Form.create()(props => {
                 message: '请选择地区',
               },
             ],
-          })(<TreeSelect showSearch treeNodeFilterProp="title" treeData={areaTrees} />)}
+          })(
+            <TreeSelect showSearch treeNodeFilterProp="title" treeData={metadataDescendantsTree} />,
+          )}
         </FormItem>
         <FormItem {...formItemLayout} label="简介">
           {getFieldDecorator('introduction', {
@@ -189,14 +191,21 @@ const BasicForm = Form.create()(props => {
   );
 });
 
-const renderContent = (providerCategoryTrees, areaTrees, data, mutation, tabKey, setTabKey) => {
+const renderContent = (
+  providerCategoryTrees,
+  metadataDescendantsTree,
+  data,
+  mutation,
+  tabKey,
+  setTabKey,
+) => {
   let tabList = {
     basic: {
       name: '基础信息',
       render: () => (
         <BasicForm
           providerCategoryTrees={getTreeData(providerCategoryTrees)}
-          areaTrees={getTreeData(areaTrees)}
+          metadataDescendantsTree={getTreeData(metadataDescendantsTree)}
           target={data || {}}
           mutation={mutation}
         />
@@ -255,6 +264,7 @@ export default withRouter(props => {
     variables: {
       id: id || '',
       queryString: buildingQuery({ join: [{ field: 'category' }, { field: 'area' }] }),
+      metadataRoot: '地区',
     },
   });
 
@@ -278,11 +288,11 @@ export default withRouter(props => {
 
   if (loading || !data) return <Skeleton loading={loading} />;
 
-  const { provider, providerCategoryTrees, areaTrees } = data;
+  const { provider, providerCategoryTrees, metadataDescendantsTree } = data;
 
   return renderContent(
     providerCategoryTrees,
-    areaTrees,
+    metadataDescendantsTree,
     id ? provider : null,
     id ? updateProvider : createProvider,
     tabKey,

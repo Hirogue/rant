@@ -1,7 +1,8 @@
-import { Get, Param } from "@nestjs/common";
+import { Get, Param, UseInterceptors } from "@nestjs/common";
 import { BaseTreeService } from "./base-tree.service";
 import { BaseController } from "./base.controller";
 import { ApiOperation } from "@nestjs/swagger";
+import { CrudRequestInterceptor, ParsedRequest, CrudRequest } from "@nestjsx/crud";
 
 const PREFIX = 'tree';
 
@@ -34,10 +35,10 @@ export abstract class BaseTreeController<T> extends BaseController<T> {
         return this.service.findDescendants(id);
     }
 
-    @Get(`${PREFIX}/descendantsTree/:id`)
+    @Get(`${PREFIX}/descendantsTree/:root`)
     @ApiOperation({ title: ' Gets all descendants of the given entity. Returns them in a tree - nested into each other.' })
-    async descendantsTree(@Param('id') id: string) {
-        return this.service.findDescendantsTree(id);
+    async descendantsTree(@Param('root') root: string) {
+        return this.service.findDescendantsTree(root);
     }
 
     @Get(`${PREFIX}/countDescendants/:id`)

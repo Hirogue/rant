@@ -9,6 +9,7 @@ import { Affix, Col, message, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
+import { CondOperator } from '@nestjsx/crud-request';
 
 export default () => {
   const defaultVariables = {
@@ -17,12 +18,16 @@ export default () => {
     join: [{ field: 'category' }, { field: 'area' }, { field: 'creator' }],
     sort: [{ field: 'create_at', order: 'DESC' }],
   };
+
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
 
   const { loading, data, refetch } = useQuery(Q_GET_PROVIDERS, {
     notifyOnNetworkStatusChange: true,
-    variables: { queryString: buildingQuery(defaultVariables) },
+    variables: {
+      queryString: buildingQuery(defaultVariables),
+      metadataRoot: '地区',
+    },
   });
 
   const [deleteProvider] = useMutation(M_DELETE_PROVIDER, {
@@ -52,7 +57,7 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { queryProvider, providerCategoryTrees, metadataTrees } = data;
+  const { queryProvider, providerCategoryTrees, metadataDescendantsTree } = data;
 
   if (!queryProvider) return <Skeleton loading={loading} active avatar />;
 
@@ -98,7 +103,7 @@ export default () => {
       dataIndex: 'area.id',
       render: (val, record) => (record.area ? record.area.title : ''),
       treeSelector: true,
-      treeFilters: metadataTrees,
+      treeFilters: metadataDescendantsTree || [],
     },
     {
       title: '创建人',

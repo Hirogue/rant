@@ -44,17 +44,17 @@ export class BaseDataSource extends RESTDataSource {
         }
     }
 
-    async findDescendantsTree(url: string, parentId: string) {
+    async findDescendantsTree(url: string, root: string) {
         try {
-            return await this.get(`${url}/tree/descendantsTree/${parentId}`);
+            return await this.get(`${url}/tree/descendantsTree/${root}`);
         } catch (err) {
             throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
         }
     }
 
-    async findCountDescendants(url: string, parentId: string) {
+    async findCountDescendants(url: string, root: string) {
         try {
-            return await this.get(`${url}/tree/countDescendants/${parentId}`);
+            return await this.get(`${url}/tree/countDescendants/${root}`);
         } catch (err) {
             throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
         }

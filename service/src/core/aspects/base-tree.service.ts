@@ -40,16 +40,15 @@ export abstract class BaseTreeService<T> extends BaseService<T> {
      * 获取给定实体的所有子项（后代）。将它们全部返回到平面数组中。
      */
     async findDescendants(id: string) {
-
         return this.repository.findDescendants(await this.findParentById(id));
     }
 
     /**
      * 获取给定实体的所有子项（后代）。在树中返回它们 - 彼此嵌套。
      */
-    async findDescendantsTree(id: string) {
-
-        return this.repository.findDescendantsTree(await this.findParentById(id));
+    async findDescendantsTree(root: string) {
+        const target = await this.repository.findDescendantsTree(await this.findOne({ where: { title: root } }));
+        return target ? target['children'] : [];
     }
 
     /**
