@@ -34,6 +34,8 @@ async function bootstrap() {
   server.use(helmet());
   server.use(compression());
   server.use('/static', serveStatic('static'));
+  server.use('/admin', serveStatic('../admin/dist'));
+  server.use('/lvyoto', serveStatic('../lvyoto/dist'));
 
   server.useGlobalPipes(new ValidationPipe());
   server.useGlobalFilters(new ExceptionsFilter(server.get(RenderService)));

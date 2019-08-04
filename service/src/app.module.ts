@@ -3,6 +3,7 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { RenderModule } from 'nest-next';
 import { AmountModule } from './amount';
+import { SpaController } from './spa.controller';
 import { AreaModule } from './area';
 import { ArticleModule } from './artilce';
 import { AuthModule } from './auth';
@@ -41,7 +42,8 @@ import { UserModule } from './user';
     ArticleModule,
     ProviderModule,
     ProductModule
-  ]
+  ],
+  controllers: [SpaController]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
