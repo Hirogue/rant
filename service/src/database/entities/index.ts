@@ -8,3 +8,5 @@ export * from './provider-category.entity';
 export * from './product.entity';
 export * from './product-category.entity';
 export * from './industry.entity';
+export * from './amount.entity';
+export * from './capital-type.entity';

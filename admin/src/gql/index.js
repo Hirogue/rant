@@ -5,6 +5,8 @@ export * from './user';
 export * from './article-category';
 export * from './article';
 export * from './area';
+export * from './amount';
+export * from './capital-type';
 export * from './industry';
 export * from './provider-category';
 export * from './provider';

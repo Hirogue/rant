@@ -2,19 +2,21 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { RenderModule } from 'nest-next';
+import { AmountModule } from './amount';
 import { AreaModule } from './area';
 import { ArticleModule } from './artilce';
 import { AuthModule } from './auth';
+import { CapitalTypeModule } from './capital-type';
 import { Config } from "./config";
 import { BaseDataSource, CoreModule } from './core';
 import { HomeModule } from './home';
+import { IndustryModule } from './industry';
 import { LoggerMiddleware, LoggerModule } from './logger';
 import { OrgModule } from './org';
 import { ProductModule } from './product';
 import { ProviderModule } from './provider';
 import { StorageModule } from './storage';
 import { UserModule } from './user';
-import { IndustryModule } from './industry';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { IndustryModule } from './industry';
     StorageModule,
     HomeModule,
     AreaModule,
+    AmountModule,
+    CapitalTypeModule,
     IndustryModule,
     OrgModule,
     UserModule,

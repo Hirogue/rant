@@ -19,6 +19,8 @@ export default {
   'menu.users': '用户管理',
   'menu.users.list': '用户列表',
   'menu.metadata': '元数据',
+  'menu.metadata.capital-type': '资金类型',
+  'menu.metadata.amount': '金额',
   'menu.metadata.area': '地区',
   'menu.metadata.industry': '行业',
   'menu.exception.403': '403',

@@ -19,6 +19,8 @@ export default {
   'menu.users': 'Users Management',
   'menu.users.list': 'Users List',
   'menu.metadata': 'Metadata',
+  'menu.metadata.capital-type': 'Capital Type',
+  'menu.metadata.amount': 'Amount',
   'menu.metadata.area': 'Area',
   'menu.metadata.industry': 'Industry',
   'menu.exception.403': '403',

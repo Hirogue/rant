@@ -229,6 +229,16 @@ export default {
           path: '/metadata',
           routes: [
             {
+              name: 'capital-type',
+              path: '/metadata/capital-type',
+              component: './capital-type',
+            },
+            {
+              name: 'amount',
+              path: '/metadata/amount',
+              component: './amount',
+            },
+            {
               name: 'area',
               path: '/metadata/area',
               component: './area',
