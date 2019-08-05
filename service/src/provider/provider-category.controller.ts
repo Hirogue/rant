@@ -19,9 +19,7 @@ import { ProviderCategoryService } from "./provider-category.service";
     }
 })
 @ApiUseTags('provider')
-@ApiBearerAuth()
 @Controller('/api/provider/category')
-@UseGuards(AuthGuard('jwt'))
 export class ProviderCategoryController extends BaseTreeController<ProviderCategory> {
     constructor(public service: ProviderCategoryService) {
         super(service)

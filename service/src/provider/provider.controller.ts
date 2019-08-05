@@ -35,9 +35,7 @@ import { ProviderService } from "./provider.service";
     }
 })
 @ApiUseTags('provider')
-@ApiBearerAuth()
 @Controller('/api/provider')
-@UseGuards(AuthGuard('jwt'))
 export class ProviderController extends BaseController<Provider> {
     constructor(public service: ProviderService) {
         super(service)

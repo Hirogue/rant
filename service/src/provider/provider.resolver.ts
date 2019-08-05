@@ -9,7 +9,6 @@ import { Provider } from '../database';
 export class ProviderPaginate extends BasePaginate(Provider) { }
 
 @Resolver(of => Provider)
-@UseGuards(GqlJwtAuthGuard)
 export class ProviderResolver extends BaseResolver(Provider, ProviderPaginate) {
     constructor(@Inject(CONTEXT) context) { super(context, 'provider'); }
 }

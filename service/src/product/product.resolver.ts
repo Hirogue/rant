@@ -9,7 +9,6 @@ import { Product } from '../database';
 export class ProductPaginate extends BasePaginate(Product) { }
 
 @Resolver(of => Product)
-@UseGuards(GqlJwtAuthGuard)
 export class ProductResolver extends BaseResolver(Product, ProductPaginate) {
     constructor(@Inject(CONTEXT) context) { super(context, 'product'); }
 }

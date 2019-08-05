@@ -32,6 +32,8 @@ export default {
   'menu.articles': 'Articles Management',
   'menu.articles.list': 'Articles List',
   'menu.articles.category': 'Articles Categories',
+  'menu.investment-financing': 'Investment And Financing',
+  'menu.investment-financing.projects': 'Projects',
   'menu.products': 'Products Management',
   'menu.products.list': 'Product List',
   'menu.products.category': 'Product Category',

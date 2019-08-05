@@ -6,6 +6,21 @@ export const IdentityEnum = {
   TOURIST: 'tourist',
 };
 
+export const IFModeEnum = {
+  EQUITY: 'equity',
+  CLAIM: 'claim',
+};
+
+export const ProjectStatusEnum = {
+  PENDING: 'pending',
+  REJECTED: 'rejected',
+  CHECKED: 'checked',
+  WAITING: 'waiting',
+  FOLLOWING: 'following',
+  CANCELLED: 'cancelled',
+  FINISHED: 'finished',
+};
+
 export const UserStatusEnum = {
   NORMAL: 0,
   PENDING: 1,

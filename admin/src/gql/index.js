@@ -9,3 +9,4 @@ export * from './product-category';
 export * from './provider';
 export * from './provider-category';
 export * from './user';
+export * from './project';

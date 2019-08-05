@@ -33,9 +33,7 @@ import { ProductService } from "./product.service";
     }
 })
 @ApiUseTags('product')
-@ApiBearerAuth()
 @Controller('/api/product')
-@UseGuards(AuthGuard('jwt'))
 export class ProductController extends BaseController<Product> {
     constructor(public service: ProductService) {
         super(service)

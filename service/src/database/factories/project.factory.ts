@@ -65,5 +65,8 @@ define(Project, (faker: typeof Faker, settings: IProjectSetting) => {
     instance.interest = settings.interest;
     instance.occupancy_time = settings.occupancy_time;
 
+    instance.status = settings.status;
+    instance.category = settings.category;
+
     return instance;
 })

@@ -148,6 +148,18 @@ export default {
           ],
         },
         {
+          name: 'investment-financing',
+          icon: 'schedule',
+          path: '/if',
+          routes: [
+            {
+              name: 'projects',
+              path: '/if/projects/list',
+              component: './projects/list',
+            },
+          ],
+        },
+        {
           name: 'providers',
           icon: 'audit',
           path: '/providers',

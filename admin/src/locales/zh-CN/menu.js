@@ -32,6 +32,8 @@ export default {
   'menu.articles': '文章管理',
   'menu.articles.list': '文章列表',
   'menu.articles.category': '文章分类',
+  'menu.investment-financing': '投融管理',
+  'menu.investment-financing.projects': '项目',
   'menu.products': '产品管理',
   'menu.products.list': '产品列表',
   'menu.products.category': '产品分类',

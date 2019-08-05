@@ -52,10 +52,11 @@ export default class implements Seeder {
         );
 
         for (let i = 0; i < 25; i++) {
+
             await factory(Project)({
                 creator: sample(users),
-                status: sample(status),
-                category: sample(category),
+                status: ProjectStatusEnum[sample(status)],
+                category: IFModeEnum[sample(category)],
                 industry: sample(industry),
                 area: sample(area),
                 stage: sample(stage),

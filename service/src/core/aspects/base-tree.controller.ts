@@ -1,8 +1,7 @@
-import { Get, Param, UseInterceptors } from "@nestjs/common";
+import { Get, Param } from "@nestjs/common";
+import { ApiOperation } from "@nestjs/swagger";
 import { BaseTreeService } from "./base-tree.service";
 import { BaseController } from "./base.controller";
-import { ApiOperation } from "@nestjs/swagger";
-import { CrudRequestInterceptor, ParsedRequest, CrudRequest } from "@nestjsx/crud";
 
 const PREFIX = 'tree';
 

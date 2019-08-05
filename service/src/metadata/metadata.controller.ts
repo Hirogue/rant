@@ -19,8 +19,6 @@ import { MetadataService } from "./metadata.service";
     }
 })
 @ApiUseTags('metadata')
-@ApiBearerAuth()
-@Controller('/api/metadata')
 @UseGuards(AuthGuard('jwt'))
 export class MetadataController extends BaseTreeController<Metadata> {
     constructor(public service: MetadataService) {

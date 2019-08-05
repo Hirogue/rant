@@ -9,7 +9,6 @@ import { Metadata } from "../database";
 export class MetadataPaginate extends BasePaginate(Metadata) { }
 
 @Resolver(of => Metadata)
-@UseGuards(GqlJwtAuthGuard)
 export class MetadataResolver extends BaseTreeResolver(Metadata, MetadataPaginate) {
     constructor(@Inject(CONTEXT) context) { super(context, 'metadata') }
 }

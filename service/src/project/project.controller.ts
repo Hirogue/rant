@@ -27,7 +27,7 @@ import { ProjectService } from "./project.service";
             },
         ],
         join: {
-
+            creator: {}
         }
     }
 })

@@ -19,9 +19,7 @@ import { ProductCategoryService } from "./product-catrgory.service";
     }
 })
 @ApiUseTags('product')
-@ApiBearerAuth()
 @Controller('/api/product/category')
-@UseGuards(AuthGuard('jwt'))
 export class ProductCategoryController extends BaseTreeController<ProductCategory> {
     constructor(public service: ProductCategoryService) {
         super(service)

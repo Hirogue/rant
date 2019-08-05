@@ -9,7 +9,6 @@ import { ProductCategory } from "../database";
 export class ProductCategoryPaginate extends BasePaginate(ProductCategory) { }
 
 @Resolver(of => ProductCategory)
-@UseGuards(GqlJwtAuthGuard)
 export class ProductCategoryResolver extends BaseTreeResolver(ProductCategory, ProductCategoryPaginate) {
     constructor(@Inject(CONTEXT) context) { super(context, 'product/category') }
 }

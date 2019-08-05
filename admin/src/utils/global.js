@@ -86,6 +86,21 @@ export const IdentityMaps = {
   tourist: '游客',
 };
 
+export const IFModeMaps = {
+  equity: '股权',
+  claim: '债权',
+};
+
+export const ProjectStatusMaps = {
+  pending: '待审核',
+  rejected: '已驳回',
+  checked: '已审核',
+  waiting: '待分配',
+  following: '待跟进',
+  cancelled: '已作废',
+  finished: '已完成',
+};
+
 export const UserStatusMaps = {
   0: '正常',
   1: '待审核',
