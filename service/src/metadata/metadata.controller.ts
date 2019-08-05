@@ -1,10 +1,9 @@
-import { Controller, UseGuards } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
-import { ApiBearerAuth, ApiUseTags } from "@nestjs/swagger";
+import { ApiUseTags } from "@nestjs/swagger";
 import { Crud } from "@nestjsx/crud";
-import { Metadata } from "../database";
 import { BaseTreeController } from "../core";
+import { Metadata } from "../database";
 import { MetadataService } from "./metadata.service";
+import { Controller } from "@nestjs/common";
 
 @Crud({
     model: {
@@ -19,7 +18,7 @@ import { MetadataService } from "./metadata.service";
     }
 })
 @ApiUseTags('metadata')
-@UseGuards(AuthGuard('jwt'))
+@Controller('/api/metadata')
 export class MetadataController extends BaseTreeController<Metadata> {
     constructor(public service: MetadataService) {
         super(service)
