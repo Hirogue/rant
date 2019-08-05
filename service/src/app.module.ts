@@ -11,6 +11,7 @@ import { LoggerMiddleware, LoggerModule } from './logger';
 import { MetadataModule } from './metadata';
 import { OrgModule } from './org';
 import { ProductModule } from './product';
+import { ProjectModule } from './project';
 import { ProviderModule } from './provider';
 import { SpaController } from './spa.controller';
 import { StorageModule } from './storage';
@@ -35,7 +36,8 @@ import { UserModule } from './user';
     AuthModule,
     ArticleModule,
     ProviderModule,
-    ProductModule
+    ProductModule,
+    ProjectModule
   ],
   controllers: [SpaController]
 })

@@ -78,6 +78,15 @@ export default class implements Seeder {
             await factory(Metadata)({ title: item, parent }).seed();
         }
 
+        parent = await factory(Metadata)({ title: '年限' }).seed();
+        list = [
+            '1年', '3年', '5年', '10年', '其他'
+        ];
+
+        for (const item of list) {
+            await factory(Metadata)({ title: item, parent }).seed();
+        }
+
         parent = await factory(Metadata)({ title: '时长' }).seed();
         list = [
             '1年以内', '1年-3年', '3年-5年', '5年-10年', '10年以上'
@@ -95,9 +104,37 @@ export default class implements Seeder {
         for (const item of list) {
             await factory(Metadata)({ title: item, parent }).seed();
         }
+
         parent = await factory(Metadata)({ title: '投资类型' }).seed();
         list = [
             '独资/投资建厂', '股权合作', '收购/并购', '其他合作方式'
+        ];
+
+        for (const item of list) {
+            await factory(Metadata)({ title: item, parent }).seed();
+        }
+
+        parent = await factory(Metadata)({ title: '退出方式' }).seed();
+        list = [
+            '首次公开发行', '买壳或借壳上市', '二次出售', '破产清算', '管理层回购'
+        ];
+
+        for (const item of list) {
+            await factory(Metadata)({ title: item, parent }).seed();
+        }
+
+        parent = await factory(Metadata)({ title: '可提供资料' }).seed();
+        list = [
+            '项目/商业计划书', '公司证件', '相关财务资料', '其他资料'
+        ];
+
+        for (const item of list) {
+            await factory(Metadata)({ title: item, parent }).seed();
+        }
+
+        parent = await factory(Metadata)({ title: '参股类型' }).seed();
+        list = [
+            '控股', '参股合作'
         ];
 
         for (const item of list) {
