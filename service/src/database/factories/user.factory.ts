@@ -1,9 +1,9 @@
 import * as Faker from 'faker';
 import { define } from "typeorm-seeding";
-import { IdentityEnum } from '../../core';
+import { IdentityEnum, UserLevelEnum } from '../../core';
 import { User, Org } from "../entities";
 
-define(User, (faker: typeof Faker, settings: { identity: IdentityEnum, org: Org }) => {
+define(User, (faker: typeof Faker, settings: { identity: IdentityEnum, org: Org, vip: UserLevelEnum }) => {
     const user = new User();
     user.account = faker.internet.userName();
     user.avatar = faker.image.avatar();
@@ -14,6 +14,7 @@ define(User, (faker: typeof Faker, settings: { identity: IdentityEnum, org: Org 
     user.company = faker.company.companyName();
     user.identity = settings.identity || IdentityEnum.TOURIST;
     user.org = settings.org;
+    user.vip = settings.vip || UserLevelEnum.V0;
 
     if (settings.identity != IdentityEnum.TOURIST && settings.identity != IdentityEnum.USER) {
         user.status = faker.random.number({ min: 0, max: 4 });

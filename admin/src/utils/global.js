@@ -108,3 +108,9 @@ export const UserStatusMaps = {
   3: '已审核',
   4: '已作废',
 };
+
+export const UserLevelMaps = {
+  0: 'V0',
+  1: 'V1',
+  2: 'V2',
+};

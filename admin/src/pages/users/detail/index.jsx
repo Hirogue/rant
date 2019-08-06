@@ -2,7 +2,13 @@ import ImageCropper from '@/components/ImageCropper';
 import StandardTabList from '@/components/StandardTabList';
 import { M_CREATE_USER, M_UPDATE_USER, Q_GET_USER } from '@/gql';
 import { uploadOne } from '@/utils/fetch';
-import { buildingQuery, getTreeData, IdentityMaps, UserStatusMaps } from '@/utils/global';
+import {
+  buildingQuery,
+  getTreeData,
+  IdentityMaps,
+  UserStatusMaps,
+  UserLevelMaps,
+} from '@/utils/global';
 import Logger from '@/utils/logger';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
@@ -215,6 +221,19 @@ const BasicForm = Form.create()(props => {
               {Object.keys(UserStatusMaps).map(key => (
                 <Option key={key} value={parseInt(key)}>
                   {UserStatusMaps[key]}
+                </Option>
+              ))}
+            </Select>,
+          )}
+        </FormItem>
+        <FormItem {...formItemLayout} label="等级">
+          {getFieldDecorator('vip', {
+            initialValue: target.vip,
+          })(
+            <Select>
+              {Object.keys(UserLevelMaps).map(key => (
+                <Option key={key} value={parseInt(key)}>
+                  {UserLevelMaps[key]}
                 </Option>
               ))}
             </Select>,

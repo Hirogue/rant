@@ -2,7 +2,7 @@ import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import { M_DELETE_USER, Q_GET_USERS, Q_GET_USER_STATISTICS } from '@/gql';
-import { buildingQuery, IdentityMaps, UserStatusMaps } from '@/utils/global';
+import { buildingQuery, IdentityMaps, UserStatusMaps, UserLevelMaps } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { Affix, Avatar, Card, Col, message, Row, Skeleton, Spin, Statistic } from 'antd';
@@ -148,6 +148,12 @@ export default () => {
       dataIndex: 'status',
       render: val => UserStatusMaps[val],
       filters: Object.keys(UserStatusMaps).map(key => ({ text: UserStatusMaps[key], value: key })),
+    },
+    {
+      title: '等级',
+      dataIndex: 'vip',
+      render: val => UserLevelMaps[val],
+      filters: Object.keys(UserLevelMaps).map(key => ({ text: UserLevelMaps[key], value: key })),
     },
     {
       title: '注册时间',

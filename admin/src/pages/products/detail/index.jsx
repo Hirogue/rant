@@ -1,3 +1,4 @@
+import EditableTable from '@/components/EditableTable';
 import ImageCropper from '@/components/ImageCropper';
 import StandardTabList from '@/components/StandardTabList';
 import { M_CREATE_PRODUCT, M_UPDATE_PRODUCT, Q_GET_PRODUCT } from '@/gql';
@@ -245,6 +246,41 @@ const renderContent = (productCategoryTrees, data, mutation, tabKey, setTabKey) 
           />
         ),
       },
+      flows: {
+        name: '流程步骤',
+        render: () => (
+          <EditableTable
+            columns={[
+              {
+                title: '步骤',
+                dataIndex: 'value',
+                defaultValue: '新步骤',
+                width: '25%',
+                editable: true,
+              },
+              {
+                title: '排序',
+                dataIndex: 'sort',
+                defaultValue: 0,
+                inputType: 'number',
+                width: '15%',
+                editable: true,
+              },
+            ]}
+            data={JSON.parse(data.flows || '').sort((a, b) => a.sort - b.sort)}
+            onChange={e =>
+              mutation({
+                variables: {
+                  id: data.id,
+                  data: {
+                    flows: JSON.stringify(e),
+                  },
+                },
+              })
+            }
+          />
+        ),
+      },
     });
   }
 
@@ -289,7 +325,7 @@ export default withRouter(props => {
   const [createProduct] = useMutation(M_CREATE_PRODUCT, {
     update: (proxy, { data }) => {
       if (data && data.createProduct) {
-        message.success('保存成功');
+        message.success('操作成功');
         router.replace(`/products/detail/${data.createProduct.id}`);
       }
     },
@@ -299,7 +335,7 @@ export default withRouter(props => {
     update: (proxy, { data }) => {
       if (data) {
         refetch();
-        message.success('保存成功');
+        message.success('操作成功');
       }
     },
   });

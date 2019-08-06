@@ -89,7 +89,6 @@ export default () => {
     {
       title: '访问量',
       dataIndex: 'views',
-      search: true,
     },
     {
       title: '分类',

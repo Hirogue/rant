@@ -8,7 +8,7 @@ export default props => {
     <ButtonGroup>
       {actions.map((action, index) => {
         return (
-          <Tooltip title={name} key={index}>
+          <Tooltip title={action.name} key={index}>
             {action.confirm ? (
               <Popconfirm
                 disabled={action.disabled}

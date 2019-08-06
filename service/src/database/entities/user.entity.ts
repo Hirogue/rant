@@ -1,9 +1,9 @@
 import * as bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
-import { Field, InputType, ObjectType } from 'type-graphql';
+import { Field, InputType, ObjectType, Int } from 'type-graphql';
 import { BeforeInsert, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Config } from '../../config';
-import { IdentityEnum, UserStatusEnum } from '../../core/enums';
+import { UserLevelEnum, IdentityEnum, UserStatusEnum } from '../../core/enums';
 import { Base } from './base';
 // import { Capital } from './capital.entity';
 import { Org } from './org.entity';
@@ -17,40 +17,44 @@ export class User extends Base {
 
     @Field({ nullable: true })
     @Column({ unique: true })
-    account: String;
+    account: string;
 
     @Exclude({ toPlainOnly: true })
     @Field({ nullable: true })
     @Column()
-    password: String;
+    password: string;
 
     @Field({ nullable: true })
     @Column({ nullable: true })
-    avatar: String;
+    avatar: string;
 
     @Field({ nullable: true })
     @Column({ nullable: true })
-    realname: String;
+    realname: string;
 
     @Field({ nullable: true })
     @Column({ nullable: true })
-    phone: String;
+    phone: string;
 
     @Field({ nullable: true })
     @Column({ nullable: true })
-    idcard: String;
+    idcard: string;
 
     @Field({ nullable: true })
     @Column({ nullable: true })
-    address: String;
+    address: string;
 
     @Field({ nullable: true })
     @Column({ nullable: true })
-    company: String;
+    company: string;
 
     @Field({ nullable: true })
     @Column({ nullable: true })
-    profile: String;
+    profile: string;
+
+    @Field(type => Int, { nullable: true })
+    @Column({ type: 'simple-enum', default: UserLevelEnum.V0 })
+    vip: UserLevelEnum;
 
     @Field({ nullable: true })
     @Column({ type: 'simple-enum', default: IdentityEnum.TOURIST })

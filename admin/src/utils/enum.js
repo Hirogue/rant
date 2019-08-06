@@ -28,3 +28,9 @@ export const UserStatusEnum = {
   AUDITED: 3,
   DELETED: 4,
 };
+
+export const UserLevelEnum = {
+  V0: 0,
+  V1: 1,
+  V2: 2,
+};
