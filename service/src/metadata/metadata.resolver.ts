@@ -1,7 +1,6 @@
-import { Inject, UseGuards } from "@nestjs/common";
+import { Inject } from "@nestjs/common";
 import { CONTEXT } from "@nestjs/graphql";
 import { ObjectType, Resolver } from "type-graphql";
-import { GqlJwtAuthGuard } from "../auth";
 import { BasePaginate, BaseTreeResolver } from "../core";
 import { Metadata } from "../database";
 

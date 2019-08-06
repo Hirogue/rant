@@ -66,7 +66,7 @@ export default () => {
       render: (val, row) => {
         return (
           <Fragment>
-            <Link to={`/projects/detail/${val}`}>详情</Link>
+            <Link to={`/if/projects/detail/${val}`}>详情</Link>
           </Fragment>
         );
       },
@@ -74,6 +74,21 @@ export default () => {
     {
       title: '名称',
       dataIndex: 'title',
+      search: true,
+    },
+    {
+      title: '联系人',
+      dataIndex: 'contact',
+      search: true,
+    },
+    {
+      title: '电话',
+      dataIndex: 'phone',
+      search: true,
+    },
+    {
+      title: '访问量',
+      dataIndex: 'views',
       search: true,
     },
     {
@@ -122,7 +137,7 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => router.push('/projects/create') },
+    { name: '新增', icon: 'file-add', action: () => router.push('/if/projects/create') },
     {
       name: '删除',
       icon: 'delete',

@@ -5,10 +5,17 @@ export const F_PROJECT_FIELDS = gql`
     id
     title
     cover
+    contact
+    phone
+    views
     category
     status
     update_at
     create_at
+    creator {
+      id
+      realname
+    }
   }
 `;
 

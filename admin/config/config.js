@@ -157,6 +157,14 @@ export default {
               path: '/if/projects/list',
               component: './projects/list',
             },
+            {
+              path: '/if/projects/detail/:id',
+              component: './projects/detail',
+            },
+            {
+              path: '/if/projects/create',
+              component: './projects/detail',
+            },
           ],
         },
         {
