@@ -16,7 +16,7 @@ export class Project extends Base {
     title: string;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     cover: string;
 
     @Field(type => Int, { nullable: true })
@@ -32,11 +32,11 @@ export class Project extends Base {
     phone: string;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     company: string;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     payment: string;
 
     @Field({ nullable: true })
@@ -44,7 +44,7 @@ export class Project extends Base {
     publish_at: string;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     amount: number;
 
     @Field({ nullable: true })

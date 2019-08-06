@@ -1,4 +1,4 @@
-import { Field, InputType, ObjectType } from "type-graphql";
+import { Field, InputType, ObjectType, Int } from "type-graphql";
 import { Column, Entity, ManyToOne } from "typeorm";
 import { JsonScalar } from "../../core";
 import { Base } from "./base";
@@ -36,6 +36,10 @@ export class Product extends Base {
     @Field({ nullable: true })
     @Column({ type: 'text', nullable: true })
     introduction: string;
+
+    @Field(type => Int, { nullable: true })
+    @Column({ default: 0 })
+    sort: number;
 
     @Field(type => ProductCategory, { nullable: true })
     @ManyToOne(type => ProductCategory, target => target.products)

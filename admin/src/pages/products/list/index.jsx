@@ -15,7 +15,7 @@ export default () => {
     page: 0,
     limit: 10,
     join: [{ field: 'category' }],
-    sort: [{ field: 'create_at', order: 'DESC' }],
+    sort: [{ field: 'sort', order: 'DESC', field: 'create_at', order: 'DESC' }],
   };
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -87,6 +87,11 @@ export default () => {
       render: (val, record) => (record.category ? record.category.title : ''),
       treeSelector: true,
       treeFilters: productCategoryTrees,
+    },
+    {
+      title: '排序',
+      dataIndex: 'sort',
+      sorter: true,
     },
     {
       title: '创建时间',

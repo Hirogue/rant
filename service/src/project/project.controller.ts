@@ -11,6 +11,7 @@ export class ProjectController extends BaseController(Project, {
     query: {
         join: {
             creator: {},
+            area: {}
         }
     }
 }) {

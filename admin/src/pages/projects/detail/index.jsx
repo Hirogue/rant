@@ -3,7 +3,7 @@ import RichText from '@/components/RichText';
 import StandardTabList from '@/components/StandardTabList';
 import { M_CREATE_PROJECT, M_UPDATE_PROJECT, Q_GET_PROJECT } from '@/gql';
 import { uploadOne } from '@/utils/fetch';
-import { buildingQuery, getTreeData } from '@/utils/global';
+import { buildingQuery, getTreeData, ProjectStatusMaps, IFModeMaps } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import {
@@ -19,6 +19,7 @@ import {
   message,
   Skeleton,
   Switch,
+  Select,
   TreeSelect,
 } from 'antd';
 import moment from 'moment';
@@ -27,6 +28,7 @@ import { router, withRouter } from 'umi';
 import styles from './style.less';
 
 const FormItem = Form.Item;
+const { Option } = Select;
 const { TextArea } = Input;
 
 const action = (
@@ -74,7 +76,7 @@ const onUpload = async (file, target, mutation) => {
 };
 
 const BasicForm = Form.create()(props => {
-  const { metadataDescendantsTree, target, mutation, form } = props;
+  const { target, mutation, form } = props;
 
   const { getFieldDecorator, getFieldValue } = form;
 
@@ -131,48 +133,48 @@ const BasicForm = Form.create()(props => {
           });
         }}
       >
-        <FormItem {...formItemLayout} label="名称">
-          {getFieldDecorator('name', {
-            initialValue: target.name,
+        <FormItem {...formItemLayout} label="标题">
+          {getFieldDecorator('title', {
+            initialValue: target.title,
             rules: [
               {
                 required: true,
-                message: '名称不能为空',
+                message: '标题不能为空',
               },
             ],
-          })(<Input placeholder="请填写名称" />)}
+          })(<Input placeholder="请填写标题" />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="简称">
-          {getFieldDecorator('slogan', {
-            initialValue: target.slogan,
-          })(<Input placeholder="请填写简称" />)}
-        </FormItem>
-        <FormItem {...formItemLayout} label="分类">
-          {getFieldDecorator('category.id', {
-            initialValue: target.category ? target.category.id : null,
+        <FormItem {...formItemLayout} label="联系人">
+          {getFieldDecorator('contact', {
+            initialValue: target.contact,
             rules: [
               {
                 required: true,
-                message: '请选择分类',
+                message: '联系人不能为空',
               },
             ],
-          })(<TreeSelect showSearch treeNodeFilterProp="title" treeData={[]} />)}
+          })(<Input placeholder="请填写联系人" />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="地区">
-          {getFieldDecorator('area.id', {
-            initialValue: target.area ? target.area.id : null,
+        <FormItem {...formItemLayout} label="手机号">
+          {getFieldDecorator('phone', {
+            initialValue: target.phone,
             rules: [
               {
                 required: true,
-                message: '请选择地区',
+                message: '手机号不能为空',
               },
             ],
-          })(<TreeSelect showSearch treeNodeFilterProp="title" treeData={[]} />)}
+          })(<Input placeholder="请填写手机号" />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="简介">
-          {getFieldDecorator('introduction', {
-            initialValue: target.introduction,
-          })(<TextArea placeholder="请填写简介" rows={4} />)}
+        <FormItem {...formItemLayout} label="公司">
+          {getFieldDecorator('company', {
+            initialValue: target.company,
+          })(<Input placeholder="请填写公司" />)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="发布时间">
+          {getFieldDecorator('publish_at', {
+            initialValue: moment(target.publish_at),
+          })(<DatePicker showTime />)}
         </FormItem>
         <FormItem
           {...submitFormLayout}
@@ -189,57 +191,6 @@ const BasicForm = Form.create()(props => {
   );
 });
 
-const renderContent = (metadataDescendantsTree, data, mutation, tabKey, setTabKey) => {
-  let tabList = {
-    basic: {
-      name: '基础信息',
-      render: () => (
-        <BasicForm
-          // metadataDescendantsTree={getTreeData(metadataDescendantsTree)}
-          target={data || {}}
-          mutation={mutation}
-        />
-      ),
-    },
-  };
-
-  if (data) {
-    tabList = Object.assign(tabList, {
-      cover: {
-        name: 'logo',
-        render: () => (
-          <ImageCropper
-            url={data.cover}
-            onUpload={file => onUpload(file, data, mutation)}
-            width={148}
-            height={62.31}
-          />
-        ),
-      },
-    });
-  }
-
-  return (
-    <PageHeaderWrapper
-      title={data ? '编辑' : '新增'}
-      extra={action}
-      className={styles.pageHeader}
-      content={null}
-      extraContent={null}
-    >
-      <div className={styles.main}>
-        <GridContent>
-          <StandardTabList
-            activeTabKey={tabKey}
-            onActiveTabKeyChange={key => setTabKey(key)}
-            tabList={tabList}
-          />
-        </GridContent>
-      </div>
-    </PageHeaderWrapper>
-  );
-};
-
 export default withRouter(props => {
   const [tabKey, setTabKey] = useState('basic');
 
@@ -254,7 +205,6 @@ export default withRouter(props => {
     variables: {
       id: id || '',
       queryString: buildingQuery({ join: [{ field: 'category' }, { field: 'area' }] }),
-      metadataRoot: '地区',
     },
   });
 
@@ -262,7 +212,7 @@ export default withRouter(props => {
     update: (proxy, { data }) => {
       if (data && data.createProject) {
         message.success('保存成功');
-        router.replace(`/projects/detail/${data.createProject.id}`);
+        router.replace(`/if/projects/detail/${data.createProject.id}`);
       }
     },
   });
@@ -278,13 +228,58 @@ export default withRouter(props => {
 
   if (loading || !data) return <Skeleton loading={loading} />;
 
-  const { project, metadataDescendantsTree } = data;
+  const { project, metadataTrees } = data;
 
-  return renderContent(
-    metadataDescendantsTree,
-    id ? project : null,
-    id ? updateProject : createProject,
-    tabKey,
-    setTabKey,
+  const target = id ? project : {};
+  const mutation = id ? updateProject : createProject;
+  const trees = metadataTrees.find(item => item.title === '地区') || {};
+
+  let tabList = {
+    basic: {
+      name: '基础信息',
+      render: () => (
+        <BasicForm
+          metadataTrees={getTreeData(trees.children || [])}
+          target={target || {}}
+          mutation={mutation}
+        />
+      ),
+    },
+  };
+
+  if (target) {
+    tabList = Object.assign(tabList, {
+      cover: {
+        name: '封面',
+        render: () => (
+          <ImageCropper
+            url={target.cover}
+            onUpload={file => onUpload(file, target, mutation)}
+            width={400}
+            height={200}
+          />
+        ),
+      },
+    });
+  }
+
+  return (
+    <PageHeaderWrapper
+      title={target ? '编辑' : '新增'}
+      extra={action}
+      className={styles.pageHeader}
+      content={null}
+      extraContent={null}
+    >
+      <div className={styles.main}>
+        <GridContent>
+          <StandardTabList
+            activeTabKey={tabKey}
+            onActiveTabKeyChange={key => setTabKey(key)}
+            tabList={tabList}
+          />
+        </GridContent>
+      </div>
+    </PageHeaderWrapper>
   );
 });

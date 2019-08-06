@@ -112,8 +112,8 @@ export default () => {
       search: true,
     },
     {
-      title: '创建时间',
-      dataIndex: 'create_at',
+      title: '发布时间',
+      dataIndex: 'publish_at',
       render: val => (val ? moment(val).format('YYYY-MM-DD HH:mm:ss') : ''),
       sorter: true,
     },

@@ -13,6 +13,7 @@ import {
   Form,
   Icon,
   Input,
+  InputNumber,
   message,
   Skeleton,
   TreeSelect,
@@ -173,6 +174,11 @@ const BasicForm = Form.create()(props => {
               },
             ],
           })(<TreeSelect showSearch treeNodeFilterProp="title" treeData={productCategoryTrees} />)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="排序">
+          {getFieldDecorator('sort', {
+            initialValue: target.sort,
+          })(<InputNumber min={0} placeholder="请填写排序" />)}
         </FormItem>
         <FormItem {...formItemLayout} label="简介">
           {getFieldDecorator('introduction', {
