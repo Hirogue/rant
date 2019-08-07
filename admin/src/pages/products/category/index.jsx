@@ -84,16 +84,16 @@ const InfoForm = Form.create()(props => {
         ) : (
           ''
         )}
-        <FormItem {...formItemLayout} label="组织名称">
+        <FormItem {...formItemLayout} label="名称">
           {getFieldDecorator('title', {
             initialValue: target && isUpdate ? target.title : '',
             rules: [
               {
                 required: true,
-                message: '组织名称不能为空',
+                message: '名称不能为空',
               },
             ],
-          })(<Input placeholder="请填写组织名称" />)}
+          })(<Input placeholder="请填写名称" />)}
         </FormItem>
         <FormItem {...formItemLayout} label="排序">
           {getFieldDecorator('sort', {

@@ -1,6 +1,7 @@
 import * as Faker from 'faker';
 import { define } from "typeorm-seeding";
 import { Article, ArticleCategory } from '../entities';
+import moment = require('moment');
 
 interface IArticleSetting {
     title?: string;
@@ -11,6 +12,7 @@ interface IArticleSetting {
     summary?: string;
     sort?: number;
     category: ArticleCategory;
+    publish_at?: string;
 }
 
 define(Article, (faker: typeof Faker, settings: IArticleSetting) => {
@@ -25,6 +27,7 @@ define(Article, (faker: typeof Faker, settings: IArticleSetting) => {
     instance.is_top = !!faker.random.number({ min: 0, max: 1 });
     instance.is_published = !!faker.random.number({ min: 0, max: 1 });
     instance.category = settings.category;
+    instance.publish_at = settings.publish_at || moment().format('YYYY-MM-DD HH:mm:ss');
 
     return instance;
 })

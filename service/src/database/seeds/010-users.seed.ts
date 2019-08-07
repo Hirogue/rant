@@ -3,9 +3,22 @@ import * as Faker from 'faker';
 import { Factory, Seeder } from "typeorm-seeding";
 import { IdentityEnum } from "../../core";
 import { User, Org } from "../entities";
+import { existsSync } from "fs";
+import { join } from "path";
+import * as csv from 'csvtojson';
 
 export default class implements Seeder {
     public async run(factory: Factory, connection: Connection): Promise<any> {
+
+        // const rootPath = join(__dirname, '../../../../csv');
+        // const filePath = rootPath + '/dbt_users.csv';
+        // // 判断 csv 文件夹是否存在
+        // if (existsSync(rootPath) && existsSync(filePath)) {
+        //     const res = await csv().fromFile(filePath);
+        //     console.log(res);
+
+        //     throw new Error('aaa');
+        // }
 
         const org1 = await connection.getRepository(Org).findOne({ where: { title: '后台' } });
         const org2 = await connection.getRepository(Org).findOne({ where: { title: '基金部' } });

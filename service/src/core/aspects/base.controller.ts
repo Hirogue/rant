@@ -29,7 +29,7 @@ export function BaseController<TEntity>(
         },
         query: {
             limit: 10,
-            maxLimit: 100,
+            maxLimit: 1000,
             cache: 10 * 1000,
             sort: [{
                 field: 'create_at', order: 'DESC'
