@@ -1,16 +1,18 @@
 import { Get, Param } from "@nestjs/common";
 import { ApiOperation } from "@nestjs/swagger";
+import { CrudOptions } from "@nestjsx/crud";
+import { ClassType } from "type-graphql";
 import { BaseTreeService } from "./base-tree.service";
 import { BaseController } from "./base.controller";
-import { ClassType } from "type-graphql";
 
 const PREFIX = 'tree';
 
 export function BaseTreeController<TEntity>(
-    TEntityClass: ClassType<TEntity>
+    TEntityClass: ClassType<TEntity>,
+    options: Partial<CrudOptions> = {}
 ): any {
 
-    abstract class BaseTreeController<TEntity> extends BaseController(TEntityClass) {
+    abstract class BaseTreeController<TEntity> extends BaseController(TEntityClass, options) {
         constructor(public service: BaseTreeService<TEntity>) {
             super(service);
         }

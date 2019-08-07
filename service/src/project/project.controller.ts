@@ -1,6 +1,5 @@
 import { Controller } from "@nestjs/common";
 import { ApiUseTags } from "@nestjs/swagger";
-import { Crud } from "@nestjsx/crud";
 import { BaseController } from "../core";
 import { Project } from "../database";
 import { ProjectService } from "./project.service";

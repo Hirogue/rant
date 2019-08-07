@@ -2,6 +2,7 @@ import { Delete, Query, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { ApiBearerAuth, ApiOperation } from "@nestjs/swagger";
 import { Crud, CrudController, CrudOptions } from "@nestjsx/crud";
+import * as deepmerge from 'deepmerge';
 import { ClassType } from "type-graphql";
 import { BaseService } from "./base.service";
 
@@ -15,7 +16,7 @@ export function BaseController<TEntity>(
     options: Partial<CrudOptions> = {}
 ): any {
 
-    @Crud({
+    const defaultOptions = {
         model: {
             type: TEntityClass
         },
@@ -24,8 +25,7 @@ export function BaseController<TEntity>(
                 field: 'id',
                 type: 'uuid',
                 primary: true,
-            },
-            ...options.params
+            }
         },
         query: {
             limit: 10,
@@ -34,7 +34,6 @@ export function BaseController<TEntity>(
             sort: [{
                 field: 'create_at', order: 'DESC'
             }],
-            ...options.query
         },
         routes: {
             exclude: ['createManyBase', 'replaceOneBase'],
@@ -47,9 +46,10 @@ export function BaseController<TEntity>(
             deleteOneBase: {
                 decorators: [...AuthDecorators],
             },
-            ...options.routes
         }
-    })
+    };
+
+    @Crud(deepmerge(defaultOptions, options, { arrayMerge: (a, b, c) => b }))
     abstract class BaseController<TEntity> implements CrudController<TEntity>  {
         constructor(public service: BaseService<TEntity>) { }
 

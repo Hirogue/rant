@@ -25,6 +25,10 @@ export class Article extends Base {
     @Column({ nullable: true })
     cover: string;
 
+    @Field(type => Int, { nullable: true })
+    @Column({ default: 0 })
+    views: number;
+
     @Field({ nullable: true })
     @Column({ type: 'boolean', default: false })
     is_top: boolean;
