@@ -2,6 +2,9 @@ import { ClassSerializerInterceptor } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as compression from 'compression';
+import * as cookieParser from 'cookie-parser';
+import * as csurf from 'csurf';
+import * as rateLimit from 'express-rate-limit';
 import * as helmet from 'helmet';
 import { RenderModule, RenderService } from 'nest-next';
 import * as Nextjs from 'next';
@@ -31,8 +34,16 @@ async function bootstrap() {
 
   server.enableCors(Config.cors);
 
-  server.use(helmet());
+  server.use(cookieParser());
+
+  if (!Config.dev) {
+    server.use(csurf(Config.csrf));
+    server.use(helmet(Config.helmet));
+    server.use(rateLimit(Config.rateLimit));
+  }
+
   server.use(compression());
+
   server.use('/static', serveStatic('static'));
   server.use('/admin', serveStatic('../admin/dist'));
   server.use('/lvyoto', serveStatic('../lvyoto/dist'));

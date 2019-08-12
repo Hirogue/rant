@@ -4,6 +4,7 @@ import * as productionConfig from './production';
 const dev = process.env.NODE_ENV !== 'production';
 
 let Config = {
+    dev,
     port: 3000,
     hostName: '0.0.0.0',
     serverUrl: 'http://127.0.0.1:3000',
@@ -22,6 +23,15 @@ let Config = {
     },
 
     cors: {},
+
+    csrf: { cookie: true },
+
+    helmet: {},
+
+    rateLimit: {
+        windowMs: 1 * 60 * 1000,
+        max: 1000
+    },
 
     next: {
         dev
@@ -56,7 +66,7 @@ let Config = {
 
 };
 
-if (!dev) {
+if (!Config.dev) {
     Config = _.merge(Config, productionConfig.default);
 }
 

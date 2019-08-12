@@ -1,4 +1,4 @@
-import { Controller, Get, Res } from "@nestjs/common";
+import { Controller, Get, Res, Req } from "@nestjs/common";
 import { ApiUseTags } from "@nestjs/swagger";
 import { join } from "path";
 
@@ -7,14 +7,16 @@ import { join } from "path";
 export class SpaController {
 
     @Get('admin/*')
-    admin(@Res() res) {
+    admin(@Req() req, @Res() res) {
+        res.cookie('XSRF-TOKEN', req.csrfToken());
         return res.sendFile(
             join(__dirname, '../../../admin/dist', 'index.html')
         );
     }
 
     @Get('lvyoto/*')
-    lvyoto(@Res() res) {
+    lvyoto(@Req() req, @Res() res) {
+        res.cookie('XSRF-TOKEN', req.csrfToken());
         return res.sendFile(
             join(__dirname, '../../../lvyoto/dist', 'index.html')
         );
