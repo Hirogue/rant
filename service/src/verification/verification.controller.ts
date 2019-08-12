@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
-import { ApiUseTags } from "@nestjs/swagger";
+import { ApiUseTags, ApiOperation } from "@nestjs/swagger";
 import { SendSmsDto } from "./dtos/send-sms.dto";
 import { VerificationService } from "./verification.service";
 
@@ -13,11 +13,13 @@ export class VerificationController {
     ) { }
 
     @Get('svg')
+    @ApiOperation({ title: 'Get svg verification code' })
     async svg() {
         return await this.verificationService.generateSvg();
     }
 
     @Post('sms')
+    @ApiOperation({ title: 'Send SMS verification code' })
     async sms(@Body() dto: SendSmsDto) {
 
         await this.verificationService.verifySvg(dto.svgKey, dto.svgCode);
