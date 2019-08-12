@@ -1,11 +1,11 @@
 import { Form, Tabs } from 'antd';
-import React, { Component } from 'react';
 import classNames from 'classnames';
+import React, { Component } from 'react';
+import styles from './index.less';
 import LoginContext from './LoginContext';
 import LoginItem from './LoginItem';
 import LoginSubmit from './LoginSubmit';
 import LoginTab from './LoginTab';
-import styles from './index.less';
 
 class Login extends Component {
   static Tab = LoginTab;

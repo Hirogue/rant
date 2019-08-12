@@ -51,7 +51,7 @@ const UserLayout = props => {
             </div>
             {children}
           </div>
-          <DefaultFooter />
+          <DefaultFooter copyright="Rant Stack" links={[]} />
         </div>
       </DocumentTitle>
     </BlankLayout>

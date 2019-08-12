@@ -7,6 +7,7 @@ export default {
   'user-login.login.tab-login-credentials': 'Credentials',
   'user-login.login.tab-login-mobile': 'Mobile number',
   'user-login.login.remember-me': 'Remember me',
+  'user-login.login.register-now': 'Register now',
   'user-login.login.forgot-password': 'Forgot your password?',
   'user-login.login.sign-in-with': 'Sign in with',
   'user-login.login.signup': 'Sign up',

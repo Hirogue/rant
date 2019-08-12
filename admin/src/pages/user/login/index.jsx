@@ -1,6 +1,7 @@
 import { M_LOGIN } from '@/gql';
 import Logger from '@/utils/logger';
 import { useMutation } from '@apollo/react-hooks';
+import { Button } from 'antd';
 import React, { useState } from 'react';
 import { router } from 'umi';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
@@ -99,15 +100,13 @@ export default () => {
             }}
           />
         </Tab>
-        <div>
-          <a
-            style={{
-              float: 'right',
-            }}
-            href=""
-          >
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Button type="link" onClick={() => router.push('/user/register')}>
+            <FormattedMessage id="user-login.login.register-now" />
+          </Button>
+          <Button type="link" onClick={() => router.push('/user/forgot')}>
             <FormattedMessage id="user-login.login.forgot-password" />
-          </a>
+          </Button>
         </div>
         <Submit loading={false}>
           <FormattedMessage id="user-login.login.login" />
