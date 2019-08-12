@@ -41,6 +41,21 @@ let Config = {
         prefix: '/_next/'
     },
 
+    redis: {
+        name: 'rant',
+        host: '127.0.0.1',
+        port: 6379
+    },
+
+    verification: {
+        svg: {
+            expire: 5 * 60
+        },
+        sms: {
+            expire: 5 * 60
+        }
+    },
+
     orm: {
         type: 'sqlite',
         database: 'db.sql',

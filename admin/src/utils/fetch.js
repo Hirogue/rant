@@ -4,20 +4,31 @@ import { router } from 'umi';
 import { formatMessage } from 'umi-plugin-locale';
 import Logger from './logger';
 import Config from '@/config';
+import { isObject } from 'util';
 
 export const createFetch = (url, config) => {
   let defaultConfig = {
     headers: {
+      'Content-Type': 'application/json',
       authorization: 'Bearer ' + localStorage.getItem('token'),
     },
   };
   return fetch(Config.basePath + url, merge(defaultConfig, config))
     .then(res => {
       const data = !!res ? res.json() : {};
-
-      if (401 === res.status) {
+      return data;
+    })
+    .then(data => {
+      if (401 === data.status) {
         message.error(formatMessage({ id: 'errors.invalid.auth' }));
         router.replace('/user/login');
+        return false;
+      }
+
+      if (400 === data.status) {
+        message.error(
+          data.message ? data.message.message : data.response ? data.response.message : '未知错误',
+        );
         return false;
       }
 
@@ -40,7 +51,19 @@ export const get = async (url, params) => {
   return createFetch(`${url}${queryString ? '?' + queryString : ''}`, { method: 'GET' });
 };
 
-export const post = async (url, data) => createFetch(url, { method: 'POST', body: data });
+export const post = async (url, data) => {
+  let body = null;
+
+  if (data instanceof FormData) {
+    body = data;
+  }
+
+  if (isObject(data)) {
+    body = JSON.stringify(data);
+  }
+
+  return createFetch(url, { method: 'POST', body });
+};
 
 export const uploadOne = async (file, fileName) => {
   const data = new FormData();

@@ -1,8 +1,7 @@
-import { ArgumentMetadata, PipeTransform, Injectable, HttpStatus } from '@nestjs/common';
+import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 import { Logger } from '../../logger';
-import { ApolloException } from '../exceptions';
 
 @Injectable()
 export class ValidationPipe implements PipeTransform {
@@ -25,7 +24,7 @@ export class ValidationPipe implements PipeTransform {
             const constraints = error.constraints
 
             Object.keys(constraints).forEach((key) => {
-                throw new ApolloException(constraints[key], HttpStatus.BAD_REQUEST);
+                throw new BadRequestException(constraints[key]);
             });
 
         }

@@ -16,6 +16,7 @@ import { ProviderModule } from './provider';
 import { SpaController } from './spa.controller';
 import { StorageModule } from './storage';
 import { UserModule } from './user';
+import { VerificationModule } from './verification';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UserModule } from './user';
     CoreModule,
     RenderModule,
     LoggerModule,
+    VerificationModule,
     StorageModule,
     HomeModule,
     MetadataModule,
