@@ -170,6 +170,19 @@ export default {
               path: '/if/projects/create',
               component: './projects/detail',
             },
+            {
+              name: 'capitals',
+              path: '/if/capitals/list',
+              component: './capitals/list',
+            },
+            {
+              path: '/if/capitals/detail/:id',
+              component: './capitals/detail',
+            },
+            {
+              path: '/if/capitals/create',
+              component: './capitals/detail',
+            },
           ],
         },
         {

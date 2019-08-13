@@ -6,7 +6,7 @@ import { BeforeInsert, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Config } from '../../config';
 import { IdentityEnum, UserLevelEnum, UserStatusEnum } from '../../core/enums';
 import { Base } from './base';
-// import { Capital } from './capital.entity';
+import { Capital } from './capital.entity';
 import { Org } from './org.entity';
 import { Project } from './project.entity';
 import { Provider } from './provider.entity';
@@ -92,9 +92,10 @@ export class User extends Base {
     @ApiModelProperty({ nullable: true })
     projects: Project[];
 
-    // @Field(type => [Capital!], { nullable: true })
-    // @OneToMany(type => Capital, target => target.creator)
-    // capitals: Capital[];
+    @Field(type => [Capital!], { nullable: true })
+    @OneToMany(type => Capital, target => target.creator)
+    @ApiModelProperty({ nullable: true })
+    capitals: Capital[];
 
     @BeforeInsert()
     async beforeInsert() {

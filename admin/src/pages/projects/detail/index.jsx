@@ -1,9 +1,8 @@
 import ImageCropper from '@/components/ImageCropper';
-import RichText from '@/components/RichText';
 import StandardTabList from '@/components/StandardTabList';
 import { M_CREATE_PROJECT, M_UPDATE_PROJECT, Q_GET_PROJECT } from '@/gql';
 import { uploadOne } from '@/utils/fetch';
-import { buildingQuery, getTreeData, ProjectStatusMaps, IFModeMaps } from '@/utils/global';
+import { buildingQuery, getTreeData } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import {
@@ -15,12 +14,9 @@ import {
   Form,
   Icon,
   Input,
-  InputNumber,
   message,
-  Skeleton,
-  Switch,
   Select,
-  TreeSelect,
+  Skeleton,
 } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useState } from 'react';

@@ -1,38 +1,33 @@
 import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
-import { M_DELETE_PROVIDER, M_UPDATE_PROVIDER, Q_GET_PROVIDERS } from '@/gql';
-import { buildingQuery } from '@/utils/global';
+import { M_DELETE_CAPITAL, M_UPDATE_CAPITAL, Q_GET_CAPITALS } from '@/gql';
+import { buildingQuery, IFModeMaps, ProjectStatusMaps } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { Affix, Col, message, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
-import { CondOperator } from '@nestjsx/crud-request';
 
 export default () => {
   const defaultVariables = {
     page: 0,
     limit: 10,
-    join: [{ field: 'category' }, { field: 'area' }, { field: 'creator' }],
+    join: [{ field: 'creator' }],
     sort: [{ field: 'create_at', order: 'DESC' }],
   };
-
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
 
-  const { loading, data, refetch } = useQuery(Q_GET_PROVIDERS, {
+  const { loading, data, refetch } = useQuery(Q_GET_CAPITALS, {
     notifyOnNetworkStatusChange: true,
-    variables: {
-      queryString: buildingQuery(defaultVariables),
-      metadataRoot: '地区',
-    },
+    variables: { queryString: buildingQuery(defaultVariables) },
   });
 
-  const [deleteProvider] = useMutation(M_DELETE_PROVIDER, {
+  const [deleteCapital] = useMutation(M_DELETE_CAPITAL, {
     update: (proxy, { data }) => {
-      if (data.deleteProvider) {
+      if (data.deleteCapital) {
         message.success('删除成功');
         refetch();
       } else {
@@ -40,9 +35,9 @@ export default () => {
       }
     },
   });
-  const [updateProvider] = useMutation(M_UPDATE_PROVIDER, {
+  const [updateCapital] = useMutation(M_UPDATE_CAPITAL, {
     update: (proxy, { data }) => {
-      if (data.updateProvider) {
+      if (data.updateCapital) {
         message.success('操作成功');
         refetch();
       } else {
@@ -57,12 +52,12 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { queryProvider, providerCategoryTrees, metadataDescendantsTree } = data;
+  const { queryCapital, areaTrees } = data;
 
-  if (!queryProvider) return <Skeleton loading={loading} active avatar />;
+  if (!queryCapital) return <Skeleton loading={loading} active avatar />;
 
-  const dataSource = queryProvider.data;
-  const total = queryProvider.total;
+  const dataSource = queryCapital.data;
+  const total = queryCapital.total;
 
   const columns = [
     {
@@ -71,39 +66,44 @@ export default () => {
       render: (val, row) => {
         return (
           <Fragment>
-            <Link to={`/providers/detail/${val}`}>详情</Link>
+            <Link to={`/if/capitals/detail/${val}`}>详情</Link>
           </Fragment>
         );
       },
     },
     {
-      title: '图标',
-      dataIndex: 'logo',
-      render: val => <img src={val} />,
-    },
-    {
       title: '名称',
-      dataIndex: 'name',
+      dataIndex: 'title',
       search: true,
     },
     {
-      title: '简称',
-      dataIndex: 'slogan',
+      title: '联系人',
+      dataIndex: 'contact',
       search: true,
+    },
+    {
+      title: '电话',
+      dataIndex: 'phone',
+      search: true,
+    },
+    {
+      title: '访问量',
+      dataIndex: 'views',
     },
     {
       title: '分类',
-      dataIndex: 'category.id',
-      render: (val, record) => (record.category ? record.category.title : ''),
-      treeSelector: true,
-      treeFilters: providerCategoryTrees,
+      dataIndex: 'category',
+      render: val => IFModeMaps[val],
+      filters: Object.keys(IFModeMaps).map(key => ({ text: IFModeMaps[key], value: key })),
     },
     {
-      title: '地区',
-      dataIndex: 'area.id',
-      render: (val, record) => (record.area ? record.area.title : ''),
-      treeSelector: true,
-      treeFilters: metadataDescendantsTree || [],
+      title: '状态',
+      dataIndex: 'status',
+      render: val => ProjectStatusMaps[val],
+      filters: Object.keys(ProjectStatusMaps).map(key => ({
+        text: ProjectStatusMaps[key],
+        value: key,
+      })),
     },
     {
       title: '创建人',
@@ -111,8 +111,8 @@ export default () => {
       search: true,
     },
     {
-      title: '创建时间',
-      dataIndex: 'create_at',
+      title: '发布时间',
+      dataIndex: 'publish_at',
       render: val => (val ? moment(val).format('YYYY-MM-DD HH:mm:ss') : ''),
       sorter: true,
     },
@@ -136,12 +136,12 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => router.push('/providers/create') },
+    { name: '新增', icon: 'file-add', action: () => router.push('/if/capitals/create') },
     {
       name: '删除',
       icon: 'delete',
       action: () => {
-        deleteProvider({ variables: { ids: selectedRows.map(item => item.id).join(',') } });
+        deleteCapital({ variables: { ids: selectedRows.map(item => item.id).join(',') } });
       },
       disabled: selectedRows.length <= 0,
       confirm: true,

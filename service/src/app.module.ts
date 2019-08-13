@@ -4,6 +4,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { RenderModule } from 'nest-next';
 import { ArticleModule } from './artilce';
 import { AuthModule } from './auth';
+import { CapitalModule } from './capital';
 import { Config } from "./config";
 import { BaseDataSource, CoreModule } from './core';
 import { HomeModule } from './home';
@@ -39,7 +40,8 @@ import { VerificationModule } from './verification';
     ArticleModule,
     ProviderModule,
     ProductModule,
-    ProjectModule
+    ProjectModule,
+    CapitalModule
   ],
   controllers: [SpaController]
 })

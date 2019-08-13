@@ -8,5 +8,6 @@ export * from './provider-category.entity';
 export * from './provider.entity';
 export * from './user.entity';
 export * from './project.entity';
+export * from './capital.entity';
 
 

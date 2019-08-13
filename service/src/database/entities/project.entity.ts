@@ -118,7 +118,7 @@ export class Project extends Base {
     stage: Metadata;
 
     @Field(type => Metadata, { nullable: true })
-    @ManyToMany(type => Metadata, target => target.exit_mode_projects)
+    @ManyToMany(type => Metadata, target => target.projects_exit_mode)
     @JoinTable()
     @ApiModelProperty({ nullable: true })
     exit_mode: Metadata[];
@@ -134,7 +134,7 @@ export class Project extends Base {
     ratio: Metadata;
 
     @Field(type => Metadata, { nullable: true })
-    @ManyToMany(type => Metadata, target => target.data_projects)
+    @ManyToMany(type => Metadata, target => target.projects_data)
     @JoinTable()
     @ApiModelProperty({ nullable: true })
     data: Metadata[];
