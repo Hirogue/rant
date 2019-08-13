@@ -209,6 +209,15 @@ export default Form.create()(props => {
           <Button type="primary" size="large" block htmlType="submit">
             立即注册
           </Button>
+          <Button
+            type="dashed"
+            style={{ marginTop: 10 }}
+            size="large"
+            block
+            onClick={() => router.goBack()}
+          >
+            返回
+          </Button>
         </Form.Item>
       </Form>
     </div>

@@ -47,7 +47,6 @@ export class VerificationService {
 
         if (SmsTypeEnum.REGISTER === type) {
             const exist = await this.userService.findOneByAccount(phone);
-            console.log(exist);
             if (exist) throw new BadRequestException('该手机号已被注册');
         }
 

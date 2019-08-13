@@ -9,7 +9,6 @@ import { isObject } from 'util';
 export const createFetch = (url, config) => {
   let defaultConfig = {
     headers: {
-      'Content-Type': 'application/json',
       authorization: 'Bearer ' + localStorage.getItem('token'),
     },
   };
@@ -51,24 +50,17 @@ export const get = async (url, params) => {
   return createFetch(`${url}${queryString ? '?' + queryString : ''}`, { method: 'GET' });
 };
 
-export const post = async (url, data) => {
-  let body = null;
-
-  if (data instanceof FormData) {
-    body = data;
-  }
-
-  if (isObject(data)) {
-    body = JSON.stringify(data);
-  }
-
-  return createFetch(url, { method: 'POST', body });
-};
+export const post = async (url, data) =>
+  createFetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
 
 export const uploadOne = async (file, fileName) => {
   const data = new FormData();
   data.append('fileName', fileName || file.name);
   data.append('file', file);
 
-  return await post('/api/storage', data);
+  return await createFetch('/api/storage', { method: 'POST', body: data });
 };
