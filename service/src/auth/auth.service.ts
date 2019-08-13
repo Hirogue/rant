@@ -4,7 +4,6 @@ import * as bcrypt from 'bcryptjs';
 import { classToPlain } from 'class-transformer';
 import { ApolloException } from '../core';
 import { User } from '../database/entities';
-import { Logger } from '../logger';
 import { UserService } from '../user';
 
 @Injectable()

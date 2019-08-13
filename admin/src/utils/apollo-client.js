@@ -19,6 +19,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   operation.setContext({
     headers: {
       apollo: true,
+      application: 'backstage',
       authorization: 'Bearer ' + localStorage.getItem('token'),
     },
   });
@@ -43,7 +44,7 @@ const errorHandler = onError(error => {
     Logger.log('error code:', errorCode);
 
     if (401 === errorCode) {
-      message.error(formatMessage({ id: 'errors.invalid.auth' }));
+      message.error(errorMsg);
       router.replace('/user/login');
       return false;
     }

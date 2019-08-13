@@ -2,6 +2,7 @@ import { get, post } from '@/utils/fetch';
 import { Button, Col, Form, Icon, Input, message, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import styles from './style.less';
+import { router } from 'umi';
 
 const formItemLayout = {
   labelCol: {
@@ -53,9 +54,8 @@ export default Form.create()(props => {
   } = props;
 
   const sendSMS = () => {
-    validateFields(['phone', 'svgCode'], {}, (errors, values) => {
+    validateFields(['phone', 'svgCode', 'password', 'confirmPassword'], {}, (errors, values) => {
       if (errors) {
-        message.error('请正确输入手机号和图形验证码');
         return false;
       }
 
@@ -74,7 +74,12 @@ export default Form.create()(props => {
     e.preventDefault();
     props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        post('/api/user/register', values).then(res => {
+          if (!!res) {
+            message.success('注册成功，请等待管理员审核');
+            router.replace('/user/login');
+          }
+        });
       }
     });
   };

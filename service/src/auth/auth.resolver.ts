@@ -1,6 +1,6 @@
 import { HttpStatus, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { ApolloException, Me } from '../core';
+import { ApolloException, Headers, Me, IdentityEnum, ApplicationEnum } from '../core';
 import { User } from '../database';
 import { UserService } from '../user';
 import { AuthService } from './auth.service';
@@ -28,9 +28,14 @@ export class AuthResolver {
 
     @Mutation(returns => Auth)
     async login(
+        @Headers('application') application: string,
         @Args('loginData') loginData: LoginInput
     ) {
         const user = await this.authService.validateUser(loginData.account, loginData.password);
+
+        if (application && ApplicationEnum.BACKSTAGE === application) {
+            if (IdentityEnum.USER !== user.identity) throw new ApolloException('权限不足', HttpStatus.UNAUTHORIZED);
+        }
 
         return await this.authService.login(user);
     }

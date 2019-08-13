@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, Inject, forwardRef } from "@nestjs/common";
 import { range, shuffle, take } from 'lodash';
 import * as UUID from 'node-uuid';
 import * as SVG from 'svg-captcha';
@@ -6,10 +6,15 @@ import { CacheService } from "../cache";
 import { Config } from "../config";
 import { SmsTypeEnum } from "../core";
 import { Logger } from "../logger";
+import { UserService } from "../user";
 
 @Injectable()
 export class VerificationService {
-    constructor(private readonly cache: CacheService) { }
+    constructor(
+        private readonly cache: CacheService,
+        @Inject(forwardRef(() => UserService))
+        private readonly userService: UserService
+    ) { }
 
     async generateSvg() {
 
@@ -39,6 +44,12 @@ export class VerificationService {
     }
 
     async sendSms(phone: string, type: SmsTypeEnum) {
+
+        if (SmsTypeEnum.REGISTER === type) {
+            const exist = await this.userService.findOneByAccount(phone);
+            console.log(exist);
+            if (exist) throw new BadRequestException('该手机号已被注册');
+        }
 
         const code = take(shuffle(range(0, 10)), 4).join('');
         const expire = Config.verification.sms.expire;

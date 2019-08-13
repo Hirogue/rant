@@ -32,14 +32,14 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(server, options);
   SwaggerModule.setup('docs', server, document);
 
-  server.enableCors(Config.cors);
-
   server.use(cookieParser());
 
   if (!Config.dev) {
     server.use(csurf(Config.csrf));
     server.use(helmet(Config.helmet));
     server.use(rateLimit(Config.rateLimit));
+  } else {
+    server.enableCors(Config.cors);
   }
 
   server.use(compression());
