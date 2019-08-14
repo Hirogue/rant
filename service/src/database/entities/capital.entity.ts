@@ -148,4 +148,9 @@ export class Capital extends Base {
     @ApiModelProperty({ nullable: true })
     ratio: Metadata;
 
+    @Field(type => User, { nullable: true })
+    @ManyToMany(type => User, target => target.apply_capitals)
+    @ApiModelProperty({ nullable: true })
+    applicants: User[];
+
 }   

@@ -152,4 +152,8 @@ export class Project extends Base {
     @ManyToOne(type => Metadata, target => target.projects)
     occupancy_time: Metadata;
 
+    @Field(type => User, { nullable: true })
+    @ManyToMany(type => User, target => target.apply_projects)
+    @ApiModelProperty({ nullable: true })
+    applicants: User[];
 }

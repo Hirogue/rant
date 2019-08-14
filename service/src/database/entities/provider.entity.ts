@@ -1,6 +1,6 @@
 import { ApiModelProperty } from "@nestjs/swagger";
 import { Field, InputType, ObjectType } from "type-graphql";
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, ManyToMany } from "typeorm";
 import { Base } from "./base";
 import { Metadata } from "./metadata.entity";
 import { ProviderCategory } from "./provider-category.entity";
@@ -45,4 +45,9 @@ export class Provider extends Base {
     @ManyToOne(type => User, target => target.providers)
     @ApiModelProperty({ nullable: true })
     creator: User;
+
+    @Field(type => User, { nullable: true })
+    @ManyToMany(type => User, target => target.apply_providers)
+    @ApiModelProperty({ nullable: true })
+    applicants: User[];
 }

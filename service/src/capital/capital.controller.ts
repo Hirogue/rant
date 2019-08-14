@@ -10,7 +10,17 @@ export class CapitalController extends BaseController(Capital, {
     query: {
         join: {
             creator: {},
-            area: {}
+            applicants: {},
+            industry: {},
+            type: {},
+            area: {},
+            invest_area: {},
+            risk: {},
+            data: {},
+            equity_type: {},
+            stage: {},
+            invest_type: {},
+            ratio: {},
         }
     }
 }) {

@@ -11,7 +11,11 @@ import { UserService } from "./user.service";
 export class UserController extends BaseController(User, {
     query: {
         join: {
-            org: {}
+            org: {},
+            apply_products: {},
+            apply_projects: {},
+            apply_capitals: {},
+            apply_providers: {},
         }
     }
 }) {

@@ -12,6 +12,7 @@ export class ProviderController extends BaseController(Provider, {
             category: {},
             area: {},
             creator: {},
+            applicants: {},
         }
     }
 }) {

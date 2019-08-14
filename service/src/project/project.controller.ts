@@ -10,7 +10,17 @@ export class ProjectController extends BaseController(Project, {
     query: {
         join: {
             creator: {},
-            area: {}
+            applicants: {},
+            industry: {},
+            area: {},
+            stage: {},
+            exit_mode: {},
+            withdrawal_year: {},
+            ratio: {},
+            data: {},
+            risk: {},
+            interest: {},
+            occupancy_time: {},
         }
     }
 }) {

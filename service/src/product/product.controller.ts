@@ -10,6 +10,7 @@ export class ProductController extends BaseController(Product, {
     query: {
         join: {
             category: {},
+            applicants: {},
         }
     }
 }) {
