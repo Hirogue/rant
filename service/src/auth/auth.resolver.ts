@@ -19,7 +19,13 @@ export class AuthResolver {
     @Query(returns => User)
     @UseGuards(GqlJwtAuthGuard)
     async me(@Me() me) {
-        const result = await this.userService.findOne(me.id);
+        const result = await this.userService.findOne({
+            where: { id: me.id },
+            relations: [
+                'org', 'area', 'providers', 'projects', 'capitals',
+                'apply_products', 'apply_projects', 'apply_capitals', 'apply_providers'
+            ]
+        });
 
         if (!result) throw new ApolloException('errors.invalid.auth', HttpStatus.UNAUTHORIZED);
 
