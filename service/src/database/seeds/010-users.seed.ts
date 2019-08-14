@@ -1,24 +1,12 @@
-import { Connection } from "typeorm";
 import * as Faker from 'faker';
+import { sample } from "lodash";
+import { Connection } from "typeorm";
 import { Factory, Seeder } from "typeorm-seeding";
-import { IdentityEnum } from "../../core";
-import { User, Org } from "../entities";
-import { existsSync } from "fs";
-import { join } from "path";
-import * as csv from 'csvtojson';
+import { IdentityEnum, UserTypeEnum, UserStatusEnum } from "../../core";
+import { Metadata, Org, User } from "../entities";
 
 export default class implements Seeder {
     public async run(factory: Factory, connection: Connection): Promise<any> {
-
-        // const rootPath = join(__dirname, '../../../../csv');
-        // const filePath = rootPath + '/dbt_users.csv';
-        // // 判断 csv 文件夹是否存在
-        // if (existsSync(rootPath) && existsSync(filePath)) {
-        //     const res = await csv().fromFile(filePath);
-        //     console.log(res);
-
-        //     throw new Error('aaa');
-        // }
 
         const org1 = await connection.getRepository(Org).findOne({ where: { title: '后台' } });
         const org2 = await connection.getRepository(Org).findOne({ where: { title: '基金部' } });
@@ -31,6 +19,13 @@ export default class implements Seeder {
         const org8 = await connection.getRepository(Org).findOne({ where: { title: '资金方' } });
         const org9 = await connection.getRepository(Org).findOne({ where: { title: '服务商' } });
 
+        const area = await connection.getTreeRepository(Metadata).findDescendants(
+            await connection.getRepository(Metadata).findOne({ title: '地区' })
+        );
+
+        const typeList = Object.keys(UserTypeEnum).map(key => key);
+        const status = Object.keys(UserStatusEnum).map(key => key);
+
         const superAdmin = new User();
         superAdmin.account = 'SuperAdmin';
         superAdmin.identity = IdentityEnum.USER;
@@ -41,15 +36,59 @@ export default class implements Seeder {
 
         await connection.getRepository(User).save(superAdmin);
 
-        await factory(User)({ identity: IdentityEnum.USER, org: org2 }).seedMany(4);
-        await factory(User)({ identity: IdentityEnum.USER, org: org3 }).seedMany(4);
-        await factory(User)({ identity: IdentityEnum.USER, org: org4 }).seedMany(5);
-        await factory(User)({ identity: IdentityEnum.USER, org: org5 }).seedMany(2);
+        await factory(User)({
+            identity: IdentityEnum.USER,
+            org: org2,
+            area: sample(area)
+        }).seedMany(4);
 
-        await factory(User)({ identity: IdentityEnum.TOURIST, org: org6 }).seedMany(10);
-        await factory(User)({ identity: IdentityEnum.FINANCER, org: org7 }).seedMany(5);
-        await factory(User)({ identity: IdentityEnum.INVESTOR, org: org8 }).seedMany(5);
-        await factory(User)({ identity: IdentityEnum.PROVIDER, org: org9 }).seedMany(10);
+        await factory(User)({
+            identity: IdentityEnum.USER,
+            org: org3,
+            area: sample(area)
+        }).seedMany(4);
+
+        await factory(User)({
+            identity: IdentityEnum.USER,
+            org: org4,
+            area: sample(area)
+        }).seedMany(5);
+
+        await factory(User)({
+            identity: IdentityEnum.USER,
+            org: org5,
+            area: sample(area)
+        }).seedMany(2);
+
+        await factory(User)({
+            identity: IdentityEnum.TOURIST,
+            org: org6,
+            area: sample(area)
+        }).seedMany(10);
+
+        await factory(User)({
+            identity: IdentityEnum.FINANCER,
+            org: org7,
+            area: sample(area),
+            type: UserTypeEnum[sample(typeList)],
+            status: UserStatusEnum[sample(status)],
+        }).seedMany(5);
+
+        await factory(User)({
+            identity: IdentityEnum.INVESTOR,
+            org: org8,
+            area: sample(area),
+            type: UserTypeEnum[sample(typeList)],
+            status: UserStatusEnum[sample(status)],
+        }).seedMany(5);
+
+        await factory(User)({
+            identity: IdentityEnum.PROVIDER,
+            org: org9,
+            area: sample(area),
+            type: UserTypeEnum[sample(typeList)],
+            status: UserStatusEnum[sample(status)],
+        }).seedMany(10);
 
     }
 }

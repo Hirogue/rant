@@ -1,69 +1,20 @@
 import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
-import { M_DELETE_USER, Q_GET_USERS, Q_GET_USER_STATISTICS } from '@/gql';
-import { buildingQuery, IdentityMaps, UserStatusMaps, UserLevelMaps } from '@/utils/global';
+import { M_DELETE_USER, Q_GET_USERS } from '@/gql';
+import { buildingQuery, IdentityMaps, UserLevelMaps, UserStatusMaps } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Affix, Avatar, Card, Col, message, Row, Skeleton, Spin, Statistic } from 'antd';
+import { Affix, Avatar, Col, message, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
-import styles from './style.less';
-
-const Info = ({ title, value, bordered }) => (
-  <div className={styles.headerInfo}>
-    <Statistic title={title} value={value} />
-    {bordered && <em />}
-  </div>
-);
-
-const renderStatistics = () => {
-  const { loading, data, refetch } = useQuery(Q_GET_USER_STATISTICS, {
-    notifyOnNetworkStatusChange: true,
-  });
-
-  const userStatistics = data.userStatistics || {};
-
-  return (
-    <Spin spinning={loading} size="large">
-      <Card bordered={false} style={{ marginBottom: 10 }}>
-        <Row>
-          <Col sm={3} xs={24}>
-            <Info title="用户总数" value={userStatistics.all} bordered />
-          </Col>
-          <Col sm={3} xs={24}>
-            <Info title="资金方" value={userStatistics.investors} bordered />
-          </Col>
-          <Col sm={3} xs={24}>
-            <Info title="项目方" value={userStatistics.financers} bordered />
-          </Col>
-          <Col sm={3} xs={24}>
-            <Info title="服务商" value={userStatistics.providers} bordered />
-          </Col>
-          <Col sm={3} xs={24}>
-            <Info title="游客" value={userStatistics.tourists} bordered />
-          </Col>
-          <Col sm={3} xs={24}>
-            <Info title="后台用户" value={userStatistics.users} bordered />
-          </Col>
-          <Col sm={3} xs={24}>
-            <Info title="待审核" value={userStatistics.pendingCount} bordered />
-          </Col>
-          <Col sm={3} xs={24}>
-            <Info title="待跟进" value={userStatistics.rejectCount} />
-          </Col>
-        </Row>
-      </Card>
-    </Spin>
-  );
-};
 
 export default () => {
   const defaultVariables = {
     page: 0,
     limit: 10,
-    join: [{ field: 'org' }],
+    join: [{ field: 'org' }, { field: 'area' }],
     sort: [{ field: 'create_at', order: 'DESC' }],
   };
   const [variables, setVariables] = useState(defaultVariables);
@@ -71,7 +22,10 @@ export default () => {
 
   const { loading, data, refetch } = useQuery(Q_GET_USERS, {
     notifyOnNetworkStatusChange: true,
-    variables: { queryString: buildingQuery(defaultVariables) },
+    variables: {
+      queryString: buildingQuery(defaultVariables),
+      metadataRoot: '地区',
+    },
   });
 
   const [deleteUser] = useMutation(M_DELETE_USER, {
@@ -91,7 +45,7 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { queryUser, orgTrees } = data;
+  const { queryUser, orgTrees, metadataDescendantsTree } = data;
 
   if (!queryUser) return <Skeleton loading={loading} active avatar />;
 
@@ -136,6 +90,13 @@ export default () => {
       render: (val, record) => (record.org ? record.org.title : ''),
       treeSelector: true,
       treeFilters: orgTrees,
+    },
+    {
+      title: '地区',
+      dataIndex: 'area.id',
+      render: (val, record) => (record.area ? record.area.title : ''),
+      treeSelector: true,
+      treeFilters: metadataDescendantsTree || [],
     },
     {
       title: '身份',

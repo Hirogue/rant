@@ -1,8 +1,10 @@
 import gql from 'graphql-tag';
 import { F_ORG_FIELDS, F_ORG_RECURSIVE } from './org';
+import { F_METADATA_FIELDS, F_METADATA_RECURSIVE } from './metadata';
 
 export const F_USER_FIELDS = gql`
   ${F_ORG_FIELDS}
+  ${F_METADATA_FIELDS}
 
   fragment UserFields on User {
     id
@@ -22,6 +24,9 @@ export const F_USER_FIELDS = gql`
     org {
       ...OrgFields
     }
+    area {
+      ...MetadataFields
+    }
   }
 `;
 
@@ -29,8 +34,9 @@ export const Q_GET_USERS = gql`
   ${F_USER_FIELDS}
   ${F_ORG_FIELDS}
   ${F_ORG_RECURSIVE}
+  ${F_METADATA_RECURSIVE}
 
-  query queryUser($queryString: String!) {
+  query queryUser($queryString: String!, $metadataRoot: String! = "") {
     queryUser(queryString: $queryString) {
       total
       page
@@ -42,6 +48,10 @@ export const Q_GET_USERS = gql`
 
     orgTrees {
       ...OrgRecursive
+    }
+
+    metadataDescendantsTree(root: $metadataRoot) {
+      ...MetadataRecursive
     }
   }
 `;

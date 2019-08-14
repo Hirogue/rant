@@ -1,9 +1,16 @@
 import * as Faker from 'faker';
 import { define } from "typeorm-seeding";
-import { IdentityEnum, UserLevelEnum } from '../../core';
-import { User, Org } from "../entities";
+import { IdentityEnum, UserLevelEnum, UserTypeEnum, UserStatusEnum } from '../../core';
+import { Metadata, Org, User } from "../entities";
 
-define(User, (faker: typeof Faker, settings: { identity: IdentityEnum, org: Org, vip: UserLevelEnum }) => {
+define(User, (faker: typeof Faker, settings: {
+    status: UserStatusEnum,
+    type: UserTypeEnum,
+    identity: IdentityEnum,
+    area: Metadata,
+    org: Org,
+    vip: UserLevelEnum
+}) => {
     const user = new User();
     user.account = faker.internet.userName();
     user.avatar = faker.image.avatar();
@@ -13,6 +20,9 @@ define(User, (faker: typeof Faker, settings: { identity: IdentityEnum, org: Org,
     user.profile = faker.lorem.sentence();
     user.company = faker.company.companyName();
     user.identity = settings.identity || IdentityEnum.TOURIST;
+    user.status = settings.status || UserStatusEnum.AUDITED;
+    user.type = settings.type || UserTypeEnum.PERSONAL;
+    user.area = settings.area;
     user.org = settings.org;
     user.vip = settings.vip || UserLevelEnum.V0;
 

@@ -239,20 +239,10 @@ const BasicForm = Form.create()(props => {
             </Select>,
           )}
         </FormItem>
-        <FormItem {...formItemLayout} label="身份证">
-          {getFieldDecorator('idcard', {
-            initialValue: target.idcard,
-          })(<Input placeholder="请填写身份证" />)}
-        </FormItem>
         <FormItem {...formItemLayout} label="地址">
           {getFieldDecorator('address', {
             initialValue: target.address,
           })(<TextArea placeholder="请填写地址" rows={4} />)}
-        </FormItem>
-        <FormItem {...formItemLayout} label="公司">
-          {getFieldDecorator('company', {
-            initialValue: target.company,
-          })(<TextArea placeholder="请填写公司" rows={4} />)}
         </FormItem>
         <FormItem {...formItemLayout} label="简介">
           {getFieldDecorator('profile', {

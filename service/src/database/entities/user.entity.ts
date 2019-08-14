@@ -4,9 +4,10 @@ import { Exclude } from 'class-transformer';
 import { Field, InputType, Int, ObjectType } from 'type-graphql';
 import { BeforeInsert, Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { Config } from '../../config';
-import { IdentityEnum, UserLevelEnum, UserStatusEnum } from '../../core/enums';
+import { IdentityEnum, UserLevelEnum, UserStatusEnum, UserTypeEnum } from '../../core/enums';
 import { Base } from './base';
 import { Capital } from './capital.entity';
+import { Metadata } from './metadata.entity';
 import { Org } from './org.entity';
 import { Product } from './product.entity';
 import { Project } from './project.entity';
@@ -51,12 +52,32 @@ export class User extends Base {
     @Field({ nullable: true })
     @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
+    idcardA: string;
+
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    idcardB: string;
+
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
     address: string;
 
     @Field({ nullable: true })
     @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     company: string;
+
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    org_code: string;
+
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    business_license: string;
 
     @Field({ nullable: true })
     @Column({ nullable: true })
@@ -74,6 +95,11 @@ export class User extends Base {
     identity: IdentityEnum;
 
     @Field({ nullable: true })
+    @Column({ type: 'simple-enum', default: UserTypeEnum.PERSONAL })
+    @ApiModelProperty({ nullable: true })
+    type: UserTypeEnum;
+
+    @Field({ nullable: true })
     @Column({ type: 'simple-enum', default: UserStatusEnum.NORMAL })
     @ApiModelProperty({ nullable: true })
     status: UserStatusEnum;
@@ -82,6 +108,11 @@ export class User extends Base {
     @ManyToOne(type => Org, target => target.users)
     @ApiModelProperty({ nullable: true })
     org: Org;
+
+    @Field(type => Metadata, { nullable: true })
+    @ManyToOne(type => Metadata, target => target.users)
+    @ApiModelProperty({ nullable: true })
+    area: Metadata;
 
     @Field(type => [Provider!], { nullable: true })
     @OneToMany(type => Provider, target => target.creator)

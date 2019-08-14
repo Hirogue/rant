@@ -5,6 +5,7 @@ import { Base } from "./base";
 import { Capital } from "./capital.entity";
 import { Project } from "./project.entity";
 import { Provider } from "./provider.entity";
+import { User } from "./user.entity";
 
 @Entity()
 @Tree('materialized-path')
@@ -30,6 +31,10 @@ export class Metadata extends Base {
     @TreeChildren()
     @ApiModelProperty({ nullable: true })
     children: Metadata[];
+
+    @Field(type => [User]!, { nullable: true })
+    @ApiModelProperty({ nullable: true })
+    users: User[];
 
     @Field(type => [Provider]!, { nullable: true })
     @ApiModelProperty({ nullable: true })
