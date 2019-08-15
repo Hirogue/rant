@@ -153,17 +153,17 @@ export class User extends Base {
     @ApiModelProperty({ nullable: true })
     apply_providers: Provider[];
 
-    @Field()
+    @Field({ nullable: true })
     @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     hideName: string;
 
-    @Field()
+    @Field({ nullable: true })
     @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     hidePhone: string;
 
-    @Field()
+    @Field({ nullable: true })
     @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     hideCompany: string;

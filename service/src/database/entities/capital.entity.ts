@@ -158,17 +158,17 @@ export class Capital extends Base {
     @ApiModelProperty({ nullable: true })
     applicants: User[];
 
-    @Field()
+    @Field({ nullable: true })
     @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     hideContact: string;
 
-    @Field()
+    @Field({ nullable: true })
     @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     hidePhone: string;
 
-    @Field()
+    @Field({ nullable: true })
     @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     hideCompany: string;
