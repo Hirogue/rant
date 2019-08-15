@@ -153,27 +153,20 @@ export class User extends Base {
     @ApiModelProperty({ nullable: true })
     apply_providers: Provider[];
 
-    @Field(type => String)
-    @Expose()
+    @Field()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
-    get hideName() {
-        return this.realname ? this.realname.substr(0, 1).padEnd(this.realname.length, '*') : '';
-    }
+    hideName: string;
 
-    @Field(type => String)
-    @Expose()
+    @Field()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
-    get hidePhone() {
-        return this.phone ? this.phone.replace(this.phone.substring(3, 7), '****') : '';
-    }
+    hidePhone: string;
 
-    @Field(type => String)
-    @Expose()
+    @Field()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
-    get hideCompany() {
-        return this.company ? this.company.substr(this.company.length - 2, this.company.length)
-            .padStart(this.company.length, '*') : '';
-    }
+    hideCompany: string;
 
     @BeforeInsert()
     async beforeInsert() {

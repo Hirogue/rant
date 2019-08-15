@@ -1,12 +1,11 @@
+import { ApiModelProperty } from '@nestjs/swagger';
 import * as moment from 'moment';
 import { Field, InputType, Int, ObjectType } from "type-graphql";
-import { Column, Entity, ManyToOne, ManyToMany, JoinTable } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from "typeorm";
 import { IFModeEnum, ProjectStatusEnum } from "../../core";
 import { Base } from "./base";
 import { Metadata } from "./metadata.entity";
 import { User } from "./user.entity";
-import { ApiModelProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
 
 @Entity()
 @ObjectType()
@@ -73,7 +72,7 @@ export class Capital extends Base {
     @ApiModelProperty({ nullable: true })
     discount: number;
 
-    @Field({ nullable: true })
+    @Field(type => Int, { nullable: true })
     @Column()
     @ApiModelProperty({ nullable: true })
     term: number;
@@ -159,26 +158,20 @@ export class Capital extends Base {
     @ApiModelProperty({ nullable: true })
     applicants: User[];
 
-    @Field(type => String)
-    @Expose()
+    @Field()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
-    get hideContact() {
-        return this.contact ? this.contact.substr(0, 1).padEnd(this.contact.length, '*') : '';
-    }
+    hideContact: string;
 
-    @Field(type => String)
-    @Expose()
+    @Field()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
-    get hidePhone() {
-        return this.phone ? this.phone.replace(this.phone.substring(3, 7), '****') : '';
-    }
+    hidePhone: string;
 
-    @Field(type => String)
-    @Expose()
+    @Field()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
-    get hideCompany() {
-        return this.company ? this.company.substr(this.company.length - 2, this.company.length)
-            .padStart(this.company.length, '*') : '';
-    }
+    hideCompany: string;
+
 
 }   

@@ -6,7 +6,6 @@ import { IFModeEnum, ProjectStatusEnum } from "../../core";
 import { Base } from "./base";
 import { Metadata } from "./metadata.entity";
 import { User } from "./user.entity";
-import { Expose } from 'class-transformer';
 
 @Entity()
 @ObjectType()
@@ -163,26 +162,19 @@ export class Project extends Base {
     @ApiModelProperty({ nullable: true })
     applicants: User[];
 
-    @Field(type => String)
-    @Expose()
+    @Field()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
-    get hideContact() {
-        return this.contact ? this.contact.substr(0, 1).padEnd(this.contact.length, '*') : '';
-    }
+    hideContact: string;
 
-    @Field(type => String)
-    @Expose()
+    @Field()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
-    get hidePhone() {
-        return this.phone ? this.phone.replace(this.phone.substring(3, 7), '****') : '';
-    }
+    hidePhone: string;
 
-    @Field(type => String)
-    @Expose()
+    @Field()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
-    get hideCompany() {
-        return this.company ? this.company.substr(this.company.length - 2, this.company.length)
-            .padStart(this.company.length, '*') : '';
-    }
+    hideCompany: string;
 
 }

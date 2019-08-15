@@ -1,27 +1,24 @@
 import { EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from "typeorm";
-import { textInterception } from "../../core";
-import { Project } from "../entities";
+import { User } from "../entities";
 
 @EventSubscriber()
-export class ProjectSubscriber implements EntitySubscriberInterface<Project> {
+export class UserSubscriber implements EntitySubscriberInterface<User> {
 
     listenTo() {
-        return Project;
+        return User;
     }
 
-    beforeInsert(event: InsertEvent<Project>) {
+    beforeInsert(event: InsertEvent<User>) {
         this.handleChange(event.entity);
     }
 
-    beforeUpdate(event: UpdateEvent<Project>) {
+    beforeUpdate(event: UpdateEvent<User>) {
         this.handleChange(event.entity);
     }
 
-    private handleChange(entity: Project) {
-        entity.summary = textInterception(entity.info, 40);
-
-        entity.hideContact = entity.contact
-            ? entity.contact.substr(0, 1).padEnd(entity.contact.length, '*')
+    private handleChange(entity: User) {
+        entity.hideName = entity.realname
+            ? entity.realname.substr(0, 1).padEnd(entity.realname.length, '*')
             : '';
 
         entity.hidePhone = entity.phone

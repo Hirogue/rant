@@ -10,10 +10,28 @@ export class CapitalSubscriber implements EntitySubscriberInterface<Capital> {
     }
 
     beforeInsert(event: InsertEvent<Capital>) {
-        event.entity.summary = textInterception(event.entity.info, 40);
+        this.handleChange(event.entity);
     }
 
     beforeUpdate(event: UpdateEvent<Capital>) {
-        event.entity.summary = textInterception(event.entity.info, 40);
+        this.handleChange(event.entity);
+    }
+
+    private handleChange(entity: Capital) {
+        entity.summary = textInterception(entity.info, 40);
+
+        entity.hideContact = entity.contact
+            ? entity.contact.substr(0, 1).padEnd(entity.contact.length, '*')
+            : '';
+
+        entity.hidePhone = entity.phone
+            ? entity.phone.replace(entity.phone.substring(3, 7), '****')
+            : '';
+
+        entity.hideCompany = entity.company
+            ? entity.company
+                .substr(entity.company.length - 2, entity.company.length)
+                .padStart(entity.company.length, '*')
+            : '';
     }
 }
