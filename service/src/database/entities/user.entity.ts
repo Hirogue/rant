@@ -1,6 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import * as bcrypt from 'bcryptjs';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { Field, InputType, Int, ObjectType } from 'type-graphql';
 import { BeforeInsert, Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { Config } from '../../config';
@@ -153,6 +153,27 @@ export class User extends Base {
     @ApiModelProperty({ nullable: true })
     apply_providers: Provider[];
 
+    @Field(type => String)
+    @Expose()
+    @ApiModelProperty({ nullable: true })
+    get hideName() {
+        return this.realname ? this.realname.substr(0, 1).padEnd(this.realname.length, '*') : '';
+    }
+
+    @Field(type => String)
+    @Expose()
+    @ApiModelProperty({ nullable: true })
+    get hidePhone() {
+        return this.phone ? this.phone.replace(this.phone.substring(3, 7), '****') : '';
+    }
+
+    @Field(type => String)
+    @Expose()
+    @ApiModelProperty({ nullable: true })
+    get hideCompany() {
+        return this.company ? this.company.substr(this.company.length - 2, this.company.length)
+            .padStart(this.company.length, '*') : '';
+    }
 
     @BeforeInsert()
     async beforeInsert() {

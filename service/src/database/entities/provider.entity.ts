@@ -27,6 +27,11 @@ export class Provider extends Base {
     slogan: string;
 
     @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    summary: string;
+
+    @Field({ nullable: true })
     @Column({ type: 'text', nullable: true })
     @ApiModelProperty({ nullable: true })
     introduction: string;
@@ -50,4 +55,5 @@ export class Provider extends Base {
     @ManyToMany(type => User, target => target.apply_providers)
     @ApiModelProperty({ nullable: true })
     applicants: User[];
+
 }

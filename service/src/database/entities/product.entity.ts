@@ -42,6 +42,11 @@ export class Product extends Base {
     advantage: string;
 
     @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    summary: string;
+
+    @Field({ nullable: true })
     @Column({ type: 'text', nullable: true })
     @ApiModelProperty({ nullable: true })
     introduction: string;

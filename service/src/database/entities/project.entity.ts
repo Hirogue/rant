@@ -6,6 +6,7 @@ import { IFModeEnum, ProjectStatusEnum } from "../../core";
 import { Base } from "./base";
 import { Metadata } from "./metadata.entity";
 import { User } from "./user.entity";
+import { Expose } from 'class-transformer';
 
 @Entity()
 @ObjectType()
@@ -83,6 +84,11 @@ export class Project extends Base {
     progress: string;
 
     @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    summary: string;
+
+    @Field({ nullable: true })
     @Column({ type: 'text', nullable: true })
     @ApiModelProperty({ nullable: true })
     info: string;
@@ -156,4 +162,27 @@ export class Project extends Base {
     @ManyToMany(type => User, target => target.apply_projects)
     @ApiModelProperty({ nullable: true })
     applicants: User[];
+
+    @Field(type => String)
+    @Expose()
+    @ApiModelProperty({ nullable: true })
+    get hideContact() {
+        return this.contact ? this.contact.substr(0, 1).padEnd(this.contact.length, '*') : '';
+    }
+
+    @Field(type => String)
+    @Expose()
+    @ApiModelProperty({ nullable: true })
+    get hidePhone() {
+        return this.phone ? this.phone.replace(this.phone.substring(3, 7), '****') : '';
+    }
+
+    @Field(type => String)
+    @Expose()
+    @ApiModelProperty({ nullable: true })
+    get hideCompany() {
+        return this.company ? this.company.substr(this.company.length - 2, this.company.length)
+            .padStart(this.company.length, '*') : '';
+    }
+
 }
