@@ -7,3 +7,4 @@ export * from './scalars';
 export * from './aspects';
 export * from './decorators';
 export * from './helpers';
+export * from './interceptors';

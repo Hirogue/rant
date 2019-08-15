@@ -4,6 +4,13 @@ module.exports = {
     logging: true,
     dropSchema: true,
     synchronize: true,
+    cache: {
+        type: 'redis',
+        options: {
+            host: '127.0.0.1',
+            port: 6379,
+        },
+    },
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
     migrations: [],
     subscribers: [__dirname + '/**/*.subscriber{.ts,.js}'],

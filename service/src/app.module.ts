@@ -1,12 +1,14 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { CacheModule, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
+import * as redisStore from 'cache-manager-redis-store';
 import { RenderModule } from 'nest-next';
 import { ArticleModule } from './artilce';
 import { AuthModule } from './auth';
 import { CapitalModule } from './capital';
 import { Config } from "./config";
-import { BaseDataSource, CoreModule } from './core';
+import { BaseDataSource, CoreModule, HttpCacheInterceptor } from './core';
 import { HomeModule } from './home';
 import { LoggerMiddleware, LoggerModule } from './logger';
 import { MetadataModule } from './metadata';
@@ -27,6 +29,11 @@ import { VerificationModule } from './verification';
       context: ({ req }) => ({ req }),
       dataSources: () => ({ api: new BaseDataSource() })
     }),
+    CacheModule.register({
+      store: redisStore,
+      ...Config.redis,
+      ...Config.cache
+    }),
     CoreModule,
     RenderModule,
     LoggerModule,
@@ -42,6 +49,12 @@ import { VerificationModule } from './verification';
     ProductModule,
     ProjectModule,
     CapitalModule
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HttpCacheInterceptor,
+    },
   ],
   controllers: [SpaController]
 })

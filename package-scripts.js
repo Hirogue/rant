@@ -17,7 +17,8 @@ module.exports = {
 
     db: {
       init: "node ./scripts/database/init-db.sh.js",
-      seed: "cd ./service && yarn seed"
+      seed: "cd ./service && yarn seed",
+      clear: "cd ./service && yarn orm cache:clear"
     },
 
     docker: {

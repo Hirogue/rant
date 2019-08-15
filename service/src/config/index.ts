@@ -47,6 +47,11 @@ let Config = {
         port: 6379
     },
 
+    cache: {
+        ttl: 10, // seconds
+        max: 500, // maximum number of items in cache
+    },
+
     verification: {
         svg: {
             expire: 5 * 60
@@ -62,6 +67,13 @@ let Config = {
         logging: true,
         dropSchema: false,
         synchronize: true,
+        cache: {
+            type: 'redis',
+            options: {
+                host: '127.0.0.1',
+                port: 6379,
+            },
+        },
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         subscribers: [__dirname + '/../**/*.subscriber{.ts,.js}']
     },

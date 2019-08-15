@@ -1,6 +1,4 @@
-import * as R from 'ramda';
 import { EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from "typeorm";
-import { UserLevelEnum } from "../../core";
 import { User } from "../entities";
 
 @EventSubscriber()
@@ -16,30 +14,6 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
 
     beforeUpdate(event: UpdateEvent<User>) {
         this.handleChange(event.entity);
-
-        // const rules = R.cond([
-
-        //     [
-        //         () => R.lt(1, UserLevelEnum.V1),
-        //         R.always('用户等级不足')
-        //     ],
-
-        //     [
-        //         () => R.lt(1, UserLevelEnum.V1),
-        //         R.always('用户等级不足')
-        //     ],
-
-        //     [
-        //         R.anyPass([
-
-        //         ]),
-        //         R.always('water freezes at 0°C')
-        //     ],
-
-        //     [R.T, target => '']
-        // ]);
-
-        // rules(event.entity);
     }
 
     private handleChange(entity: User) {
