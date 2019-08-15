@@ -7,11 +7,11 @@ const prefix = 'user-login.login.input';
 export class LoginInput {
     @Field()
     @IsNotEmpty({ message: `${prefix}.account.empty` })
-    @Length(8, 14, { message: `${prefix}.account.length` })
+    @Length(6, 12, { message: `${prefix}.account.length` })
     account: string;
 
     @Field()
     @IsNotEmpty({ message: `${prefix}.password.empty` })
-    @Length(8, 14, { message: `${prefix}.password.length` })
+    @Length(6, 12, { message: `${prefix}.password.length` })
     password: string;
 }

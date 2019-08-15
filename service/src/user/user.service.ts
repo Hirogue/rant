@@ -1,9 +1,10 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcryptjs';
 import { Repository } from 'typeorm';
 import { BaseService } from '../core';
 import { User } from '../database/entities';
-import { RegisterDto } from './dtos/register.dto';
+import { RegisterDto, ResetPasswordDto } from './dtos';
 
 @Injectable()
 export class UserService extends BaseService<User> {
@@ -26,6 +27,18 @@ export class UserService extends BaseService<User> {
         user.account = dto.phone;
         user.phone = dto.phone;
         user.password = dto.password;
+
+        return await this.repo.save(user);
+    }
+
+    async resetPassword(dto: ResetPasswordDto) {
+
+        if (dto.password !== dto.confirmPassword) throw new BadRequestException('两次密码不一致');
+
+        const user = await this.findOneByAccount(dto.phone);
+
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(dto.password, salt);
 
         return await this.repo.save(user);
     }

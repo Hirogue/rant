@@ -50,12 +50,17 @@ export class VerificationService {
             if (exist) throw new BadRequestException('该手机号已被注册');
         }
 
+        if (SmsTypeEnum.PASSWORD === type) {
+            const exist = await this.userService.findOneByAccount(phone);
+            if (!exist) throw new BadRequestException('该账户不存在');
+        }
+
         const code = take(shuffle(range(0, 10)), 4).join('');
         const expire = Config.verification.sms.expire;
 
         this.cache.set(`${type}-${phone}`, code, expire);
 
-        Logger.debug('register code:', code);
+        Logger.debug('code:', code);
 
         // TODO: send message to message queue
 

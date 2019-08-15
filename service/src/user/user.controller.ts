@@ -3,7 +3,7 @@ import { ApiUseTags, ApiOperation } from "@nestjs/swagger";
 import { BaseController, SmsTypeEnum } from "../core";
 import { User } from "../database";
 import { VerificationService } from "../verification";
-import { RegisterDto } from "./dtos/register.dto";
+import { ResetPasswordDto, RegisterDto } from "./dtos";
 import { UserService } from "./user.service";
 
 @ApiUseTags('user')
@@ -35,5 +35,14 @@ export class UserController extends BaseController(User, {
         await this.verificationService.verifySms(dto.phone, dto.smsCode, SmsTypeEnum.REGISTER);
 
         return await this.service.register(dto);
+    }
+
+    @Post('reset-password')
+    @ApiOperation({ title: 'Reset password' })
+    async fotgot(@Body() dto: ResetPasswordDto) {
+
+        await this.verificationService.verifySms(dto.phone, dto.smsCode, SmsTypeEnum.PASSWORD);
+
+        return await this.service.resetPassword(dto);
     }
 }

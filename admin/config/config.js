@@ -95,6 +95,11 @@ export default {
           path: '/user/register',
           component: './user/register',
         },
+        {
+          name: 'forgot',
+          path: '/user/forgot',
+          component: './user/forgot',
+        },
       ],
     },
     {

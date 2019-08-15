@@ -1,6 +1,6 @@
-import { M_LOGIN } from '@/gql';
+import { M_LOGIN, Q_FETCH_CURRENT_USER } from '@/gql';
 import Logger from '@/utils/logger';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import { Button } from 'antd';
 import React, { useState } from 'react';
 import { router } from 'umi';
@@ -13,8 +13,9 @@ const { Tab, UserName, Password, Submit } = LoginComponents;
 
 export default () => {
   const [loginForm, setLoginForm] = useState(null);
+  const client = useApolloClient();
   const [login, { loading }] = useMutation(M_LOGIN, {
-    update: (proxy, { data }) => {
+    update: async (cache, { data }) => {
       const login = data.login;
 
       if (login && login.token) {
@@ -38,6 +39,16 @@ export default () => {
             return;
           }
         }
+
+        const { data } = await client.query({
+          query: Q_FETCH_CURRENT_USER,
+          fetchPolicy: 'no-cache',
+        });
+
+        cache.writeQuery({
+          query: Q_FETCH_CURRENT_USER,
+          data,
+        });
 
         Logger.log('redirect:', redirect);
 
