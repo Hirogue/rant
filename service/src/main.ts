@@ -15,6 +15,8 @@ import { Config } from './config';
 import { ExceptionsFilter, ValidationPipe } from './core';
 import { Logger } from './logger';
 
+declare const module: any;
+
 async function bootstrap() {
   const app = Nextjs(Config.next);
   await app.prepare();
@@ -55,5 +57,10 @@ async function bootstrap() {
   await server.listen(Config.port, Config.hostName, () => {
     Logger.log(`Server run at port ${Config.port}`);
   });
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 bootstrap();

@@ -12,6 +12,8 @@
     "orm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "rimraf ./dist && ts-node -r tsconfig-paths/register src/main.ts",
+    "hmr": "node dist/server",
+    "webpack": "webpack --config webpack.config.js",
     "dev": "concurrently --handle-input \"wait-on dist/src/main.js && nodemon\" \"tsc -w -p tsconfig.build.json\" ",
     "start:debug": "nodemon --config nodemon-debug.json",
     "prestart:prod": "rimraf dist && npm run build",
@@ -81,7 +83,11 @@
     "stacktrace-js": "^2.0.0",
     "svg-captcha": "^1.4.0",
     "swagger-ui-express": "^4.0.7",
+    "ts-loader": "^6.0.4",
     "typeorm": "^0.2.18",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.6",
+    "webpack-node-externals": "^1.7.2",
     "youch": "^2.0.10"
   },
   "devDependencies": {
