@@ -1,11 +1,10 @@
-import { BadRequestException, Injectable, HttpException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
-import { BaseService } from '../core';
-import { User, Capital, Project, Provider } from '../database/entities';
+import { BaseService, UserLevelEnum } from '../core';
+import { Capital, Project, Provider, User } from '../database/entities';
 import { RegisterDto, ResetPasswordDto } from './dtos';
-import { UserLevelEnum } from 'dist/src/core';
 
 @Injectable()
 export class UserService extends BaseService<User> {
