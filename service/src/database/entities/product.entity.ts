@@ -1,7 +1,7 @@
 import { ApiModelProperty } from "@nestjs/swagger";
 import { Field, InputType, Int, ObjectType } from "type-graphql";
 import { Column, Entity, ManyToOne, ManyToMany } from "typeorm";
-import { JsonScalar } from "../../core";
+import { JsonScalar, ProjectStatusEnum } from "../../core";
 import { Base } from "./base";
 import { ProductCategory } from "./product-category.entity";
 import { User } from "./user.entity";
@@ -65,4 +65,9 @@ export class Product extends Base {
     @ManyToMany(type => User, target => target.apply_products)
     @ApiModelProperty({ nullable: true })
     applicants: User[];
+
+    @Field({ nullable: true })
+    @Column({ type: 'simple-enum', default: ProjectStatusEnum.PENDING })
+    @ApiModelProperty({ nullable: true })
+    status: ProjectStatusEnum;
 }
