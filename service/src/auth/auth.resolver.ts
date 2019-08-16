@@ -18,7 +18,7 @@ export class AuthResolver {
 
     @Query(returns => User)
     @UseGuards(GqlJwtAuthGuard)
-    async me(@Me() me) {
+    async me(@Me() me: User) {
         const result = await this.userService.findOne({
             where: { id: me.id },
             relations: [

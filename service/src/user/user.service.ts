@@ -1,15 +1,37 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
-import { Repository } from 'typeorm';
+import { Repository, Transaction } from 'typeorm';
 import { BaseService } from '../core';
-import { User } from '../database/entities';
+import { User, Capital } from '../database/entities';
 import { RegisterDto, ResetPasswordDto } from './dtos';
 
 @Injectable()
 export class UserService extends BaseService<User> {
-    constructor(@InjectRepository(User) protected readonly repo: Repository<User>) {
+    constructor(
+        @InjectRepository(User) protected readonly repo: Repository<User>
+    ) {
         super(repo);
+    }
+
+    @Transaction()
+    async applyCapitals(
+        capitalId: number, userId: number,
+        @InjectRepository(User) userRepo?: Repository<User>,
+        @InjectRepository(Capital) capitalRepo?: Repository<Capital>,
+    ) {
+        const user = await userRepo.findOne({
+            where: { id: userId },
+            relations: ['apply_capitals']
+        });
+
+        const capital = await capitalRepo.findOne({ id: capitalId });
+
+        user.apply_capitals.push(capital);
+
+        await userRepo.save(user);
+
+        return true;
     }
 
     async findOneByAccount(account: string) {

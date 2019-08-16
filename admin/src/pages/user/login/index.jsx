@@ -2,7 +2,7 @@ import { M_LOGIN, Q_FETCH_CURRENT_USER } from '@/gql';
 import Logger from '@/utils/logger';
 import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import { Button } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { router } from 'umi';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import LoginComponents from './components/Login';
@@ -12,7 +12,7 @@ import { getPageQuery } from './utils/utils';
 const { Tab, UserName, Password, Submit } = LoginComponents;
 
 export default () => {
-  const [loginForm, setLoginForm] = useState(null);
+  const loginFormRef = useRef(null);
   const client = useApolloClient();
   const [login, { loading }] = useMutation(M_LOGIN, {
     update: async (cache, { data }) => {
@@ -70,7 +70,7 @@ export default () => {
       <LoginComponents
         defaultActiveKey="account"
         onSubmit={handleSubmit}
-        wrappedComponentRef={formRef => setLoginForm(formRef)}
+        wrappedComponentRef={loginFormRef}
       >
         <Tab
           key="account"
@@ -107,7 +107,7 @@ export default () => {
             ]}
             onPressEnter={e => {
               e.preventDefault();
-              loginForm.validateFields(handleSubmit);
+              loginFormRef.validateFields(handleSubmit);
             }}
           />
         </Tab>
