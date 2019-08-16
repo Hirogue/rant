@@ -18,6 +18,11 @@ export class UserResolver extends BaseResolver(User, UserPaginate) {
     ) { super(context, 'user'); }
 
     @Mutation(returns => Boolean)
+    async applyProducts(@Args('id') id: string, @Me() me: User) {
+        return await this.userService.applyProducts(id, me.id);
+    }
+
+    @Mutation(returns => Boolean)
     async applyCapitals(@Args('id') id: string, @Me() me: User) {
         return await this.userService.applyCapitals(id, me.id);
     }

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { BaseService, UserLevelEnum } from '../core';
-import { Capital, Project, Provider, User } from '../database/entities';
+import { Capital, Project, Provider, User, Product } from '../database/entities';
 import { RegisterDto, ResetPasswordDto } from './dtos';
 
 @Injectable()
@@ -12,6 +12,26 @@ export class UserService extends BaseService<User> {
         @InjectRepository(User) protected readonly repo: Repository<User>
     ) {
         super(repo);
+    }
+
+    @Transaction()
+    async applyProducts(
+        id: string, userId: number,
+        @TransactionRepository(User) userRepo?: Repository<User>,
+        @TransactionRepository(Product) productRepo?: Repository<Product>,
+    ) {
+        const user = await userRepo.findOne({
+            where: { id: userId },
+            relations: ['apply_products']
+        });
+
+        const product = await productRepo.findOne({ id: parseInt(id) });
+
+        user.apply_products.push(product);
+
+        await userRepo.save(user);
+
+        return true;
     }
 
     @Transaction()
