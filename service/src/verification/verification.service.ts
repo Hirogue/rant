@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Inject, forwardRef } from "@nestjs/common";
+import { BadRequestException, forwardRef, Inject, Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { range, shuffle, take } from 'lodash';
 import * as UUID from 'node-uuid';
 import * as SVG from 'svg-captcha';
@@ -6,15 +6,34 @@ import { CacheService } from "../cache";
 import { Config } from "../config";
 import { SmsTypeEnum } from "../core";
 import { Logger } from "../logger";
+import { MqService, MsgQueue } from "../mq";
 import { UserService } from "../user";
 
 @Injectable()
-export class VerificationService {
+export class VerificationService implements OnModuleInit, OnModuleDestroy {
+
+    private queue: MsgQueue;
+
     constructor(
         private readonly cache: CacheService,
+        private readonly mq: MqService,
         @Inject(forwardRef(() => UserService))
         private readonly userService: UserService
     ) { }
+
+    async onModuleInit() {
+        const channel = await this.mq.createChannel();
+        this.queue = new MsgQueue(channel, 'SMS');
+        await this.queue.consume(this.handleSMS);
+    }
+
+    async onModuleDestroy() {
+        await this.queue.close();
+    }
+
+    async handleSMS(content: any) {
+        Logger.log('handle sms:', content);
+    }
 
     async generateSvg() {
 
@@ -62,7 +81,7 @@ export class VerificationService {
 
         Logger.debug('code:', code);
 
-        // TODO: send message to message queue
+        await this.queue.send({ phone, type, code });
 
         return true;
     }

@@ -41,6 +41,11 @@ let Config = {
         prefix: '/_next/'
     },
 
+    mq: {
+        url: 'amqp://localhost',
+        options: {}
+    },
+
     redis: {
         name: 'rant',
         host: '127.0.0.1',

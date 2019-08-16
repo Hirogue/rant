@@ -14,7 +14,7 @@ export default props => {
         checkedKeys={checkedKeys}
         onCheck={e => onCheck(e.checked)}
         onSelect={(key, e) => onSelect(e)}
-        draggable={true}
+        draggable={false}
         onDrop={e => {
           if (!e.dragNode.props.root) {
             message.warn('不支持根节点的修改');

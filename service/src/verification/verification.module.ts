@@ -1,12 +1,14 @@
-import { Module, forwardRef } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { CacheModule } from '../cache';
+import { MqModule } from "../mq";
+import { UserModule } from "../user";
 import { VerificationController } from "./verification.controller";
 import { VerificationService } from "./verification.service";
-import { UserModule } from "../user";
 
 @Module({
     imports: [
         CacheModule,
+        MqModule,
         forwardRef(() => UserModule)
     ],
     controllers: [VerificationController],
