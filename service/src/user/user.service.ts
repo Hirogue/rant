@@ -1,10 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, HttpException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { BaseService } from '../core';
 import { User, Capital, Project, Provider } from '../database/entities';
 import { RegisterDto, ResetPasswordDto } from './dtos';
+import { UserLevelEnum } from 'dist/src/core';
 
 @Injectable()
 export class UserService extends BaseService<User> {
@@ -24,6 +25,10 @@ export class UserService extends BaseService<User> {
             where: { id: userId },
             relations: ['apply_capitals']
         });
+
+        if (UserLevelEnum.V1 > user.vip) {
+            throw new UnauthorizedException('请先升级VIP等级');
+        }
 
         const capital = await capitalRepo.findOne({ id: parseInt(id) });
 
@@ -45,6 +50,10 @@ export class UserService extends BaseService<User> {
             relations: ['apply_projects']
         });
 
+        if (UserLevelEnum.V1 > user.vip) {
+            throw new UnauthorizedException('请先升级VIP等级');
+        }
+
         const project = await projectRepo.findOne({ id: parseInt(id) });
 
         user.apply_projects.push(project);
@@ -64,6 +73,10 @@ export class UserService extends BaseService<User> {
             where: { id: userId },
             relations: ['apply_providers']
         });
+
+        if (UserLevelEnum.V1 > user.vip) {
+            throw new UnauthorizedException('请先升级VIP等级');
+        }
 
         const provider = await providerRepo.findOne({ id: parseInt(id) });
 
