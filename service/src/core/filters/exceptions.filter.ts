@@ -79,13 +79,19 @@ export class ExceptionsFilter implements ExceptionFilter {
             const status = exception.getStatus();
 
             if (!!request && !!response) {
-                response
-                    .status(status)
-                    .send({
-                        ...exception,
-                        timestamp,
-                        path: request.url
-                    });
+
+                const headers = request.headers;
+
+                if (!headers.apollo) {
+
+                    return response
+                        .status(status)
+                        .send({
+                            ...exception,
+                            timestamp,
+                            path: request.url
+                        });
+                }
             }
 
             if (exception instanceof ApolloException) {
