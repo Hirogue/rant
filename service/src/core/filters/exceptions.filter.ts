@@ -79,26 +79,20 @@ export class ExceptionsFilter implements ExceptionFilter {
             const status = exception.getStatus();
 
             if (!!request && !!response) {
-
-                const headers = request.headers;
-
-                if (!headers.apollo) {
-
-                    return response
-                        .status(status)
-                        .send({
-                            ...exception,
-                            timestamp,
-                            path: request.url
-                        });
-                }
+                return response
+                    .status(status)
+                    .send({
+                        ...exception,
+                        timestamp,
+                        path: request.url
+                    });
             }
 
             if (exception instanceof ApolloException) {
                 throw new ApolloError(exception.getMessage(), status.toString());
             }
 
-            throw new ApolloError(exception.toString() || 'Unknown Exception', status.toString());
+            throw new ApolloError(exception.message ? exception.message.message : 'Unknown Exception', status.toString());
 
         } else {
 
