@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
-import { Repository, Transaction } from 'typeorm';
+import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { BaseService } from '../core';
-import { User, Capital } from '../database/entities';
+import { User, Capital, Project, Provider } from '../database/entities';
 import { RegisterDto, ResetPasswordDto } from './dtos';
 
 @Injectable()
@@ -16,18 +16,58 @@ export class UserService extends BaseService<User> {
 
     @Transaction()
     async applyCapitals(
-        capitalId: number, userId: number,
-        @InjectRepository(User) userRepo?: Repository<User>,
-        @InjectRepository(Capital) capitalRepo?: Repository<Capital>,
+        id: string, userId: number,
+        @TransactionRepository(User) userRepo?: Repository<User>,
+        @TransactionRepository(Capital) capitalRepo?: Repository<Capital>,
     ) {
         const user = await userRepo.findOne({
             where: { id: userId },
             relations: ['apply_capitals']
         });
 
-        const capital = await capitalRepo.findOne({ id: capitalId });
+        const capital = await capitalRepo.findOne({ id: parseInt(id) });
 
         user.apply_capitals.push(capital);
+
+        await userRepo.save(user);
+
+        return true;
+    }
+
+    @Transaction()
+    async applyProjects(
+        id: string, userId: number,
+        @TransactionRepository(User) userRepo?: Repository<User>,
+        @TransactionRepository(Project) projectRepo?: Repository<Project>,
+    ) {
+        const user = await userRepo.findOne({
+            where: { id: userId },
+            relations: ['apply_projects']
+        });
+
+        const project = await projectRepo.findOne({ id: parseInt(id) });
+
+        user.apply_projects.push(project);
+
+        await userRepo.save(user);
+
+        return true;
+    }
+
+    @Transaction()
+    async applyProviders(
+        id: string, userId: number,
+        @TransactionRepository(User) userRepo?: Repository<User>,
+        @TransactionRepository(Provider) providerRepo?: Repository<Provider>,
+    ) {
+        const user = await userRepo.findOne({
+            where: { id: userId },
+            relations: ['apply_providers']
+        });
+
+        const provider = await providerRepo.findOne({ id: parseInt(id) });
+
+        user.apply_providers.push(provider);
 
         await userRepo.save(user);
 

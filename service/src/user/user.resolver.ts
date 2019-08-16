@@ -18,7 +18,17 @@ export class UserResolver extends BaseResolver(User, UserPaginate) {
     ) { super(context, 'user'); }
 
     @Mutation(returns => Boolean)
-    async applyCapitals(@Args({ name: 'id', type: () => Int }) id: number, @Me() me: User) {
+    async applyCapitals(@Args('id') id: string, @Me() me: User) {
         return await this.userService.applyCapitals(id, me.id);
+    }
+
+    @Mutation(returns => Boolean)
+    async applyProjects(@Args('id') id: string, @Me() me: User) {
+        return await this.userService.applyProjects(id, me.id);
+    }
+
+    @Mutation(returns => Boolean)
+    async applyProviders(@Args('id') id: string, @Me() me: User) {
+        return await this.userService.applyProviders(id, me.id);
     }
 }
