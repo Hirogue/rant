@@ -67,6 +67,7 @@ let Config = {
         logging: true,
         dropSchema: false,
         synchronize: true,
+        entityPrefix: 't_',
         cache: {
             type: 'redis',
             options: {

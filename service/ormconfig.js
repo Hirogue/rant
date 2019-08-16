@@ -4,6 +4,7 @@ module.exports = {
     logging: true,
     dropSchema: true,
     synchronize: true,
+    entityPrefix: 't_',
     cache: {
         type: 'redis',
         options: {

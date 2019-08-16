@@ -1,5 +1,4 @@
 import { CacheInterceptor, ExecutionContext, Injectable } from "@nestjs/common";
-import { Logger } from "../../logger";
 
 @Injectable()
 export class HttpCacheInterceptor extends CacheInterceptor {
@@ -9,8 +8,6 @@ export class HttpCacheInterceptor extends CacheInterceptor {
         if (!request) return undefined;
 
         const cacheKey = `http-cache-${request.originalUrl}`;
-
-        Logger.log(cacheKey);
 
         return cacheKey;
     }

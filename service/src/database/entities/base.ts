@@ -6,9 +6,9 @@ import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'type
 @InputType({ isAbstract: true })
 export abstract class Base {
     @Field(type => ID, { nullable: true })
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn()
     @ApiModelProperty({ nullable: true })
-    id: string;
+    id: number;
 
     @Field({ nullable: true })
     @CreateDateColumn()
