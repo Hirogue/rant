@@ -1,6 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import * as bcrypt from 'bcryptjs';
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude } from 'class-transformer';
 import { Field, InputType, Int, ObjectType } from 'type-graphql';
 import { BeforeInsert, Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { Config } from '../../config';
