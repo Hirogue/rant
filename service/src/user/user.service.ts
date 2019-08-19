@@ -1,9 +1,9 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { BaseService, UserLevelEnum } from '../core';
-import { Capital, Project, Provider, User, Product } from '../database/entities';
+import { ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
 import { RegisterDto, ResetPasswordDto } from './dtos';
 
 @Injectable()
@@ -45,9 +45,7 @@ export class UserService extends BaseService<User> {
             relations: ['apply_capitals']
         });
 
-        if (UserLevelEnum.V1 > user.vip) {
-            throw new UnauthorizedException('请先升级VIP等级');
-        }
+        await this.checkLimit(user.vip);
 
         const capital = await capitalRepo.findOne({ id: parseInt(id) });
 
@@ -69,9 +67,7 @@ export class UserService extends BaseService<User> {
             relations: ['apply_projects']
         });
 
-        if (UserLevelEnum.V1 > user.vip) {
-            throw new UnauthorizedException('请先升级VIP等级');
-        }
+        await this.checkLimit(user.vip);
 
         const project = await projectRepo.findOne({ id: parseInt(id) });
 
@@ -93,13 +89,13 @@ export class UserService extends BaseService<User> {
             relations: ['apply_providers']
         });
 
-        if (UserLevelEnum.V1 > user.vip) {
-            throw new UnauthorizedException('请先升级VIP等级');
-        }
-
         const provider = await providerRepo.findOne({ id: parseInt(id) });
 
-        user.apply_providers.push(provider);
+        const applyProvider = new ApplyProvider();
+        applyProvider.provider = provider;
+        applyProvider.user = user;
+
+        user.apply_providers.push(applyProvider);
 
         await userRepo.save(user);
 
@@ -135,5 +131,15 @@ export class UserService extends BaseService<User> {
         user.password = await bcrypt.hash(dto.password, salt);
 
         return await this.repo.save(user);
+    }
+
+    private async checkLimit(vip: UserLevelEnum) {
+        if (UserLevelEnum.V0 === vip) {
+
+        }
+
+        if (UserLevelEnum.V1 <= vip) {
+
+        }
     }
 }

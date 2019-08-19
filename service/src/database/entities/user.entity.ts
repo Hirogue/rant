@@ -12,6 +12,7 @@ import { Org } from './org.entity';
 import { Product } from './product.entity';
 import { Project } from './project.entity';
 import { Provider } from './provider.entity';
+import { ApplyProvider } from './apply-provider.entity';
 
 @Entity()
 @ObjectType()
@@ -147,11 +148,11 @@ export class User extends Base {
     @ApiModelProperty({ nullable: true })
     apply_capitals: Capital[];
 
-    @Field(type => [Provider]!, { nullable: true })
-    @ManyToMany(type => Provider, target => target.applicants)
+    @Field(type => [ApplyProvider]!, { nullable: true })
+    @OneToMany(type => ApplyProvider, target => target.user)
     @JoinTable()
     @ApiModelProperty({ nullable: true })
-    apply_providers: Provider[];
+    apply_providers: ApplyProvider[];
 
     @Field({ nullable: true })
     @Column({ nullable: true })

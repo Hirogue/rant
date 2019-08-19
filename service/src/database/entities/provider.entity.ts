@@ -1,11 +1,12 @@
 import { ApiModelProperty } from "@nestjs/swagger";
 import { Field, InputType, ObjectType } from "type-graphql";
-import { Column, Entity, ManyToMany, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { ProjectStatusEnum } from "../../core";
 import { Base } from "./base";
 import { Metadata } from "./metadata.entity";
 import { ProviderCategory } from "./provider-category.entity";
 import { User } from "./user.entity";
+import { ApplyProvider } from "./apply-provider.entity";
 
 @Entity()
 @ObjectType()
@@ -52,10 +53,10 @@ export class Provider extends Base {
     @ApiModelProperty({ nullable: true })
     creator: User;
 
-    @Field(type => User, { nullable: true })
-    @ManyToMany(type => User, target => target.apply_providers)
+    @Field(type => ApplyProvider, { nullable: true })
+    @OneToMany(type => ApplyProvider, target => target.provider)
     @ApiModelProperty({ nullable: true })
-    applicants: User[];
+    applicants: ApplyProvider[];
 
     @Field({ nullable: true })
     @Column({ type: 'simple-enum', default: ProjectStatusEnum.PENDING })

@@ -97,6 +97,11 @@ let Config = {
         uploads: '/uploads'
     },
 
+    apply: {
+        v0Limit: 1,
+        v1Limit: 3
+    }
+
 };
 
 if (!Config.dev) {
