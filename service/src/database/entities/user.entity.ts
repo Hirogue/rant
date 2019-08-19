@@ -5,14 +5,15 @@ import { Field, InputType, Int, ObjectType } from 'type-graphql';
 import { BeforeInsert, Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { Config } from '../../config';
 import { IdentityEnum, UserLevelEnum, UserStatusEnum, UserTypeEnum } from '../../core/enums';
+import { ApplyProduct } from './apply-product.entity';
+import { ApplyProject } from './apply-project.entity';
+import { ApplyProvider } from './apply-provider.entity';
 import { Base } from './base';
 import { Capital } from './capital.entity';
 import { Metadata } from './metadata.entity';
 import { Org } from './org.entity';
-import { Product } from './product.entity';
 import { Project } from './project.entity';
 import { Provider } from './provider.entity';
-import { ApplyProvider } from './apply-provider.entity';
 
 @Entity()
 @ObjectType()
@@ -130,17 +131,17 @@ export class User extends Base {
     @ApiModelProperty({ nullable: true })
     capitals: Capital[];
 
-    @Field(type => [Product]!, { nullable: true })
-    @ManyToMany(type => Product, target => target.applicants)
+    @Field(type => [ApplyProduct]!, { nullable: true })
+    @ManyToMany(type => ApplyProduct, target => target.applicant)
     @JoinTable()
     @ApiModelProperty({ nullable: true })
-    apply_products: Product[];
+    apply_products: ApplyProduct[];
 
-    @Field(type => [Project]!, { nullable: true })
-    @ManyToMany(type => Project, target => target.applicants)
+    @Field(type => [ApplyProject]!, { nullable: true })
+    @ManyToMany(type => ApplyProject, target => target.applicant)
     @JoinTable()
     @ApiModelProperty({ nullable: true })
-    apply_projects: Project[];
+    apply_projects: ApplyProject[];
 
     @Field(type => [Capital]!, { nullable: true })
     @ManyToMany(type => Capital, target => target.applicants)
