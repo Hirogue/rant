@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { BaseService, UserLevelEnum } from '../core';
-import { ApplyProvider, Capital, Product, Project, Provider, User, ApplyProject, ApplyCapital, ApplyProduct } from '../database/entities';
+import { ApplyCapital, ApplyProduct, ApplyProject, ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
 import { RegisterDto, ResetPasswordDto } from './dtos';
 
 @Injectable()
@@ -61,7 +61,7 @@ export class UserService extends BaseService<User> {
         });
 
 
-        await this.checkLimit(user.vip);
+        await this.checkLimit(user.vip, 'capital');
 
         const capital = await capitalRepo.findOne({ id: parseInt(id) });
 
@@ -91,7 +91,7 @@ export class UserService extends BaseService<User> {
             }
         });
 
-        await this.checkLimit(user.vip);
+        await this.checkLimit(user.vip, 'project');
 
         const project = await projectRepo.findOne({ id: parseInt(id) });
 
@@ -162,7 +162,7 @@ export class UserService extends BaseService<User> {
         return await this.repo.save(user);
     }
 
-    private async checkLimit(vip: UserLevelEnum) {
+    private async checkLimit(vip: UserLevelEnum, type: string) {
         if (UserLevelEnum.V0 === vip) {
 
         }

@@ -14,6 +14,7 @@ import { Metadata } from './metadata.entity';
 import { Org } from './org.entity';
 import { Project } from './project.entity';
 import { Provider } from './provider.entity';
+import { ApplyCapital } from './apply-capital.entity';
 
 @Entity()
 @ObjectType()
@@ -143,11 +144,11 @@ export class User extends Base {
     @ApiModelProperty({ nullable: true })
     apply_projects: ApplyProject[];
 
-    @Field(type => [Capital]!, { nullable: true })
-    @ManyToMany(type => Capital, target => target.applicants)
+    @Field(type => [ApplyCapital]!, { nullable: true })
+    @ManyToMany(type => ApplyCapital, target => target.applicant)
     @JoinTable()
     @ApiModelProperty({ nullable: true })
-    apply_capitals: Capital[];
+    apply_capitals: ApplyCapital[];
 
     @Field(type => [ApplyProvider]!, { nullable: true })
     @OneToMany(type => ApplyProvider, target => target.applicant)
