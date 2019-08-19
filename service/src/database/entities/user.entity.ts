@@ -149,7 +149,7 @@ export class User extends Base {
     apply_capitals: Capital[];
 
     @Field(type => [ApplyProvider]!, { nullable: true })
-    @OneToMany(type => ApplyProvider, target => target.user)
+    @OneToMany(type => ApplyProvider, target => target.applicant)
     @JoinTable()
     @ApiModelProperty({ nullable: true })
     apply_providers: ApplyProvider[];

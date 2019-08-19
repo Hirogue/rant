@@ -83,21 +83,25 @@ export class UserService extends BaseService<User> {
         id: string, userId: number,
         @TransactionRepository(User) userRepo?: Repository<User>,
         @TransactionRepository(Provider) providerRepo?: Repository<Provider>,
+        @TransactionRepository(ApplyProvider) applyProviderRepo?: Repository<ApplyProvider>,
     ) {
         const user = await userRepo.findOne({
             where: { id: userId },
-            relations: ['apply_providers']
+            relations: ['apply_providers', 'apply_providers.provider']
+        });
+
+        user.apply_providers.forEach(item => {
+            if (item.provider.id === parseInt(id)) {
+                throw new BadRequestException('请勿重复申请');
+            }
         });
 
         const provider = await providerRepo.findOne({ id: parseInt(id) });
 
         const applyProvider = new ApplyProvider();
         applyProvider.provider = provider;
-        applyProvider.user = user;
-
-        user.apply_providers.push(applyProvider);
-
-        await userRepo.save(user);
+        applyProvider.applicant = user;
+        await applyProviderRepo.save(applyProvider);
 
         return true;
     }
