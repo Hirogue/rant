@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { BaseService, UserLevelEnum } from '../core';
-import { ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
+import { ApplyProvider, Capital, Product, Project, Provider, User, ApplyProject, ApplyCapital, ApplyProduct } from '../database/entities';
 import { RegisterDto, ResetPasswordDto } from './dtos';
 
 @Injectable()
@@ -19,17 +19,25 @@ export class UserService extends BaseService<User> {
         id: string, userId: number,
         @TransactionRepository(User) userRepo?: Repository<User>,
         @TransactionRepository(Product) productRepo?: Repository<Product>,
+        @TransactionRepository(ApplyProduct) applyProductRepo?: Repository<ApplyProduct>,
     ) {
         const user = await userRepo.findOne({
             where: { id: userId },
-            relations: ['apply_products']
+            relations: ['apply_products', 'apply_products.product']
+        });
+
+        user.apply_products.forEach(item => {
+            if (item.product.id === parseInt(id)) {
+                throw new BadRequestException('请勿重复申请');
+            }
         });
 
         const product = await productRepo.findOne({ id: parseInt(id) });
 
-        user.apply_products.push(product);
-
-        await userRepo.save(user);
+        const applyProduct = new ApplyProduct();
+        applyProduct.product = product;
+        applyProduct.applicant = user;
+        await applyProductRepo.save(applyProduct);
 
         return true;
     }
@@ -39,19 +47,28 @@ export class UserService extends BaseService<User> {
         id: string, userId: number,
         @TransactionRepository(User) userRepo?: Repository<User>,
         @TransactionRepository(Capital) capitalRepo?: Repository<Capital>,
+        @TransactionRepository(ApplyCapital) applyCapitalRepo?: Repository<ApplyCapital>,
     ) {
         const user = await userRepo.findOne({
             where: { id: userId },
-            relations: ['apply_capitals']
+            relations: ['apply_capitals', 'apply_capitals.capital']
         });
+
+        user.apply_capitals.forEach(item => {
+            if (item.capital.id === parseInt(id)) {
+                throw new BadRequestException('请勿重复申请');
+            }
+        });
+
 
         await this.checkLimit(user.vip);
 
         const capital = await capitalRepo.findOne({ id: parseInt(id) });
 
-        user.apply_capitals.push(capital);
-
-        await userRepo.save(user);
+        const applyCapital = new ApplyCapital();
+        applyCapital.capital = capital;
+        applyCapital.applicant = user;
+        await applyCapitalRepo.save(applyCapital);
 
         return true;
     }
@@ -61,19 +78,27 @@ export class UserService extends BaseService<User> {
         id: string, userId: number,
         @TransactionRepository(User) userRepo?: Repository<User>,
         @TransactionRepository(Project) projectRepo?: Repository<Project>,
+        @TransactionRepository(ApplyProject) applyProjectRepo?: Repository<ApplyProject>,
     ) {
         const user = await userRepo.findOne({
             where: { id: userId },
-            relations: ['apply_projects']
+            relations: ['apply_projects', 'apply_providers.project']
+        });
+
+        user.apply_projects.forEach(item => {
+            if (item.project.id === parseInt(id)) {
+                throw new BadRequestException('请勿重复申请');
+            }
         });
 
         await this.checkLimit(user.vip);
 
         const project = await projectRepo.findOne({ id: parseInt(id) });
 
-        user.apply_projects.push(project);
-
-        await userRepo.save(user);
+        const applyProject = new ApplyProject();
+        applyProject.project = project;
+        applyProject.applicant = user;
+        await applyProjectRepo.save(applyProject);
 
         return true;
     }
