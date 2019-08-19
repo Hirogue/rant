@@ -1,8 +1,9 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import * as moment from 'moment';
 import { Field, InputType, Int, ObjectType } from "type-graphql";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { IFModeEnum, ProjectStatusEnum } from "../../core";
+import { ApplyProject } from './apply-project.entity';
 import { Base } from "./base";
 import { Metadata } from "./metadata.entity";
 import { User } from "./user.entity";
@@ -157,10 +158,10 @@ export class Project extends Base {
     @ManyToOne(type => Metadata, target => target.projects)
     occupancy_time: Metadata;
 
-    @Field(type => User, { nullable: true })
-    @ManyToMany(type => User, target => target.apply_projects)
+    @Field(type => ApplyProject, { nullable: true })
+    @OneToMany(type => ApplyProject, target => target.project)
     @ApiModelProperty({ nullable: true })
-    applicants: User[];
+    applicants: ApplyProject[];
 
     @Field({ nullable: true })
     @Column({ nullable: true })

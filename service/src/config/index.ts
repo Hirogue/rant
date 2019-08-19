@@ -69,9 +69,9 @@ let Config = {
     orm: {
         type: 'sqlite',
         database: 'db.sql',
-        logging: true,
+        logging: ["error"],
         dropSchema: false,
-        synchronize: true,
+        synchronize: false,
         entityPrefix: 't_',
         cache: {
             type: 'redis',

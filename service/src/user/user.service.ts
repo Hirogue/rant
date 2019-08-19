@@ -1,15 +1,22 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
+import * as moment from 'moment';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { BaseService, UserLevelEnum } from '../core';
 import { ApplyCapital, ApplyProduct, ApplyProject, ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
+import { Logger } from '../logger';
 import { RegisterDto, ResetPasswordDto } from './dtos';
 
 @Injectable()
 export class UserService extends BaseService<User> {
     constructor(
-        @InjectRepository(User) protected readonly repo: Repository<User>
+        @InjectRepository(User)
+        protected readonly repo: Repository<User>,
+        @InjectRepository(ApplyProject)
+        private readonly applyProjectRepository: Repository<ApplyProject>,
+        @InjectRepository(ApplyCapital)
+        private readonly applyCapitalRepository: Repository<ApplyCapital>,
     ) {
         super(repo);
     }
@@ -31,6 +38,7 @@ export class UserService extends BaseService<User> {
                 throw new BadRequestException('请勿重复申请');
             }
         });
+        Logger.log(user)
 
         const product = await productRepo.findOne({ id: parseInt(id) });
 
@@ -59,7 +67,7 @@ export class UserService extends BaseService<User> {
                 throw new BadRequestException('请勿重复申请');
             }
         });
-
+        Logger.log(user)
 
         await this.checkLimit(user.vip, 'capital');
 
@@ -82,7 +90,7 @@ export class UserService extends BaseService<User> {
     ) {
         const user = await userRepo.findOne({
             where: { id: userId },
-            relations: ['apply_projects', 'apply_providers.project']
+            relations: ['apply_projects', 'apply_projects.project']
         });
 
         user.apply_projects.forEach(item => {
@@ -90,6 +98,7 @@ export class UserService extends BaseService<User> {
                 throw new BadRequestException('请勿重复申请');
             }
         });
+        Logger.log(user)
 
         await this.checkLimit(user.vip, 'project');
 
@@ -163,6 +172,16 @@ export class UserService extends BaseService<User> {
     }
 
     private async checkLimit(vip: UserLevelEnum, type: string) {
+        const currentDate = moment();
+        Logger.log('start of day', currentDate.startOf('day').format('YYYY-MM-DD HH:mm:ss'));
+        Logger.log('end of day', currentDate.endOf('day').format('YYYY-MM-DD HH:mm:ss'));
+
+        const total = await this.applyProjectRepository
+            .createQueryBuilder('t')
+            .getCount();
+
+        Logger.log(total);
+
         if (UserLevelEnum.V0 === vip) {
 
         }
@@ -170,5 +189,7 @@ export class UserService extends BaseService<User> {
         if (UserLevelEnum.V1 <= vip) {
 
         }
+
+        // return false;
     }
 }

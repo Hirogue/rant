@@ -1,8 +1,9 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import * as moment from 'moment';
 import { Field, InputType, Int, ObjectType } from "type-graphql";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { IFModeEnum, ProjectStatusEnum } from "../../core";
+import { ApplyCapital } from './apply-capital.entity';
 import { Base } from "./base";
 import { Metadata } from "./metadata.entity";
 import { User } from "./user.entity";
@@ -153,10 +154,10 @@ export class Capital extends Base {
     @ApiModelProperty({ nullable: true })
     ratio: Metadata;
 
-    @Field(type => User, { nullable: true })
-    @ManyToMany(type => User, target => target.apply_capitals)
+    @Field(type => ApplyCapital, { nullable: true })
+    @OneToMany(type => ApplyCapital, target => target.capital)
     @ApiModelProperty({ nullable: true })
-    applicants: User[];
+    applicants: ApplyCapital[];
 
     @Field({ nullable: true })
     @Column({ nullable: true })
