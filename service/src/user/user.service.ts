@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import * as moment from 'moment';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
+import { Config } from '../config';
 import { BaseService, UserLevelEnum } from '../core';
 import { ApplyCapital, ApplyProduct, ApplyProject, ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
 import { Logger } from '../logger';
@@ -38,7 +39,6 @@ export class UserService extends BaseService<User> {
                 throw new BadRequestException('请勿重复申请');
             }
         });
-        Logger.log(user)
 
         const product = await productRepo.findOne({ id: parseInt(id) });
 
@@ -67,9 +67,8 @@ export class UserService extends BaseService<User> {
                 throw new BadRequestException('请勿重复申请');
             }
         });
-        Logger.log(user)
 
-        await this.checkLimit(user.vip, 'capital');
+        await this.checkLimit(user, 'capital');
 
         const capital = await capitalRepo.findOne({ id: parseInt(id) });
 
@@ -98,9 +97,8 @@ export class UserService extends BaseService<User> {
                 throw new BadRequestException('请勿重复申请');
             }
         });
-        Logger.log(user)
 
-        await this.checkLimit(user.vip, 'project');
+        await this.checkLimit(user, 'project');
 
         const project = await projectRepo.findOne({ id: parseInt(id) });
 
@@ -171,25 +169,40 @@ export class UserService extends BaseService<User> {
         return await this.repo.save(user);
     }
 
-    private async checkLimit(vip: UserLevelEnum, type: string) {
+    private async checkLimit(user: User, type: string) {
         const currentDate = moment();
-        Logger.log('start of day', currentDate.startOf('day').format('YYYY-MM-DD HH:mm:ss'));
-        Logger.log('end of day', currentDate.endOf('day').format('YYYY-MM-DD HH:mm:ss'));
+        const startOfDay = currentDate.startOf('day').format('YYYY-MM-DD HH:mm:ss');
+        const endOfDay = currentDate.endOf('day').format('YYYY-MM-DD HH:mm:ss');
 
-        const total = await this.applyProjectRepository
-            .createQueryBuilder('t')
+        let builder = null;
+        let appliedyCount = -1;
+
+        if ('project' === type) {
+            builder = await this.applyProjectRepository.createQueryBuilder('t');
+        } else {
+            builder = await this.applyCapitalRepository.createQueryBuilder('t');
+        }
+
+        appliedyCount = await builder
+            .leftJoin('t.applicant', 'applicant')
+            .where('applicant.id = :id', { id: user.id })
+            .andWhere('t.create_at BETWEEN :startOfDay AND :endOfDay', {
+                startOfDay,
+                endOfDay,
+            })
+            .printSql()
             .getCount();
 
-        Logger.log(total);
+        const total = UserLevelEnum.V0 <= user.vip
+            ? Config.apply.v0Limit
+            : Config.apply.v1Limit;
 
-        if (UserLevelEnum.V0 === vip) {
+        Logger.log('total', total);
+        Logger.log('appliedyCount', appliedyCount);
 
+        if (total - appliedyCount <= 0) {
+            throw new BadRequestException('今日可投递次数不足');
         }
 
-        if (UserLevelEnum.V1 <= vip) {
-
-        }
-
-        // return false;
     }
 }

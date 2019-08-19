@@ -10,7 +10,7 @@ import { User } from "./user.entity";
 export class ApplyCapital extends Base {
 
     @Field(type => User, { nullable: true })
-    @ManyToOne(type => User, target => target.apply_projects)
+    @ManyToOne(type => User, target => target.apply_capitals)
     applicant: User;
 
     @Field(type => Capital, { nullable: true })
