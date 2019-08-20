@@ -1,9 +1,10 @@
 import { Inject, UseGuards } from '@nestjs/common';
 import { Args, CONTEXT, Mutation, Resolver } from '@nestjs/graphql';
-import { ObjectType, Int } from 'type-graphql';
+import { ObjectType } from 'type-graphql';
 import { GqlJwtAuthGuard } from '../auth/gql-jwt-auth.guard';
 import { BasePaginate, BaseResolver, Me } from '../core';
 import { User } from '../database';
+import { BecomeProviderInput } from './dtos/become-provider.input';
 import { UserService } from './user.service';
 
 @ObjectType()
@@ -35,5 +36,10 @@ export class UserResolver extends BaseResolver(User, UserPaginate) {
     @Mutation(returns => Boolean, { description: 'Apply provider' })
     async applyProviders(@Args('id') id: string, @Me() me: User) {
         return await this.userService.applyProviders(id, me.id);
+    }
+
+    @Mutation(returns => Boolean, { description: 'Become a provider' })
+    async becomeProvider(@Args('data') data: BecomeProviderInput, @Me() me: User) {
+        return await this.userService.becomeProvider(data, me.id);
     }
 }

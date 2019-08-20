@@ -1,6 +1,7 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { configureWorkflow, IWorkflowHost, WorkflowBase, WorkflowConfig } from "workflow-es";
 import { Logger } from "../logger";
+import { UserFlow } from "./user";
 
 @Injectable()
 export class WfService implements OnModuleInit, OnModuleDestroy {
@@ -14,6 +15,12 @@ export class WfService implements OnModuleInit, OnModuleDestroy {
         Logger.trace('Workflow configured');
 
         this.host = this.config.getHost();
+
+        this.registerList([
+            UserFlow
+        ]);
+
+        await this.startHost();
     }
 
     async onModuleDestroy() {

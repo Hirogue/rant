@@ -8,6 +8,7 @@ import { BaseService, UserLevelEnum } from '../core';
 import { ApplyCapital, ApplyProduct, ApplyProject, ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
 import { Logger } from '../logger';
 import { RegisterDto, ResetPasswordDto } from './dtos';
+import { BecomeProviderInput } from './dtos/become-provider.input';
 
 @Injectable()
 export class UserService extends BaseService<User> {
@@ -167,6 +168,11 @@ export class UserService extends BaseService<User> {
         user.password = await bcrypt.hash(dto.password, salt);
 
         return await this.repo.save(user);
+    }
+
+    async becomeProvider(data: BecomeProviderInput, userId: number) {
+        Logger.log('become provider');
+        return true;
     }
 
     private async checkLimit(user: User, type: string) {

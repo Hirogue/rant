@@ -18,13 +18,13 @@ export class UserController extends BaseController(User, {
             apply_capitals: {},
             apply_providers: {},
             'apply_products.applicant': {},
-            'apply_products.provider': {},
+            'apply_products.product': {},
             'apply_projects.applicant': {},
-            'apply_projects.provider': {},
+            'apply_projects.project': {},
             'apply_providers.applicant': {},
             'apply_providers.provider': {},
             'apply_capitals.applicant': {},
-            'apply_capitals.provider': {},
+            'apply_capitals.capital': {},
         }
     }
 }) {
