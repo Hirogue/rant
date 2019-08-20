@@ -1,7 +1,7 @@
-import { BaseDataSource } from "./base.datasource";
-import { ClassType } from "type-graphql";
-import { camelCase } from "lodash";
 import { Args, Mutation, Query } from "@nestjs/graphql";
+import { camelCase } from "lodash";
+import { ClassType } from "type-graphql";
+import { BaseDataSource } from "./base.datasource";
 
 export function BaseResolver<TEntity, TPaginate>(
     TEntityClass: ClassType<TEntity>, TPaginateClass: ClassType<TPaginate>
@@ -17,27 +17,42 @@ export function BaseResolver<TEntity, TPaginate>(
             this.api = context.dataSources.api;
         }
 
-        @Query(returns => TPaginateClass, { name: 'query' + TEntityClass.name })
+        @Query(returns => TPaginateClass, {
+            name: 'query' + TEntityClass.name,
+            description: `Retrieve many ${TEntityClass.name}`
+        })
         async query(@Args('queryString') queryString: string) {
             return await this.api.find(this.root, queryString);
         }
 
-        @Query(returns => TEntityClass, { name: camelCase(TEntityClass.name) })
+        @Query(returns => TEntityClass, {
+            name: camelCase(TEntityClass.name),
+            description: `Retrieve one ${TEntityClass.name}`
+        })
         async find(@Args('id') id: string, @Args('queryString') queryString: string) {
             return await this.api.findOne(this.root, id, queryString);
         }
 
-        @Mutation(returns => Boolean, { name: 'delete' + TEntityClass.name })
+        @Mutation(returns => Boolean, {
+            name: 'delete' + TEntityClass.name,
+            description: `Delete many ${TEntityClass.name}`
+        })
         async delete(@Args('ids') ids: string) {
             return !!await this.api.remove(this.root, ids);
         }
 
-        @Mutation(returns => TEntityClass, { name: 'update' + TEntityClass.name })
+        @Mutation(returns => TEntityClass, {
+            name: 'update' + TEntityClass.name,
+            description: `Update one ${TEntityClass.name}`
+        })
         async update(@Args('id') id: string, @Args({ name: 'data', type: () => TEntityClass }) data: TEntity) {
             return await this.api.update(this.root, id, data);
         }
 
-        @Mutation(returns => TEntityClass, { name: 'create' + TEntityClass.name })
+        @Mutation(returns => TEntityClass, {
+            name: 'create' + TEntityClass.name,
+            description: `Create one ${TEntityClass.name}`
+        })
         async create(@Args({ name: 'data', type: () => TEntityClass }) data: TEntity) {
             return await this.api.create(this.root, data);
         }

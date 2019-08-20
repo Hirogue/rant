@@ -20,6 +20,7 @@ import { SpaController } from './spa.controller';
 import { StorageModule } from './storage';
 import { UserModule } from './user';
 import { VerificationModule } from './verification';
+import { WfModule } from './wf';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { VerificationModule } from './verification';
     RenderModule,
     LoggerModule,
     VerificationModule,
+    WfModule,
     StorageModule,
     HomeModule,
     MetadataModule,

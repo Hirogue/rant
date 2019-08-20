@@ -16,7 +16,7 @@ export class AuthResolver {
         private readonly userService: UserService,
     ) { }
 
-    @Query(returns => User)
+    @Query(returns => User, { description: 'Fetch current user' })
     @UseGuards(GqlJwtAuthGuard)
     async me(@Me() me: User) {
         const result = await this.userService.findOne({
@@ -32,7 +32,7 @@ export class AuthResolver {
         return result;
     }
 
-    @Mutation(returns => Auth)
+    @Mutation(returns => Auth, { description: 'User login' })
     async login(
         @Headers('application') application: string,
         @Args('loginData') loginData: LoginInput
