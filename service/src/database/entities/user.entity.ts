@@ -2,14 +2,17 @@ import { ApiModelProperty } from '@nestjs/swagger';
 import * as bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
 import { Field, InputType, Int, ObjectType } from 'type-graphql';
-import { BeforeInsert, Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
+import { BeforeInsert, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Config } from '../../config';
 import { IdentityEnum, UserLevelEnum, UserStatusEnum, UserTypeEnum } from '../../core/enums';
+import { ApplyCapital } from './apply-capital.entity';
+import { ApplyProduct } from './apply-product.entity';
+import { ApplyProject } from './apply-project.entity';
+import { ApplyProvider } from './apply-provider.entity';
 import { Base } from './base';
 import { Capital } from './capital.entity';
 import { Metadata } from './metadata.entity';
 import { Org } from './org.entity';
-import { Product } from './product.entity';
 import { Project } from './project.entity';
 import { Provider } from './provider.entity';
 
@@ -129,29 +132,25 @@ export class User extends Base {
     @ApiModelProperty({ nullable: true })
     capitals: Capital[];
 
-    @Field(type => [Product]!, { nullable: true })
-    @ManyToMany(type => Product, target => target.applicants)
-    @JoinTable()
+    @Field(type => [ApplyProduct]!, { nullable: true })
+    @OneToMany(type => ApplyProduct, target => target.applicant)
     @ApiModelProperty({ nullable: true })
-    apply_products: Product[];
+    apply_products: ApplyProduct[];
 
-    @Field(type => [Project]!, { nullable: true })
-    @ManyToMany(type => Project, target => target.applicants)
-    @JoinTable()
+    @Field(type => [ApplyProject]!, { nullable: true })
+    @OneToMany(type => ApplyProject, target => target.applicant)
     @ApiModelProperty({ nullable: true })
-    apply_projects: Project[];
+    apply_projects: ApplyProject[];
 
-    @Field(type => [Capital]!, { nullable: true })
-    @ManyToMany(type => Capital, target => target.applicants)
-    @JoinTable()
+    @Field(type => [ApplyCapital]!, { nullable: true })
+    @OneToMany(type => ApplyCapital, target => target.applicant)
     @ApiModelProperty({ nullable: true })
-    apply_capitals: Capital[];
+    apply_capitals: ApplyCapital[];
 
-    @Field(type => [Provider]!, { nullable: true })
-    @ManyToMany(type => Provider, target => target.applicants)
-    @JoinTable()
+    @Field(type => [ApplyProvider]!, { nullable: true })
+    @OneToMany(type => ApplyProvider, target => target.applicant)
     @ApiModelProperty({ nullable: true })
-    apply_providers: Provider[];
+    apply_providers: ApplyProvider[];
 
     @Field({ nullable: true })
     @Column({ nullable: true })

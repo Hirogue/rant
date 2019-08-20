@@ -1,4 +1,4 @@
-import { LoggerService as ILoggerService, Injectable } from '@nestjs/common';
+import { Injectable, LoggerService as ILoggerService } from '@nestjs/common';
 import Chalk from 'chalk';
 import * as _ from 'lodash';
 import * as Log4js from 'log4js';

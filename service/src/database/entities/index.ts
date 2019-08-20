@@ -9,5 +9,9 @@ export * from './provider.entity';
 export * from './user.entity';
 export * from './project.entity';
 export * from './capital.entity';
+export * from './apply-provider.entity';
+export * from './apply-product.entity';
+export * from './apply-project.entity';
+export * from './apply-capital.entity';
 
 

@@ -17,22 +17,22 @@ export class UserResolver extends BaseResolver(User, UserPaginate) {
         private readonly userService: UserService
     ) { super(context, 'user'); }
 
-    @Mutation(returns => Boolean)
+    @Mutation(returns => Boolean, { description: 'Apply product' })
     async applyProducts(@Args('id') id: string, @Me() me: User) {
         return await this.userService.applyProducts(id, me.id);
     }
 
-    @Mutation(returns => Boolean)
+    @Mutation(returns => Boolean, { description: 'Apply capital' })
     async applyCapitals(@Args('id') id: string, @Me() me: User) {
         return await this.userService.applyCapitals(id, me.id);
     }
 
-    @Mutation(returns => Boolean)
+    @Mutation(returns => Boolean, { description: 'Apply project' })
     async applyProjects(@Args('id') id: string, @Me() me: User) {
         return await this.userService.applyProjects(id, me.id);
     }
 
-    @Mutation(returns => Boolean)
+    @Mutation(returns => Boolean, { description: 'Apply provider' })
     async applyProviders(@Args('id') id: string, @Me() me: User) {
         return await this.userService.applyProviders(id, me.id);
     }

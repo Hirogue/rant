@@ -1,9 +1,9 @@
 import { Body, Controller, forwardRef, Inject, Post } from "@nestjs/common";
-import { ApiUseTags, ApiOperation } from "@nestjs/swagger";
+import { ApiOperation, ApiUseTags } from "@nestjs/swagger";
 import { BaseController, SmsTypeEnum } from "../core";
 import { User } from "../database";
 import { VerificationService } from "../verification";
-import { ResetPasswordDto, RegisterDto } from "./dtos";
+import { RegisterDto, ResetPasswordDto } from "./dtos";
 import { UserService } from "./user.service";
 
 @ApiUseTags('user')
@@ -17,6 +17,14 @@ export class UserController extends BaseController(User, {
             apply_projects: {},
             apply_capitals: {},
             apply_providers: {},
+            'apply_products.applicant': {},
+            'apply_products.provider': {},
+            'apply_projects.applicant': {},
+            'apply_projects.provider': {},
+            'apply_providers.applicant': {},
+            'apply_providers.provider': {},
+            'apply_capitals.applicant': {},
+            'apply_capitals.provider': {},
         }
     }
 }) {
