@@ -1,7 +1,7 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { configureWorkflow, IWorkflowHost, WorkflowBase, WorkflowConfig } from "workflow-es";
 import { Logger } from "../logger";
-import { UserFlow } from "./user";
+import { LevelUpFlow } from "./user";
 
 @Injectable()
 export class WfService implements OnModuleInit, OnModuleDestroy {
@@ -17,7 +17,7 @@ export class WfService implements OnModuleInit, OnModuleDestroy {
         this.host = this.config.getHost();
 
         this.registerList([
-            UserFlow
+            LevelUpFlow
         ]);
 
         await this.startHost();
@@ -51,7 +51,7 @@ export class WfService implements OnModuleInit, OnModuleDestroy {
         return flows.forEach(flow => this.host.registerWorkflow(flow));
     }
 
-    public async start(id: string, version: number, data: any) {
+    public async start(id: string, data: any, version: number = 1) {
         return await this.host.startWorkflow(id, version, data);
     }
 
@@ -59,7 +59,7 @@ export class WfService implements OnModuleInit, OnModuleDestroy {
         return await this.host.resumeWorkflow(id);
     }
 
-    public async publish(name: string, key: string, data: any, time: Date) {
+    public async publish(name: string, key: string, data: any, time: Date = new Date()) {
         return await this.host.publishEvent(name, key, data, time);
     }
 

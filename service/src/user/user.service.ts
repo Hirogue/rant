@@ -7,12 +7,13 @@ import { Config } from '../config';
 import { BaseService, UserLevelEnum } from '../core';
 import { ApplyCapital, ApplyProduct, ApplyProject, ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
 import { Logger } from '../logger';
-import { RegisterDto, ResetPasswordDto } from './dtos';
-import { BecomeProviderInput } from './dtos/become-provider.input';
+import { FlowIdEnum, UserEventEnum, WfService } from '../wf';
+import { AdminApprovalInput, LevelUpInput, RegisterDto, ResetPasswordDto } from './dtos';
 
 @Injectable()
 export class UserService extends BaseService<User> {
     constructor(
+        private readonly wf: WfService,
         @InjectRepository(User)
         protected readonly repo: Repository<User>,
         @InjectRepository(ApplyProject)
@@ -170,8 +171,19 @@ export class UserService extends BaseService<User> {
         return await this.repo.save(user);
     }
 
-    async becomeProvider(data: BecomeProviderInput, userId: number) {
-        Logger.log('become provider');
+    async levelUp(data: LevelUpInput) {
+        // TODO: 判断用户是否为待审核状态
+        await this.wf.start(FlowIdEnum.LEVEL_UP, data);
+        return true;
+    }
+
+    async adminApproval(data: AdminApprovalInput) {
+
+        await this.wf.publish(
+            UserEventEnum.ADMIN_APPROVAL,
+            `${UserEventEnum.ADMIN_APPROVAL}-${data.user.id}`,
+            data
+        );
         return true;
     }
 
