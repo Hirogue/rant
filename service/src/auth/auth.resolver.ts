@@ -23,18 +23,24 @@ export class AuthResolver {
             where: { id: me.id },
             relations: [
                 'org', 'area', 'providers', 'projects', 'capitals',
-                'apply_products',
-                'apply_projects',
-                'apply_capitals',
+
                 'apply_providers',
-                'apply_products.applicant',
-                'apply_products.product',
-                'apply_projects.applicant',
-                'apply_projects.project',
-                'apply_providers.applicant',
                 'apply_providers.provider',
-                'apply_capitals.applicant',
+                'apply_providers.provider.creator',
+                'apply_providers.provider.category',
+                'apply_providers.provider.area',
+
+                'apply_products',
+                'apply_products.product',
+                'apply_products.product.category',
+
+                'apply_projects',
+                'apply_projects.project',
+                'apply_projects.project.creator',
+
+                'apply_capitals',
                 'apply_capitals.capital',
+                'apply_capitals.capital.creator',
             ]
         });
 
