@@ -1,9 +1,9 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
-import * as Redis from 'ioredis';
+// import * as Redis from 'ioredis';
 import { configureWorkflow, IWorkflowHost, WorkflowBase, WorkflowConfig } from "workflow-es";
-import { RedisLockManager, RedisQueueProvider } from 'workflow-es-redis';
-import { MongoDBPersistence } from 'workflow-es-mongodb';
-import Config from "../config";
+// import { RedisLockManager, RedisQueueProvider } from 'workflow-es-redis';
+// import { MongoDBPersistence } from 'workflow-es-mongodb';
+// import Config from "../config";
 import { Logger } from "../logger";
 import { LevelUpFlow } from "../user";
 

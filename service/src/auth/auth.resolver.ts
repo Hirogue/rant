@@ -28,7 +28,6 @@ export class AuthResolver {
 
                 'projects',
                 'projects.creator',
-                'projects.category',
                 'projects.industry',
                 'projects.area',
 
