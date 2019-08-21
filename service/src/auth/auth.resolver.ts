@@ -22,8 +22,41 @@ export class AuthResolver {
         const result = await this.userService.findOne({
             where: { id: me.id },
             relations: [
-                'org', 'area', 'providers', 'projects', 'capitals',
-                'apply_products', 'apply_projects', 'apply_capitals', 'apply_providers'
+                'org', 'area',
+
+                'providers',
+
+                'projects',
+                'projects.creator',
+                'projects.industry',
+                'projects.area',
+
+                'capitals',
+                'capitals.creator',
+                'capitals.industry',
+                'capitals.stage',
+                'capitals.type',
+
+                'apply_providers',
+                'apply_providers.provider',
+                'apply_providers.provider.creator',
+                'apply_providers.provider.category',
+                'apply_providers.provider.area',
+
+                'apply_products',
+                'apply_products.product',
+                'apply_products.product.category',
+
+                'apply_projects',
+                'apply_projects.project',
+                'apply_projects.project.creator',
+
+                'apply_capitals',
+                'apply_capitals.capital',
+                'apply_capitals.capital.creator',
+                'apply_capitals.capital.industry',
+                'apply_capitals.capital.stage',
+                'apply_capitals.capital.type',
             ]
         });
 

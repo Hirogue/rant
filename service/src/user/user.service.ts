@@ -7,11 +7,14 @@ import { Config } from '../config';
 import { BaseService, UserLevelEnum } from '../core';
 import { ApplyCapital, ApplyProduct, ApplyProject, ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
 import { Logger } from '../logger';
-import { RegisterDto, ResetPasswordDto } from './dtos';
+import { FlowIdEnum, WfService } from '../wf';
+import { AdminApprovalInput, LevelUpInput, RegisterDto, ResetPasswordDto } from './dtos';
+import { UserEventEnum } from './enums';
 
 @Injectable()
 export class UserService extends BaseService<User> {
     constructor(
+        private readonly wf: WfService,
         @InjectRepository(User)
         protected readonly repo: Repository<User>,
         @InjectRepository(ApplyProject)
@@ -167,6 +170,22 @@ export class UserService extends BaseService<User> {
         user.password = await bcrypt.hash(dto.password, salt);
 
         return await this.repo.save(user);
+    }
+
+    async levelUp(data: LevelUpInput) {
+
+        await this.wf.start(FlowIdEnum.LEVEL_UP, data);
+        return true;
+    }
+
+    async adminApproval(data: AdminApprovalInput) {
+
+        await this.wf.publish(
+            UserEventEnum.ADMIN_APPROVAL,
+            `${UserEventEnum.ADMIN_APPROVAL}-${data.user.id}`,
+            data
+        );
+        return true;
     }
 
     private async checkLimit(user: User, type: string) {

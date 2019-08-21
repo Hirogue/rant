@@ -55,14 +55,18 @@ export default () => {
   const columns = [
     {
       title: '详情',
-      dataIndex: 'id',
+
       render: (val, row) => {
         return (
           <Fragment>
-            <Link to={`/users/detail/${val}`}>详情</Link>
+            <Link to={`/users/detail/${row.id}`}>详情</Link>
           </Fragment>
         );
       },
+    },
+    {
+      title: '编号',
+      dataIndex: 'id',
     },
     {
       title: '头像',
