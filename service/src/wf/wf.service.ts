@@ -1,7 +1,10 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
+import * as Redis from 'ioredis';
 import { configureWorkflow, IWorkflowHost, WorkflowBase, WorkflowConfig } from "workflow-es";
+import { RedisLockManager, RedisQueueProvider } from 'workflow-es-redis';
+import Config from "../config";
 import { Logger } from "../logger";
-import { LevelUpFlow } from "./user";
+import { LevelUpFlow } from "../user";
 
 @Injectable()
 export class WfService implements OnModuleInit, OnModuleDestroy {
@@ -11,7 +14,13 @@ export class WfService implements OnModuleInit, OnModuleDestroy {
 
     async onModuleInit() {
         Logger.trace('Workflow configuring ...');
+
+        const connection = new Redis(Config.redis);
+
         this.config = configureWorkflow();
+        this.config.useLockManager(new RedisLockManager(connection));
+        this.config.useQueueManager(new RedisQueueProvider(connection));
+
         Logger.trace('Workflow configured');
 
         this.host = this.config.getHost();
@@ -52,7 +61,12 @@ export class WfService implements OnModuleInit, OnModuleDestroy {
     }
 
     public async start(id: string, data: any, version: number = 1) {
-        return await this.host.startWorkflow(id, version, data);
+
+        const token = await this.host.startWorkflow(id, version, data);
+
+        Logger.log(`Start workflow id: ${id} version: ${version} token: ${token}`, data);
+
+        return token;
     }
 
     public async resume(id: string) {
@@ -60,6 +74,9 @@ export class WfService implements OnModuleInit, OnModuleDestroy {
     }
 
     public async publish(name: string, key: string, data: any, time: Date = new Date()) {
+
+        Logger.log(`Publish event name: ${name} key: ${key}`, data);
+
         return await this.host.publishEvent(name, key, data, time);
     }
 

@@ -1,9 +1,8 @@
-import { ExecutionResult, WorkflowBase, WorkflowBuilder } from "workflow-es";
+import { WorkflowBase, WorkflowBuilder } from "workflow-es";
 import { Logger } from "../../logger";
-import { FlowIdEnum } from "../flow-id.enum";
-import { UserEventEnum } from "./user-event.enum";
-import { LevelUpSetUpStep } from "./steps/level-up-set-up.step";
-import { AdminApprovalStep } from "./steps/admin-approval.step";
+import { FlowIdEnum } from "../../wf/flow-id.enum";
+import { UserEventEnum } from "../enums";
+import { AdminApprovalStep, LevelUpSetUpStep } from "../steps";
 
 export class LevelUpFlow implements WorkflowBase<any> {
     public id: string = FlowIdEnum.LEVEL_UP;

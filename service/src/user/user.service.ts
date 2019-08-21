@@ -7,8 +7,9 @@ import { Config } from '../config';
 import { BaseService, UserLevelEnum } from '../core';
 import { ApplyCapital, ApplyProduct, ApplyProject, ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
 import { Logger } from '../logger';
-import { FlowIdEnum, UserEventEnum, WfService } from '../wf';
+import { FlowIdEnum, WfService } from '../wf';
 import { AdminApprovalInput, LevelUpInput, RegisterDto, ResetPasswordDto } from './dtos';
+import { UserEventEnum } from './enums';
 
 @Injectable()
 export class UserService extends BaseService<User> {
@@ -172,7 +173,7 @@ export class UserService extends BaseService<User> {
     }
 
     async levelUp(data: LevelUpInput) {
-        // TODO: 判断用户是否为待审核状态
+
         await this.wf.start(FlowIdEnum.LEVEL_UP, data);
         return true;
     }

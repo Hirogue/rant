@@ -1,12 +1,11 @@
 import { ExecutionResult, StepBody, StepExecutionContext } from "workflow-es";
-import { Logger } from "../../../logger";
+import { Logger } from "../../logger";
 
-export class LevelUpSetUpStep extends StepBody {
+export class AdminApprovalStep extends StepBody {
 
     public run(context: StepExecutionContext): Promise<ExecutionResult> {
 
-        Logger.log("Level up step:", context.workflow);
-
+        Logger.log("Admin approval step:", context.workflow);
         return ExecutionResult.next();
     }
 }

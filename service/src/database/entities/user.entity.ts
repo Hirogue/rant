@@ -102,7 +102,7 @@ export class User extends Base {
     @ApiModelProperty({ nullable: true })
     type: UserTypeEnum;
 
-    @Field({ nullable: true })
+    @Field(type => Int, { nullable: true })
     @Column({ type: 'simple-enum', default: UserStatusEnum.NORMAL })
     @ApiModelProperty({ nullable: true })
     status: UserStatusEnum;
