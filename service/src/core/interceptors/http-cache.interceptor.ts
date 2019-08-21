@@ -7,6 +7,8 @@ export class HttpCacheInterceptor extends CacheInterceptor {
         const request = context.switchToHttp().getRequest();
         if (!request) return undefined;
 
+        if (request.originalUrl.startsWith('/api/verification')) return undefined;
+
         const cacheKey = `http-cache-${request.originalUrl}`;
 
         return cacheKey;
