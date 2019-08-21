@@ -87,6 +87,11 @@ export class User extends Base {
     @ApiModelProperty({ nullable: true })
     profile: string;
 
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    reason: string;
+
     @Field(type => Int, { nullable: true })
     @Column({ type: 'simple-enum', default: UserLevelEnum.V0 })
     @ApiModelProperty({ nullable: true })

@@ -19,6 +19,7 @@ export const F_USER_FIELDS = gql`
     company
     profile
     identity
+    type
     status
     vip
     org {

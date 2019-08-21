@@ -114,3 +114,8 @@ export const UserLevelMaps = {
   1: 'V1',
   2: 'V2',
 };
+
+export const UserTypeMaps = {
+  personal: '个人',
+  enterprise: '企业',
+};

@@ -10,10 +10,10 @@ export class ArticleSubscriber implements EntitySubscriberInterface<Article> {
     }
 
     beforeInsert(event: InsertEvent<Article>) {
-        event.entity.summary = textInterception(extractionTextInHtml(event.entity.text), 40);
+        event.entity.summary = event.entity.text ? textInterception(extractionTextInHtml(event.entity.text), 40) : '';
     }
 
     beforeUpdate(event: UpdateEvent<Article>) {
-        event.entity.summary = textInterception(extractionTextInHtml(event.entity.text), 40);
+        event.entity.summary = event.entity.text ? textInterception(extractionTextInHtml(event.entity.text), 40) : '';
     }
 }

@@ -10,10 +10,10 @@ export class ProviderSubscriber implements EntitySubscriberInterface<Provider> {
     }
 
     beforeInsert(event: InsertEvent<Provider>) {
-        event.entity.summary = textInterception(event.entity.introduction, 40);
+        event.entity.summary = event.entity.introduction ? textInterception(event.entity.introduction, 40) : '';
     }
 
     beforeUpdate(event: UpdateEvent<Provider>) {
-        event.entity.summary = textInterception(event.entity.introduction, 40);
+        event.entity.summary = event.entity.introduction ? textInterception(event.entity.introduction, 40) : '';
     }
 }

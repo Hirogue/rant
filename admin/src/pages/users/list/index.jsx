@@ -2,7 +2,13 @@ import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import { M_DELETE_USER, Q_GET_USERS } from '@/gql';
-import { buildingQuery, IdentityMaps, UserLevelMaps, UserStatusMaps } from '@/utils/global';
+import {
+  buildingQuery,
+  IdentityMaps,
+  UserLevelMaps,
+  UserStatusMaps,
+  UserTypeMaps,
+} from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { Affix, Avatar, Col, message, Row, Skeleton } from 'antd';
@@ -67,6 +73,7 @@ export default () => {
     {
       title: '编号',
       dataIndex: 'id',
+      search: true,
     },
     {
       title: '头像',
@@ -107,6 +114,12 @@ export default () => {
       dataIndex: 'identity',
       render: val => IdentityMaps[val],
       filters: Object.keys(IdentityMaps).map(key => ({ text: IdentityMaps[key], value: key })),
+    },
+    {
+      title: '类型',
+      dataIndex: 'type',
+      render: val => UserTypeMaps[val],
+      filters: Object.keys(UserTypeMaps).map(key => ({ text: UserTypeMaps[key], value: key })),
     },
     {
       title: '状态',

@@ -14,6 +14,7 @@ export const F_PROVIDER_FIELDS = gql`
     logo
     slogan
     introduction
+    status
     update_at
     create_at
     category {
