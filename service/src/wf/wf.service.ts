@@ -2,6 +2,7 @@ import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import * as Redis from 'ioredis';
 import { configureWorkflow, IWorkflowHost, WorkflowBase, WorkflowConfig } from "workflow-es";
 import { RedisLockManager, RedisQueueProvider } from 'workflow-es-redis';
+import { MongoDBPersistence } from 'workflow-es-mongodb';
 import Config from "../config";
 import { Logger } from "../logger";
 import { LevelUpFlow } from "../user";
@@ -14,12 +15,19 @@ export class WfService implements OnModuleInit, OnModuleDestroy {
 
     async onModuleInit() {
         Logger.trace('Workflow configuring ...');
-
-        const connection = new Redis(Config.redis);
-
         this.config = configureWorkflow();
-        this.config.useLockManager(new RedisLockManager(connection));
-        this.config.useQueueManager(new RedisQueueProvider(connection));
+
+        // TODO: persistence
+
+        // const mongoPersistence = new MongoDBPersistence(Config.mongo.uri);
+        // await mongoPersistence.connect;   
+
+        // this.config.usePersistence(mongoPersistence);
+
+        // const connection = new Redis(Config.redis);
+
+        // this.config.useLockManager(new RedisLockManager(connection));
+        // this.config.useQueueManager(new RedisQueueProvider(connection));
 
         Logger.trace('Workflow configured');
 

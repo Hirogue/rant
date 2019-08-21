@@ -69,7 +69,7 @@ let Config = {
     orm: {
         type: 'sqlite',
         database: 'db.sql',
-        logging: ["error"],
+        logging: ["error", "query", "log"],
         dropSchema: false,
         synchronize: false,
         entityPrefix: 't_',
@@ -82,6 +82,10 @@ let Config = {
         },
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         subscribers: [__dirname + '/../**/*.subscriber{.ts,.js}']
+    },
+
+    mongo: {
+        uri: 'mongodb://root:123456@127.0.0.1:27017/workflow-node'
     },
 
     graphql: {
