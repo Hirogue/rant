@@ -41,6 +41,9 @@ export class AuthResolver {
                 'apply_capitals',
                 'apply_capitals.capital',
                 'apply_capitals.capital.creator',
+                'apply_capitals.capital.industry',
+                'apply_capitals.capital.stage',
+                'apply_capitals.capital.type',
             ]
         });
 
