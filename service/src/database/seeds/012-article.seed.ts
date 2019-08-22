@@ -27,6 +27,7 @@ export default class implements Seeder {
                 await factory(Article)({
                     title: item.title,
                     cover: thumbnail ? thumbnail.url : null,
+                    create_at: item.created_when,
                     author: item.author,
                     source: item.subtitle,
                     summary: item.description,
@@ -45,9 +46,9 @@ export default class implements Seeder {
             const cate4 = await connection.getRepository(ArticleCategory).findOne({ where: { title: '投融学堂' } });
             const cate5 = await connection.getRepository(ArticleCategory).findOne({ where: { title: '通知公告' } });
 
-            await factory(Article)({ category: cate1 }).seedMany(25);
-            await factory(Article)({ category: cate2 }).seedMany(15);
-            await factory(Article)({ category: cate3 }).seedMany(23);
+            await factory(Article)({ category: cate1 }).seedMany(10);
+            await factory(Article)({ category: cate2 }).seedMany(10);
+            await factory(Article)({ category: cate3 }).seedMany(10);
             await factory(Article)({ category: cate4 }).seedMany(12);
             await factory(Article)({ category: cate5 }).seedMany(12);
         }
