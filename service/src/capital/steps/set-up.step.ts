@@ -4,7 +4,7 @@ import { IdentityEnum, ProjectStatusEnum, UserStatusEnum } from '../../core';
 import { Provider, User } from "../../database";
 import { Logger } from "../../logger";
 
-export class LevelUpSetUpStep extends StepBody {
+export class SetUpStep extends StepBody {
 
     @Transaction()
     public async run(
@@ -33,7 +33,7 @@ export class LevelUpSetUpStep extends StepBody {
 
         }
 
-        Logger.log("Level up step:", user.id);
+        Logger.log("Set up step:", user.id);
 
         return await ExecutionResult.next();
     }

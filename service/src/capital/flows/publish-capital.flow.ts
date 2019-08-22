@@ -1,11 +1,11 @@
 import { WorkflowBase, WorkflowBuilder } from "workflow-es";
 import { Logger } from "../../logger";
-import { EventEnum } from "./event.enum";
-import { AdminApprovalStep, CheckStatusStep, LevelUpSetUpStep } from "./steps";
+import { EventEnum } from "../enums";
+import { ApprovalStep, CheckStatusStep, SetUpStep } from "../steps";
 
-export const FlowId = 'level-up';
+export const FlowId = 'publish-capital';
 
-export class LevelUpFlow implements WorkflowBase<any> {
+export class PublishCapitalFlow implements WorkflowBase<any> {
     public id: string = FlowId;
     public version: number = 1;
 
@@ -13,13 +13,13 @@ export class LevelUpFlow implements WorkflowBase<any> {
 
         builder
             .startWith(CheckStatusStep)
-            .then(LevelUpSetUpStep)
+            .then(SetUpStep)
             .waitFor(EventEnum.APPROVAL, data => {
                 Logger.log(`Waiting for event ${EventEnum.APPROVAL}-${data.user.id}:`, data);
                 return `${EventEnum.APPROVAL}-${data.user.id}`;
             })
             .output((step, data) => data.eventData = step.eventData)
-            .then(AdminApprovalStep)
+            .then(ApprovalStep)
 
     }
 }

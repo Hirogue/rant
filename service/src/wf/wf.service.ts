@@ -1,6 +1,7 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 // import * as Redis from 'ioredis';
 import { configureWorkflow, IWorkflowHost, WorkflowBase, WorkflowConfig } from "workflow-es";
+import { PublishCapitalFlow } from "../capital";
 // import { RedisLockManager, RedisQueueProvider } from 'workflow-es-redis';
 // import { MongoDBPersistence } from 'workflow-es-mongodb';
 // import Config from "../config";
@@ -33,9 +34,8 @@ export class WfService implements OnModuleInit, OnModuleDestroy {
 
         this.host = this.config.getHost();
 
-        this.registerList([
-            LevelUpFlow
-        ]);
+        this.register(LevelUpFlow);
+        this.register(PublishCapitalFlow);
 
         await this.startHost();
     }
@@ -62,10 +62,6 @@ export class WfService implements OnModuleInit, OnModuleDestroy {
 
     public register(flow: new () => WorkflowBase<unknown>) {
         return this.host.registerWorkflow(flow);
-    }
-
-    public registerList(flows: [new () => WorkflowBase<unknown>]) {
-        return flows.forEach(flow => this.host.registerWorkflow(flow));
     }
 
     public async start(id: string, data: any, version: number = 1) {

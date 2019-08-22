@@ -4,7 +4,7 @@ import { UserLevelEnum, UserStatusEnum } from "../../core";
 import { User } from "../../database";
 import { Logger } from "../../logger";
 
-export class AdminApprovalStep extends StepBody {
+export class ApprovalStep extends StepBody {
 
     @Transaction()
     public async run(
@@ -29,7 +29,7 @@ export class AdminApprovalStep extends StepBody {
 
         await userRepos.save(user);
 
-        Logger.log("Admin approval step", user.id);
+        Logger.log("Approval step", user.id);
 
         return await ExecutionResult.next();
     }

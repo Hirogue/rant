@@ -93,6 +93,11 @@ export class Project extends Base {
     @ApiModelProperty({ nullable: true })
     info: string;
 
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    reason: string;
+
     @Field(type => User, { nullable: true })
     @ManyToOne(type => User, target => target.projects)
     @ApiModelProperty({ nullable: true })
