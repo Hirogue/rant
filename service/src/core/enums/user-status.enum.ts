@@ -1,7 +1,7 @@
 export enum UserStatusEnum {
     NORMAL,
     PENDING,
-    REJECT,
-    AUDITED,
+    REJECTED,
+    CHECKED,
     DELETED
 }

@@ -1,11 +1,36 @@
+import { Repository, Transaction, TransactionRepository } from "typeorm";
 import { ExecutionResult, StepBody, StepExecutionContext } from "workflow-es";
+import { UserLevelEnum, UserStatusEnum } from "../../core";
+import { User } from "../../database";
 import { Logger } from "../../logger";
 
 export class AdminApprovalStep extends StepBody {
 
-    public run(context: StepExecutionContext): Promise<ExecutionResult> {
+    @Transaction()
+    public async run(
+        context: StepExecutionContext,
+        @TransactionRepository(User) userRepos?: Repository<User>
+    ): Promise<ExecutionResult> {
 
-        Logger.log("Admin approval step:", context.workflow);
-        return ExecutionResult.next();
+        const { data } = context.workflow;
+        const eventData = data.eventData;
+
+        const user = data.user as User;
+        user.status = eventData.user.status;
+
+        if (UserStatusEnum.CHECKED === user.status) {
+            user.vip = UserLevelEnum.V1;
+        }
+
+        if (UserStatusEnum.REJECTED === user.status) {
+            user.vip = UserLevelEnum.V0;
+            user.reason = eventData.user.reason;
+        }
+
+        await userRepos.save(user);
+
+        Logger.log("Admin approval step", user.id);
+
+        return await ExecutionResult.next();
     }
 }

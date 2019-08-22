@@ -2,14 +2,13 @@ import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import { M_DELETE_PROVIDER, M_UPDATE_PROVIDER, Q_GET_PROVIDERS } from '@/gql';
-import { buildingQuery } from '@/utils/global';
+import { buildingQuery, ProjectStatusMaps } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { Affix, Col, message, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
-import { CondOperator } from '@nestjsx/crud-request';
 
 export default () => {
   const defaultVariables = {
@@ -104,6 +103,15 @@ export default () => {
       render: (val, record) => (record.area ? record.area.title : ''),
       treeSelector: true,
       treeFilters: metadataDescendantsTree || [],
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      render: val => ProjectStatusMaps[val],
+      filters: Object.keys(ProjectStatusMaps).map(key => ({
+        text: ProjectStatusMaps[key],
+        value: key,
+      })),
     },
     {
       title: '创建人',

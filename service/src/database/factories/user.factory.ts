@@ -20,7 +20,7 @@ define(User, (faker: typeof Faker, settings: {
     user.profile = faker.lorem.sentence();
     user.company = faker.company.companyName();
     user.identity = settings.identity || IdentityEnum.TOURIST;
-    user.status = settings.status || UserStatusEnum.AUDITED;
+    user.status = settings.status || UserStatusEnum.CHECKED;
     user.type = settings.type || UserTypeEnum.PERSONAL;
     user.area = settings.area;
     user.org = settings.org;

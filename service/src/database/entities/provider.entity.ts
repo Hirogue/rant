@@ -19,7 +19,7 @@ export class Provider extends Base {
     name: string;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     logo: string;
 

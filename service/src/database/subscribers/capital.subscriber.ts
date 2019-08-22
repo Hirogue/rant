@@ -18,7 +18,7 @@ export class CapitalSubscriber implements EntitySubscriberInterface<Capital> {
     }
 
     private handleChange(entity: Capital) {
-        entity.summary = textInterception(entity.info, 40);
+        entity.summary = entity.info ? textInterception(entity.info, 40) : '';
 
         entity.hideContact = entity.contact
             ? entity.contact.substr(0, 1).padEnd(entity.contact.length, '*')

@@ -24,8 +24,8 @@ export const ProjectStatusEnum = {
 export const UserStatusEnum = {
   NORMAL: 0,
   PENDING: 1,
-  REJECT: 2,
-  AUDITED: 3,
+  REJECTED: 2,
+  CHECKED: 3,
   DELETED: 4,
 };
 
@@ -33,4 +33,9 @@ export const UserLevelEnum = {
   V0: 0,
   V1: 1,
   V2: 2,
+};
+
+export const UserTypeEnum = {
+  PERSONAL: 'personal',
+  ENTERPRISE: 'enterprise',
 };

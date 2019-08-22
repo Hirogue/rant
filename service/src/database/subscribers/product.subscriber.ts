@@ -10,10 +10,10 @@ export class ProductSubscriber implements EntitySubscriberInterface<Product> {
     }
 
     beforeInsert(event: InsertEvent<Product>) {
-        event.entity.summary = textInterception(event.entity.introduction, 40);
+        event.entity.summary = event.entity.introduction ? textInterception(event.entity.introduction, 40) : '';
     }
 
     beforeUpdate(event: UpdateEvent<Product>) {
-        event.entity.summary = textInterception(event.entity.introduction, 40);
+        event.entity.summary = event.entity.introduction ? textInterception(event.entity.introduction, 40) : '';
     }
 }
