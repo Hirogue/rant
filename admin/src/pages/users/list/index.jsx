@@ -1,7 +1,9 @@
 import StandardActions from '@/components/StandardActions';
+import StandardConfirm from '@/components/StandardConfirm';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import { M_DELETE_USER, Q_GET_USERS } from '@/gql';
+import { UserStatusEnum } from '@/utils/enum';
 import {
   buildingQuery,
   IdentityMaps,
@@ -10,11 +12,12 @@ import {
   UserTypeMaps,
 } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Affix, Avatar, Col, message, Row, Skeleton } from 'antd';
+import { useApolloClient, useQuery } from '@apollo/react-hooks';
+import { Affix, Avatar, Col, Divider, message, Popconfirm, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
+import { M_ADMIN_APPROVAL } from '../gql';
 
 export default () => {
   const defaultVariables = {
@@ -25,23 +28,15 @@ export default () => {
   };
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [visible, setVisible] = useState(false);
+
+  const client = useApolloClient();
 
   const { loading, data, refetch } = useQuery(Q_GET_USERS, {
     notifyOnNetworkStatusChange: true,
     variables: {
       queryString: buildingQuery(defaultVariables),
       metadataRoot: '地区',
-    },
-  });
-
-  const [deleteUser] = useMutation(M_DELETE_USER, {
-    update: (proxy, { data }) => {
-      if (data.deleteUser) {
-        message.success('删除成功');
-        refetch();
-      } else {
-        message.error('删除失败');
-      }
     },
   });
 
@@ -54,6 +49,70 @@ export default () => {
   const { queryUser, orgTrees, metadataDescendantsTree } = data;
 
   if (!queryUser) return <Skeleton loading={loading} active avatar />;
+
+  const renderActions = record => {
+    if (UserStatusEnum.PENDING === record.status) {
+      return (
+        <Fragment>
+          <Popconfirm
+            title="确定要审核吗?"
+            onConfirm={() => {
+              client.mutate({
+                mutation: M_ADMIN_APPROVAL,
+                variables: {
+                  data: {
+                    user: {
+                      id: record.id,
+                      status: UserStatusEnum.CHECKED,
+                    },
+                  },
+                },
+                update: (cache, { data }) => {
+                  if (data.adminApproval) {
+                    message.success('操作成功');
+                    refetch();
+                  }
+                },
+              });
+            }}
+          >
+            <a href="#">[审核]</a>
+          </Popconfirm>
+          <Divider type="vertical" />
+          <a href="javascript:;" onClick={() => setVisible(true)}>
+            [驳回]
+          </a>
+          <StandardConfirm
+            title="请输入驳回理由"
+            visible={visible}
+            setVisible={setVisible}
+            onConfirm={reason => {
+              client.mutate({
+                mutation: M_ADMIN_APPROVAL,
+                variables: {
+                  data: {
+                    user: {
+                      id: record.id,
+                      status: UserStatusEnum.REJECTED,
+                      reason,
+                    },
+                  },
+                },
+                update: (proxy, { data }) => {
+                  if (data.adminApproval) {
+                    message.success('操作成功');
+                    refetch();
+                  }
+                },
+              });
+            }}
+          />
+        </Fragment>
+      );
+    } else {
+      return null;
+    }
+  };
 
   const dataSource = queryUser.data;
   const total = queryUser.total;
@@ -140,10 +199,8 @@ export default () => {
       sorter: true,
     },
     {
-      title: '更新时间',
-      dataIndex: 'update_at',
-      render: val => moment(val).format('YYYY-MM-DD HH:mm:ss'),
-      sorter: true,
+      title: '操作',
+      render: (val, record) => renderActions(record),
     },
   ];
 
@@ -164,7 +221,16 @@ export default () => {
       name: '删除',
       icon: 'delete',
       action: () => {
-        deleteUser({ variables: { ids: selectedRows.map(item => item.id).join(',') } });
+        client.mutate({
+          mutation: M_DELETE_USER,
+          variables: { ids: selectedRows.map(item => item.id).join(',') },
+          update: (proxy, { data }) => {
+            if (data.deleteUser) {
+              message.success('操删除成功');
+              refetch();
+            }
+          },
+        });
       },
       disabled: selectedRows.length <= 0,
       confirm: true,

@@ -53,7 +53,7 @@ let Config = {
     },
 
     cache: {
-        ttl: 10, // seconds
+        ttl: 3, // seconds
         max: 500, // maximum number of items in cache
     },
 
