@@ -7,9 +7,10 @@ import { Config } from '../config';
 import { BaseService, UserLevelEnum } from '../core';
 import { ApplyCapital, ApplyProduct, ApplyProject, ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
 import { Logger } from '../logger';
-import { FlowIdEnum, WfService } from '../wf';
+import { WfService } from '../wf';
 import { AdminApprovalInput, LevelUpInput, RegisterDto, ResetPasswordDto } from './dtos';
-import { UserEventEnum } from './enums';
+import { FlowId } from './flows';
+import { EventEnum } from './flows/event.enum';
 
 @Injectable()
 export class UserService extends BaseService<User> {
@@ -174,15 +175,15 @@ export class UserService extends BaseService<User> {
 
     async levelUp(data: LevelUpInput) {
 
-        await this.wf.start(FlowIdEnum.LEVEL_UP, data);
+        await this.wf.start(FlowId, data);
         return true;
     }
 
     async adminApproval(data: AdminApprovalInput) {
 
         await this.wf.publish(
-            UserEventEnum.ADMIN_APPROVAL,
-            `${UserEventEnum.ADMIN_APPROVAL}-${data.user.id}`,
+            EventEnum.APPROVAL,
+            `${EventEnum.APPROVAL}-${data.user.id}`,
             data
         );
         return true;

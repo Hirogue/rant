@@ -83,6 +83,11 @@ export class Capital extends Base {
     @ApiModelProperty({ nullable: true })
     pre_payment: string;
 
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    reason: string;
+
     @Field(type => User, { nullable: true })
     @ManyToOne(type => User, target => target.capitals)
     @ApiModelProperty({ nullable: true })
