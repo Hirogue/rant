@@ -7,8 +7,10 @@ import { RenderModule } from 'nest-next';
 import { ArticleModule } from './artilce';
 import { AuthModule } from './auth';
 import { CapitalModule } from './capital';
+import { CarouselModule } from './carousel';
 import { Config } from "./config";
 import { BaseDataSource, CoreModule, HttpCacheInterceptor } from './core';
+import { ExpertModule } from './expert';
 import { HomeModule } from './home';
 import { LoggerMiddleware, LoggerModule } from './logger';
 import { MetadataModule } from './metadata';
@@ -18,6 +20,7 @@ import { ProjectModule } from './project';
 import { ProviderModule } from './provider';
 import { SpaController } from './spa.controller';
 import { StorageModule } from './storage';
+import { SuccessCaseModule } from './success-case';
 import { UserModule } from './user';
 import { VerificationModule } from './verification';
 import { WfModule } from './wf';
@@ -50,7 +53,10 @@ import { WfModule } from './wf';
     ProviderModule,
     ProductModule,
     ProjectModule,
-    CapitalModule
+    CapitalModule,
+    SuccessCaseModule,
+    ExpertModule,
+    CarouselModule
   ],
   providers: [
     {
