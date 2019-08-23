@@ -1,5 +1,6 @@
 import { ClassSerializerInterceptor } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as compression from 'compression';
 import * as cookieParser from 'cookie-parser';
@@ -8,7 +9,6 @@ import * as rateLimit from 'express-rate-limit';
 import * as helmet from 'helmet';
 import { RenderModule, RenderService } from 'nest-next';
 import * as Nextjs from 'next';
-import * as serveStatic from 'serve-static';
 import '../local';
 import { AppModule } from './app.module';
 import { Config } from './config';
@@ -21,7 +21,7 @@ async function bootstrap() {
   const app = Nextjs(Config.next);
   await app.prepare();
 
-  const server = await NestFactory.create(AppModule, { logger: new Logger() });
+  const server = await NestFactory.create<NestExpressApplication>(AppModule, { logger: new Logger() });
 
   (server.get(RenderModule)).register(server, app);
 
@@ -46,9 +46,9 @@ async function bootstrap() {
 
   server.use(compression());
 
-  server.use('/static', serveStatic('static'));
-  server.use('/admin', serveStatic('../admin/dist'));
-  server.use('/lvyoto', serveStatic('../lvyoto/dist'));
+  for (let assets of Config.staticAssets) {
+    server.useStaticAssets(assets.path, assets.options);
+  }
 
   server.useGlobalPipes(new ValidationPipe());
   server.useGlobalFilters(new ExceptionsFilter(server.get(RenderService)));

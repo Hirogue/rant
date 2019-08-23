@@ -14,7 +14,7 @@ import { User } from "./user.entity";
 export class Capital extends Base {
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     title: string;
 
@@ -24,17 +24,17 @@ export class Capital extends Base {
     views: number;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     contact: string;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     phone: string;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     company: string;
 
@@ -44,7 +44,7 @@ export class Capital extends Base {
     publish_at: string;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     amount: number;
 
@@ -59,27 +59,27 @@ export class Capital extends Base {
     info: string;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     return: string;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     pledge: string;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     discount: number;
 
     @Field(type => Int, { nullable: true })
-    @Column()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     term: number;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     pre_payment: string;
 

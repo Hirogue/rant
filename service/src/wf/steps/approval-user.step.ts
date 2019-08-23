@@ -4,7 +4,7 @@ import { UserLevelEnum, UserStatusEnum } from "../../core";
 import { User } from "../../database";
 import { Logger } from "../../logger";
 
-export class ApprovalStep extends StepBody {
+export class ApprovalUserStep extends StepBody {
 
     @Transaction()
     public async run(
@@ -16,7 +16,7 @@ export class ApprovalStep extends StepBody {
         const eventData = data.eventData;
 
         const user = data.user as User;
-        user.status = eventData.user.status;
+        user.status = eventData.status;
 
         if (UserStatusEnum.CHECKED === user.status) {
             user.vip = UserLevelEnum.V1;
@@ -24,12 +24,12 @@ export class ApprovalStep extends StepBody {
 
         if (UserStatusEnum.REJECTED === user.status) {
             user.vip = UserLevelEnum.V0;
-            user.reason = eventData.user.reason;
+            user.reason = eventData.reason;
         }
 
         await userRepos.save(user);
 
-        Logger.log("Approval step", user.id);
+        Logger.log("Admin approval step", user.id);
 
         return await ExecutionResult.next();
     }

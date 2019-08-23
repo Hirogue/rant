@@ -17,7 +17,7 @@ import { Affix, Avatar, Col, Divider, message, Popconfirm, Row, Skeleton } from 
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
-import { M_ADMIN_APPROVAL } from '../gql';
+import { M_APPROVAL_USER } from '../gql';
 
 export default () => {
   const defaultVariables = {
@@ -58,17 +58,15 @@ export default () => {
             title="确定要审核吗?"
             onConfirm={() => {
               client.mutate({
-                mutation: M_ADMIN_APPROVAL,
+                mutation: M_APPROVAL_USER,
                 variables: {
                   data: {
-                    user: {
-                      id: record.id,
-                      status: UserStatusEnum.CHECKED,
-                    },
+                    id: record.id,
+                    status: UserStatusEnum.CHECKED,
                   },
                 },
                 update: (cache, { data }) => {
-                  if (data.adminApproval) {
+                  if (data.approvalUser) {
                     message.success('操作成功');
                     refetch();
                   }
@@ -88,18 +86,16 @@ export default () => {
             setVisible={setVisible}
             onConfirm={reason => {
               client.mutate({
-                mutation: M_ADMIN_APPROVAL,
+                mutation: M_APPROVAL_USER,
                 variables: {
                   data: {
-                    user: {
-                      id: record.id,
-                      status: UserStatusEnum.REJECTED,
-                      reason,
-                    },
+                    id: record.id,
+                    status: UserStatusEnum.REJECTED,
+                    reason,
                   },
                 },
                 update: (proxy, { data }) => {
-                  if (data.adminApproval) {
+                  if (data.approvalUser) {
                     message.success('操作成功');
                     refetch();
                   }
@@ -128,11 +124,6 @@ export default () => {
           </Fragment>
         );
       },
-    },
-    {
-      title: '编号',
-      dataIndex: 'id',
-      search: true,
     },
     {
       title: '头像',

@@ -7,10 +7,9 @@ import { Config } from '../config';
 import { BaseService, UserLevelEnum } from '../core';
 import { ApplyCapital, ApplyProduct, ApplyProject, ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
 import { Logger } from '../logger';
-import { WfService } from '../wf';
-import { AdminApprovalInput, LevelUpInput, RegisterDto, ResetPasswordDto } from './dtos';
-import { FlowId } from './flows';
-import { EventEnum } from './flows/event.enum';
+import { FlowEventEnum, FlowIdEnum, WfService } from '../wf';
+import { LevelUpInput, RegisterDto, ResetPasswordDto } from './dtos';
+
 
 @Injectable()
 export class UserService extends BaseService<User> {
@@ -28,7 +27,7 @@ export class UserService extends BaseService<User> {
 
     @Transaction()
     async applyProducts(
-        id: string, userId: number,
+        id: string, userId: string,
         @TransactionRepository(User) userRepo?: Repository<User>,
         @TransactionRepository(Product) productRepo?: Repository<Product>,
         @TransactionRepository(ApplyProduct) applyProductRepo?: Repository<ApplyProduct>,
@@ -39,12 +38,12 @@ export class UserService extends BaseService<User> {
         });
 
         user.apply_products.forEach(item => {
-            if (item.product.id === parseInt(id)) {
+            if (item.product.id === id) {
                 throw new BadRequestException('请勿重复申请');
             }
         });
 
-        const product = await productRepo.findOne({ id: parseInt(id) });
+        const product = await productRepo.findOne({ id });
 
         const applyProduct = new ApplyProduct();
         applyProduct.product = product;
@@ -56,7 +55,7 @@ export class UserService extends BaseService<User> {
 
     @Transaction()
     async applyCapitals(
-        id: string, userId: number,
+        id: string, userId: string,
         @TransactionRepository(User) userRepo?: Repository<User>,
         @TransactionRepository(Capital) capitalRepo?: Repository<Capital>,
         @TransactionRepository(ApplyCapital) applyCapitalRepo?: Repository<ApplyCapital>,
@@ -67,14 +66,14 @@ export class UserService extends BaseService<User> {
         });
 
         user.apply_capitals.forEach(item => {
-            if (item.capital.id === parseInt(id)) {
+            if (item.capital.id === id) {
                 throw new BadRequestException('请勿重复申请');
             }
         });
 
         await this.checkLimit(user, 'capital');
 
-        const capital = await capitalRepo.findOne({ id: parseInt(id) });
+        const capital = await capitalRepo.findOne({ id });
 
         const applyCapital = new ApplyCapital();
         applyCapital.capital = capital;
@@ -86,7 +85,7 @@ export class UserService extends BaseService<User> {
 
     @Transaction()
     async applyProjects(
-        id: string, userId: number,
+        id: string, userId: string,
         @TransactionRepository(User) userRepo?: Repository<User>,
         @TransactionRepository(Project) projectRepo?: Repository<Project>,
         @TransactionRepository(ApplyProject) applyProjectRepo?: Repository<ApplyProject>,
@@ -97,14 +96,14 @@ export class UserService extends BaseService<User> {
         });
 
         user.apply_projects.forEach(item => {
-            if (item.project.id === parseInt(id)) {
+            if (item.project.id === id) {
                 throw new BadRequestException('请勿重复申请');
             }
         });
 
         await this.checkLimit(user, 'project');
 
-        const project = await projectRepo.findOne({ id: parseInt(id) });
+        const project = await projectRepo.findOne({ id });
 
         const applyProject = new ApplyProject();
         applyProject.project = project;
@@ -116,7 +115,7 @@ export class UserService extends BaseService<User> {
 
     @Transaction()
     async applyProviders(
-        id: string, userId: number,
+        id: string, userId: string,
         @TransactionRepository(User) userRepo?: Repository<User>,
         @TransactionRepository(Provider) providerRepo?: Repository<Provider>,
         @TransactionRepository(ApplyProvider) applyProviderRepo?: Repository<ApplyProvider>,
@@ -127,12 +126,12 @@ export class UserService extends BaseService<User> {
         });
 
         user.apply_providers.forEach(item => {
-            if (item.provider.id === parseInt(id)) {
+            if (item.provider.id === id) {
                 throw new BadRequestException('请勿重复申请');
             }
         });
 
-        const provider = await providerRepo.findOne({ id: parseInt(id) });
+        const provider = await providerRepo.findOne({ id });
 
         const applyProvider = new ApplyProvider();
         applyProvider.provider = provider;
@@ -175,15 +174,15 @@ export class UserService extends BaseService<User> {
 
     async levelUp(data: LevelUpInput) {
 
-        await this.wf.start(FlowId, data);
+        await this.wf.start(FlowIdEnum.LEVEL_UP, data);
         return true;
     }
 
-    async adminApproval(data: AdminApprovalInput) {
+    async approvalUser(data: User) {
 
         await this.wf.publish(
-            EventEnum.APPROVAL,
-            `${EventEnum.APPROVAL}-${data.user.id}`,
+            FlowEventEnum.APPROVAL_USER,
+            `${FlowEventEnum.APPROVAL_USER}-${data.id}`,
             data
         );
         return true;

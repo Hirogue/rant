@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
-export const M_ADMIN_APPROVAL = gql`
-  mutation adminApproval($data: AdminApprovalInput!) {
-    adminApproval(data: $data)
+export const M_APPROVAL_USER = gql`
+  mutation approvalUser($data: UserInput!) {
+    approvalUser(data: $data)
   }
 `;

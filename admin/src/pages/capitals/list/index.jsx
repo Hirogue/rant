@@ -1,10 +1,11 @@
 import StandardActions from '@/components/StandardActions';
+import StandardConfirm from '@/components/StandardConfirm';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import { M_DELETE_CAPITAL, M_UPDATE_CAPITAL, Q_GET_CAPITALS } from '@/gql';
 import { buildingQuery, IFModeMaps, ProjectStatusMaps } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery, useApolloClient } from '@apollo/react-hooks';
 import { Affix, Col, message, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -19,6 +20,8 @@ export default () => {
   };
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
+
+  const client = useApolloClient();
 
   const { loading, data, refetch } = useQuery(Q_GET_CAPITALS, {
     notifyOnNetworkStatusChange: true,
@@ -58,6 +61,70 @@ export default () => {
 
   const dataSource = queryCapital.data;
   const total = queryCapital.total;
+
+  const renderActions = record => {
+    if (UserStatusEnum.PENDING === record.status) {
+      return (
+        <Fragment>
+          <Popconfirm
+            title="确定要审核吗?"
+            onConfirm={() => {
+              client.mutate({
+                mutation: M_ADMIN_APPROVAL,
+                variables: {
+                  data: {
+                    user: {
+                      id: record.id,
+                      status: UserStatusEnum.CHECKED,
+                    },
+                  },
+                },
+                update: (cache, { data }) => {
+                  if (data.adminApproval) {
+                    message.success('操作成功');
+                    refetch();
+                  }
+                },
+              });
+            }}
+          >
+            <a href="#">[审核]</a>
+          </Popconfirm>
+          <Divider type="vertical" />
+          <a href="javascript:;" onClick={() => setVisible(true)}>
+            [驳回]
+          </a>
+          <StandardConfirm
+            title="请输入驳回理由"
+            visible={visible}
+            setVisible={setVisible}
+            onConfirm={reason => {
+              client.mutate({
+                mutation: M_ADMIN_APPROVAL,
+                variables: {
+                  data: {
+                    user: {
+                      id: record.id,
+                      status: UserStatusEnum.REJECTED,
+                      reason,
+                    },
+                  },
+                },
+                update: (proxy, { data }) => {
+                  if (data.adminApproval) {
+                    message.success('操作成功');
+                    refetch();
+                  }
+                },
+              });
+            }}
+          />
+        </Fragment>
+      );
+    } else {
+      return null;
+    }
+  };
 
   const columns = [
     {
