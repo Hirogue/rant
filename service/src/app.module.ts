@@ -10,6 +10,7 @@ import { CapitalModule } from './capital';
 import { CarouselModule } from './carousel';
 import { Config } from "./config";
 import { BaseDataSource, CoreModule, HttpCacheInterceptor } from './core';
+import { DocumentModule } from './document';
 import { ExpertModule } from './expert';
 import { HomeModule } from './home';
 import { LoggerMiddleware, LoggerModule } from './logger';
@@ -56,7 +57,8 @@ import { WfModule } from './wf';
     CapitalModule,
     SuccessCaseModule,
     ExpertModule,
-    CarouselModule
+    CarouselModule,
+    DocumentModule
   ],
   providers: [
     {

@@ -11,3 +11,4 @@ export * from './provider-category';
 export * from './user';
 export * from './project';
 export * from './capital';
+export * from './document';
