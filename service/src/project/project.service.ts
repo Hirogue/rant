@@ -2,11 +2,34 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BaseService } from '../core';
-import { Project } from '../database/entities';
+import { Project, User } from '../database';
+import { FlowEventEnum, FlowIdEnum, WfService } from '../wf';
 
 @Injectable()
 export class ProjectService extends BaseService<Project> {
-    constructor(@InjectRepository(Project) protected readonly repo: Repository<Project>) {
+    constructor(
+        private readonly wf: WfService,
+        @InjectRepository(Project)
+        protected readonly repo: Repository<Project>
+    ) {
         super(repo);
+    }
+
+    async publish(project: Project, currentUser: User) {
+
+        project.creator = currentUser;
+
+        await this.wf.start(FlowIdEnum.PUBLISH_PROJECT, project);
+        return true;
+    }
+
+    async approval(project: Project) {
+
+        await this.wf.publish(
+            FlowEventEnum.APPROVAL_PROJECT,
+            `${FlowEventEnum.APPROVAL_PROJECT}-${project.id}`,
+            project
+        );
+        return true;
     }
 }

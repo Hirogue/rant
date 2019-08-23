@@ -4,7 +4,7 @@ import { ObjectType } from 'type-graphql';
 import { GqlJwtAuthGuard } from '../auth/gql-jwt-auth.guard';
 import { BasePaginate, BaseResolver, Me } from '../core';
 import { User } from '../database';
-import { LevelUpInput, AdminApprovalInput } from './dtos';
+import { LevelUpInput } from './dtos';
 import { UserService } from './user.service';
 
 @ObjectType()
@@ -43,8 +43,8 @@ export class UserResolver extends BaseResolver(User, UserPaginate) {
         return await this.userService.levelUp(data);
     }
 
-    @Mutation(returns => Boolean, { description: 'Admin approval' })
-    async adminApproval(@Args('data') data: AdminApprovalInput) {
-        return await this.userService.adminApproval(data);
+    @Mutation(returns => Boolean, { description: 'Approval user' })
+    async approvalUser(@Args('data') data: User) {
+        return await this.userService.approvalUser(data);
     }
 }

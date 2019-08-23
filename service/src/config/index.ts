@@ -10,6 +10,12 @@ let Config = {
     serverUrl: 'http://127.0.0.1:3000',
     defaultPassword: '12345678',
 
+    staticAssets: [
+        { path: './static', options: { prefix: '/static' } },
+        { path: '../admin/dist', options: { prefix: '/admin/' } },
+        { path: '../lvyoto/dist', options: { prefix: '/lvyoto/' } },
+    ],
+
     passport: {
         jwt: {
             ignoreExpiration: false,
@@ -53,7 +59,7 @@ let Config = {
     },
 
     cache: {
-        ttl: 3, // seconds
+        ttl: 1, // seconds
         max: 500, // maximum number of items in cache
     },
 

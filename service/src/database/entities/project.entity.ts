@@ -14,7 +14,7 @@ import { User } from "./user.entity";
 export class Project extends Base {
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     title: string;
 
@@ -29,12 +29,12 @@ export class Project extends Base {
     views: number;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     contact: string;
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     phone: string;
 

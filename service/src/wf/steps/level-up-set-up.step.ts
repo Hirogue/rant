@@ -4,7 +4,7 @@ import { IdentityEnum, ProjectStatusEnum, UserStatusEnum } from '../../core';
 import { Provider, User } from "../../database";
 import { Logger } from "../../logger";
 
-export class SetUpStep extends StepBody {
+export class LevelUpSetUpStep extends StepBody {
 
     @Transaction()
     public async run(
@@ -16,7 +16,6 @@ export class SetUpStep extends StepBody {
         const { data } = context.workflow;
 
         const user = data.user as User;
-        user.id = parseInt(data.user.id);
         user.status = UserStatusEnum.PENDING;
 
         await userRepos.save(user);
@@ -33,7 +32,7 @@ export class SetUpStep extends StepBody {
 
         }
 
-        Logger.log("Set up step:", user.id);
+        Logger.log("Level up step:", user.id);
 
         return await ExecutionResult.next();
     }

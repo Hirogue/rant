@@ -1,14 +1,17 @@
 import StandardActions from '@/components/StandardActions';
+import StandardConfirm from '@/components/StandardConfirm';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
-import { M_DELETE_PROJECT, M_UPDATE_PROJECT, Q_GET_PROJECTS } from '@/gql';
+import { M_DELETE_PROJECT, Q_GET_PROJECTS } from '@/gql';
+import { ProjectStatusEnum } from '@/utils/enum';
 import { buildingQuery, IFModeMaps, ProjectStatusMaps } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Affix, Col, message, Row, Skeleton } from 'antd';
+import { useApolloClient, useQuery } from '@apollo/react-hooks';
+import { Affix, Col, Divider, message, Popconfirm, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
+import { M_APPROVAL_PROJECT } from '../gql';
 
 export default () => {
   const defaultVariables = {
@@ -19,31 +22,14 @@ export default () => {
   };
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [current, setCurrent] = useState(null);
+
+  const client = useApolloClient();
 
   const { loading, data, refetch } = useQuery(Q_GET_PROJECTS, {
     notifyOnNetworkStatusChange: true,
     variables: { queryString: buildingQuery(defaultVariables) },
-  });
-
-  const [deleteProject] = useMutation(M_DELETE_PROJECT, {
-    update: (proxy, { data }) => {
-      if (data.deleteProject) {
-        message.success('删除成功');
-        refetch();
-      } else {
-        message.error('删除失败');
-      }
-    },
-  });
-  const [updateProject] = useMutation(M_UPDATE_PROJECT, {
-    update: (proxy, { data }) => {
-      if (data.updateProject) {
-        message.success('操作成功');
-        refetch();
-      } else {
-        message.error('操作失败');
-      }
-    },
   });
 
   useEffect(() => {
@@ -58,6 +44,49 @@ export default () => {
 
   const dataSource = queryProject.data;
   const total = queryProject.total;
+
+  const renderActions = record => {
+    if (ProjectStatusEnum.PENDING === record.status) {
+      return (
+        <Fragment>
+          <Popconfirm
+            title="确定要审核吗?"
+            onConfirm={() => {
+              client.mutate({
+                mutation: M_APPROVAL_PROJECT,
+                variables: {
+                  data: {
+                    id: record.id,
+                    status: ProjectStatusEnum.CHECKED,
+                  },
+                },
+                update: (cache, { data }) => {
+                  if (data.approvalProject) {
+                    message.success('操作成功');
+                    refetch();
+                  }
+                },
+              });
+            }}
+          >
+            <a href="#">[审核]</a>
+          </Popconfirm>
+          <Divider type="vertical" />
+          <a
+            href="javascript:;"
+            onClick={() => {
+              setCurrent(record);
+              setVisible(true);
+            }}
+          >
+            [驳回]
+          </a>
+        </Fragment>
+      );
+    } else {
+      return null;
+    }
+  };
 
   const columns = [
     {
@@ -122,6 +151,10 @@ export default () => {
       render: val => moment(val).format('YYYY-MM-DD HH:mm:ss'),
       sorter: true,
     },
+    {
+      title: '操作',
+      render: (val, record) => renderActions(record),
+    },
   ];
 
   const pagination = {
@@ -141,7 +174,16 @@ export default () => {
       name: '删除',
       icon: 'delete',
       action: () => {
-        deleteProject({ variables: { ids: selectedRows.map(item => item.id).join(',') } });
+        client.mutate({
+          mutation: M_DELETE_PROJECT,
+          variables: { ids: selectedRows.map(item => item.id).join(',') },
+          update: (proxy, { data }) => {
+            if (data.deleteProject) {
+              message.success('操删除成功');
+              refetch();
+            }
+          },
+        });
       },
       disabled: selectedRows.length <= 0,
       confirm: true,
@@ -154,6 +196,30 @@ export default () => {
   return (
     <Fragment>
       <PageHeaderWrapper>
+        <StandardConfirm
+          title="请输入驳回理由"
+          visible={visible}
+          setVisible={setVisible}
+          onConfirm={reason => {
+            client.mutate({
+              mutation: M_APPROVAL_PROJECT,
+              variables: {
+                data: {
+                  id: current.id,
+                  status: ProjectStatusEnum.REJECTED,
+                  reason,
+                },
+              },
+              update: (proxy, { data }) => {
+                if (data.approvalProject) {
+                  message.success('操作成功');
+                  refetch();
+                }
+              },
+            });
+          }}
+        />
+
         <StandardRow>
           <Row gutter={16}>
             <Col lg={6}>

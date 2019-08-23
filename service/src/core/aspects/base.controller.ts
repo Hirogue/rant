@@ -23,7 +23,7 @@ export function BaseController<TEntity>(
         params: {
             id: {
                 field: 'id',
-                type: 'number',
+                type: 'uuid',
                 primary: true,
             }
         },

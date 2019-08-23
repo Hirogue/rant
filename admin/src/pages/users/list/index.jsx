@@ -17,7 +17,7 @@ import { Affix, Avatar, Col, Divider, message, Popconfirm, Row, Skeleton } from 
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
-import { M_ADMIN_APPROVAL } from '../gql';
+import { M_APPROVAL_USER } from '../gql';
 
 export default () => {
   const defaultVariables = {
@@ -29,6 +29,7 @@ export default () => {
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [current, setCurrent] = useState(null);
 
   const client = useApolloClient();
 
@@ -58,17 +59,15 @@ export default () => {
             title="确定要审核吗?"
             onConfirm={() => {
               client.mutate({
-                mutation: M_ADMIN_APPROVAL,
+                mutation: M_APPROVAL_USER,
                 variables: {
                   data: {
-                    user: {
-                      id: record.id,
-                      status: UserStatusEnum.CHECKED,
-                    },
+                    id: record.id,
+                    status: UserStatusEnum.CHECKED,
                   },
                 },
                 update: (cache, { data }) => {
-                  if (data.adminApproval) {
+                  if (data.approvalUser) {
                     message.success('操作成功');
                     refetch();
                   }
@@ -79,34 +78,15 @@ export default () => {
             <a href="#">[审核]</a>
           </Popconfirm>
           <Divider type="vertical" />
-          <a href="javascript:;" onClick={() => setVisible(true)}>
+          <a
+            href="javascript:;"
+            onClick={() => {
+              setCurrent(record);
+              setVisible(true);
+            }}
+          >
             [驳回]
           </a>
-          <StandardConfirm
-            title="请输入驳回理由"
-            visible={visible}
-            setVisible={setVisible}
-            onConfirm={reason => {
-              client.mutate({
-                mutation: M_ADMIN_APPROVAL,
-                variables: {
-                  data: {
-                    user: {
-                      id: record.id,
-                      status: UserStatusEnum.REJECTED,
-                      reason,
-                    },
-                  },
-                },
-                update: (proxy, { data }) => {
-                  if (data.adminApproval) {
-                    message.success('操作成功');
-                    refetch();
-                  }
-                },
-              });
-            }}
-          />
         </Fragment>
       );
     } else {
@@ -128,11 +108,6 @@ export default () => {
           </Fragment>
         );
       },
-    },
-    {
-      title: '编号',
-      dataIndex: 'id',
-      search: true,
     },
     {
       title: '头像',
@@ -243,6 +218,30 @@ export default () => {
   return (
     <Fragment>
       <PageHeaderWrapper>
+        <StandardConfirm
+          title="请输入驳回理由"
+          visible={visible}
+          setVisible={setVisible}
+          onConfirm={reason => {
+            client.mutate({
+              mutation: M_APPROVAL_USER,
+              variables: {
+                data: {
+                  id: current.id,
+                  status: UserStatusEnum.REJECTED,
+                  reason,
+                },
+              },
+              update: (proxy, { data }) => {
+                if (data.approvalUser) {
+                  message.success('操作成功');
+                  refetch();
+                }
+              },
+            });
+          }}
+        />
+
         <StandardRow>
           <Row gutter={16}>
             <Col lg={6}>
