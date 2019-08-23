@@ -2,11 +2,11 @@ import StandardActions from '@/components/StandardActions';
 import StandardConfirm from '@/components/StandardConfirm';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
-import { M_DELETE_CAPITAL, M_UPDATE_CAPITAL, Q_GET_CAPITALS } from '@/gql';
+import { M_DELETE_CAPITAL, Q_GET_CAPITALS } from '@/gql';
 import { ProjectStatusEnum } from '@/utils/enum';
 import { buildingQuery, IFModeMaps, ProjectStatusMaps } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
+import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { Affix, Col, Divider, message, Popconfirm, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -30,27 +30,6 @@ export default () => {
   const { loading, data, refetch } = useQuery(Q_GET_CAPITALS, {
     notifyOnNetworkStatusChange: true,
     variables: { queryString: buildingQuery(defaultVariables) },
-  });
-
-  const [deleteCapital] = useMutation(M_DELETE_CAPITAL, {
-    update: (proxy, { data }) => {
-      if (data.deleteCapital) {
-        message.success('删除成功');
-        refetch();
-      } else {
-        message.error('删除失败');
-      }
-    },
-  });
-  const [updateCapital] = useMutation(M_UPDATE_CAPITAL, {
-    update: (proxy, { data }) => {
-      if (data.updateCapital) {
-        message.success('操作成功');
-        refetch();
-      } else {
-        message.error('操作失败');
-      }
-    },
   });
 
   useEffect(() => {
@@ -195,7 +174,16 @@ export default () => {
       name: '删除',
       icon: 'delete',
       action: () => {
-        deleteCapital({ variables: { ids: selectedRows.map(item => item.id).join(',') } });
+        client.mutate({
+          mutation: M_DELETE_CAPITAL,
+          variables: { ids: selectedRows.map(item => item.id).join(',') },
+          update: (proxy, { data }) => {
+            if (data.deleteCapital) {
+              message.success('操删除成功');
+              refetch();
+            }
+          },
+        });
       },
       disabled: selectedRows.length <= 0,
       confirm: true,

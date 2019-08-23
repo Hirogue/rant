@@ -5,7 +5,7 @@ import { configureWorkflow, IWorkflowHost, WorkflowBase, WorkflowConfig } from "
 // import { MongoDBPersistence } from 'workflow-es-mongodb';
 // import Config from "../config";
 import { Logger } from "../logger";
-import { LevelUpFlow, PublishCapitalFlow } from './flows';
+import { LevelUpFlow, PublishCapitalFlow, PublishProjectFlow } from './flows';
 
 @Injectable()
 export class WfService implements OnModuleInit, OnModuleDestroy {
@@ -35,6 +35,7 @@ export class WfService implements OnModuleInit, OnModuleDestroy {
 
         this.register(LevelUpFlow);
         this.register(PublishCapitalFlow);
+        this.register(PublishProjectFlow);
 
         await this.startHost();
     }
