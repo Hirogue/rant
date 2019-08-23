@@ -3,13 +3,15 @@ import StandardConfirm from '@/components/StandardConfirm';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import { M_DELETE_CAPITAL, M_UPDATE_CAPITAL, Q_GET_CAPITALS } from '@/gql';
+import { ProjectStatusEnum } from '@/utils/enum';
 import { buildingQuery, IFModeMaps, ProjectStatusMaps } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { useMutation, useQuery, useApolloClient } from '@apollo/react-hooks';
-import { Affix, Col, message, Row, Skeleton } from 'antd';
+import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
+import { Affix, Col, Divider, message, Popconfirm, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
+import { M_APPROVAL_CAPITAL } from '../gql';
 
 export default () => {
   const defaultVariables = {
@@ -20,6 +22,8 @@ export default () => {
   };
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [current, setCurrent] = useState(null);
 
   const client = useApolloClient();
 
@@ -63,24 +67,22 @@ export default () => {
   const total = queryCapital.total;
 
   const renderActions = record => {
-    if (UserStatusEnum.PENDING === record.status) {
+    if (ProjectStatusEnum.PENDING === record.status) {
       return (
         <Fragment>
           <Popconfirm
             title="确定要审核吗?"
             onConfirm={() => {
               client.mutate({
-                mutation: M_ADMIN_APPROVAL,
+                mutation: M_APPROVAL_CAPITAL,
                 variables: {
                   data: {
-                    user: {
-                      id: record.id,
-                      status: UserStatusEnum.CHECKED,
-                    },
+                    id: record.id,
+                    status: ProjectStatusEnum.CHECKED,
                   },
                 },
                 update: (cache, { data }) => {
-                  if (data.adminApproval) {
+                  if (data.approvalCapital) {
                     message.success('操作成功');
                     refetch();
                   }
@@ -91,34 +93,15 @@ export default () => {
             <a href="#">[审核]</a>
           </Popconfirm>
           <Divider type="vertical" />
-          <a href="javascript:;" onClick={() => setVisible(true)}>
+          <a
+            href="javascript:;"
+            onClick={() => {
+              setCurrent(record);
+              setVisible(true);
+            }}
+          >
             [驳回]
           </a>
-          <StandardConfirm
-            title="请输入驳回理由"
-            visible={visible}
-            setVisible={setVisible}
-            onConfirm={reason => {
-              client.mutate({
-                mutation: M_ADMIN_APPROVAL,
-                variables: {
-                  data: {
-                    user: {
-                      id: record.id,
-                      status: UserStatusEnum.REJECTED,
-                      reason,
-                    },
-                  },
-                },
-                update: (proxy, { data }) => {
-                  if (data.adminApproval) {
-                    message.success('操作成功');
-                    refetch();
-                  }
-                },
-              });
-            }}
-          />
         </Fragment>
       );
     } else {
@@ -189,6 +172,10 @@ export default () => {
       render: val => moment(val).format('YYYY-MM-DD HH:mm:ss'),
       sorter: true,
     },
+    {
+      title: '操作',
+      render: (val, record) => renderActions(record),
+    },
   ];
 
   const pagination = {
@@ -221,6 +208,30 @@ export default () => {
   return (
     <Fragment>
       <PageHeaderWrapper>
+        <StandardConfirm
+          title="请输入驳回理由"
+          visible={visible}
+          setVisible={setVisible}
+          onConfirm={reason => {
+            client.mutate({
+              mutation: M_APPROVAL_CAPITAL,
+              variables: {
+                data: {
+                  id: current.id,
+                  status: ProjectStatusEnum.REJECTED,
+                  reason,
+                },
+              },
+              update: (proxy, { data }) => {
+                if (data.approvalCapital) {
+                  message.success('操作成功');
+                  refetch();
+                }
+              },
+            });
+          }}
+        />
+
         <StandardRow>
           <Row gutter={16}>
             <Col lg={6}>
