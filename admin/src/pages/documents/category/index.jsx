@@ -2,28 +2,10 @@ import StandardActions from '@/components/StandardActions';
 import StandardPanel from '@/components/StandardPanel';
 import StandardRow from '@/components/StandardRow';
 import StandardTree from '@/components/StandardTree';
-import {
-  M_CREATE_ARTICLE_CATEGORY,
-  M_DELETE_ARTICLE_CATEGORY,
-  M_UPDATE_ARTICLE_CATEGORY,
-  Q_GET_ARTICLE_CATEGORY_TREES,
-} from '@/gql';
+import { M_CREATE_DOCUMENT_CATEGORY, M_DELETE_DOCUMENT_CATEGORY, M_UPDATE_DOCUMENT_CATEGORY, Q_GET_DOCUMENT_CATEGORY_TREES } from '@/gql';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import {
-  Affix,
-  Button,
-  Card,
-  Col,
-  Divider,
-  Form,
-  Input,
-  InputNumber,
-  message,
-  Row,
-  Skeleton,
-  Tree,
-} from 'antd';
+import { Affix, Button, Card, Col, Divider, Form, Input, InputNumber, message, Row, Skeleton, Tree } from 'antd';
 import { useEffect, useState } from 'react';
 
 const { TreeNode } = Tree;
@@ -82,8 +64,8 @@ const InfoForm = Form.create()(props => {
             <Input disabled value={target.title} />
           </FormItem>
         ) : (
-          ''
-        )}
+            ''
+          )}
         <FormItem {...formItemLayout} label="名称">
           {getFieldDecorator('title', {
             initialValue: target && isUpdate ? target.title : '',
@@ -125,19 +107,19 @@ export default () => {
   const [checkedKeys, setCheckedKeys] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [panelVisible, setPanelVisible] = useState(false);
-  const { loading, data, refetch, client } = useQuery(Q_GET_ARTICLE_CATEGORY_TREES, {
+  const { loading, data, refetch, client } = useQuery(Q_GET_DOCUMENT_CATEGORY_TREES, {
     notifyOnNetworkStatusChange: true,
   });
-  const [updateArticleCategory] = useMutation(M_UPDATE_ARTICLE_CATEGORY, {
+  const [updateDocumentCategory] = useMutation(M_UPDATE_DOCUMENT_CATEGORY, {
     update: (cache, { data }) => {
       if (data) {
         refetch();
-        setSelectedNode(data.updateArticleCategory);
+        setSelectedNode(data.updateDocumentCategory);
         message.success('保存成功');
       }
     },
   });
-  const [createArticleCategory] = useMutation(M_CREATE_ARTICLE_CATEGORY, {
+  const [createDocumentCategory] = useMutation(M_CREATE_DOCUMENT_CATEGORY, {
     update: (cache, { data }) => {
       if (data) {
         refetch();
@@ -146,7 +128,7 @@ export default () => {
       }
     },
   });
-  const [deleteArticleCategory] = useMutation(M_DELETE_ARTICLE_CATEGORY, {
+  const [deleteDocumentCategory] = useMutation(M_DELETE_DOCUMENT_CATEGORY, {
     update: (cache, { data }) => {
       if (data) {
         refetch();
@@ -157,9 +139,9 @@ export default () => {
     },
   });
 
-  const { articleCategoryTrees } = data;
+  const { documentCategoryTrees } = data;
 
-  if (!articleCategoryTrees) return <Skeleton />;
+  if (!documentCategoryTrees) return <Skeleton />;
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
@@ -168,7 +150,7 @@ export default () => {
       name: '删除',
       icon: 'delete',
       action: () => {
-        deleteArticleCategory({ variables: { ids: checkedKeys.join(',') } });
+        deleteDocumentCategory({ variables: { ids: checkedKeys.join(',') } });
       },
       disabled: checkedKeys.length <= 0,
       confirm: true,
@@ -191,12 +173,12 @@ export default () => {
         <Row>
           <Col lg={8}>
             <StandardTree
-              treeData={articleCategoryTrees}
+              treeData={documentCategoryTrees}
               checkedKeys={checkedKeys}
               onCheck={checkedKeys => setCheckedKeys(checkedKeys)}
               onSelect={e => setSelectedNode(e.selected ? e.node.props.dataRef : null)}
               onDrop={(current, target) => {
-                updateArticleCategory({
+                updateDocumentCategory({
                   variables: {
                     id: current.id,
                     data: {
@@ -211,10 +193,10 @@ export default () => {
           <Col lg={15} offset={1}>
             <Divider orientation="left">详情</Divider>
             {selectedNode ? (
-              <InfoForm isUpdate={true} mutation={updateArticleCategory} target={selectedNode} />
+              <InfoForm isUpdate={true} mutation={updateDocumentCategory} target={selectedNode} />
             ) : (
-              ''
-            )}
+                ''
+              )}
           </Col>
         </Row>
       </StandardRow>
@@ -223,7 +205,7 @@ export default () => {
         visible={panelVisible}
         onCancel={() => setPanelVisible(false)}
       >
-        <InfoForm mutation={createArticleCategory} target={selectedNode} />
+        <InfoForm mutation={createDocumentCategory} target={selectedNode} />
       </StandardPanel>
     </PageHeaderWrapper>
   );

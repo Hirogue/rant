@@ -1,7 +1,7 @@
 import ImageCropper from '@/components/ImageCropper';
 import RichText from '@/components/RichText';
 import StandardTabList from '@/components/StandardTabList';
-import { M_CREATE_ARTICLE, M_UPDATE_ARTICLE, Q_GET_ARTICLE } from '@/gql';
+import { M_CREATE_DOCUMENT, M_UPDATE_DOCUMENT, Q_GET_DOCUMENT } from '@/gql';
 import { uploadOne } from '@/utils/fetch';
 import { buildingQuery, getTreeData } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
@@ -74,7 +74,7 @@ const onUpload = async (file, target, mutation) => {
 };
 
 const BasicForm = Form.create()(props => {
-  const { articleCategoryTrees, target, mutation, form } = props;
+  const { documentCategoryTrees, target, mutation, form } = props;
 
   const { getFieldDecorator, getFieldValue } = form;
 
@@ -162,7 +162,7 @@ const BasicForm = Form.create()(props => {
                 message: '请选择分类',
               },
             ],
-          })(<TreeSelect showSearch treeNodeFilterProp="title" treeData={articleCategoryTrees} />)}
+          })(<TreeSelect showSearch treeNodeFilterProp="title" treeData={documentCategoryTrees} />)}
         </FormItem>
         <FormItem {...formItemLayout} label="来源">
           {getFieldDecorator('source', {
@@ -215,13 +215,13 @@ const BasicForm = Form.create()(props => {
   );
 });
 
-const renderContent = (articleCategoryTrees, data, mutation, tabKey, setTabKey) => {
+const renderContent = (documentCategoryTrees, data, mutation, tabKey, setTabKey) => {
   let tabList = {
     basic: {
       name: '基础信息',
       render: () => (
         <BasicForm
-          articleCategoryTrees={getTreeData(articleCategoryTrees)}
+          documentCategoryTrees={getTreeData(documentCategoryTrees)}
           target={data || {}}
           mutation={mutation}
         />
@@ -284,21 +284,21 @@ export default withRouter(props => {
     },
   } = props;
 
-  const { loading, data, refetch } = useQuery(Q_GET_ARTICLE, {
+  const { loading, data, refetch } = useQuery(Q_GET_DOCUMENT, {
     notifyOnNetworkStatusChange: true,
     variables: { id: id || '', queryString: buildingQuery({ join: [{ field: 'category' }] }) },
   });
 
-  const [createArticle] = useMutation(M_CREATE_ARTICLE, {
+  const [createDocument] = useMutation(M_CREATE_DOCUMENT, {
     update: (proxy, { data }) => {
-      if (data && data.createArticle) {
+      if (data && data.createDocument) {
         message.success('保存成功');
-        router.replace(`/articles/detail/${data.createArticle.id}`);
+        router.replace(`/documents/detail/${data.createDocument.id}`);
       }
     },
   });
 
-  const [updateArticle] = useMutation(M_UPDATE_ARTICLE, {
+  const [updateDocument] = useMutation(M_UPDATE_DOCUMENT, {
     update: (proxy, { data }) => {
       if (data) {
         refetch();
@@ -309,12 +309,12 @@ export default withRouter(props => {
 
   if (loading || !data) return <Skeleton loading={loading} />;
 
-  const { article, articleCategoryTrees } = data;
+  const { document, documentCategoryTrees } = data;
 
   return renderContent(
-    articleCategoryTrees,
-    id ? article : null,
-    id ? updateArticle : createArticle,
+    documentCategoryTrees,
+    id ? document : null,
+    id ? updateDocument : createDocument,
     tabKey,
     setTabKey,
   );

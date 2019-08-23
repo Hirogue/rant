@@ -158,6 +158,31 @@ export default {
           ],
         },
         {
+          name: 'documents',
+          icon: 'container',
+          path: '/documents',
+          routes: [
+            {
+              name: 'list',
+              path: '/documents/list',
+              component: './documents/list',
+            },
+            {
+              path: '/documents/detail/:id',
+              component: './documents/detail',
+            },
+            {
+              path: '/documents/create',
+              component: './documents/detail',
+            },
+            {
+              name: 'category',
+              path: '/documents/category',
+              component: './documents/category',
+            },
+          ],
+        },
+        {
           name: 'investment-financing',
           icon: 'schedule',
           path: '/if',
