@@ -46,7 +46,7 @@ export const Q_GET_DOCUMENT_CATEGORY_TREES = gql`
   ${F_DOCUMENT_CATEGORYRECURSIVE}
 
   query getDocumentCategoryTrees {
-    articleCategoryTrees {
+    documentCategoryTrees {
       ...DocumentCategoryRecursive
     }
   }
@@ -56,7 +56,7 @@ export const Q_GET_DOCUMENT_CATEGORY = gql`
   ${F_DOCUMENT_CATEGORY_FIELDS}
 
   query getDocumentCategory($id: String!, $queryString: String! = "") {
-    articleCategory(id: $id, queryString: $queryString) {
+    documentCategory(id: $id, queryString: $queryString) {
       ...DocumentCategoryFields
     }
   }
