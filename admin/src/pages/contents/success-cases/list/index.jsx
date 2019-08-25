@@ -58,7 +58,7 @@ export default () => {
       render: (val, row) => {
         return (
           <Fragment>
-            <Link to={`/contents/success-case/detail/${val}`}>详情</Link>
+            <Link to={`/contents/success-cases/detail/${val}`}>详情</Link>
           </Fragment>
         );
       },
@@ -123,7 +123,7 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => router.push('/contents/success-case/create') },
+    { name: '新增', icon: 'file-add', action: () => router.push('/contents/success-cases/create') },
     {
       name: '删除',
       icon: 'delete',

@@ -11,12 +11,12 @@ export abstract class Base {
     id: string;
 
     @Field({ nullable: true })
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'date' })
     @ApiModelProperty({ nullable: true })
     create_at: string;
 
     @Field({ nullable: true })
-    @UpdateDateColumn()
+    @UpdateDateColumn({ type: 'date' })
     @ApiModelProperty({ nullable: true })
     update_at: string;
 }

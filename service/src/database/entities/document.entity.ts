@@ -61,7 +61,7 @@ export class Document extends Base {
     text: string;
 
     @Field({ nullable: true })
-    @Column({ type: 'datetime', nullable: true, default: moment().format('YYYY-MM-DD HH:mm:ss') })
+    @Column({ type: 'date', nullable: true, default: moment().format('YYYY-MM-DD HH:mm:ss') })
     @ApiModelProperty({ nullable: true })
     publish_at: string;
 
