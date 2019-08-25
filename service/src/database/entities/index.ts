@@ -18,5 +18,6 @@ export * from './provider-category.entity';
 export * from './provider.entity';
 export * from './success-case.entity';
 export * from './user.entity';
+export * from './seo.entity';
 
 

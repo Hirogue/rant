@@ -16,3 +16,4 @@ export * from './document-category';
 export * from './carousel';
 export * from './success-case';
 export * from './expert';
+export * from './seo';

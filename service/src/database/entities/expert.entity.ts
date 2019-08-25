@@ -9,7 +9,7 @@ import { Base } from "./base";
 export class Expert extends Base {
 
     @Field({ nullable: true })
-    @Column()
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     name: string;
 
