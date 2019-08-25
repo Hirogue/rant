@@ -133,112 +133,112 @@ export default {
           component: './dashboard/analysis',
         },
         {
-          name: 'carousels',
-          icon: 'picture',
-          path: '/carousels',
-          routes: [
-            {
-              name: 'list',
-              path: '/carousels/list',
-              component: './carousels/list',
-            },
-            {
-              path: '/carousels/detail/:id',
-              component: './carousels/detail',
-            },
-            {
-              path: '/carousels/create',
-              component: './carousels/detail',
-            },
-          ],
-        },
-        {
-          name: 'success-cases',
-          icon: 'file-image',
-          path: '/success-cases',
-          routes: [
-            {
-              name: 'list',
-              path: '/success-cases/list',
-              component: './success-cases/list',
-            },
-            {
-              path: '/success-cases/detail/:id',
-              component: './success-cases/detail',
-            },
-            {
-              path: '/success-cases/create',
-              component: './success-cases/detail',
-            },
-          ],
-        },
-        {
-          name: 'experts',
-          icon: 'solution',
-          path: '/experts',
-          routes: [
-            {
-              name: 'list',
-              path: '/experts/list',
-              component: './experts/list',
-            },
-            {
-              path: '/experts/detail/:id',
-              component: './experts/detail',
-            },
-            {
-              path: '/experts/create',
-              component: './experts/detail',
-            },
-          ],
-        },
-        {
-          name: 'articles',
+          name: 'contents',
           icon: 'file-text',
-          path: '/articles',
+          path: '/contents',
           routes: [
             {
-              name: 'list',
-              path: '/articles/list',
-              component: './articles/list',
+              name: 'carousels',
+              path: '/contents/carousels/list',
+              component: './contents/carousels/list',
             },
             {
-              path: '/articles/detail/:id',
-              component: './articles/detail',
+              path: '/contents/carousels/detail/:id',
+              component: './contents/carousels/detail',
             },
             {
-              path: '/articles/create',
-              component: './articles/detail',
+              path: '/contents/carousels/create',
+              component: './contents/carousels/detail',
             },
             {
-              name: 'category',
-              path: '/articles/category',
-              component: './articles/category',
-            },
-          ],
-        },
-        {
-          name: 'documents',
-          icon: 'file-word',
-          path: '/documents',
-          routes: [
-            {
-              name: 'list',
-              path: '/documents/list',
-              component: './documents/list',
+              name: 'success-cases',
+              path: '/contents/success-cases/list',
+              component: './contents/success-cases/list',
             },
             {
-              path: '/documents/detail/:id',
-              component: './documents/detail',
+              path: '/contents/success-cases/detail/:id',
+              component: './contents/success-cases/detail',
             },
             {
-              path: '/documents/create',
-              component: './documents/detail',
+              path: '/contents/success-cases/create',
+              component: './contents/success-cases/detail',
+            },
+
+            {
+              name: 'experts',
+              path: '/contents/experts/list',
+              component: './contents/experts/list',
             },
             {
-              name: 'category',
-              path: '/documents/category',
-              component: './documents/category',
+              path: '/contents/experts/detail/:id',
+              component: './contents/experts/detail',
+            },
+            {
+              path: '/contents/experts/create',
+              component: './contents/experts/detail',
+            },
+
+            {
+              name: 'seo',
+              path: '/contents/seo/list',
+              component: './contents/seo/list',
+            },
+            {
+              path: '/contents/seo/detail/:id',
+              component: './contents/seo/detail',
+            },
+            {
+              path: '/contents/seo/create',
+              component: './contents/seo/detail',
+            },
+
+            {
+              name: 'articles',
+              path: '/contents/articles',
+              routes: [
+                {
+                  name: 'list',
+                  path: '/contents/articles/list',
+                  component: './contents/articles/list',
+                },
+                {
+                  path: '/contents/articles/detail/:id',
+                  component: './contents/articles/detail',
+                },
+                {
+                  path: '/contents/articles/create',
+                  component: './contents/articles/detail',
+                },
+                {
+                  name: 'category',
+                  path: '/contents/articles/category',
+                  component: './contents/articles/category',
+                },
+              ],
+            },
+            {
+              name: 'documents',
+              path: '/contents/documents',
+              routes: [
+                {
+                  name: 'list',
+                  path: '/contents/documents/list',
+                  component: './contents/documents/list',
+                },
+                {
+                  path: '/contents/documents/detail/:id',
+                  component: './contents/documents/detail',
+                },
+                {
+                  path: '/contents/documents/create',
+                  component: './contents/documents/detail',
+                },
+                {
+                  name: 'category',
+                  path: '/contents/documents/category',
+                  component: './contents/documents/category',
+                },
+              ],
             },
           ],
         },

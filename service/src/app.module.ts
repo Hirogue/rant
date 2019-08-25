@@ -19,6 +19,7 @@ import { OrgModule } from './org';
 import { ProductModule } from './product';
 import { ProjectModule } from './project';
 import { ProviderModule } from './provider';
+import { SeoModule } from './seo';
 import { SpaController } from './spa.controller';
 import { StorageModule } from './storage';
 import { SuccessCaseModule } from './success-case';
@@ -58,7 +59,8 @@ import { WfModule } from './wf';
     SuccessCaseModule,
     ExpertModule,
     CarouselModule,
-    DocumentModule
+    DocumentModule,
+    SeoModule
   ],
   providers: [
     {
