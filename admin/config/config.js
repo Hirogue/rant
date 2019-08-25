@@ -133,8 +133,68 @@ export default {
           component: './dashboard/analysis',
         },
         {
+          name: 'carousels',
+          icon: 'picture',
+          path: '/carousels',
+          routes: [
+            {
+              name: 'list',
+              path: '/carousels/list',
+              component: './carousels/list',
+            },
+            {
+              path: '/carousels/detail/:id',
+              component: './carousels/detail',
+            },
+            {
+              path: '/carousels/create',
+              component: './carousels/detail',
+            },
+          ],
+        },
+        {
+          name: 'success-cases',
+          icon: 'file-image',
+          path: '/success-cases',
+          routes: [
+            {
+              name: 'list',
+              path: '/success-cases/list',
+              component: './success-cases/list',
+            },
+            {
+              path: '/success-cases/detail/:id',
+              component: './success-cases/detail',
+            },
+            {
+              path: '/success-cases/create',
+              component: './success-cases/detail',
+            },
+          ],
+        },
+        {
+          name: 'experts',
+          icon: 'solution',
+          path: '/experts',
+          routes: [
+            {
+              name: 'list',
+              path: '/experts/list',
+              component: './experts/list',
+            },
+            {
+              path: '/experts/detail/:id',
+              component: './experts/detail',
+            },
+            {
+              path: '/experts/create',
+              component: './experts/detail',
+            },
+          ],
+        },
+        {
           name: 'articles',
-          icon: 'container',
+          icon: 'file-text',
           path: '/articles',
           routes: [
             {
@@ -159,7 +219,7 @@ export default {
         },
         {
           name: 'documents',
-          icon: 'container',
+          icon: 'file-word',
           path: '/documents',
           routes: [
             {

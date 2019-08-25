@@ -1,11 +1,11 @@
 import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
-import { M_DELETE_ARTICLE, M_UPDATE_ARTICLE, Q_GET_ARTICLES } from '@/gql';
+import { M_DELETE_EXPERT, M_UPDATE_EXPERT, Q_GET_EXPERTS } from '@/gql';
 import { buildingQuery } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Affix, Col, message, Row, Skeleton, Switch } from 'antd';
+import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
+import { Affix, Avatar, Col, message, Row, Skeleton, Switch } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
@@ -20,24 +20,16 @@ export default () => {
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
 
-  const { loading, data, refetch } = useQuery(Q_GET_ARTICLES, {
+  const client = useApolloClient();
+
+  const { loading, data, refetch } = useQuery(Q_GET_EXPERTS, {
     notifyOnNetworkStatusChange: true,
     variables: { queryString: buildingQuery(defaultVariables) },
   });
 
-  const [deleteArticle] = useMutation(M_DELETE_ARTICLE, {
+  const [updateExpert] = useMutation(M_UPDATE_EXPERT, {
     update: (proxy, { data }) => {
-      if (data.deleteArticle) {
-        message.success('删除成功');
-        refetch();
-      } else {
-        message.error('删除失败');
-      }
-    },
-  });
-  const [updateArticle] = useMutation(M_UPDATE_ARTICLE, {
-    update: (proxy, { data }) => {
-      if (data.updateArticle) {
+      if (data.updateExpert) {
         message.success('操作成功');
         refetch();
       } else {
@@ -52,12 +44,12 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { queryArticle, articleCategoryTrees } = data;
+  const { queryExpert } = data;
 
-  if (!queryArticle) return <Skeleton loading={loading} active avatar />;
+  if (!queryExpert) return <Skeleton loading={loading} active avatar />;
 
-  const dataSource = queryArticle.data;
-  const total = queryArticle.total;
+  const dataSource = queryExpert.data;
+  const total = queryExpert.total;
 
   const columns = [
     {
@@ -66,51 +58,40 @@ export default () => {
       render: (val, row) => {
         return (
           <Fragment>
-            <Link to={`/articles/detail/${val}`}>详情</Link>
+            <Link to={`/experts/detail/${val}`}>详情</Link>
           </Fragment>
         );
       },
     },
     {
-      title: '封面',
-      dataIndex: 'cover',
-      render: val => <img src={val} width="100" height="60" />,
+      title: '头像',
+      dataIndex: 'avatar',
+      render: val => <Avatar src={val} />,
     },
     {
-      title: '标题',
-      dataIndex: 'title',
+      title: '名称',
+      dataIndex: 'name',
       search: true,
     },
     {
-      title: '作者',
-      dataIndex: 'author',
+      title: '分类',
+      dataIndex: 'category',
       search: true,
     },
     {
-      title: '来源',
-      dataIndex: 'source',
+      title: '公司',
+      dataIndex: 'company',
+      search: true,
+    },
+    {
+      title: '职位',
+      dataIndex: 'position',
       search: true,
     },
     {
       title: '排序',
       dataIndex: 'sort',
       sorter: true,
-    },
-    {
-      title: '是否置顶',
-      dataIndex: 'is_top',
-      render: (val, record) => (
-        <Switch
-          checkedChildren="是"
-          unCheckedChildren="否"
-          checked={!!val}
-          onChange={checked =>
-            updateArticle({ variables: { id: record.id, data: { is_top: checked } } })
-          }
-        />
-      ),
-      filterMultiple: false,
-      filters: [{ text: '是', value: true }, { text: '否', value: false }],
     },
     {
       title: '是否发布',
@@ -120,31 +101,27 @@ export default () => {
           checkedChildren="是"
           unCheckedChildren="否"
           checked={!!val}
-          onChange={checked =>
-            updateArticle({ variables: { id: record.id, data: { is_published: checked } } })
-          }
+          onChange={checked => {
+            client.mutate({
+              mutation: M_UPDATE_EXPERT,
+              variables: { id: record.id, data: { is_published: checked } },
+              update: (proxy, { data }) => {
+                if (data.deleteExpert) {
+                  message.success('操删除成功');
+                  refetch();
+                }
+              },
+            });
+          }}
         />
       ),
       filterMultiple: false,
       filters: [{ text: '是', value: true }, { text: '否', value: false }],
     },
     {
-      title: '分类',
-      dataIndex: 'category.id',
-      render: (val, record) => (record.category ? record.category.title : ''),
-      treeSelector: true,
-      treeFilters: articleCategoryTrees,
-    },
-    {
-      title: '发布时间',
-      dataIndex: 'publish_at',
+      title: '创建时间',
+      dataIndex: 'create_at',
       render: val => (val ? moment(val).format('YYYY-MM-DD HH:mm:ss') : ''),
-      sorter: true,
-    },
-    {
-      title: '更新时间',
-      dataIndex: 'update_at',
-      render: val => moment(val).format('YYYY-MM-DD HH:mm:ss'),
       sorter: true,
     },
   ];
@@ -161,12 +138,21 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => router.push('/articles/create') },
+    { name: '新增', icon: 'file-add', action: () => router.push('/experts/create') },
     {
       name: '删除',
       icon: 'delete',
       action: () => {
-        deleteArticle({ variables: { ids: selectedRows.map(item => item.id).join(',') } });
+        client.mutate({
+          mutation: M_DELETE_EXPERT,
+          variables: { ids: selectedRows.map(item => item.id).join(',') },
+          update: (proxy, { data }) => {
+            if (data.deleteExpert) {
+              message.success('操删除成功');
+              refetch();
+            }
+          },
+        });
       },
       disabled: selectedRows.length <= 0,
       confirm: true,
