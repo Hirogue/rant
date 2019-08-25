@@ -1,11 +1,11 @@
 import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
-import { M_DELETE_CAROUSEL, M_UPDATE_CAROUSEL, Q_GET_CAROUSELS } from '@/gql';
+import { M_DELETE_EXPERT, M_UPDATE_EXPERT, Q_GET_EXPERTS } from '@/gql';
 import { buildingQuery } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
-import { Affix, Col, message, Row, Skeleton, Switch } from 'antd';
+import { Affix, Avatar, Col, message, Row, Skeleton, Switch } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
@@ -22,14 +22,14 @@ export default () => {
 
   const client = useApolloClient();
 
-  const { loading, data, refetch } = useQuery(Q_GET_CAROUSELS, {
+  const { loading, data, refetch } = useQuery(Q_GET_EXPERTS, {
     notifyOnNetworkStatusChange: true,
     variables: { queryString: buildingQuery(defaultVariables) },
   });
 
-  const [updateCarousel] = useMutation(M_UPDATE_CAROUSEL, {
+  const [updateExpert] = useMutation(M_UPDATE_EXPERT, {
     update: (proxy, { data }) => {
-      if (data.updateCarousel) {
+      if (data.updateExpert) {
         message.success('操作成功');
         refetch();
       } else {
@@ -44,12 +44,12 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { queryCarousel } = data;
+  const { queryExpert } = data;
 
-  if (!queryCarousel) return <Skeleton loading={loading} active avatar />;
+  if (!queryExpert) return <Skeleton loading={loading} active avatar />;
 
-  const dataSource = queryCarousel.data;
-  const total = queryCarousel.total;
+  const dataSource = queryExpert.data;
+  const total = queryExpert.total;
 
   const columns = [
     {
@@ -58,24 +58,34 @@ export default () => {
       render: (val, row) => {
         return (
           <Fragment>
-            <Link to={`/carousels/detail/${val}`}>详情</Link>
+            <Link to={`/experts/detail/${val}`}>详情</Link>
           </Fragment>
         );
       },
     },
     {
-      title: '图片',
-      dataIndex: 'url',
-      render: val => <img src={val} width="100" height="60" />,
+      title: '头像',
+      dataIndex: 'avatar',
+      render: val => <Avatar src={val} />,
     },
     {
-      title: '标题',
-      dataIndex: 'title',
+      title: '名称',
+      dataIndex: 'name',
       search: true,
     },
     {
-      title: '地址',
-      dataIndex: 'link',
+      title: '分类',
+      dataIndex: 'category',
+      search: true,
+    },
+    {
+      title: '公司',
+      dataIndex: 'company',
+      search: true,
+    },
+    {
+      title: '职位',
+      dataIndex: 'position',
       search: true,
     },
     {
@@ -93,10 +103,10 @@ export default () => {
           checked={!!val}
           onChange={checked => {
             client.mutate({
-              mutation: M_UPDATE_CAROUSEL,
+              mutation: M_UPDATE_EXPERT,
               variables: { id: record.id, data: { is_published: checked } },
               update: (proxy, { data }) => {
-                if (data.deleteCarousel) {
+                if (data.deleteExpert) {
                   message.success('操删除成功');
                   refetch();
                 }
@@ -128,16 +138,16 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => router.push('/carousels/create') },
+    { name: '新增', icon: 'file-add', action: () => router.push('/experts/create') },
     {
       name: '删除',
       icon: 'delete',
       action: () => {
         client.mutate({
-          mutation: M_DELETE_CAROUSEL,
+          mutation: M_DELETE_EXPERT,
           variables: { ids: selectedRows.map(item => item.id).join(',') },
           update: (proxy, { data }) => {
-            if (data.deleteCarousel) {
+            if (data.deleteExpert) {
               message.success('操删除成功');
               refetch();
             }

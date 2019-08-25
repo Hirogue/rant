@@ -15,3 +15,4 @@ export * from './document';
 export * from './document-category';
 export * from './carousel';
 export * from './success-case';
+export * from './expert';

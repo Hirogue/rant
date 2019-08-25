@@ -153,22 +153,42 @@ export default {
           ],
         },
         {
-          name: 'success-case',
+          name: 'success-cases',
           icon: 'file-image',
-          path: '/success-case',
+          path: '/success-cases',
           routes: [
             {
               name: 'list',
-              path: '/success-case/list',
-              component: './success-case/list',
+              path: '/success-cases/list',
+              component: './success-cases/list',
             },
             {
-              path: '/success-case/detail/:id',
-              component: './success-case/detail',
+              path: '/success-cases/detail/:id',
+              component: './success-cases/detail',
             },
             {
-              path: '/success-case/create',
-              component: './success-case/detail',
+              path: '/success-cases/create',
+              component: './success-cases/detail',
+            },
+          ],
+        },
+        {
+          name: 'experts',
+          icon: 'solution',
+          path: '/experts',
+          routes: [
+            {
+              name: 'list',
+              path: '/experts/list',
+              component: './experts/list',
+            },
+            {
+              path: '/experts/detail/:id',
+              component: './experts/detail',
+            },
+            {
+              path: '/experts/create',
+              component: './experts/detail',
             },
           ],
         },
