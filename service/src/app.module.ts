@@ -6,6 +6,7 @@ import * as redisStore from 'cache-manager-redis-store';
 import { RenderModule } from 'nest-next';
 import { ArticleModule } from './artilce';
 import { AuthModule } from './auth';
+import { AuthorityModule } from './authority';
 import { CapitalModule } from './capital';
 import { CarouselModule } from './carousel';
 import { Config } from "./config";
@@ -19,6 +20,7 @@ import { OrgModule } from './org';
 import { ProductModule } from './product';
 import { ProjectModule } from './project';
 import { ProviderModule } from './provider';
+import { RoleModule } from './role';
 import { SeoModule } from './seo';
 import { SpaController } from './spa.controller';
 import { StorageModule } from './storage';
@@ -46,6 +48,8 @@ import { WfModule } from './wf';
     VerificationModule,
     WfModule,
     StorageModule,
+    RoleModule,
+    AuthorityModule,
     HomeModule,
     MetadataModule,
     OrgModule,

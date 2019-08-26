@@ -332,6 +332,39 @@ export default {
           component: './org',
         },
         {
+          name: 'rbac',
+          icon: 'safety-certificate',
+          path: '/rbac',
+          routes: [
+            {
+              name: 'role.list',
+              path: '/rbac/role/list',
+              component: './rbac/role/list',
+            },
+            {
+              path: '/rbac/role/detail/:id',
+              component: './rbac/role/detail',
+            },
+            {
+              path: '/rbac/role/create',
+              component: './rbac/role/detail',
+            },
+            {
+              name: 'authority.list',
+              path: '/rbac/authority/list',
+              component: './rbac/authority/list',
+            },
+            {
+              path: '/rbac/authority/detail/:id',
+              component: './rbac/authority/detail',
+            },
+            {
+              path: '/rbac/authority/create',
+              component: './rbac/authority/detail',
+            },
+          ],
+        },
+        {
           name: 'users',
           icon: 'team',
           path: '/users',

@@ -17,3 +17,5 @@ export * from './carousel';
 export * from './success-case';
 export * from './expert';
 export * from './seo';
+export * from './role';
+export * from './authority';
