@@ -8,6 +8,9 @@
   "scripts": {
     "r": "nps",
     "dev": "nps dev",
+    "build": "nps build",
+    "start": "nps start",
+    "stop": "nps stop",
     "ic": "lerna bootstrap --hoist && nps install",
     "lerna": "lerna-wizard"
   },

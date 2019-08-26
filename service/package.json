@@ -6,8 +6,8 @@
   "license": "MIT",
   "scripts": {
     "prod": "cross-env NODE_ENV=production pm2 start dist/src/main.js --name 'rant:8009'",
-    "build": "run-s build:**",
-    "build:server": "rimraf ./dist && tsc -p tsconfig.build.json",
+    "stop": "pm2 delete 'rant:8009'",
+    "build:service": "rimraf ./dist && tsc -p tsconfig.build.json",
     "build:next": "next build",
     "seed": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js seed",
     "orm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
