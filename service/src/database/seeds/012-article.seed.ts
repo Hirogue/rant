@@ -36,6 +36,8 @@ export default class implements Seeder {
                     publish_at: item.release_datetime,
                     category,
                 }).seed();
+
+                await connection.getRepository(Article).update({title: item.title}, {create_at: item.created_when});
             }
 
         } else {
