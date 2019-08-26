@@ -4,14 +4,13 @@ import productionConfig from './production';
 
 const dev = process.env.NODE_ENV !== 'production';
 
-const basePath = 'http://127.0.0.1:3000';
-
 let Config = {
-  basePath,
+  dev,
+  basePath: 'http://127.0.0.1:3000/',
 
   apollo: {
     link: {
-      uri: `${basePath}/graphql`,
+      uri: 'http://127.0.0.1:3000/graphql',
     },
   },
 
@@ -20,7 +19,7 @@ let Config = {
   },
 };
 
-if (!dev) {
+if (!Config.dev) {
   Config = _.merge(Config, productionConfig);
 }
 

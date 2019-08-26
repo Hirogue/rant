@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@apollo/react-hooks": "^0.1.0-beta.11",
+    "@apollo/react-ssr": "^3.0.1",
     "@nestjs/common": "^6.0.0",
     "@nestjs/core": "^6.0.0",
     "@nestjs/graphql": "^6.4.2",

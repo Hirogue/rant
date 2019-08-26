@@ -8,7 +8,7 @@ export class SpaController {
 
     @Get('admin/*')
     admin(@Req() req, @Res() res) {
-        res.cookie('XSRF-TOKEN', req.csrfToken());
+        // res.cookie('XSRF-TOKEN', req.csrfToken());
         return res.sendFile(
             join(__dirname, '../../../admin/dist', 'index.html')
         );
@@ -16,7 +16,7 @@ export class SpaController {
 
     @Get('lvyoto/*')
     lvyoto(@Req() req, @Res() res) {
-        res.cookie('XSRF-TOKEN', req.csrfToken());
+        // res.cookie('XSRF-TOKEN', req.csrfToken());
         return res.sendFile(
             join(__dirname, '../../../lvyoto/dist', 'index.html')
         );

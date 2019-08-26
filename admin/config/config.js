@@ -70,6 +70,9 @@ if (isAntDesignProPreview) {
 }
 
 export default {
+  outputPath: './dist',
+  base: '/admin/',
+  publicPath: '/admin/',
   plugins,
   block: {
     defaultGitUrl: 'https://github.com/ant-design/pro-blocks',
