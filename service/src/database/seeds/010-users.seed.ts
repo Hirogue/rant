@@ -52,6 +52,7 @@ export default class implements Seeder {
                 
                 const user = new User();
                 user.password = item.password;
+                user.lastPassword = item.password;
                 user.account = item.credential;
                 user.realname = item.real_name;
                 user.phone = item.phonenumber;
@@ -92,11 +93,11 @@ export default class implements Seeder {
 
                 if (item.status == "PENDING") {
                     user.status = UserStatusEnum.PENDING;
-                } else if (item.status = "REJECT") {
+                } else if (item.status == "REJECT") {
                     user.status = UserStatusEnum.REJECTED;
-                } else if (item.status = "FOLLOW") {
+                } else if (item.status == "FOLLOW") {
                     user.status = UserStatusEnum.PENDING;
-                } else if (item.status = "OVER") {
+                } else if (item.status == "OVER") {
                     user.status = UserStatusEnum.CHECKED;
                 }
 
