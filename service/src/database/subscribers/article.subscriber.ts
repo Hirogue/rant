@@ -10,10 +10,16 @@ export class ArticleSubscriber implements EntitySubscriberInterface<Article> {
     }
 
     beforeInsert(event: InsertEvent<Article>) {
-        event.entity.summary = event.entity.text ? textInterception(extractionTextInHtml(event.entity.text), 40) : '';
+        this.handleChange(event.entity);
     }
 
     beforeUpdate(event: UpdateEvent<Article>) {
-        event.entity.summary = event.entity.text ? textInterception(extractionTextInHtml(event.entity.text), 40) : '';
+        this.handleChange(event.entity);
+    }
+
+    private handleChange(entity: Article) {
+        if (entity && entity.text) {
+            entity.summary = textInterception(extractionTextInHtml(entity.text), 40);
+        }
     }
 }
