@@ -19,7 +19,12 @@ import {
   Tree,
 } from 'antd';
 import { useEffect, useState } from 'react';
-import { M_CREATE_ORG, M_DELETE_ORG, M_UPDATE_ORG, Q_GET_ORG_TREES } from '@/gql';
+import {
+  M_CREATE_AUTHORITY,
+  M_DELETE_AUTHORITY,
+  M_UPDATE_AUTHORITY,
+  Q_GET_AUTHORITY_TREES,
+} from '@/gql';
 
 const { TreeNode } = Tree;
 const FormItem = Form.Item;
@@ -90,6 +95,17 @@ const InfoForm = Form.create()(props => {
             ],
           })(<Input placeholder="请填写名称" />)}
         </FormItem>
+        <FormItem {...formItemLayout} label="值">
+          {getFieldDecorator('value', {
+            initialValue: target && isUpdate ? target.value : '',
+            rules: [
+              {
+                required: true,
+                message: '值不能为空',
+              },
+            ],
+          })(<Input placeholder="请填写值" />)}
+        </FormItem>
         <FormItem {...formItemLayout} label="排序">
           {getFieldDecorator('sort', {
             initialValue: target && isUpdate ? target.sort : 0,
@@ -120,19 +136,19 @@ export default () => {
   const [checkedKeys, setCheckedKeys] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [panelVisible, setPanelVisible] = useState(false);
-  const { loading, data, refetch, client } = useQuery(Q_GET_ORG_TREES, {
+  const { loading, data, refetch, client } = useQuery(Q_GET_AUTHORITY_TREES, {
     notifyOnNetworkStatusChange: true,
   });
-  const [updateOrg] = useMutation(M_UPDATE_ORG, {
+  const [updateAuthority] = useMutation(M_UPDATE_AUTHORITY, {
     update: (cache, { data }) => {
       if (data) {
         refetch();
-        setSelectedNode(data.updateOrg);
+        setSelectedNode(data.updateAuthority);
         message.success('保存成功');
       }
     },
   });
-  const [createOrg] = useMutation(M_CREATE_ORG, {
+  const [createAuthority] = useMutation(M_CREATE_AUTHORITY, {
     update: (cache, { data }) => {
       if (data) {
         refetch();
@@ -141,7 +157,7 @@ export default () => {
       }
     },
   });
-  const [deleteOrg] = useMutation(M_DELETE_ORG, {
+  const [deleteAuthority] = useMutation(M_DELETE_AUTHORITY, {
     update: (cache, { data }) => {
       if (data) {
         refetch();
@@ -152,9 +168,9 @@ export default () => {
     },
   });
 
-  const { orgTrees } = data;
+  const { authorityTrees } = data;
 
-  if (!orgTrees) return <Skeleton />;
+  if (!authorityTrees) return <Skeleton />;
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
@@ -163,9 +179,9 @@ export default () => {
       name: '删除',
       icon: 'delete',
       action: () => {
-        deleteOrg({ variables: { ids: checkedKeys.join(',') } });
+        deleteAuthority({ variables: { ids: checkedKeys.join(',') } });
       },
-      disabled: checkedKeys ? checkedKeys.length <= 0 : false,
+      disabled: checkedKeys.length <= 0,
       confirm: true,
       confirmTitle: `确定要删除吗?`,
     },
@@ -186,12 +202,12 @@ export default () => {
         <Row>
           <Col lg={8}>
             <StandardTree
-              treeData={orgTrees}
+              treeData={authorityTrees}
               checkedKeys={checkedKeys}
               onCheck={checkedKeys => setCheckedKeys(checkedKeys)}
               onSelect={e => setSelectedNode(e.selected ? e.node.props.dataRef : null)}
               onDrop={(current, target) => {
-                updateOrg({
+                updateAuthority({
                   variables: {
                     id: current.id,
                     data: {
@@ -206,7 +222,7 @@ export default () => {
           <Col lg={15} offset={1}>
             <Divider orientation="left">详情</Divider>
             {selectedNode ? (
-              <InfoForm isUpdate={true} mutation={updateOrg} target={selectedNode} />
+              <InfoForm isUpdate={true} mutation={updateAuthority} target={selectedNode} />
             ) : (
               ''
             )}
@@ -218,7 +234,7 @@ export default () => {
         visible={panelVisible}
         onCancel={() => setPanelVisible(false)}
       >
-        <InfoForm mutation={createOrg} target={selectedNode} />
+        <InfoForm mutation={createAuthority} target={selectedNode} />
       </StandardPanel>
     </PageHeaderWrapper>
   );

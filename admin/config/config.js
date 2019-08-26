@@ -350,17 +350,9 @@ export default {
               component: './rbac/role/detail',
             },
             {
-              name: 'authority.list',
-              path: '/rbac/authority/list',
-              component: './rbac/authority/list',
-            },
-            {
-              path: '/rbac/authority/detail/:id',
-              component: './rbac/authority/detail',
-            },
-            {
-              path: '/rbac/authority/create',
-              component: './rbac/authority/detail',
+              name: 'authority',
+              path: '/rbac/authority',
+              component: './rbac/authority',
             },
           ],
         },

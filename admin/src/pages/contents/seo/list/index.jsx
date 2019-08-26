@@ -103,7 +103,7 @@ export default () => {
           variables: { ids: selectedRows.map(item => item.id).join(',') },
           update: (proxy, { data }) => {
             if (data.deleteSeo) {
-              message.success('操删除成功');
+              message.success('删除成功');
               refetch();
             }
           },

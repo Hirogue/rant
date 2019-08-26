@@ -32,6 +32,12 @@ export class User extends Base {
     @ApiModelProperty({ nullable: true })
     password: string;
 
+    @Exclude({ toPlainOnly: true })
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    lastPassword: string;
+
     @Field({ nullable: true })
     @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })

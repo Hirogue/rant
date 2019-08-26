@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { BaseService } from '../core';
+import { TreeRepository } from 'typeorm';
+import { BaseTreeService } from '../core';
 import { Authority } from '../database';
 
 @Injectable()
-export class AuthorityService extends BaseService<Authority> {
-    constructor(@InjectRepository(Authority) protected readonly repo: Repository<Authority>) {
+export class AuthorityService extends BaseTreeService<Authority> {
+    constructor(@InjectRepository(Authority) protected readonly repo: TreeRepository<Authority>) {
         super(repo);
     }
 }

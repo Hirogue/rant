@@ -97,7 +97,7 @@ export default () => {
               variables: { id: record.id, data: { is_published: checked } },
               update: (proxy, { data }) => {
                 if (data.deleteCarousel) {
-                  message.success('操删除成功');
+                  message.success('删除成功');
                   refetch();
                 }
               },
@@ -138,7 +138,7 @@ export default () => {
           variables: { ids: selectedRows.map(item => item.id).join(',') },
           update: (proxy, { data }) => {
             if (data.deleteCarousel) {
-              message.success('操删除成功');
+              message.success('删除成功');
               refetch();
             }
           },
