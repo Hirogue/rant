@@ -164,10 +164,14 @@ export class UserService extends BaseService<User> {
 
         if (dto.password !== dto.confirmPassword) throw new BadRequestException('两次密码不一致');
 
-        const user = await this.findOneByAccount(dto.phone);
+        return await this.changePassword(dto.phone, dto.password);
+    }
+
+    async changePassword(account: string, password: string) {
+        const user = await this.findOneByAccount(account);
 
         const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(dto.password, salt);
+        user.password = await bcrypt.hash(password, salt);
 
         return await this.repo.save(user);
     }
