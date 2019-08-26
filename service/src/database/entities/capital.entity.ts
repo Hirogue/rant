@@ -39,7 +39,7 @@ export class Capital extends Base {
     company: string;
 
     @Field({ nullable: true })
-    @Column({ type: 'date', nullable: true, default: moment().format('YYYY-MM-DD HH:mm:ss') })
+    @Column({ type: 'timestamp', nullable: true, default: moment().format('YYYY-MM-DD HH:mm:ss') })
     @ApiModelProperty({ nullable: true })
     publish_at: string;
 
@@ -69,7 +69,7 @@ export class Capital extends Base {
     pledge: string;
 
     @Field({ nullable: true })
-    @Column({ nullable: true })
+    @Column({ type: 'float', nullable: true })
     @ApiModelProperty({ nullable: true })
     discount: number;
 

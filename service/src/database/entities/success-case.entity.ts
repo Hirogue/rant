@@ -35,7 +35,7 @@ export class SuccessCase extends Base {
     summary: string;
 
     @Field({ nullable: true })
-    @Column({ type: 'date', nullable: true, default: moment().format('YYYY-MM-DD HH:mm:ss') })
+    @Column({ type: 'timestamp', nullable: true, default: moment().format('YYYY-MM-DD HH:mm:ss') })
     @ApiModelProperty({ nullable: true })
     publish_at: string;
 

@@ -10,19 +10,19 @@ services:
         networks:
             - app
 
-    mongo:
-        container_name: mongo
-        image: mongo
-        restart: always
-        ports:
-            - '27017:27017'
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: root
-            MONGO_INITDB_ROOT_PASSWORD: 123456
-        volumes:
-            - mongo-db-data:/var/lib/mongodb/data
-        networks:
-            - app
+    # mongo:
+    #     container_name: mongo
+    #     image: mongo
+    #     restart: always
+    #     ports:
+    #         - '27017:27017'
+    #     environment:
+    #         MONGO_INITDB_ROOT_USERNAME: root
+    #         MONGO_INITDB_ROOT_PASSWORD: 123456
+    #     volumes:
+    #         - mongo-db-data:/var/lib/mongodb/data
+    #     networks:
+    #         - app
 
     postgres:
         container_name: postgres
