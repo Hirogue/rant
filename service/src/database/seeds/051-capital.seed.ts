@@ -47,6 +47,7 @@ export default class implements Seeder {
             await connection.getRepository(Metadata).findOne({ title: '投资类型' })
         );
 
+        /*
         for (let i = 0; i < 25; i++) {
 
             await factory(Capital)({
@@ -65,6 +66,7 @@ export default class implements Seeder {
                 risk: sample(risk),
             }).seed();
         }
+        */
 
     }
 }

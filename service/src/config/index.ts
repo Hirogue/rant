@@ -48,7 +48,7 @@ let Config = {
     },
 
     mq: {
-        url: 'amqp://localhost',
+        url: 'amqp://guest:guest@192.168.100.30:5672',
         options: {}
     },
 

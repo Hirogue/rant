@@ -8,6 +8,25 @@ export default class implements Seeder {
         let list = [];
 
         parent = await factory(Metadata)({ title: '地区' }).seed();
+        
+        const area = require('../seeds/area.json');
+        for (const province of area) {
+            const province_data = await factory(Metadata)({ title: province.name, parent }).seed();
+            //console.log('province_data:' + province_data);
+            if (province.cityList.length > 0) {
+                for (const city of province.cityList) {
+                    const city_data = await factory(Metadata)({ title: city.name, parent:province_data }).seed();
+                    if (city.areaList.length > 0) {
+                        for (const county of city.areaList) {
+                            await factory(Metadata)({ title: county.name, parent:city_data }).seed();
+                        }
+                    }
+                }
+            }
+
+        }
+        
+        /*
         list = [
             '江西', '北京', '天津', '上海', '重庆', '河北', '山西',
             '辽宁', '吉林', '黑龙江', '江苏', '浙江', '安徽', '福建',
@@ -15,10 +34,10 @@ export default class implements Seeder {
             '贵州', '云南', '陕西', '甘肃', '青海', '台湾', '内蒙古',
             '广西', '西藏', '宁夏', '新疆', '香港', '澳门', '海外'
         ];
-
         for (const item of list) {
             await factory(Metadata)({ title: item, parent }).seed();
         }
+        */
 
         parent = await factory(Metadata)({ title: '行业' }).seed();
         list = [
@@ -34,7 +53,7 @@ export default class implements Seeder {
         list = [
             '个人资金', '企业资金', 'VC投资', 'PE投资', '小额贷款',
             '典当公司', '担保公司', '金融租赁', '投资公司', '商业银行',
-            '基金公司', '证券公司'
+            '基金公司', '证券公司', '信托公司', '资产管理', '其他公司'
         ];
 
         for (const item of list) {
