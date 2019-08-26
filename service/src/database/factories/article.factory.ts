@@ -23,9 +23,9 @@ define(Article, (faker: typeof Faker, settings: IArticleSetting) => {
     instance.source = settings.source || faker.company.companyName();
     instance.summary = settings.summary || faker.lorem.paragraphs();
     instance.text = settings.text || faker.lorem.text();
-    instance.sort = settings.sort || faker.random.number({ min: 0, max: 100 });
-    instance.is_top = !!faker.random.number({ min: 0, max: 1 });
-    instance.is_published = !!faker.random.number({ min: 0, max: 1 });
+    instance.sort = settings.sort || 0;
+    instance.is_top = false;
+    instance.is_published = true;
     instance.category = settings.category;
     instance.publish_at = settings.publish_at || moment().format('YYYY-MM-DD HH:mm:ss');
 

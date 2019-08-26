@@ -36,7 +36,7 @@ export default class implements Seeder {
                         project.status = ProjectStatusEnum.REJECTED;
                     }
 
-                    //project.reason = item.reject_msg;
+                    project.reason = item.reject_msg;
                     project.cover = item.thumbnail ? JSON.parse(item.thumbnail).url : null;
                     project.contact = item.contacts;
                     project.phone = item.phone;
