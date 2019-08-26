@@ -49,7 +49,7 @@ export class Project extends Base {
     payment: string;
 
     @Field({ nullable: true })
-    @Column({ type: 'datetime', nullable: true, default: moment().format('YYYY-MM-DD HH:mm:ss') })
+    @Column({ type: 'date', nullable: true, default: moment().format('YYYY-MM-DD HH:mm:ss') })
     @ApiModelProperty({ nullable: true })
     publish_at: string;
 
@@ -104,12 +104,12 @@ export class Project extends Base {
     creator: User;
 
     @Field({ nullable: true })
-    @Column({ type: 'simple-enum', default: ProjectStatusEnum.PENDING })
+    @Column({ default: ProjectStatusEnum.PENDING })
     @ApiModelProperty({ nullable: true })
     status: ProjectStatusEnum;
 
     @Field({ nullable: true })
-    @Column({ type: 'simple-enum', default: IFModeEnum.EQUITY })
+    @Column({ default: IFModeEnum.EQUITY })
     @ApiModelProperty({ nullable: true })
     category: IFModeEnum;
 

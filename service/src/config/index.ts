@@ -73,8 +73,14 @@ let Config = {
     },
 
     orm: {
-        type: 'sqlite',
-        database: 'db.sql',
+        // type: 'sqlite',
+        // database: 'db.sql',
+        type: 'postgres',
+        host: '127.0.0.1',
+        port: 5432,
+        database: 'rant',
+        username: 'rant',
+        password: '123456',
         logging: ["error", "query", "log"],
         dropSchema: false,
         synchronize: false,

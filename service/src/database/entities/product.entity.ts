@@ -67,7 +67,7 @@ export class Product extends Base {
     applicants: ApplyProduct[];
 
     @Field({ nullable: true })
-    @Column({ type: 'simple-enum', default: ProjectStatusEnum.PENDING })
+    @Column({ default: ProjectStatusEnum.PENDING })
     @ApiModelProperty({ nullable: true })
     status: ProjectStatusEnum;
 }

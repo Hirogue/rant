@@ -93,22 +93,22 @@ export class User extends Base {
     reason: string;
 
     @Field(type => Int, { nullable: true })
-    @Column({ type: 'simple-enum', default: UserLevelEnum.V0 })
+    @Column({ default: UserLevelEnum.V0 })
     @ApiModelProperty({ nullable: true })
     vip: UserLevelEnum;
 
     @Field({ nullable: true })
-    @Column({ type: 'simple-enum', default: IdentityEnum.TOURIST })
+    @Column({ default: IdentityEnum.TOURIST })
     @ApiModelProperty({ nullable: true })
     identity: IdentityEnum;
 
     @Field({ nullable: true })
-    @Column({ type: 'simple-enum', default: UserTypeEnum.PERSONAL })
+    @Column({ default: UserTypeEnum.PERSONAL })
     @ApiModelProperty({ nullable: true })
     type: UserTypeEnum;
 
     @Field(type => Int, { nullable: true })
-    @Column({ type: 'simple-enum', default: UserStatusEnum.NORMAL })
+    @Column({ default: UserStatusEnum.NORMAL })
     @ApiModelProperty({ nullable: true })
     status: UserStatusEnum;
 
