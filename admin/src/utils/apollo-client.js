@@ -57,7 +57,7 @@ const errorHandler = onError(error => {
 let middlewares = [authMiddleware, errorHandler, httpLink];
 
 if (Config.dev) {
-  middlewares = [...middlewares, apolloLogger];
+  middlewares = [apolloLogger, ...middlewares];
 }
 
 const client = new ApolloClient({
