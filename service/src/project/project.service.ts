@@ -3,12 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BaseService } from '../core';
 import { Project, User } from '../database';
-import { FlowEventEnum, FlowIdEnum, WfService } from '../wf';
+import { FlowEventEnum, FlowIdEnum, WorkflowService } from '../workflow';
 
 @Injectable()
 export class ProjectService extends BaseService<Project> {
     constructor(
-        private readonly wf: WfService,
+        private readonly wf: WorkflowService,
         @InjectRepository(Project)
         protected readonly repo: Repository<Project>
     ) {

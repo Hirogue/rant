@@ -7,14 +7,14 @@ import { Config } from '../config';
 import { BaseService, UserLevelEnum } from '../core';
 import { ApplyCapital, ApplyProduct, ApplyProject, ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
 import { Logger } from '../logger';
-import { FlowEventEnum, FlowIdEnum, WfService } from '../wf';
+import { FlowEventEnum, FlowIdEnum, WorkflowService } from '../workflow';
 import { LevelUpInput, RegisterDto, ResetPasswordDto } from './dtos';
 
 
 @Injectable()
 export class UserService extends BaseService<User> {
     constructor(
-        private readonly wf: WfService,
+        private readonly wf: WorkflowService,
         @InjectRepository(User)
         protected readonly repo: Repository<User>,
         @InjectRepository(ApplyProject)

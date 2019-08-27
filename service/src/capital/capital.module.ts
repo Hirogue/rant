@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Capital } from "../database";
-import { WfModule } from "../wf";
+import { WorkflowModule } from "../workflow";
 import { CapitalController } from "./capital.controller";
 import { CapitalResolver } from "./capital.resolver";
 import { CapitalService } from "./capital.service";
@@ -9,7 +9,7 @@ import { CapitalService } from "./capital.service";
 @Module({
     imports: [
         TypeOrmModule.forFeature([Capital]),
-        WfModule
+        WorkflowModule
     ],
     controllers: [CapitalController],
     providers: [
