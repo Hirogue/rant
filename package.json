@@ -11,6 +11,7 @@
     "build": "nps build",
     "start": "nps start",
     "stop": "nps stop",
+    "seed": "nps db.seed",
     "ic": "lerna bootstrap --hoist && nps install",
     "lerna": "lerna-wizard"
   },

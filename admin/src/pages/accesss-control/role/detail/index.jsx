@@ -1,11 +1,26 @@
 import ImageCropper from '@/components/ImageCropper';
 import StandardTabList from '@/components/StandardTabList';
+import StandardTreeTable from '@/components/StandardTreeTable';
 import { M_CREATE_ROLE, M_UPDATE_ROLE, Q_GET_ROLE } from '@/gql';
 import { uploadOne } from '@/utils/fetch';
 import { buildingQuery } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Affix, Button, Card, Dropdown, Form, Icon, Input, message, Select, Skeleton } from 'antd';
+import {
+  Affix,
+  Switch,
+  Radio,
+  Button,
+  Card,
+  Dropdown,
+  Form,
+  Icon,
+  Input,
+  InputNumber,
+  message,
+  Select,
+  Skeleton,
+} from 'antd';
 import React, { Fragment, useState } from 'react';
 import { router, withRouter } from 'umi';
 import styles from './style.less';
@@ -42,21 +57,6 @@ const action = (
     }}
   </RouteContext.Consumer>
 );
-
-const onUpload = async (file, target, mutation) => {
-  const res = await uploadOne(file);
-
-  if (!!res && res.relativePath) {
-    mutation({
-      variables: {
-        id: target.id,
-        data: {
-          avatar: res.relativePath,
-        },
-      },
-    });
-  }
-};
 
 const BasicForm = Form.create()(props => {
   const { target, mutation, form } = props;
@@ -127,6 +127,11 @@ const BasicForm = Form.create()(props => {
             ],
           })(<Input placeholder="请填写名称" />)}
         </FormItem>
+        <FormItem {...formItemLayout} label="排序">
+          {getFieldDecorator('sort', {
+            initialValue: target.sort || 0,
+          })(<InputNumber min={0} placeholder="请填写排序" />)}
+        </FormItem>
         <FormItem
           {...submitFormLayout}
           style={{
@@ -142,13 +147,59 @@ const BasicForm = Form.create()(props => {
   );
 });
 
-const renderContent = (data, mutation, tabKey, setTabKey) => {
+const renderContent = (data, dataSource, mutation, tabKey, setTabKey) => {
   let tabList = {
     basic: {
       name: '基础信息',
       render: () => <BasicForm target={data || {}} mutation={mutation} />,
     },
   };
+
+  if (data) {
+    const renderGrantAction = (action, record) => (
+      <Fragment>
+        <Radio.Group defaultValue="">
+          <Radio value="">无</Radio>
+          <Radio value={`${action}:any`}>任意</Radio>
+          <Radio value={`${action}:own`}>所属</Radio>
+        </Radio.Group>
+      </Fragment>
+    );
+
+    const columns = [
+      {
+        title: '名称',
+        dataIndex: 'name',
+      },
+      // {
+      //   title: '值',
+      //   dataIndex: 'value',
+      // },
+      {
+        title: '新增',
+        render: (val, record) => renderGrantAction('create', record),
+      },
+      {
+        title: '查询',
+        render: (val, record) => renderGrantAction('read', record),
+      },
+      {
+        title: '修改',
+        render: (val, record) => renderGrantAction('update', record),
+      },
+      {
+        title: '删除',
+        render: (val, record) => renderGrantAction('delete', record),
+      },
+    ];
+
+    tabList = Object.assign(tabList, {
+      grant: {
+        name: '授权',
+        render: () => <StandardTreeTable dataSource={dataSource} columns={columns} />,
+      },
+    });
+  }
 
   return (
     <PageHeaderWrapper
@@ -205,7 +256,13 @@ export default withRouter(props => {
 
   if (loading || !data) return <Skeleton loading={loading} />;
 
-  const { role } = data;
+  const { role, authorityTrees } = data;
 
-  return renderContent(id ? role : null, id ? updateRole : createRole, tabKey, setTabKey);
+  return renderContent(
+    id ? role : null,
+    authorityTrees,
+    id ? updateRole : createRole,
+    tabKey,
+    setTabKey,
+  );
 });

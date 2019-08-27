@@ -15,7 +15,7 @@ export const getTreeData = (data, root) =>
   data.map(item => {
     item.__typename && delete item.__typename;
 
-    if (item.children) {
+    if (item.children && item.children.length > 0) {
       return {
         ...item,
         key: item.id,

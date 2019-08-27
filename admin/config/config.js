@@ -352,11 +352,6 @@ export default {
               path: '/accesss-control/role/create',
               component: './accesss-control/role/detail',
             },
-            {
-              name: 'authority',
-              path: '/accesss-control/authority',
-              component: './accesss-control/authority',
-            },
           ],
         },
         {

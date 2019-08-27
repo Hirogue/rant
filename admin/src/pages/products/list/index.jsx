@@ -72,6 +72,11 @@ export default () => {
       },
     },
     {
+      title: '封面',
+      dataIndex: 'cover',
+      render: val => <img src={val} width="100" height="60" />,
+    },
+    {
       title: '名称',
       dataIndex: 'name',
       search: true,

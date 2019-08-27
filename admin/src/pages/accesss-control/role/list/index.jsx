@@ -69,6 +69,11 @@ export default () => {
       search: true,
     },
     {
+      title: '排序',
+      dataIndex: 'sort',
+      sorter: true,
+    },
+    {
       title: '创建时间',
       dataIndex: 'create_at',
       render: val => (val ? moment(val).format('YYYY-MM-DD HH:mm:ss') : ''),
@@ -108,8 +113,6 @@ export default () => {
       confirm: true,
       confirmTitle: `确定要删除吗?`,
     },
-    { name: '导入', icon: 'import', action: () => refetch() },
-    { name: '导出', icon: 'export', action: () => refetch() },
   ];
 
   return (

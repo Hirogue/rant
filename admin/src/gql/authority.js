@@ -3,9 +3,11 @@ import gql from 'graphql-tag';
 export const F_AUTHORITY_FIELDS = gql`
   fragment AuthorityFields on Authority {
     id
-    title
+    name
     value
     sort
+    update_at
+    create_at
   }
 `;
 
@@ -42,6 +44,21 @@ export const F_AUTHORITY_RECURSIVE = gql`
   }
 `;
 
+export const Q_GET_AUTHORITYS = gql`
+  ${F_AUTHORITY_FIELDS}
+
+  query queryAuthority($queryString: String!) {
+    queryAuthority(queryString: $queryString) {
+      total
+      page
+      pageCount
+      data {
+        ...AuthorityFields
+      }
+    }
+  }
+`;
+
 export const Q_GET_AUTHORITY_TREES = gql`
   ${F_AUTHORITY_FIELDS}
   ${F_AUTHORITY_RECURSIVE}
@@ -55,7 +72,6 @@ export const Q_GET_AUTHORITY_TREES = gql`
 
 export const Q_GET_AUTHORITY = gql`
   ${F_AUTHORITY_FIELDS}
-
   query getAuthority($id: String!, $queryString: String! = "") {
     authority(id: $id, queryString: $queryString) {
       ...AuthorityFields

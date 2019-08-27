@@ -4,6 +4,7 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import * as redisStore from 'cache-manager-redis-store';
 import { RenderModule } from 'nest-next';
+import { AccessControlModule } from './access-control';
 import { ArticleModule } from './artilce';
 import { AuthModule } from './auth';
 import { AuthorityModule } from './authority';
@@ -43,6 +44,7 @@ import { WorkflowModule } from './workflow';
       ...Config.cache
     }),
     CoreModule,
+    AccessControlModule,
     RenderModule,
     LoggerModule,
     VerificationModule,
