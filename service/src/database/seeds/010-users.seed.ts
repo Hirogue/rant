@@ -54,7 +54,7 @@ export default class implements Seeder {
                 user.password = item.password;
                 user.lastPassword = item.password;
                 user.account = item.credential;
-                user.realname = item.real_name;
+                user.realname = item.real_name ? item.real_name : '';
                 user.phone = item.phonenumber;
                 user.vip = item.vip;
                 user.create_at = item.created_when;
@@ -103,6 +103,7 @@ export default class implements Seeder {
 
 
                 await connection.getRepository(User).save(user);
+                await connection.getRepository(User).update({account: item.credential}, {create_at: item.created_when});
 
             }
         } else {

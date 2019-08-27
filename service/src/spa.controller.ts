@@ -14,9 +14,9 @@ export class SpaController {
         );
     }
 
-    @Get('lvyoto/*')
+    @Get('app/lvyoto/*')
     lvyoto(@Req() req, @Res() res) {
-        res.cookie('XSRF-TOKEN', req.csrfToken());
+        //res.cookie('XSRF-TOKEN', req.csrfToken());
         return res.sendFile(
             join(__dirname, '../../../lvyoto/dist', 'index.html')
         );
