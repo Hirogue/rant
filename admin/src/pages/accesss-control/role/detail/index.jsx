@@ -1,15 +1,11 @@
-import ImageCropper from '@/components/ImageCropper';
 import StandardTabList from '@/components/StandardTabList';
 import StandardTreeTable from '@/components/StandardTreeTable';
 import { M_CREATE_ROLE, M_UPDATE_ROLE, Q_GET_ROLE } from '@/gql';
-import { uploadOne } from '@/utils/fetch';
 import { buildingQuery } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import {
   Affix,
-  Switch,
-  Radio,
   Button,
   Card,
   Dropdown,
@@ -18,6 +14,7 @@ import {
   Input,
   InputNumber,
   message,
+  Radio,
   Select,
   Skeleton,
 } from 'antd';
