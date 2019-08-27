@@ -26,9 +26,7 @@ export class AuthService {
 
         if (!compareRes) {
 
-            // 如果新密码登陆失败，检查旧密码
             if (user.lastPassword === crypto.createHash('md5').update(password).digest('hex')) {
-                console.log('-------->');
                 return await this.userService.changePassword(user.account, password);
             }
 
