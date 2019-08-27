@@ -27,7 +27,7 @@ import { StorageModule } from './storage';
 import { SuccessCaseModule } from './success-case';
 import { UserModule } from './user';
 import { VerificationModule } from './verification';
-import { WfModule } from './wf';
+import { WorkflowModule } from './workflow';
 
 @Module({
   imports: [
@@ -46,7 +46,7 @@ import { WfModule } from './wf';
     RenderModule,
     LoggerModule,
     VerificationModule,
-    WfModule,
+    WorkflowModule,
     StorageModule,
     RoleModule,
     AuthorityModule,

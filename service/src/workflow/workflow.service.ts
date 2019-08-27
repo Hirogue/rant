@@ -8,7 +8,7 @@ import { Logger } from "../logger";
 import { LevelUpFlow, PublishCapitalFlow, PublishProjectFlow } from './flows';
 
 @Injectable()
-export class WfService implements OnModuleInit, OnModuleDestroy {
+export class WorkflowService implements OnModuleInit, OnModuleDestroy {
 
     private config: WorkflowConfig;
     private host: IWorkflowHost;

@@ -35,7 +35,7 @@ async function bootstrap() {
   server.use(cookieParser());
 
   if (!Config.dev) {
-    server.use(csurf(Config.csrf));
+    // server.use(csurf(Config.csrf));
     server.use(helmet(Config.helmet));
     server.use(rateLimit(Config.rateLimit));
   } else {

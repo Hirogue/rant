@@ -6,29 +6,29 @@ import { CacheService } from "../cache";
 import { Config } from "../config";
 import { SmsTypeEnum } from "../core";
 import { Logger } from "../logger";
-import { MqService, MsgQueue } from "../mq";
+import { MessageQueueService, MessageChannel } from "../message-queue";
 import { UserService } from "../user";
 
 @Injectable()
 export class VerificationService implements OnModuleInit, OnModuleDestroy {
 
-    private queue: MsgQueue;
+    private ch: MessageChannel;
 
     constructor(
         private readonly cache: CacheService,
-        private readonly mq: MqService,
+        private readonly mq: MessageQueueService,
         @Inject(forwardRef(() => UserService))
         private readonly userService: UserService
     ) { }
 
     async onModuleInit() {
         const channel = await this.mq.createChannel();
-        this.queue = new MsgQueue(channel, 'SMS');
-        await this.queue.consume(this.handleSMS);
+        this.ch = new MessageChannel(channel, 'SMS');
+        await this.ch.consume(this.handleSMS);
     }
 
     async onModuleDestroy() {
-        await this.queue.close();
+        await this.ch.close();
     }
 
     async handleSMS(content: any) {
@@ -81,7 +81,7 @@ export class VerificationService implements OnModuleInit, OnModuleDestroy {
 
         Logger.debug('code:', code);
 
-        await this.queue.send({ phone, type, code });
+        await this.ch.send({ phone, type, code });
 
         return true;
     }

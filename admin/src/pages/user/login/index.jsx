@@ -82,7 +82,7 @@ export default () => {
             name="account"
             placeholder={`${formatMessage({
               id: 'user-login.login.userName',
-            })}: admin or user`}
+            })}: SuperAdmin or your phone number`}
             rules={[
               {
                 required: true,
@@ -96,7 +96,7 @@ export default () => {
             name="password"
             placeholder={`${formatMessage({
               id: 'user-login.login.password',
-            })}: ant.design`}
+            })}`}
             rules={[
               {
                 required: true,

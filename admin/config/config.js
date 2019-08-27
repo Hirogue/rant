@@ -70,6 +70,9 @@ if (isAntDesignProPreview) {
 }
 
 export default {
+  outputPath: './dist',
+  base: '/admin/',
+  publicPath: '/admin/',
   plugins,
   block: {
     defaultGitUrl: 'https://github.com/ant-design/pro-blocks',
@@ -332,27 +335,27 @@ export default {
           component: './org',
         },
         {
-          name: 'rbac',
+          name: 'accesss-control',
           icon: 'safety-certificate',
-          path: '/rbac',
+          path: '/accesss-control',
           routes: [
             {
               name: 'role.list',
-              path: '/rbac/role/list',
-              component: './rbac/role/list',
+              path: '/accesss-control/role/list',
+              component: './accesss-control/role/list',
             },
             {
-              path: '/rbac/role/detail/:id',
-              component: './rbac/role/detail',
+              path: '/accesss-control/role/detail/:id',
+              component: './accesss-control/role/detail',
             },
             {
-              path: '/rbac/role/create',
-              component: './rbac/role/detail',
+              path: '/accesss-control/role/create',
+              component: './accesss-control/role/detail',
             },
             {
               name: 'authority',
-              path: '/rbac/authority',
-              component: './rbac/authority',
+              path: '/accesss-control/authority',
+              component: './accesss-control/authority',
             },
           ],
         },

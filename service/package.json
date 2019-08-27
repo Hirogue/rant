@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@apollo/react-hooks": "^0.1.0-beta.11",
+    "@apollo/react-ssr": "^3.0.1",
     "@nestjs/common": "^6.0.0",
     "@nestjs/core": "^6.0.0",
     "@nestjs/graphql": "^6.4.2",
@@ -51,6 +52,7 @@
     "class-validator": "^0.9.1",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.4",
+    "crypto": "^1.0.1",
     "csurf": "^1.10.0",
     "csvtojson": "^2.0.10",
     "deepmerge": "^4.0.0",

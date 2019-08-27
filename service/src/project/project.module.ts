@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Project } from "../database";
-import { WfModule } from "../wf";
+import { WorkflowModule } from "../workflow";
 import { ProjectController } from "./project.controller";
 import { ProjectResolver } from "./project.resolver";
 import { ProjectService } from "./project.service";
@@ -9,7 +9,7 @@ import { ProjectService } from "./project.service";
 @Module({
     imports: [
         TypeOrmModule.forFeature([Project]),
-        WfModule
+        WorkflowModule
     ],
     controllers: [ProjectController],
     providers: [

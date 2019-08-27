@@ -7,8 +7,8 @@ import { ApolloLink, from } from 'apollo-link';
 import { onError } from 'apollo-link-error';
 import { HttpLink } from 'apollo-link-http';
 import apolloLogger from 'apollo-link-logger';
-import { formatMessage } from 'umi-plugin-react/locale';
 import { router } from 'umi';
+import { formatMessage } from 'umi-plugin-react/locale';
 
 const httpLink = new HttpLink({
   ...Config.apollo.link,
@@ -54,8 +54,14 @@ const errorHandler = onError(error => {
   }
 });
 
+let middlewares = [authMiddleware, errorHandler, httpLink];
+
+if (Config.dev) {
+  middlewares = [apolloLogger, ...middlewares];
+}
+
 const client = new ApolloClient({
-  link: from([apolloLogger, authMiddleware, errorHandler, httpLink]),
+  link: from(middlewares),
   cache: new InMemoryCache(),
 });
 

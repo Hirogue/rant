@@ -7,14 +7,14 @@ import { Config } from '../config';
 import { BaseService, UserLevelEnum } from '../core';
 import { ApplyCapital, ApplyProduct, ApplyProject, ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
 import { Logger } from '../logger';
-import { FlowEventEnum, FlowIdEnum, WfService } from '../wf';
+import { FlowEventEnum, FlowIdEnum, WorkflowService } from '../workflow';
 import { LevelUpInput, RegisterDto, ResetPasswordDto } from './dtos';
 
 
 @Injectable()
 export class UserService extends BaseService<User> {
     constructor(
-        private readonly wf: WfService,
+        private readonly wf: WorkflowService,
         @InjectRepository(User)
         protected readonly repo: Repository<User>,
         @InjectRepository(ApplyProject)
@@ -164,10 +164,14 @@ export class UserService extends BaseService<User> {
 
         if (dto.password !== dto.confirmPassword) throw new BadRequestException('两次密码不一致');
 
-        const user = await this.findOneByAccount(dto.phone);
+        return await this.changePassword(dto.phone, dto.password);
+    }
+
+    async changePassword(account: string, password: string) {
+        const user = await this.findOneByAccount(account);
 
         const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(dto.password, salt);
+        user.password = await bcrypt.hash(password, salt);
 
         return await this.repo.save(user);
     }

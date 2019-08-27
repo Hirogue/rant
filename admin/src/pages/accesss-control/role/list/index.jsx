@@ -58,7 +58,7 @@ export default () => {
       render: (val, row) => {
         return (
           <Fragment>
-            <Link to={`/rbac/role/detail/${val}`}>详情</Link>
+            <Link to={`/accesss-control/role/detail/${val}`}>详情</Link>
           </Fragment>
         );
       },
@@ -88,7 +88,7 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => router.push('/rbac/role/create') },
+    { name: '新增', icon: 'file-add', action: () => router.push('/accesss-control/role/create') },
     {
       name: '删除',
       icon: 'delete',
