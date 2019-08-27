@@ -1,6 +1,6 @@
 import { forwardRef, Module } from "@nestjs/common";
 import { CacheModule } from '../cache';
-import { MqModule } from "../mq";
+import { MessageQueueModule } from "../message-queue";
 import { UserModule } from "../user";
 import { VerificationController } from "./verification.controller";
 import { VerificationService } from "./verification.service";
@@ -8,7 +8,7 @@ import { VerificationService } from "./verification.service";
 @Module({
     imports: [
         CacheModule,
-        MqModule,
+        MessageQueueModule,
         forwardRef(() => UserModule)
     ],
     controllers: [VerificationController],

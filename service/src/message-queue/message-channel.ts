@@ -1,6 +1,6 @@
 import { Channel } from "amqplib";
 
-export class MsgQueue {
+export class MessageChannel {
 
     constructor(
         private readonly ch: Channel,

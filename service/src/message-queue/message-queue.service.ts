@@ -4,7 +4,7 @@ import { Config } from "../config";
 import { Logger } from "../logger";
 
 @Injectable()
-export class MqService implements OnModuleInit, OnModuleDestroy {
+export class MessageQueueService implements OnModuleInit, OnModuleDestroy {
     private client: Connection;
 
     async onModuleInit() {
