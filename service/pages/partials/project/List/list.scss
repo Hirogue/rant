@@ -1,0 +1,113 @@
+.list-container {
+	height: 216px;
+	padding: 30px 20px;
+	box-sizing: border-box;
+	border-bottom: 1px dashed #efefef;
+	.link-img {
+		width: 270px;
+		height: 156px;
+		display: block;
+		float: left;
+		img {
+			width: 100%;
+			height: 100%;
+		}
+	}
+	.join-mod {
+		width: 510px;
+		height: 156px;
+		padding: 0 20px;
+		box-sizing: border-box;
+		float: left;
+		border-right: 1px solid #efefef;
+		.join-title {
+			font-size: 20px;
+		}
+		.join-lis {
+			padding: 20px 0;
+			height: 88px;
+			li {
+				width: 25%;
+				height: 48px;
+				float: left;
+				border-right: 1px solid #efefef;
+				padding-left: 20px;
+				box-sizing: border-box;
+				p {
+					font-size: 14px;
+				}
+				h5 {
+					font-size: 16px;
+					font-weight: 400;
+					padding-top: 10px;
+				}
+			}
+			li:nth-last-of-type(1) {
+				border-right: none;
+			}
+			li:nth-of-type(1) {
+				padding-left: 0;
+			}
+		}
+		.join-user {
+			.iconfont {
+				color: #2e88e8;
+			}
+			span {
+				font-size: 14px;
+			}
+		}
+		.join-time {
+			width: 100%;
+			height: 36px;
+			line-height: 36px;
+			p {
+				font-size: 14px;
+			}
+			p:nth-of-type(1) {
+				float: left;
+			}
+			p:nth-last-of-type(1) {
+				float: right;
+				.iconfont {
+					color: #2e88e8;
+				}
+				span {
+					margin-left: 2px;
+				}
+			}
+		}
+	}
+	.introduce {
+		width: 356px;
+		float: right;
+		p {
+			text-indent: 20px;
+			font-size: 14px;
+			line-height: 1.5;
+			padding: 0 0 30px;
+		}
+		.btns {
+			height: 36px;
+			a {
+				display: block;
+				width: 148px;
+				height: 34px;
+				font-size: 14px;
+				text-align: center;
+				line-height: 34px;
+				border: 1px solid #2e88e8;
+				&:hover {
+					background-color: #2e88e8;
+					color: #fff;
+				}
+			}
+			a:nth-of-type(1) {
+				float: left;
+			}
+			a:nth-last-of-type(1) {
+				float: right;
+			}
+		}
+	}
+}

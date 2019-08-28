@@ -1,0 +1,125 @@
+.service-detail-page {
+	width: 100%;
+	.service-top {
+		width: 100%;
+		height: 316px;
+		position: relative;
+		.service-bg-img {
+			width: 100%;
+			height: 100%;
+			display: block;
+			position: absolute;
+			left: 0;
+			top: 0;
+			z-index: 10;
+		}
+		.service-top-content {
+			width: 1200px;
+			height: 100%;
+			position: absolute;
+			left: 50%;
+			top: 0;
+			margin-left: -600px;
+			padding: 0 20px;
+			box-sizing: border-box;
+			z-index: 20;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			.left {
+				width: 336px;
+				float: left;
+				.service-logo-img {
+					width: 260px;
+					height: auto;
+					display: block;
+				}
+				.name-btn {
+					width: 100%;
+					height: 40px;
+					line-height: 40px;
+					margin-top: 20px;
+					p {
+						float: left;
+						color: #fff;
+						margin-right: 40px;
+						font-size: 16px;
+					}
+					a {
+						width: 160px;
+						height: 40px;
+						border-radius: 4px;
+						text-align: center;
+						color: #fff;
+						font-size: 14px;
+						background-color: #ffa800;
+						float: left;
+					}
+				}
+			}
+			.right {
+				width: 558px;
+				float: right;
+				li {
+					height: 28px;
+					font-size: 14px;
+					margin-top: 20px;
+					span {
+						float: left;
+						color: #fff;
+						line-height: 28px;
+					}
+					span:nth-of-type(1) {
+						width: 88px;
+						height: 28px;
+						text-align: center;
+						background-color: #2e88e8;
+						margin-right: 10px;
+						border-radius: 14px 14px 14px 0;
+					}
+					span:nth-of-type(2) {
+					}
+				}
+			}
+		}
+	}
+	.item-main {
+		width: 1200px;
+		margin: auto;
+		background-color: #fff;
+		border-radius: 8px 8px 0 0;
+		margin-bottom: 40px;
+		padding-bottom: 40px;
+		.item-top {
+			width: 100%;
+			height: 52px;
+			border-bottom: 1px dashed #efefef;
+			padding: 0 20px;
+			.icon {
+				padding: 0 20px;
+				height: 40px;
+				background-color: #2e88e8;
+				float: left;
+				line-height: 40px;
+				border-radius: 0 0 8px 8px;
+				.iconfont {
+					font-size: 16px;
+					color: #fff;
+				}
+				span {
+					font-size: 16px;
+					color: #fff;
+				}
+			}
+		}
+		.item-content {
+			padding: 20px;
+			box-sizing: border-box;
+			p {
+				font-size: 14px;
+				line-height: 2;
+				padding-bottom: 15px;
+			}
+		}
+	}
+}

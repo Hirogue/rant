@@ -1,0 +1,43 @@
+.fund-form{
+  .tab-title{
+    width: 100%;
+    border-bottom: 1px dashed #efefef;
+    p{
+      font-size: 16px;
+      line-height: 40px;
+      border-left: 4px solid #2e8df3;
+      text-indent: 20px;
+    }
+  }
+  .form-main{
+    width: 100%;
+    .id-tab{
+      padding: 25px 0;
+      display: flex;
+      font-size: 14px;
+      align-items: center;
+      p{
+        width: 140px;
+        text-align: right;
+        color: #333;
+        span{
+          color: red;
+        }
+      }
+    }
+    .ant-form-item{
+      display: flex;
+      .ant-form-item-label{
+        width: 140px;
+        text-align: right;
+      }
+      .ant-form-item-control-wrapper{
+        min-width: 320px;
+      }
+    }
+    .ant-btn-primary{
+      width: 120px;
+      margin-left: 140px;
+    }
+  }
+}
