@@ -1,0 +1,91 @@
+
+
+.notice-advantage{
+    width: 100%;
+    margin: auto;
+    .notice-container{
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        border-bottom: 1px solid #efefef;
+        background-color: #fff;
+        .notice-box{
+            width: 1200px;
+            margin: auto;
+            height: 100%;
+            .iconfont{
+                float: left;
+                font-size: 18px;
+                color: #dd3228;
+                line-height: 40px;
+            }
+            h4{
+                float: left;
+                font-weight: 400;
+                margin-left: 10px;
+                color: #666;
+                font-size: 12px;
+            }
+            a{
+                float: right;
+                font-size: 12px;
+                color: #999;
+                &:hover{
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+    .advantage-container{
+        width: 100%;
+        background-color: #fff;
+        .advantage-box{
+            width: 1200px;
+            height: 140px;
+            margin: auto;
+            .advantage-item{
+                width: 33.33%;
+                height: 46px;
+                float: left;
+                padding: 48px 0 0;
+                box-sizing: border-box;
+                display: flex;
+                justify-content: center;
+                .iconfont{
+                    float: left;
+                    color: #dd3228;
+                    font-size: 18px;
+                    padding: 28px 2px 0 0;
+                }
+                p{
+                    font-size: 12px;
+                    float: left;
+                    padding: 32px 4px 0 0;
+                }
+                h4{
+                    float: left;
+                    height: 46px;
+                    font-size: 12px;
+                    color: #dd3228;
+                    span{
+                        width: 30px;
+                        height: 44px;
+                        text-align: center;
+                        line-height: 44px;
+                        color: #dd3228;
+                        font-size: 36px;
+                        border: 1px solid #dd3228;
+                        border-radius: 3px;
+                        display: block;
+                        float: left;
+                        margin: 0 2px;
+                    }
+                    i{
+                        float: left;
+                        padding: 32px 0 0 4px;
+                    }
+                }
+            }
+        }
+    }
+}

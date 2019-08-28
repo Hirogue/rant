@@ -1,0 +1,41 @@
+.selected-items-page{
+    width: 1200px;
+    margin: auto; 
+    .search{
+      width: 100%;
+      padding-right: 880px;
+      padding-left: 20px;
+      box-sizing: border-box;
+    }
+    .project-list{
+        box-sizing: border-box;
+        background-color: #fff;
+        margin: 20px 0 30px;
+        .sort-container{
+            width: 100%;
+            height: 36px;
+            border-bottom: 1px solid #efefef;
+            font-size: 14px;
+            .sort-on{
+                float: left;
+                line-height: 36px;
+                margin-right: 40px;
+                cursor: pointer;
+                span{
+                    margin-right: 2px;
+                }
+                .iconfont{
+                    color: #999;
+                    font-size: 12px;
+                }
+            }
+            .result{
+                float: right;
+                line-height: 36px;
+                span{
+                    color: #dd3228;
+                }
+            }
+        }
+    }
+}

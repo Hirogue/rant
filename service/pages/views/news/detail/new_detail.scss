@@ -1,0 +1,151 @@
+.news-detail-page {
+	width: 1120px;
+	height: auto;
+	margin: auto;
+
+	.clearfix:after {
+		content: ".";
+		display: block;
+		clear: both;
+		visibility: hidden;
+		line-height: 0;
+		height: 0;
+		font-size: 0;
+	}
+
+	.news-detail-main {
+		box-sizing: border-box;
+		margin: 40px auto 0;
+
+		.news-detail-box {
+			padding: 0 20px 60px;
+			box-sizing: border-box;
+			background-color: #fff;
+			border-radius: 12px;
+
+			.img-box {
+				width: 100%;
+				border-radius: 12px;
+				position: relative;
+				top: -20px;
+
+				img {
+					width: 100%;
+					height: auto;
+				}
+			}
+
+			.content-box {
+				width: 1100px;
+
+				.time-left {
+					width: 100px;
+					float: left;
+					.tile-p {
+						font: 14px;
+						color: #999;
+						margin-bottom: 0;
+
+						span {
+							font-size: 52px;
+							color: #222;
+						}
+					}
+
+					.come-p {
+						font-size: 12px;
+						color: #999;
+					}
+				}
+
+				.content-text {
+					width: 980px;
+					float: right;
+					padding: 20px;
+					color: rgba(0, 0, 0, 0.85);
+					p {
+						padding: 10px 0;
+					}
+					.news-title {
+						font-size: 30px;
+						padding-bottom: 40px;
+						font-weight: 400;
+					}
+					.text {
+						font-size: 14px;
+						color: #666;
+						line-height: 2;
+					}
+					img {
+						display: block;
+						margin: auto;
+						max-width: 100%;
+						height: auto;
+						padding: 20px 20px 20px 0;
+					}
+				}
+			}
+		}
+
+		.flip-box {
+			max-width: 1160px;
+			margin: 40px auto;
+
+			a {
+				width: 100%;
+				display: block;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				font-size: 14px;
+				line-height: 2;
+				color: #666;
+
+				&:hover {
+					color: #222;
+					text-decoration: underline;
+				}
+			}
+
+			.a-pre {
+				width: 50%;
+				float: left;
+			}
+
+			.a-next {
+				width: 50%;
+				float: right;
+				text-align: right;
+			}
+		}
+		.share {
+			.bdsharebuttonbox {
+				width: 100px;
+				margin: 40px auto;
+			}
+		}
+	}
+}
+
+.share {
+	.bds_tsina {
+		background: url("/static/img/xinlang.png") no-repeat center;
+		background-size: 100%;
+		background-position: 0 !important;
+		padding: 20px !important;
+	}
+
+	.bds_tqq {
+		background: url("/static/img/weibo.png") no-repeat center;
+		background-size: 100%;
+		background-position: 0 !important;
+		padding: 20px !important;
+	}
+
+	.bds_weixin {
+		background: url("/static/img/weixin.png") no-repeat center;
+		background-size: 100%;
+		background-position: 0 !important;
+		padding: 20px !important;
+	}
+}
