@@ -1,16 +1,15 @@
+import StandardActions from '@/components/StandardActions';
 import StandardTabList from '@/components/StandardTabList';
 import StandardTreeTable from '@/components/StandardTreeTable';
 import { M_CREATE_ROLE, M_UPDATE_ROLE, Q_GET_ROLE } from '@/gql';
 import { buildingQuery } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
 import {
   Affix,
   Button,
   Card,
-  Dropdown,
   Form,
-  Icon,
   Input,
   InputNumber,
   message,
@@ -18,42 +17,14 @@ import {
   Select,
   Skeleton,
 } from 'antd';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { router, withRouter } from 'umi';
+import { M_UPDATE_GRANTS } from '../gql';
 import styles from './style.less';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Option } = Select;
-
-const action = (
-  <RouteContext.Consumer>
-    {({ isMobile }) => {
-      if (isMobile) {
-        return (
-          <Dropdown.Button
-            type="primary"
-            icon={<Icon type="down" />}
-            overlay={mobileMenu}
-            placement="bottomRight"
-          >
-            主操作
-          </Dropdown.Button>
-        );
-      }
-
-      return (
-        <Fragment>
-          <Affix style={{ display: 'inline-block' }} offsetTop={80}>
-            <Button style={{ borderRadius: 4 }} type="primary" onClick={() => router.goBack()}>
-              返回
-            </Button>
-          </Affix>
-        </Fragment>
-      );
-    }}
-  </RouteContext.Consumer>
-);
 
 const BasicForm = Form.create()(props => {
   const { target, mutation, form } = props;
@@ -144,7 +115,17 @@ const BasicForm = Form.create()(props => {
   );
 });
 
-const renderContent = (data, dataSource, mutation, tabKey, setTabKey) => {
+const renderContent = (
+  grants,
+  setGrants,
+  data,
+  dataSource,
+  mutation,
+  client,
+  refetch,
+  tabKey,
+  setTabKey,
+) => {
   let tabList = {
     basic: {
       name: '基础信息',
@@ -153,15 +134,45 @@ const renderContent = (data, dataSource, mutation, tabKey, setTabKey) => {
   };
 
   if (data) {
-    const renderGrantAction = (action, record) => (
-      <Fragment>
-        <Radio.Group defaultValue="">
-          <Radio value="">无</Radio>
-          <Radio value={`${action}:any`}>任意</Radio>
-          <Radio value={`${action}:own`}>所属</Radio>
-        </Radio.Group>
-      </Fragment>
-    );
+    const getGrantValue = (action, record) => {
+      const grant = grants[record.id];
+
+      if (!!grant) {
+        if (!!grant[`${action}:any`]) return 'any';
+        if (!!grant[`${action}:own`]) return 'own';
+      }
+
+      return '';
+    };
+
+    const onGrantChange = (action, value, record) => {
+      if (grants[record.id]) {
+        delete grants[record.id][`${action}:any`];
+        delete grants[record.id][`${action}:own`];
+
+        if (!!value) {
+          grants[record.id][`${action}:${value}`] = ['*'];
+        }
+
+        setGrants({ ...grants });
+      }
+    };
+
+    const renderGrantAction = (action, record) =>
+      grants[record.id] ? (
+        <Fragment>
+          <Radio.Group
+            value={getGrantValue(action, record)}
+            onChange={e => onGrantChange(action, e.target.value, record)}
+          >
+            <Radio value="">无</Radio>
+            <Radio value="any">任意</Radio>
+            <Radio value="own">所属</Radio>
+          </Radio.Group>
+        </Fragment>
+      ) : (
+        ''
+      );
 
     const columns = [
       {
@@ -191,9 +202,44 @@ const renderContent = (data, dataSource, mutation, tabKey, setTabKey) => {
     ];
 
     tabList = Object.assign(tabList, {
-      grant: {
+      grants: {
         name: '授权',
-        render: () => <StandardTreeTable dataSource={dataSource} columns={columns} />,
+        render: () => (
+          <Fragment>
+            <Affix style={{ display: 'inline-block', marginBottom: 10 }} offsetTop={80}>
+              <StandardActions
+                actions={[
+                  // { name: '新增', icon: 'file-add', action: () => { } },
+                  {
+                    name: '保存',
+                    icon: 'save',
+                    action: () => {
+                      client.mutate({
+                        mutation: M_UPDATE_GRANTS,
+                        variables: {
+                          id: data.id,
+                          data: { grants: JSON.stringify(grants) },
+                        },
+                        update: (cache, { data }) => {
+                          if (data.updateGrants) {
+                            message.success('授权成功');
+                            refetch();
+                          }
+                        },
+                      });
+                    },
+                  },
+                ]}
+              />
+            </Affix>
+            <StandardTreeTable
+              dataSource={dataSource}
+              columns={columns}
+              grants={grants}
+              setGrants={setGrants}
+            />
+          </Fragment>
+        ),
       },
     });
   }
@@ -201,7 +247,19 @@ const renderContent = (data, dataSource, mutation, tabKey, setTabKey) => {
   return (
     <PageHeaderWrapper
       title={data ? '编辑' : '新增'}
-      extra={action}
+      extra={
+        <RouteContext.Consumer>
+          {() => (
+            <Fragment>
+              <Affix style={{ display: 'inline-block' }} offsetTop={80}>
+                <Button style={{ borderRadius: 4 }} type="primary" onClick={() => router.goBack()}>
+                  返回
+                </Button>
+              </Affix>
+            </Fragment>
+          )}
+        </RouteContext.Consumer>
+      }
       className={styles.pageHeader}
       content={null}
       extraContent={null}
@@ -221,6 +279,8 @@ const renderContent = (data, dataSource, mutation, tabKey, setTabKey) => {
 
 export default withRouter(props => {
   const [tabKey, setTabKey] = useState('basic');
+  const [grants, setGrants] = useState({});
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const {
     match: {
@@ -228,10 +288,18 @@ export default withRouter(props => {
     },
   } = props;
 
+  const client = useApolloClient();
+
   const { loading, data, refetch } = useQuery(Q_GET_ROLE, {
     notifyOnNetworkStatusChange: true,
-    variables: { id: id || '', queryString: buildingQuery({ join: [{ field: 'category' }] }) },
+    variables: { id: id || '', queryString: buildingQuery({}) },
   });
+
+  useEffect(() => {
+    if (data.role) {
+      setGrants(data.role.grants ? JSON.parse(data.role.grants) : {});
+    }
+  }, [data]);
 
   const [createRole] = useMutation(M_CREATE_ROLE, {
     update: (proxy, { data }) => {
@@ -245,8 +313,17 @@ export default withRouter(props => {
   const [updateRole] = useMutation(M_UPDATE_ROLE, {
     update: (proxy, { data }) => {
       if (data) {
-        refetch();
         message.success('保存成功');
+        refetch();
+      }
+    },
+  });
+
+  const [updateGrants] = useMutation(M_UPDATE_GRANTS, {
+    update: (proxy, { data }) => {
+      if (data) {
+        message.success('保存成功');
+        refetch();
       }
     },
   });
@@ -256,9 +333,13 @@ export default withRouter(props => {
   const { role, authorityTrees } = data;
 
   return renderContent(
+    grants,
+    setGrants,
     id ? role : null,
     authorityTrees,
     id ? updateRole : createRole,
+    client,
+    refetch,
     tabKey,
     setTabKey,
   );

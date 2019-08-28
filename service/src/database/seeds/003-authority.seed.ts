@@ -128,19 +128,13 @@ export default class implements Seeder {
         }).seed();
 
         const ac = await factory(Authority)({
-            name: '访问控制',
+            name: '权限管理',
             value: '/accesss-control'
         }).seed();
 
         await factory(Authority)({
             name: '角色列表',
             value: '/accesss-control/role/list',
-            parent: ac
-        }).seed();
-
-        await factory(Authority)({
-            name: '权限管理',
-            value: '/accesss-control/authority',
             parent: ac
         }).seed();
 

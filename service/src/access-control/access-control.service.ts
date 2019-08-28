@@ -1,5 +1,8 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
 import { AccessControl } from 'accesscontrol';
+import { Repository } from "typeorm";
+import { Role } from "../database";
 import { Logger } from "../logger";
 
 @Injectable()
@@ -7,26 +10,24 @@ export class AccessControlService implements OnModuleInit {
 
     private readonly ac: AccessControl;
 
-    constructor() {
+    constructor(
+        @InjectRepository(Role)
+        private readonly roleRepos: Repository<Role>
+    ) {
         this.ac = new AccessControl();
     }
 
     async onModuleInit() {
-        Logger.trace('AccessControl settings grants ...');
+        Logger.trace('AccessControl loading grants ...');
+        await this.loadGrants();
+        Logger.trace('AccessControl loaded grants ...');
+    }
 
-        const grantList = [
-            { role: 'admin', resource: 'video', action: 'create:any', attributes: '*, !views' },
-            { role: 'admin', resource: 'video', action: 'read:any', attributes: '*' },
-            { role: 'admin', resource: 'video', action: 'update:any', attributes: '*, !views' },
-            { role: 'admin', resource: 'video', action: 'delete:any', attributes: '*' },
+    async loadGrants() {
+        const grants = {};
+        const roles = await this.roleRepos.find();
 
-            { role: 'user', resource: 'video', action: 'create:own', attributes: '*, !rating, !views' },
-            { role: 'user', resource: 'video', action: 'read:any', attributes: '*' },
-            { role: 'user', resource: 'video', action: 'update:own', attributes: '*, !rating, !views' },
-            { role: 'user', resource: 'video', action: 'delete:own', attributes: '*' }
-        ];
-
-        this.ac.setGrants(grantList);
-
+        roles.forEach(role => grants[role.id] = role.grants ? role.grants : {});
+        this.ac.setGrants(grants);
     }
 }
