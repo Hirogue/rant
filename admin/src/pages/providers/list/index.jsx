@@ -85,11 +85,11 @@ export default () => {
       dataIndex: 'name',
       search: true,
     },
-    {
-      title: '简称',
-      dataIndex: 'slogan',
-      search: true,
-    },
+    // {
+    //   title: '简称',
+    //   dataIndex: 'slogan',
+    //   search: true,
+    // },
     {
       title: '分类',
       dataIndex: 'category.id',

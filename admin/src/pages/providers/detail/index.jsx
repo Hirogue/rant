@@ -137,11 +137,11 @@ const BasicForm = Form.create()(props => {
             ],
           })(<Input placeholder="请填写名称" />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="简称">
+        {/* <FormItem {...formItemLayout} label="简称">
           {getFieldDecorator('slogan', {
             initialValue: target.slogan,
           })(<Input placeholder="请填写简称" />)}
-        </FormItem>
+        </FormItem> */}
         <FormItem {...formItemLayout} label="分类">
           {getFieldDecorator('category.id', {
             initialValue: target.category ? target.category.id : null,
