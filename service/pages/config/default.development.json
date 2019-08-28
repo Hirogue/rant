@@ -1,0 +1,48 @@
+{
+	"HOST": "http://localhost",
+	"PORT": 3000,
+
+	"database": {
+		"bitLengthOfAuth": 16
+	},
+
+	"storage": {
+		"preUrl": "http://localhost:3000",
+		"rootPath": "./runtime/storage",
+		"uploadPath": "./runtime/storage/upload"
+	},
+
+	"redis": {
+		"host": "127.0.0.1",
+		"port": "6379",
+		"lifeTimeInSecOfCredentialToken": 60
+	},
+
+	"knex": {
+		"host": "127.0.0.1",
+		"database": "tourism",
+		"user": "tourism",
+		"password": "123456"
+	},
+
+	"typeorm": {
+		"type": "postgres",
+		"host": "127.0.0.1",
+		"port": "5432",
+		"database": "tourism",
+		"username": "tourism",
+		"password": "123456",
+		"dropSchema": false,
+		"synchronize": false,
+		"logging": true,
+		"entities": [ "./src/**/*.entity.ts" ]
+	},
+
+	"rabbitmq": {
+		"connection": "amqp://localhost"
+	},
+
+	"verification": {
+		"lifeTimeInSec": 180
+	}
+}

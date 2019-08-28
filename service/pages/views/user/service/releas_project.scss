@@ -1,0 +1,39 @@
+.releas-fund {
+	padding: 44px 0 20px;
+	.right-title {
+		width: 100%;
+		height: 44px;
+		padding: 0 20px;
+		box-sizing: border-box;
+		font-size: 16px;
+		background-color: #f9f9f9;
+		line-height: 44px;
+		border-radius: 6px 6px 0 0;
+		border-bottom: 1px solid #e7e7e7;
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+	.form-main {
+		padding: 25px;
+		box-sizing: border-box;
+		.ant-form-item-children {
+			span {
+				margin: 0 6px;
+			}
+		}
+		.ant-form-item {
+			display: flex;
+			.ant-form-item-label {
+				width: 140px;
+			}
+			.ant-form-item-control-wrapper {
+				min-width: 200px;
+			}
+			.ant-btn-primary {
+				width: 120px;
+				margin-left: 140px;
+			}
+		}
+	}
+}

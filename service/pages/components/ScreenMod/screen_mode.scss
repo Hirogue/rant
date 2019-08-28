@@ -1,0 +1,90 @@
+.ant-list-item {
+	position: relative;
+}
+.screen-mod {
+	width: 100%;
+	background-color: #fff;
+	margin-bottom: 20px;
+	.list-tag-box {
+		display: flex;
+		h6 {
+			width: 70px !important;
+		}
+		.tag-items-box {
+			height: 22px;
+			overflow: hidden;
+			.tag-items {
+				width: 980px;
+			}
+		}
+	}
+	.tag-box {
+		width: 100%;
+		height: 36px;
+		background-color: #fcfcfc;
+		border-radius: 8px 8px 0 0;
+		padding: 0 20px;
+		box-sizing: border-box;
+		border-bottom: 1px solid #efefef;
+		.tag {
+			float: left;
+			padding: 0 10px;
+			background-color: #2e88e8;
+			color: #fff;
+			height: 28px;
+			line-height: 28px;
+			border-radius: 0 0 8px 8px;
+			font-size: 12px;
+			.iconfont {
+				font-size: 16px;
+				margin-right: 4px;
+				position: relative;
+				top: 2px;
+			}
+		}
+		.change-tag {
+			padding: 6px 0 0 128px;
+		}
+	}
+	.ant-list-item {
+		border-bottom: 1px dashed #efefef;
+		padding: 10px 20px;
+		box-sizing: border-box;
+		.ant-tag {
+			font-size: 14px;
+		}
+	}
+}
+
+.popover-list {
+	p {
+		display: inline-block !important;
+		margin: 4px 10px;
+		font-size: 12px;
+		cursor: pointer;
+		&:hover {
+			color: #2e88e8;
+		}
+	}
+}
+
+.tag-more-btn {
+	color: #666;
+	font-size: 12px;
+	display: inline-block;
+	text-align: right;
+	position: absolute;
+	right: 20px;
+	top: 12px;
+	&:hover {
+		color: #222;
+		text-decoration: underline;
+	}
+	.iconfont {
+		font-size: 12px;
+		-webkit-transform: scale(0.8);
+		-moz-transform: scale(0.8);
+		transform: scale(0.8);
+		color: #999;
+	}
+}

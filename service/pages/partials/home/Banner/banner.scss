@@ -1,0 +1,157 @@
+.banner-container {
+	width: 100%;
+	max-width: 1920px;
+	margin: auto;
+	height: 420px;
+	position: relative;
+
+	input {
+		border-radius: 0 !important;
+	}
+
+	button {
+		border-radius: 0 !important;
+	}
+
+	.banner-box {
+		width: 100%;
+		height: auto;
+	}
+
+	.login-mod {
+		width: 1200px;
+		height: auto;
+		position: absolute;
+		left: 50%;
+		margin-left: -600px;
+		top: 0;
+		z-index: 100;
+
+		.ant-tabs-bar {
+			border-bottom: none;
+		}
+
+		.ant-form-item {
+			margin-bottom: 0;
+		}
+
+		.ant-form-explain {
+			font-size: 12px;
+			color: #fff;
+		}
+
+		.ant-form-item-children {
+			font-size: 12px;
+		}
+
+		.ant-tabs-nav {
+			width: 100%;
+		}
+
+		.ant-tabs-nav-container {
+			padding: 0;
+		}
+
+		.ant-tabs-tab-arrow-show {
+			display: none;
+		}
+
+		.ant-tabs-tab {
+			width: 50%;
+			text-align: center;
+			background-color: rgba(255, 255, 255, 0) !important;
+			color: #999;
+			font-size: 14px;
+			font-weight: 300;
+			border: none !important;
+			border-radius: 0 !important;
+			height: 40px;
+			line-height: 40px;
+		}
+
+		.ant-tabs-tab-active {
+			background-color: rgba(255, 255, 255, 0.1) !important;
+			color: #fff !important;
+			font-weight: 400 !important;
+		}
+
+		.login-mod-box {
+			width: 300px;
+			height: auto;
+			background-color: rgba(0, 0, 0, 0.5);
+			float: right;
+			margin-top: 60px;
+			padding: 0 30px 20px;
+			box-sizing: border-box;
+
+			.get-test {
+				position: absolute;
+				right: 0;
+				top: -8px;
+				width: 80px;
+				height: 32px;
+				z-index: 10;
+				font-size: 12px;
+			}
+
+			.reckon-img {
+				position: absolute;
+				right: 0;
+				top: -8px;
+				width: 80px;
+				height: 32px;
+				z-index: 10;
+				font-size: 14px;
+				text-align: center;
+				background-color: #999;
+				line-height: 32px;
+			}
+
+			.set-margin {
+				margin-bottom: 0;
+			}
+
+			.login-mod-title {
+				font-size: 16px;
+				font-weight: 400;
+				color: #fff;
+				padding: 20px 0 10px;
+				box-sizing: border-box;
+			}
+
+			.login-text-links {
+				color: #fff;
+				font-size: 12px;
+				position: relative;
+				top: -6px;
+			}
+
+			.ant-checkbox-checked .ant-checkbox-inner {
+				background-color: #dd3228;
+				border: 1px solid #dd3228;
+			}
+
+			.login-form-forgot {
+				color: #fff;
+			}
+
+			.login-form-button {
+				width: 100%;
+				background-color: #dd3228;
+				border: none;
+			}
+
+			.ant-form {
+				.ant-row {
+					.ant-form-item-children {
+						label {
+							span:nth-last-of-type(1) {
+								color: #fff;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

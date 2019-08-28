@@ -1,0 +1,30 @@
+.fund-manage{
+  padding: 44px 0 20px;
+  .right-title{
+    width: 100%;
+    height: 44px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    line-height: 44px;
+    border-radius: 6px 6px 0 0;
+    border-bottom: 1px solid #e7e7e7;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .tabs-btns{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    .ant-btn{
+      width: 56px;
+      height: 28px;
+      font-size: 12px;
+    }
+  }
+  .ant-pagination{
+    padding: 0 20px;
+  }
+}
