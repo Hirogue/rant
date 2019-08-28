@@ -111,7 +111,7 @@ const onAvatarUpload = async (file, target, mutation) => {
 };
 
 const BasicForm = Form.create()(props => {
-  const { orgTrees, target, mutation, form } = props;
+  const { orgTrees, roles, target, mutation, form } = props;
 
   const { getFieldDecorator, getFieldValue } = form;
 
@@ -198,7 +198,12 @@ const BasicForm = Form.create()(props => {
                 message: '请选择所属组织',
               },
             ],
-          })(<TreeSelect showSearch treeNodeFilterProp="title" treeData={orgTrees} />)}
+          })(<TreeSelect showSearch treeData={orgTrees} />)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="角色">
+          {getFieldDecorator('role.id', {
+            initialValue: target.role ? target.role.id : null,
+          })(<TreeSelect showSearch treeData={roles} />)}
         </FormItem>
         <FormItem {...formItemLayout} label="身份">
           {getFieldDecorator('identity', {
@@ -264,12 +269,17 @@ const BasicForm = Form.create()(props => {
   );
 });
 
-const renderContent = (orgTrees, data, mutation, tabKey, setTabKey) => {
+const renderContent = (orgTrees, roles, data, mutation, tabKey, setTabKey) => {
   let tabList = {
     basic: {
       name: '基础信息',
       render: () => (
-        <BasicForm orgTrees={getTreeData(orgTrees)} target={data || {}} mutation={mutation} />
+        <BasicForm
+          orgTrees={getTreeData(orgTrees)}
+          roles={getTreeData(roles.map(item => ({ title: item.name, ...item })))}
+          target={data || {}}
+          mutation={mutation}
+        />
       ),
     },
   };
@@ -328,7 +338,10 @@ export default withRouter(props => {
 
   const { loading, data, refetch } = useQuery(Q_GET_USER, {
     notifyOnNetworkStatusChange: true,
-    variables: { id: id || '', queryString: buildingQuery({ join: [{ field: 'org' }] }) },
+    variables: {
+      id: id || '',
+      queryString: buildingQuery({ join: [{ field: 'role' }, { field: 'org' }] }),
+    },
   });
 
   const [createUser] = useMutation(M_CREATE_USER, {
@@ -351,7 +364,14 @@ export default withRouter(props => {
 
   if (loading || !data) return <Skeleton loading={loading} />;
 
-  const { user, orgTrees } = data;
+  const { user, orgTrees, roles } = data;
 
-  return renderContent(orgTrees, id ? user : null, id ? updateUser : createUser, tabKey, setTabKey);
+  return renderContent(
+    orgTrees,
+    roles,
+    id ? user : null,
+    id ? updateUser : createUser,
+    tabKey,
+    setTabKey,
+  );
 });

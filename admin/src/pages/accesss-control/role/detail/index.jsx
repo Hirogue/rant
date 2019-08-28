@@ -209,6 +209,7 @@ const renderContent = (
             <Affix style={{ display: 'inline-block', marginBottom: 10 }} offsetTop={80}>
               <StandardActions
                 actions={[
+                  { name: '刷新', icon: 'reload', action: () => refetch() },
                   // { name: '新增', icon: 'file-add', action: () => { } },
                   {
                     name: '保存',
@@ -222,8 +223,9 @@ const renderContent = (
                         },
                         update: (cache, { data }) => {
                           if (data.updateGrants) {
-                            message.success('授权成功');
                             refetch();
+                            setGrants({ ...grants });
+                            message.success('授权成功');
                           }
                         },
                       });
@@ -311,15 +313,6 @@ export default withRouter(props => {
   });
 
   const [updateRole] = useMutation(M_UPDATE_ROLE, {
-    update: (proxy, { data }) => {
-      if (data) {
-        message.success('保存成功');
-        refetch();
-      }
-    },
-  });
-
-  const [updateGrants] = useMutation(M_UPDATE_GRANTS, {
     update: (proxy, { data }) => {
       if (data) {
         message.success('保存成功');

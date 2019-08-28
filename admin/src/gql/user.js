@@ -1,8 +1,10 @@
 import gql from 'graphql-tag';
+import { F_ROLE_FIELDS } from './role';
 import { F_ORG_FIELDS, F_ORG_RECURSIVE } from './org';
 import { F_METADATA_FIELDS, F_METADATA_RECURSIVE } from './metadata';
 
 export const F_USER_FIELDS = gql`
+  ${F_ROLE_FIELDS}
   ${F_ORG_FIELDS}
   ${F_METADATA_FIELDS}
 
@@ -22,6 +24,10 @@ export const F_USER_FIELDS = gql`
     type
     status
     vip
+    isSuperAdmin
+    role {
+      ...RoleFields
+    }
     org {
       ...OrgFields
     }
@@ -33,11 +39,11 @@ export const F_USER_FIELDS = gql`
 
 export const Q_GET_USERS = gql`
   ${F_USER_FIELDS}
+  ${F_ROLE_FIELDS}
   ${F_ORG_FIELDS}
   ${F_ORG_RECURSIVE}
-  ${F_METADATA_RECURSIVE}
 
-  query queryUser($queryString: String!, $metadataRoot: String! = "") {
+  query queryUser($queryString: String!) {
     queryUser(queryString: $queryString) {
       total
       page
@@ -51,14 +57,15 @@ export const Q_GET_USERS = gql`
       ...OrgRecursive
     }
 
-    metadataDescendantsTree(root: $metadataRoot) {
-      ...MetadataRecursive
+    roles {
+      ...RoleFields
     }
   }
 `;
 
 export const Q_GET_USER = gql`
   ${F_USER_FIELDS}
+  ${F_ROLE_FIELDS}
   ${F_ORG_FIELDS}
   ${F_ORG_RECURSIVE}
 
@@ -69,6 +76,10 @@ export const Q_GET_USER = gql`
 
     orgTrees {
       ...OrgRecursive
+    }
+
+    roles {
+      ...RoleFields
     }
   }
 `;

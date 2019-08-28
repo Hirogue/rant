@@ -1,5 +1,5 @@
 import { EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from "typeorm";
-import { User } from "../entities";
+import { Role, User } from "../entities";
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<User> {
@@ -8,7 +8,13 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
         return User;
     }
 
-    beforeInsert(event: InsertEvent<User>) {
+    async beforeInsert(event: InsertEvent<User>) {
+
+        if (!event.entity.role) {
+            const defaultRole = await event.connection.getRepository(Role).findOne({ name: '默认' });
+            event.entity.role = defaultRole;
+        }
+
         this.handleChange(event.entity);
     }
 

@@ -5,6 +5,7 @@ import { Role } from "../entities";
 export default class implements Seeder {
     public async run(factory: Factory, connection: Connection): Promise<any> {
 
+        await factory(Role)({ name: '默认' }).seed();
         await factory(Role)({ name: '总经理' }).seed();
 
         await factory(Role)({ name: '投资部副总' }).seed();

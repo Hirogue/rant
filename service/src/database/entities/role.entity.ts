@@ -1,8 +1,9 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Field, InputType, Int, ObjectType } from "type-graphql";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 import { JsonScalar } from '../../core';
 import { Base } from "./base";
+import { User } from './user.entity';
 
 @Entity()
 @ObjectType()
@@ -23,4 +24,10 @@ export class Role extends Base {
     @Column({ type: 'simple-json', nullable: true })
     @ApiModelProperty({ nullable: true })
     grants: any;
+
+    @Field(type => [User], { nullable: true })
+    @OneToMany(type => User, target => target.role)
+    @ApiModelProperty({ nullable: true })
+    users: User[];
+
 }   

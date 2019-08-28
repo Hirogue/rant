@@ -13,6 +13,7 @@ export class UserController extends BaseController(User, {
         join: {
             org: {},
             area: {},
+            role: {},
             apply_products: {},
             apply_projects: {},
             apply_capitals: {},
