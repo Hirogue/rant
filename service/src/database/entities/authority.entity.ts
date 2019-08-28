@@ -1,8 +1,7 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Field, InputType, Int, ObjectType } from "type-graphql";
-import { Column, Entity, ManyToMany, Tree, TreeChildren, TreeParent } from "typeorm";
+import { Column, Entity, Tree, TreeChildren, TreeParent } from "typeorm";
 import { Base } from "./base";
-import { Role } from './role.entity';
 
 @Entity()
 @Tree('materialized-path')
@@ -13,7 +12,7 @@ export class Authority extends Base {
     @Field({ nullable: true })
     @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
-    title: string;
+    name: string;
 
     @Field({ nullable: true })
     @Column({ nullable: true })
@@ -34,9 +33,4 @@ export class Authority extends Base {
     @TreeChildren()
     @ApiModelProperty({ nullable: true })
     children: Authority[];
-
-    @Field(type => [Role], { nullable: true })
-    @ManyToMany(type => Role, target => target.authorities)
-    @ApiModelProperty({ nullable: true })
-    roles: Role[];
 }

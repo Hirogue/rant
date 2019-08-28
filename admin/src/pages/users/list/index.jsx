@@ -13,7 +13,7 @@ import {
 } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
-import { Affix, Avatar, Col, Divider, message, Popconfirm, Row, Skeleton } from 'antd';
+import { Affix, Col, Divider, message, Popconfirm, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
@@ -109,11 +109,11 @@ export default () => {
         );
       },
     },
-    {
-      title: '头像',
-      dataIndex: 'avatar',
-      render: val => <Avatar src={val} />,
-    },
+    // {
+    //   title: '头像',
+    //   dataIndex: 'avatar',
+    //   render: val => <Avatar src={val} />,
+    // },
     {
       title: '账户',
       dataIndex: 'account',
@@ -127,6 +127,11 @@ export default () => {
     {
       title: '手机号',
       dataIndex: 'phone',
+      search: true,
+    },
+    {
+      title: '企业名称',
+      dataIndex: 'company',
       search: true,
     },
     {

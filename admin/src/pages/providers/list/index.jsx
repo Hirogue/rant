@@ -78,7 +78,7 @@ export default () => {
     {
       title: '图标',
       dataIndex: 'logo',
-      render: val => <img src={val} />,
+      render: val => <img src={val} width="100" height="60" />,
     },
     {
       title: '名称',

@@ -39,7 +39,7 @@ export class VerificationService implements OnModuleInit, OnModuleDestroy {
 
         const key = 'verification-' + UUID.v4();
 
-        const result = SVG.create({ fontSize: 40, width: 100, height: 40 });
+        const result = SVG.create({ fontSize: 40, width: 100, height: 40, background: '#fff' });
 
         this.cache.set(key, result.text, Config.verification.svg.expire);
 

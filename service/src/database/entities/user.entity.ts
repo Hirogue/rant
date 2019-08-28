@@ -98,6 +98,11 @@ export class User extends Base {
     @ApiModelProperty({ nullable: true })
     reason: string;
 
+    @Field({ nullable: true })
+    @Column({ type: 'boolean', default: false })
+    @ApiModelProperty({ nullable: true })
+    isSuperAdmin: boolean;
+
     @Field(type => Int, { nullable: true })
     @Column({ default: UserLevelEnum.V0 })
     @ApiModelProperty({ nullable: true })

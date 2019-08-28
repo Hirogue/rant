@@ -1,9 +1,12 @@
 import gql from 'graphql-tag';
+import { F_AUTHORITY_FIELDS, F_AUTHORITY_RECURSIVE } from './authority';
 
 export const F_ROLE_FIELDS = gql`
   fragment RoleFields on Role {
     id
     name
+    sort
+    grants
     update_at
     create_at
   }
@@ -26,9 +29,15 @@ export const Q_GET_ROLES = gql`
 
 export const Q_GET_ROLE = gql`
   ${F_ROLE_FIELDS}
+  ${F_AUTHORITY_FIELDS}
+  ${F_AUTHORITY_RECURSIVE}
+
   query getRole($id: String!, $queryString: String! = "") {
     role(id: $id, queryString: $queryString) {
       ...RoleFields
+    }
+    authorityTrees {
+      ...AuthorityRecursive
     }
   }
 `;

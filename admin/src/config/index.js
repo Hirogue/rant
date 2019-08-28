@@ -6,7 +6,7 @@ const dev = process.env.NODE_ENV !== 'production';
 
 let Config = {
   dev,
-  basePath: 'http://127.0.0.1:3000/',
+  basePath: 'http://127.0.0.1:3000',
 
   apollo: {
     link: {

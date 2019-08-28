@@ -25,6 +25,7 @@ export class AuthResolver {
                 'org', 'area',
 
                 'providers',
+                'providers.category',
 
                 'projects',
                 'projects.creator',

@@ -67,11 +67,7 @@ export default () => {
 
   return (
     <div className={styles.main}>
-      <LoginComponents
-        defaultActiveKey="account"
-        onSubmit={handleSubmit}
-        wrappedComponentRef={loginFormRef}
-      >
+      <LoginComponents defaultActiveKey="account" onSubmit={handleSubmit} ref={loginFormRef}>
         <Tab
           key="account"
           tab={formatMessage({
@@ -107,7 +103,7 @@ export default () => {
             ]}
             onPressEnter={e => {
               e.preventDefault();
-              loginFormRef.validateFields(handleSubmit);
+              loginFormRef.current.validateFields(handleSubmit);
             }}
           />
         </Tab>

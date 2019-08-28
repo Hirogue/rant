@@ -36,6 +36,7 @@ export default class implements Seeder {
         superAdmin.realname = 'Super Admin';
         superAdmin.profile = 'A mysterious person with arbitrary authority!';
         superAdmin.org = org1;
+        superAdmin.isSuperAdmin = true;
 
         await connection.getRepository(User).save(superAdmin);
 
@@ -49,7 +50,7 @@ export default class implements Seeder {
             for (let item of res) {
 
                 if (item.row_status == "DELETED") continue;
-                
+
                 const user = new User();
                 user.password = item.password;
                 user.lastPassword = item.password;
@@ -59,7 +60,7 @@ export default class implements Seeder {
                 user.vip = item.vip;
                 user.create_at = item.created_when;
 
-                const area = await connection.getRepository(Metadata).findOne({ where: { title: Like(`${item.area}%` ), } });
+                const area = await connection.getRepository(Metadata).findOne({ where: { title: Like(`${item.area}%`), } });
                 user.area = area;
 
                 if (item.id_name == "游客") {
@@ -71,14 +72,14 @@ export default class implements Seeder {
                 } else if (item.id_name == "资金方") {
                     user.identity = IdentityEnum.INVESTOR;
                     user.org = org8;
-                } else  if (item.id_name == "服务商") {
+                } else if (item.id_name == "服务商") {
                     user.identity = IdentityEnum.PROVIDER;
                     user.org = org9;
                 } else {
                     user.identity = IdentityEnum.USER;
                     user.org = org6;
                 }
-                
+
                 if (item.id_type == "个人") {
                     user.type = UserTypeEnum.PERSONAL;
                     user.idcard = item.org_name;
@@ -112,31 +113,31 @@ export default class implements Seeder {
                 org: org2,
                 area: sample(area)
             }).seedMany(4);
-    
+
             await factory(User)({
                 identity: IdentityEnum.USER,
                 org: org3,
                 area: sample(area)
             }).seedMany(4);
-    
+
             await factory(User)({
                 identity: IdentityEnum.USER,
                 org: org4,
                 area: sample(area)
             }).seedMany(5);
-    
+
             await factory(User)({
                 identity: IdentityEnum.USER,
                 org: org5,
                 area: sample(area)
             }).seedMany(2);
-    
+
             await factory(User)({
                 identity: IdentityEnum.TOURIST,
                 org: org6,
                 area: sample(area)
             }).seedMany(10);
-    
+
             await factory(User)({
                 identity: IdentityEnum.FINANCER,
                 org: org7,
@@ -144,7 +145,7 @@ export default class implements Seeder {
                 type: UserTypeEnum[sample(typeList)],
                 status: UserStatusEnum[sample(status)],
             }).seedMany(5);
-    
+
             await factory(User)({
                 identity: IdentityEnum.INVESTOR,
                 org: org8,
@@ -152,7 +153,7 @@ export default class implements Seeder {
                 type: UserTypeEnum[sample(typeList)],
                 status: UserStatusEnum[sample(status)],
             }).seedMany(5);
-    
+
             await factory(User)({
                 identity: IdentityEnum.PROVIDER,
                 org: org9,
