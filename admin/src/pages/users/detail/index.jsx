@@ -182,11 +182,23 @@ const BasicForm = Form.create()(props => {
         <FormItem {...formItemLayout} label="姓名">
           {getFieldDecorator('realname', {
             initialValue: target.realname,
+            rules: [
+              {
+                required: true,
+                message: '请填写姓名',
+              },
+            ],
           })(<Input placeholder="请填写姓名" />)}
         </FormItem>
         <FormItem {...formItemLayout} label="手机号">
           {getFieldDecorator('phone', {
             initialValue: target.phone,
+            rules: [
+              {
+                required: true,
+                message: '请填写手机号',
+              },
+            ],
           })(<Input placeholder="请填写手机号" />)}
         </FormItem>
         <FormItem {...formItemLayout} label="所属">
@@ -203,11 +215,23 @@ const BasicForm = Form.create()(props => {
         <FormItem {...formItemLayout} label="角色">
           {getFieldDecorator('role.id', {
             initialValue: target.role ? target.role.id : null,
+            rules: [
+              {
+                required: true,
+                message: '请分配角色',
+              },
+            ],
           })(<TreeSelect showSearch treeData={roles} />)}
         </FormItem>
         <FormItem {...formItemLayout} label="身份">
           {getFieldDecorator('identity', {
             initialValue: target.identity,
+            rules: [
+              {
+                required: true,
+                message: '请选择身份',
+              },
+            ],
           })(
             <Select>
               {Object.keys(IdentityMaps).map(key => (

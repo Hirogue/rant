@@ -1,24 +1,26 @@
 import RightContent from '@/components/GlobalHeader/RightContent';
 import BlankLayout from '@/layouts/BlankLayout';
-import Authorized from '@/utils/Authorized';
-import { isAntDesignPro } from '@/utils/utils';
+import Auth, { AccessAction, check } from '@/utils/access-control';
+import { fetchCurrentUser } from '@/utils/global';
+import logger from '@/utils/logger';
 import ProLayout from '@ant-design/pro-layout';
+import { Layout } from 'antd';
 import { connect } from 'dva';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { formatMessage } from 'umi-plugin-react/locale';
 import Link from 'umi/link';
-import { Layout } from 'antd';
 import logo from '../assets/logo.svg';
 
 const { Footer } = Layout;
 
-/**
- * use Authorized check all menu item
- */
 const menuDataRender = menuList =>
   menuList.map(item => {
     const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
-    return Authorized.check(item.authority, localItem, null);
+
+    return check(localItem.path, AccessAction.READ_ANY) ||
+      check(localItem.path, AccessAction.READ_OWN)
+      ? item
+      : null;
   });
 
 const footerRender = (_, defaultDom) => {
@@ -31,6 +33,7 @@ const footerRender = (_, defaultDom) => {
 
 const BasicLayout = props => {
   const { dispatch, children, settings } = props;
+  const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
     if (dispatch) {
@@ -38,7 +41,32 @@ const BasicLayout = props => {
         type: 'settings/getSetting',
       });
     }
+
+    (async () => {
+      const { data } = await fetchCurrentUser();
+
+      if (data) {
+        const user = data.me || {};
+        const role = user.role;
+
+        let grants = {};
+
+        if (role && role.grants) {
+          grants = JSON.parse(role.grants);
+        }
+
+        const grantsObj = {};
+        grantsObj[role.id] = grants;
+
+        Auth.user = user;
+        Auth.role = role.id;
+        Auth.setGrants(grantsObj);
+
+        setCurrentUser(user);
+      }
+    })();
   }, []);
+
   /**
    * init variables
    */
