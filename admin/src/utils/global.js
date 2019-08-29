@@ -88,7 +88,7 @@ export const filterOrg = resource => {
   return [];
 };
 
-export const paramsAuth = (resource, params) => {
+export const paramsAuth = (resource, params, defaultFilter = []) => {
   if (Auth.isSuperAdmin) return params;
 
   if (Auth.org) {
@@ -102,6 +102,7 @@ export const paramsAuth = (resource, params) => {
 
       return mergeParams(params, {
         filter: [
+          ...defaultFilter,
           {
             field: 'org.id',
             operator: CondOperator.IN,
@@ -115,6 +116,7 @@ export const paramsAuth = (resource, params) => {
     if (permission.granted) {
       return mergeParams(params, {
         filter: [
+          ...defaultFilter,
           {
             field: 'own.id',
             operator: CondOperator.EQUALS,
@@ -127,6 +129,7 @@ export const paramsAuth = (resource, params) => {
 
   return mergeParams(params, {
     filter: [
+      ...defaultFilter,
       {
         field: 'create_at',
         operator: CondOperator.EQUALS,

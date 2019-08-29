@@ -32,11 +32,14 @@ import {
 import React, { Fragment, useState } from 'react';
 import { router, withRouter } from 'umi';
 import styles from './style.less';
+import { IdentityEnum } from '@/utils/enum';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
+
+const PATH = '/users/admin';
 
 const action = (
   <RouteContext.Consumer>
@@ -88,8 +91,8 @@ const renderDescription = user => (
   <RouteContext.Consumer>
     {({ isMobile }) => (
       <Descriptions className={styles.headerList} size="small" column={1}>
-        <Descriptions.Item label="账户名">{user.account}</Descriptions.Item>
-        <Descriptions.Item label="身份">{IdentityMaps[user.identity]}</Descriptions.Item>
+        <Descriptions.Item label="账户名:">{user.account}</Descriptions.Item>
+        <Descriptions.Item label="身份:">{IdentityMaps[user.identity]}</Descriptions.Item>
       </Descriptions>
     )}
   </RouteContext.Consumer>
@@ -157,6 +160,7 @@ const BasicForm = Form.create()(props => {
           e.preventDefault();
           form.validateFields((err, values) => {
             if (!err) {
+              values.identity = IdentityEnum.USER;
               const variables = { data: values };
 
               if (target.id) {
@@ -223,7 +227,7 @@ const BasicForm = Form.create()(props => {
             ],
           })(<TreeSelect showSearch treeData={roles} />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="身份">
+        {/* <FormItem {...formItemLayout} label="身份">
           {getFieldDecorator('identity', {
             initialValue: target.identity,
             rules: [
@@ -241,7 +245,7 @@ const BasicForm = Form.create()(props => {
               ))}
             </Select>,
           )}
-        </FormItem>
+        </FormItem> */}
         <FormItem {...formItemLayout} label="状态">
           {getFieldDecorator('status', {
             initialValue: target.status,
@@ -255,7 +259,7 @@ const BasicForm = Form.create()(props => {
             </Select>,
           )}
         </FormItem>
-        <FormItem {...formItemLayout} label="等级">
+        {/* <FormItem {...formItemLayout} label="等级">
           {getFieldDecorator('vip', {
             initialValue: target.vip,
           })(
@@ -267,8 +271,8 @@ const BasicForm = Form.create()(props => {
               ))}
             </Select>,
           )}
-        </FormItem>
-        <FormItem {...formItemLayout} label="地址">
+        </FormItem> */}
+        {/* <FormItem {...formItemLayout} label="地址">
           {getFieldDecorator('address', {
             initialValue: target.address,
           })(<TextArea placeholder="请填写地址" rows={4} />)}
@@ -277,7 +281,7 @@ const BasicForm = Form.create()(props => {
           {getFieldDecorator('profile', {
             initialValue: target.profile,
           })(<TextArea placeholder="请填写简介" rows={4} />)}
-        </FormItem>
+        </FormItem> */}
         <FormItem
           {...submitFormLayout}
           style={{
@@ -372,7 +376,7 @@ export default withRouter(props => {
     update: (proxy, { data }) => {
       if (data && data.createUser) {
         message.success('保存成功');
-        router.replace(`/users/detail/${data.createUser.id}`);
+        router.replace(`${PATH}/detail/${data.createUser.id}`);
       }
     },
   });

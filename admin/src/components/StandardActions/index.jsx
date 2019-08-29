@@ -7,6 +7,7 @@ export default props => {
   return (
     <ButtonGroup>
       {actions.map((action, index) => {
+        if (action.hide) return null;
         return (
           <Tooltip title={action.name} key={index}>
             {action.confirm ? (

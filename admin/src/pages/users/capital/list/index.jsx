@@ -3,12 +3,10 @@ import StandardConfirm from '@/components/StandardConfirm';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import { M_DELETE_USER, Q_GET_USERS } from '@/gql';
-import Auth from '@/utils/access-control';
-import { UserStatusEnum } from '@/utils/enum';
+import { canCreateAny, canDeleteAny, canReadAny, canUpdateAny } from '@/utils/access-control';
+import { IdentityEnum, UserStatusEnum } from '@/utils/enum';
 import {
   buildingQuery,
-  filterOrg,
-  IdentityMaps,
   paramsAuth,
   UserLevelMaps,
   UserStatusMaps,
@@ -16,20 +14,24 @@ import {
 } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
+import { CondOperator } from '@nestjsx/crud-request';
 import { Affix, Col, Divider, message, Popconfirm, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
-import { M_APPROVAL_USER } from '../gql';
+import { M_APPROVAL_USER } from '../../gql';
 
-const PATH = '/users';
-const AUTH_RESOURCE = '/user';
+const PATH = '/users/capital';
+const AUTH_RESOURCE = '/user/capital';
 
 export default () => {
+  const defaultFilter = [
+    { field: 'identity', operator: CondOperator.EQUALS, value: IdentityEnum.INVESTOR },
+  ];
   const defaultVariables = {
     page: 0,
     limit: 10,
-    join: [{ field: 'role' }, { field: 'org' }, { field: 'area' }],
+    filter: defaultFilter,
     sort: [{ field: 'create_at', order: 'DESC' }],
   };
   const [variables, setVariables] = useState(defaultVariables);
@@ -42,12 +44,12 @@ export default () => {
   const { loading, data, refetch } = useQuery(Q_GET_USERS, {
     notifyOnNetworkStatusChange: true,
     variables: {
-      queryString: buildingQuery(paramsAuth(AUTH_RESOURCE, defaultVariables)),
+      queryString: buildingQuery(paramsAuth(AUTH_RESOURCE, defaultVariables, defaultFilter)),
     },
   });
 
   useEffect(() => {
-    const queryString = buildingQuery(paramsAuth(AUTH_RESOURCE, variables));
+    const queryString = buildingQuery(paramsAuth(AUTH_RESOURCE, variables, defaultFilter));
 
     refetch({ queryString });
   }, [variables]);
@@ -57,7 +59,7 @@ export default () => {
   if (!queryUser) return <Skeleton loading={loading} active avatar />;
 
   const renderActions = record => {
-    if (UserStatusEnum.PENDING === record.status) {
+    if (UserStatusEnum.PENDING === record.status && canUpdateAny(AUTH_RESOURCE)) {
       return (
         <Fragment>
           <Popconfirm
@@ -106,19 +108,9 @@ export default () => {
     {
       title: '详情',
 
-      render: (val, row) => {
-        return (
-          <Fragment>
-            <Link to={`${PATH}/detail/${row.id}`}>详情</Link>
-          </Fragment>
-        );
-      },
+      render: (val, row) =>
+        canUpdateAny(AUTH_RESOURCE) ? <Link to={`${PATH}/detail/${row.id}`}>详情</Link> : '--',
     },
-    // {
-    //   title: '头像',
-    //   dataIndex: 'avatar',
-    //   render: val => <Avatar src={val} />,
-    // },
     {
       title: '账户',
       dataIndex: 'account',
@@ -135,43 +127,10 @@ export default () => {
       search: true,
     },
     {
-      title: '企业名称',
-      dataIndex: 'company',
-      search: true,
-    },
-    {
-      title: '所属',
-      dataIndex: 'org.id',
-      render: (val, record) => (record.org ? record.org.title : ''),
-      treeSelector: true,
-      treeFilters: filterOrg(AUTH_RESOURCE),
-    },
-    {
-      title: '角色',
-      dataIndex: 'role.id',
-      render: (val, record) => {
-        if (record.isSuperAdmin) {
-          return '超级管理员';
-        } else {
-          return record.role ? record.role.name : '';
-        }
-      },
-      treeSelector: true,
-      treeNodeFilterProp: 'name',
-      treeNodeLabelProp: 'name',
-      treeFilters: roles.map(item => ({ title: item.name, ...item })),
-    },
-    {
       title: '地区',
       dataIndex: 'area.title',
       render: (val, record) => (record.area ? record.area.title : ''),
       search: true,
-    },
-    {
-      title: '身份',
-      dataIndex: 'identity',
-      render: val => IdentityMaps[val],
-      filters: Object.keys(IdentityMaps).map(key => ({ text: IdentityMaps[key], value: key })),
     },
     {
       title: '类型',
@@ -215,29 +174,39 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => router.push(`${PATH}/create`) },
+    // {
+    //   name: '新增',
+    //   icon: 'file-add',
+    //   action: () => router.push(`${PATH}/create`),
+    //   hide: !canCreateAny(AUTH_RESOURCE)
+    // },
+    // {
+    //   name: '删除',
+    //   icon: 'delete',
+    //   action: () => {
+    //     client.mutate({
+    //       mutation: M_DELETE_USER,
+    //       variables: { ids: selectedRows.map(item => item.id).join(',') },
+    //       update: (proxy, { data }) => {
+    //         if (data.deleteUser) {
+    //           message.success('删除成功');
+    //           refetch();
+    //         }
+    //       },
+    //     });
+    //   },
+    //   disabled: selectedRows.length <= 0,
+    //   hide: !canDeleteAny(AUTH_RESOURCE),
+    //   confirm: true,
+    //   confirmTitle: `确定要删除吗?`,
+    // },
     {
-      name: '删除',
-      icon: 'delete',
-      action: () => {
-        client.mutate({
-          mutation: M_DELETE_USER,
-          variables: { ids: selectedRows.map(item => item.id).join(',') },
-          update: (proxy, { data }) => {
-            if (data.deleteUser) {
-              message.success('删除成功');
-              refetch();
-            }
-          },
-        });
-      },
-      disabled: selectedRows.length <= 0,
-      hide: !Auth.isSuperAdmin,
-      confirm: true,
-      confirmTitle: `确定要删除吗?`,
+      name: '导入',
+      icon: 'import',
+      action: () => refetch(),
+      hide: !canCreateAny(AUTH_RESOURCE),
     },
-    { name: '导入', icon: 'import', action: () => refetch() },
-    { name: '导出', icon: 'export', action: () => refetch() },
+    { name: '导出', icon: 'export', action: () => refetch(), hide: !canReadAny(AUTH_RESOURCE) },
   ];
 
   return (
@@ -282,6 +251,7 @@ export default () => {
           dataSource={dataSource}
           columns={columns}
           pagination={pagination}
+          defaultFilter={defaultFilter}
           state={variables}
           onChange={values => setVariables({ ...values })}
           onRowSelectionChange={selectedRows => setSelectedRows(selectedRows)}
