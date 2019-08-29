@@ -3,10 +3,13 @@ import StandardConfirm from '@/components/StandardConfirm';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import { M_DELETE_USER, Q_GET_USERS } from '@/gql';
+import Auth from '@/utils/access-control';
 import { UserStatusEnum } from '@/utils/enum';
 import {
   buildingQuery,
+  filterOrg,
   IdentityMaps,
+  paramsAuth,
   UserLevelMaps,
   UserStatusMaps,
   UserTypeMaps,
@@ -18,6 +21,9 @@ import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
 import { M_APPROVAL_USER } from '../gql';
+
+const PATH = '/users';
+const AUTH_RESOURCE = '/user';
 
 export default () => {
   const defaultVariables = {
@@ -36,17 +42,17 @@ export default () => {
   const { loading, data, refetch } = useQuery(Q_GET_USERS, {
     notifyOnNetworkStatusChange: true,
     variables: {
-      queryString: buildingQuery(defaultVariables),
+      queryString: buildingQuery(paramsAuth(AUTH_RESOURCE, defaultVariables)),
     },
   });
 
   useEffect(() => {
-    const queryString = buildingQuery(variables);
+    const queryString = buildingQuery(paramsAuth(AUTH_RESOURCE, variables));
 
     refetch({ queryString });
   }, [variables]);
 
-  const { queryUser, orgTrees, roles } = data;
+  const { queryUser, roles } = data;
 
   if (!queryUser) return <Skeleton loading={loading} active avatar />;
 
@@ -103,7 +109,7 @@ export default () => {
       render: (val, row) => {
         return (
           <Fragment>
-            <Link to={`/users/detail/${row.id}`}>详情</Link>
+            <Link to={`${PATH}/detail/${row.id}`}>详情</Link>
           </Fragment>
         );
       },
@@ -138,7 +144,7 @@ export default () => {
       dataIndex: 'org.id',
       render: (val, record) => (record.org ? record.org.title : ''),
       treeSelector: true,
-      treeFilters: orgTrees,
+      treeFilters: filterOrg(AUTH_RESOURCE),
     },
     {
       title: '角色',
@@ -209,7 +215,7 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => router.push('/users/create') },
+    { name: '新增', icon: 'file-add', action: () => router.push(`${PATH}/create`) },
     {
       name: '删除',
       icon: 'delete',
@@ -226,6 +232,7 @@ export default () => {
         });
       },
       disabled: selectedRows.length <= 0,
+      hide: !Auth.isSuperAdmin,
       confirm: true,
       confirmTitle: `确定要删除吗?`,
     },

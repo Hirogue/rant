@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
-import { F_ROLE_FIELDS } from './role';
+import { F_METADATA_FIELDS } from './metadata';
 import { F_ORG_FIELDS, F_ORG_RECURSIVE } from './org';
-import { F_METADATA_FIELDS, F_METADATA_RECURSIVE } from './metadata';
+import { F_ROLE_FIELDS } from './role';
 
 export const F_USER_FIELDS = gql`
   ${F_ROLE_FIELDS}
@@ -40,8 +40,6 @@ export const F_USER_FIELDS = gql`
 export const Q_GET_USERS = gql`
   ${F_USER_FIELDS}
   ${F_ROLE_FIELDS}
-  ${F_ORG_FIELDS}
-  ${F_ORG_RECURSIVE}
 
   query queryUser($queryString: String!) {
     queryUser(queryString: $queryString) {
@@ -53,10 +51,6 @@ export const Q_GET_USERS = gql`
       }
     }
 
-    orgTrees {
-      ...OrgRecursive
-    }
-
     roles {
       ...RoleFields
     }
@@ -66,16 +60,10 @@ export const Q_GET_USERS = gql`
 export const Q_GET_USER = gql`
   ${F_USER_FIELDS}
   ${F_ROLE_FIELDS}
-  ${F_ORG_FIELDS}
-  ${F_ORG_RECURSIVE}
 
   query user($id: String!, $queryString: String! = "") {
     user(id: $id, queryString: $queryString) {
       ...UserFields
-    }
-
-    orgTrees {
-      ...OrgRecursive
     }
 
     roles {

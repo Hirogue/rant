@@ -71,10 +71,10 @@ const PageHeaderContent = ({ currentUser }) => {
 const ExtraContent = () => (
   <div className={styles.extraContent}>
     <div className={styles.statItem}>
-      <Statistic title="项目数" value={56} />
+      <Statistic title="工单数" value={56} />
     </div>
     <div className={styles.statItem}>
-      <Statistic title="团队内排名" value={8} suffix="/ 24" />
+      <Statistic title="部门排名" value={8} suffix="/ 24" />
     </div>
   </div>
 );
@@ -285,7 +285,7 @@ export default () => {
       extraContent={<ExtraContent />}
     >
       <Row gutter={24}>
-        <Col xl={16} lg={24} md={24} sm={24} xs={24}>
+        {/* <Col>
           <Card
             style={{
               marginBottom: 24,
@@ -296,10 +296,9 @@ export default () => {
               padding: 0,
             }}
           >
-            <EditableLinkGroup onAdd={() => {}} links={links} linkElement={Link} />
+            <EditableLinkGroup onAdd={() => { }} links={links} linkElement={Link} />
           </Card>
-        </Col>
-        <Col xl={16} lg={24} md={24} sm={24} xs={24}></Col>
+        </Col> */}
       </Row>
     </PageHeaderWrapper>
   );

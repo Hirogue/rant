@@ -45,7 +45,7 @@ export const check = (resource, action = AccessAction.READ_ANY) => {
     }
   }
 
-  if (ac.user && ac.user.isSuperAdmin) return true;
+  if (ac.user && ac.isSuperAdmin) return true;
 
   return permission.granted;
 };

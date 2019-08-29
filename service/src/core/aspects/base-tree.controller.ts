@@ -17,6 +17,12 @@ export function BaseTreeController<TEntity>(
             super(service);
         }
 
+        @Get(`${PREFIX}/tree/:id`)
+        @ApiOperation({ title: `Get ${TEntityClass.name} tree` })
+        async tree(@Param('id') id: string) {
+            return this.service.findTree(id);
+        }
+
         @Get(`${PREFIX}/trees`)
         @ApiOperation({ title: `Get all ${TEntityClass.name} trees` })
         async trees() {
@@ -41,10 +47,22 @@ export function BaseTreeController<TEntity>(
         //     return this.service.findDescendants(id);
         // }
 
+        @Get(`${PREFIX}/descendants/:id`)
+        @ApiOperation({ title: `Get ${TEntityClass.name} descendants` })
+        async descendants(@Param('id') id: string) {
+            return this.service.findDescendants(id);
+        }
+
         @Get(`${PREFIX}/descendantsTree/:root`)
         @ApiOperation({ title: `Get ${TEntityClass.name} descendants tree` })
         async descendantsTree(@Param('root') root: string) {
             return this.service.findDescendantsTree(root);
+        }
+
+        @Get(`${PREFIX}/descendantsTrees/:id`)
+        @ApiOperation({ title: `Get ${TEntityClass.name} descendants trees` })
+        async descendantsTrees(@Param('id') id: string) {
+            return this.service.findDescendantsTrees(id);
         }
 
         // @Get(`${PREFIX}/countDescendants/:id`)

@@ -1,13 +1,12 @@
 import { CacheModule, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import * as redisStore from 'cache-manager-redis-store';
 import { RenderModule } from 'nest-next';
-import { AccessControlModule } from './access-control';
+import { AccessControlModule, AccessGuard } from './access-control';
 import { ArticleModule } from './artilce';
 import { AuthModule } from './auth';
-import { AuthorityModule } from './authority';
 import { CapitalModule } from './capital';
 import { CarouselModule } from './carousel';
 import { Config } from "./config";
@@ -51,7 +50,6 @@ import { WorkflowModule } from './workflow';
     WorkflowModule,
     StorageModule,
     RoleModule,
-    AuthorityModule,
     HomeModule,
     MetadataModule,
     OrgModule,
@@ -69,6 +67,10 @@ import { WorkflowModule } from './workflow';
     SeoModule
   ],
   providers: [
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AccessGuard,
+    // },
     {
       provide: APP_INTERCEPTOR,
       useClass: HttpCacheInterceptor,

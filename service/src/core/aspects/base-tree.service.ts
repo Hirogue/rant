@@ -7,6 +7,10 @@ export abstract class BaseTreeService<T> extends BaseService<T> {
         super(repository);
     }
 
+    async findTree(id: string) {
+        return await this.findOne(id);
+    }
+
     async findParentById(id: string) {
 
         return await this.repository.findOne(id);
@@ -49,6 +53,14 @@ export abstract class BaseTreeService<T> extends BaseService<T> {
     async findDescendantsTree(root: string) {
         const target = await this.repository.findDescendantsTree(await this.findOne({ where: { title: root } }));
         return target ? target['children'] : [];
+    }
+
+    /**
+     * 获取给定实体的所有子项（后代）。在树中返回它们 - 彼此嵌套。
+     */
+    async findDescendantsTrees(id: string) {
+        const target = await this.repository.findDescendantsTree(await this.findOne(id));
+        return [target];
     }
 
     /**

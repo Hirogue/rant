@@ -1,4 +1,4 @@
-export enum ActionEnum {
+export enum AccessAction {
     CREATE_ANY = 'create:any',
     CREATE_OWN = 'create:own',
     UPDATE_ANY = 'update:any',

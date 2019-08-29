@@ -10,6 +10,15 @@ export class BaseDataSource extends RESTDataSource {
 
     willSendRequest(request) {
         request.headers.set('Authorization', this.context.req.headers.authorization);
+        request.headers.set('Application', this.context.req.headers.application);
+    }
+
+    async findTree(url: string, id: string) {
+        try {
+            return await this.get(`${url}/tree/tree/${id}`);
+        } catch (err) {
+            throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
+        }
     }
 
     async findTrees(url: string) {
@@ -47,6 +56,14 @@ export class BaseDataSource extends RESTDataSource {
     async findDescendantsTree(url: string, root: string) {
         try {
             return await this.get(`${url}/tree/descendantsTree/${root}`);
+        } catch (err) {
+            throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
+        }
+    }
+
+    async findDescendantsTrees(url: string, id: string) {
+        try {
+            return await this.get(`${url}/tree/descendantsTrees/${id}`);
         } catch (err) {
             throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
         }
