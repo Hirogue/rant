@@ -4,6 +4,7 @@ export const F_SUCCESS_CASE_FIELDS = gql`
   fragment SuccessCaseFields on SuccessCase {
     id
     title
+    link
     cover
     is_published
     sort

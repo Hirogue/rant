@@ -2,10 +2,10 @@ import { Q_FETCH_CURRENT_USER, Q_GET_ORG_DESCENDANTS } from '@/gql';
 import Auth from '@/utils/access-control';
 import client from '@/utils/apollo-client';
 import Logger from '@/utils/logger';
-import { RequestQueryBuilder, CondOperator } from '@nestjsx/crud-request';
+import { CondOperator, RequestQueryBuilder } from '@nestjsx/crud-request';
 import { isArray, isEmpty } from 'lodash';
-import { router } from 'umi';
 import moment from 'moment';
+import { router } from 'umi';
 
 export const fetchCurrentUser = async () => {
   return await client.query({
@@ -116,9 +116,9 @@ export const paramsAuth = (resource, params) => {
       return mergeParams(params, {
         filter: [
           {
-            field: 'org.id',
+            field: 'own.id',
             operator: CondOperator.EQUALS,
-            value: Auth.org,
+            value: Auth.user.id,
           },
         ],
       });

@@ -20,6 +20,11 @@ export class SuccessCase extends Base {
     cover: string;
 
     @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    link: string;
+
+    @Field({ nullable: true })
     @Column({ type: 'boolean', default: false })
     @ApiModelProperty({ nullable: true })
     is_published: boolean;

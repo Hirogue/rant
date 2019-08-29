@@ -19,4 +19,4 @@ export abstract class Base {
     @UpdateDateColumn({ type: 'timestamp' })
     @ApiModelProperty({ nullable: true })
     update_at: string;
-}
+}   
