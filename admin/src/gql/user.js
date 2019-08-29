@@ -60,6 +60,8 @@ export const Q_GET_USERS = gql`
 export const Q_GET_USER = gql`
   ${F_USER_FIELDS}
   ${F_ROLE_FIELDS}
+  ${F_ORG_FIELDS}
+  ${F_ORG_RECURSIVE}
 
   query user($id: String!, $queryString: String! = "") {
     user(id: $id, queryString: $queryString) {
@@ -68,6 +70,10 @@ export const Q_GET_USER = gql`
 
     roles {
       ...RoleFields
+    }
+
+    orgTrees {
+      ...OrgRecursive
     }
   }
 `;

@@ -140,6 +140,11 @@ const BasicForm = Form.create()(props => {
             ],
           })(<Input placeholder="请填写标题" />)}
         </FormItem>
+        <FormItem {...formItemLayout} label="地址">
+          {getFieldDecorator('link', {
+            initialValue: target.link,
+          })(<Input placeholder="请填写地址" />)}
+        </FormItem>
         <FormItem {...formItemLayout} label="排序">
           {getFieldDecorator('sort', {
             initialValue: target.sort || 0,

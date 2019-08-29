@@ -175,6 +175,11 @@ export class User extends Base {
     role: Role;
 
     @Field({ nullable: true })
+    @ManyToOne(type => User)
+    @ApiModelProperty({ nullable: true })
+    own: User;
+
+    @Field({ nullable: true })
     @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     hideName: string;
