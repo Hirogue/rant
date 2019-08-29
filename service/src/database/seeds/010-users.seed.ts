@@ -45,7 +45,6 @@ export default class implements Seeder {
         // 判断 csv 文件夹是否存在
         if (existsSync(rootPath) && existsSync(filePath)) {
             const res = await csv().fromFile(filePath);
-            console.log(res);
 
             for (let item of res) {
 

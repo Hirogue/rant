@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { F_METADATA_FIELDS, F_METADATA_RECURSIVE } from './metadata';
+import { F_PROVIDER_CATEGORYRECURSIVE, F_PROVIDER_CATEGORY_FIELDS } from './provider-category';
 import { F_USER_FIELDS } from './user';
-import { F_PROVIDER_CATEGORY_FIELDS, F_PROVIDER_CATEGORYRECURSIVE } from './provider-category';
 
 export const F_PROVIDER_FIELDS = gql`
   ${F_PROVIDER_CATEGORY_FIELDS}
@@ -32,9 +32,8 @@ export const F_PROVIDER_FIELDS = gql`
 export const Q_GET_PROVIDERS = gql`
   ${F_PROVIDER_FIELDS}
   ${F_PROVIDER_CATEGORYRECURSIVE}
-  ${F_METADATA_RECURSIVE}
 
-  query queryProvider($queryString: String!, $metadataRoot: String! = "") {
+  query queryProvider($queryString: String!) {
     queryProvider(queryString: $queryString) {
       total
       page
@@ -46,10 +45,6 @@ export const Q_GET_PROVIDERS = gql`
 
     providerCategoryTrees {
       ...ProviderCategoryRecursive
-    }
-
-    metadataDescendantsTree(root: $metadataRoot) {
-      ...MetadataRecursive
     }
   }
 `;

@@ -75,7 +75,8 @@ export default props => {
           allowClear
           multiple
           showSearch
-          treeNodeFilterProp="title"
+          treeNodeLabelProp={data.treeNodeLabelProp || 'title'}
+          treeNodeFilterProp={data.treeNodeFilterProp || 'value'}
           dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
           treeData={getTreeData(data.treeFilters)}
           treeDefaultExpandAll

@@ -15,6 +15,10 @@ export class RoleService extends BaseService<Role> {
         super(repo);
     }
 
+    async findAll() {
+        return await this.repo.find();
+    }
+
     async updateGrants(id: string, grants: any) {
 
         await this.repo.update(id, { grants });

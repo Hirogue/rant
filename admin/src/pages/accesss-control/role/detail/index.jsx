@@ -135,7 +135,7 @@ const renderContent = (
 
   if (data) {
     const getGrantValue = (action, record) => {
-      const grant = grants[record.id];
+      const grant = grants[record.value];
 
       if (!!grant) {
         if (!!grant[`${action}:any`]) return 'any';
@@ -146,20 +146,19 @@ const renderContent = (
     };
 
     const onGrantChange = (action, value, record) => {
-      if (grants[record.id]) {
-        delete grants[record.id][`${action}:any`];
-        delete grants[record.id][`${action}:own`];
+      if (grants[record.value]) {
+        delete grants[record.value][`${action}:any`];
+        delete grants[record.value][`${action}:own`];
 
         if (!!value) {
-          grants[record.id][`${action}:${value}`] = ['*'];
+          grants[record.value][`${action}:${value}`] = ['*'];
         }
-
         setGrants({ ...grants });
       }
     };
 
     const renderGrantAction = (action, record) =>
-      grants[record.id] ? (
+      grants[record.value] ? (
         <Fragment>
           <Radio.Group
             value={getGrantValue(action, record)}
@@ -209,6 +208,7 @@ const renderContent = (
             <Affix style={{ display: 'inline-block', marginBottom: 10 }} offsetTop={80}>
               <StandardActions
                 actions={[
+                  { name: '刷新', icon: 'reload', action: () => refetch() },
                   // { name: '新增', icon: 'file-add', action: () => { } },
                   {
                     name: '保存',
@@ -222,8 +222,9 @@ const renderContent = (
                         },
                         update: (cache, { data }) => {
                           if (data.updateGrants) {
-                            message.success('授权成功');
                             refetch();
+                            setGrants({ ...grants });
+                            message.success('授权成功');
                           }
                         },
                       });
@@ -311,15 +312,6 @@ export default withRouter(props => {
   });
 
   const [updateRole] = useMutation(M_UPDATE_ROLE, {
-    update: (proxy, { data }) => {
-      if (data) {
-        message.success('保存成功');
-        refetch();
-      }
-    },
-  });
-
-  const [updateGrants] = useMutation(M_UPDATE_GRANTS, {
     update: (proxy, { data }) => {
       if (data) {
         message.success('保存成功');

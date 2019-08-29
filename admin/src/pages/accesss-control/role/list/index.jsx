@@ -73,12 +73,12 @@ export default () => {
       dataIndex: 'sort',
       sorter: true,
     },
-    {
-      title: '创建时间',
-      dataIndex: 'create_at',
-      render: val => (val ? moment(val).format('YYYY-MM-DD HH:mm:ss') : ''),
-      sorter: true,
-    },
+    // {
+    //   title: '创建时间',
+    //   dataIndex: 'create_at',
+    //   render: val => (val ? moment(val).format('YYYY-MM-DD HH:mm:ss') : ''),
+    //   sorter: true,
+    // },
   ];
 
   const pagination = {

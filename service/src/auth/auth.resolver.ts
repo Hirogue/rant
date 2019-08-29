@@ -22,7 +22,9 @@ export class AuthResolver {
         const result = await this.userService.findOne({
             where: { id: me.id },
             relations: [
-                'org', 'area',
+                'role',
+                'org',
+                'area',
 
                 'providers',
                 'providers.category',

@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { CONTEXT, Resolver, Mutation, Args } from '@nestjs/graphql';
+import { CONTEXT, Resolver, Mutation, Args, Query } from '@nestjs/graphql';
 import { ObjectType } from 'type-graphql';
 import { BasePaginate, BaseResolver } from '../core';
 import { Role } from '../database';
@@ -15,6 +15,11 @@ export class RoleResolver extends BaseResolver(Role, RolePaginate) {
         @Inject(CONTEXT) context,
     ) {
         super(context, 'role');
+    }
+
+    @Query(returns => [Role]!)
+    async roles() {
+        return this.roleService.findAll();
     }
 
     @Mutation(returns => Boolean, {

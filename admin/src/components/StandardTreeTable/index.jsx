@@ -13,10 +13,8 @@ export default props => {
     dataSource,
   } = props;
 
-  const defaultRowKeys = grants ? Object.keys(grants) : [];
-
-  const [selectedRowKeys, setSelectedRowKeys] = useState(defaultRowKeys);
-  const [expandedRowKeys, setExpandedRowKeys] = useState(defaultRowKeys);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [expandedRowKeys, setExpandedRowKeys] = useState([]);
   const [treeList, setTreeList] = useState([]);
   const [rawList, setRawList] = useState([]);
 
@@ -40,16 +38,23 @@ export default props => {
 
   useEffect(() => {
     setTreeList(getTreeData(dataSource));
+
+    const defaultGrantKeys = grants ? Object.keys(grants) : [];
+
+    const defaultRowKeys = rawList
+      .filter(item => !!defaultGrantKeys.includes(item.value))
+      .map(item => item.id);
+
+    setSelectedRowKeys(defaultRowKeys);
+    setExpandedRowKeys(defaultRowKeys);
   }, []);
 
   const rowSelection = {
     selectedRowKeys,
     onSelectAll: selected => {
       if (selected) {
-        const selectedRowKeys = rawList.map(item => item.id);
-
-        selectedRowKeys.forEach(item => {
-          grants[item] = {
+        rawList.forEach(item => {
+          grants[item.value] = {
             'create:any': ['*'],
             'read:any': ['*'],
             'update:any': ['*'],
@@ -58,22 +63,22 @@ export default props => {
         });
 
         setGrants(grants);
-        setSelectedRowKeys(selectedRowKeys);
+        setSelectedRowKeys(rawList.map(item => item.id));
       } else {
         setGrants({});
         setSelectedRowKeys([]);
       }
     },
     onSelect: (row, selected) => {
-      const descendants = rawList
-        .filter(item => item.root.search(row.id) >= 0)
-        .map(item => item.id);
+      const descendants = rawList.filter(item => item.root.search(row.id) >= 0);
+
+      const descendantKeys = descendants.map(item => item.id);
 
       let newKeys = selectedRowKeys;
 
       if (selected) {
         descendants.forEach(item => {
-          grants[item] = {
+          grants[item.value] = {
             'create:any': ['*'],
             'read:any': ['*'],
             'update:any': ['*'],
@@ -81,13 +86,13 @@ export default props => {
           };
         });
 
-        newKeys = newKeys.concat(descendants);
+        newKeys = newKeys.concat(descendantKeys);
       } else {
         descendants.forEach(item => {
-          delete grants[item];
+          delete grants[item.value];
         });
 
-        newKeys = newKeys.filter(item => !descendants.includes(item));
+        newKeys = newKeys.filter(item => !descendantKeys.includes(item));
       }
 
       setGrants(grants);

@@ -23,7 +23,7 @@ export default () => {
   const defaultVariables = {
     page: 0,
     limit: 10,
-    join: [{ field: 'org' }, { field: 'area' }],
+    join: [{ field: 'role' }, { field: 'org' }, { field: 'area' }],
     sort: [{ field: 'create_at', order: 'DESC' }],
   };
   const [variables, setVariables] = useState(defaultVariables);
@@ -37,7 +37,6 @@ export default () => {
     notifyOnNetworkStatusChange: true,
     variables: {
       queryString: buildingQuery(defaultVariables),
-      metadataRoot: '地区',
     },
   });
 
@@ -47,7 +46,7 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { queryUser, orgTrees, metadataDescendantsTree } = data;
+  const { queryUser, orgTrees, roles } = data;
 
   if (!queryUser) return <Skeleton loading={loading} active avatar />;
 
@@ -142,11 +141,25 @@ export default () => {
       treeFilters: orgTrees,
     },
     {
-      title: '地区',
-      dataIndex: 'area.id',
-      render: (val, record) => (record.area ? record.area.title : ''),
+      title: '角色',
+      dataIndex: 'role.id',
+      render: (val, record) => {
+        if (record.isSuperAdmin) {
+          return '超级管理员';
+        } else {
+          return record.role ? record.role.name : '';
+        }
+      },
       treeSelector: true,
-      treeFilters: metadataDescendantsTree || [],
+      treeNodeFilterProp: 'name',
+      treeNodeLabelProp: 'name',
+      treeFilters: roles.map(item => ({ title: item.name, ...item })),
+    },
+    {
+      title: '地区',
+      dataIndex: 'area.title',
+      render: (val, record) => (record.area ? record.area.title : ''),
+      search: true,
     },
     {
       title: '身份',

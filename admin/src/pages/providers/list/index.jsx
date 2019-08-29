@@ -25,7 +25,6 @@ export default () => {
     notifyOnNetworkStatusChange: true,
     variables: {
       queryString: buildingQuery(defaultVariables),
-      metadataRoot: '地区',
     },
   });
 
@@ -56,7 +55,7 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { queryProvider, providerCategoryTrees, metadataDescendantsTree } = data;
+  const { queryProvider, providerCategoryTrees } = data;
 
   if (!queryProvider) return <Skeleton loading={loading} active avatar />;
 
@@ -99,10 +98,9 @@ export default () => {
     },
     {
       title: '地区',
-      dataIndex: 'area.id',
+      dataIndex: 'area.title',
       render: (val, record) => (record.area ? record.area.title : ''),
-      treeSelector: true,
-      treeFilters: metadataDescendantsTree || [],
+      search: true,
     },
     {
       title: '状态',

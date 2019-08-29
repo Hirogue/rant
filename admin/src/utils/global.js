@@ -1,7 +1,16 @@
 import Logger from '@/utils/logger';
 import { RequestQueryBuilder } from '@nestjsx/crud-request';
 import { isArray, isEmpty } from 'lodash';
+import client from '@/utils/apollo-client';
 import { router } from 'umi';
+import { Q_FETCH_CURRENT_USER } from '@/gql';
+
+export const fetchCurrentUser = async () => {
+  return await client.query({
+    query: Q_FETCH_CURRENT_USER,
+    notifyOnNetworkStatusChange: true,
+  });
+};
 
 export const logout = () => {
   localStorage.removeItem('token');

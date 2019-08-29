@@ -15,6 +15,7 @@ import { Metadata } from './metadata.entity';
 import { Org } from './org.entity';
 import { Project } from './project.entity';
 import { Provider } from './provider.entity';
+import { Role } from './role.entity';
 
 @Entity()
 @ObjectType()
@@ -167,6 +168,11 @@ export class User extends Base {
     @OneToMany(type => ApplyProvider, target => target.applicant)
     @ApiModelProperty({ nullable: true })
     apply_providers: ApplyProvider[];
+
+    @Field(type => Role, { nullable: true })
+    @ManyToOne(type => Role, target => target.users)
+    @ApiModelProperty({ nullable: true })
+    role: Role;
 
     @Field({ nullable: true })
     @Column({ nullable: true })
