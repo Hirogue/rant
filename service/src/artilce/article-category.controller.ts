@@ -4,7 +4,6 @@ import { BaseTreeController } from "../core";
 import { ArticleCategory } from "../database";
 import { ArticleCategoryService } from "./article-category.service";
 
-
 @ApiUseTags('article')
 @Controller('/api/article/category')
 export class ArticleCategoryController extends BaseTreeController(ArticleCategory) {

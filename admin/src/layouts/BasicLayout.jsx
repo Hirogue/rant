@@ -1,8 +1,7 @@
 import RightContent from '@/components/GlobalHeader/RightContent';
 import BlankLayout from '@/layouts/BlankLayout';
-import Auth, { AccessAction, check } from '@/utils/access-control';
-import { fetchCurrentUser } from '@/utils/global';
-import logger from '@/utils/logger';
+import { AccessAction, check } from '@/utils/access-control';
+import { getUserInfo } from '@/utils/global';
 import ProLayout from '@ant-design/pro-layout';
 import { Layout } from 'antd';
 import { connect } from 'dva';
@@ -17,10 +16,7 @@ const menuDataRender = menuList =>
   menuList.map(item => {
     const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
 
-    return check(localItem.path, AccessAction.READ_ANY) ||
-      check(localItem.path, AccessAction.READ_OWN)
-      ? item
-      : null;
+    return check(localItem.path, AccessAction.READ_ANY) ? localItem : null;
   });
 
 const footerRender = (_, defaultDom) => {
@@ -43,27 +39,8 @@ const BasicLayout = props => {
     }
 
     (async () => {
-      const { data } = await fetchCurrentUser();
-
-      if (data) {
-        const user = data.me || {};
-        const role = user.role;
-
-        let grants = {};
-
-        if (role && role.grants) {
-          grants = JSON.parse(role.grants);
-        }
-
-        const grantsObj = {};
-        grantsObj[role.id] = grants;
-
-        Auth.user = user;
-        Auth.role = role.id;
-        Auth.setGrants(grantsObj);
-
-        setCurrentUser(user);
-      }
+      const user = await getUserInfo();
+      setCurrentUser(user);
     })();
   }, []);
 

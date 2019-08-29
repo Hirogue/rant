@@ -38,13 +38,13 @@ export function BaseController<TEntity>(
         routes: {
             exclude: ['createManyBase', 'replaceOneBase'],
             createOneBase: {
-                decorators: [...AuthDecorators],
+                decorators: AuthDecorators,
             },
             updateOneBase: {
-                decorators: [...AuthDecorators],
+                decorators: AuthDecorators,
             },
             deleteOneBase: {
-                decorators: [...AuthDecorators],
+                decorators: AuthDecorators,
             },
         }
     };

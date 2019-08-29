@@ -52,6 +52,21 @@ export const Q_GET_ORG_TREES = gql`
   }
 `;
 
+export const Q_GET_ORG_DESCENDANTS = gql`
+  ${F_ORG_FIELDS}
+  ${F_ORG_RECURSIVE}
+
+  query getOrgDescendants($id: String!) {
+    orgDescendants(id: $id) {
+      ...OrgRecursive
+    }
+
+    orgDescendantsTrees(id: $id) {
+      ...OrgRecursive
+    }
+  }
+`;
+
 export const Q_GET_ORG = gql`
   ${F_ORG_FIELDS}
 

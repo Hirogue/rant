@@ -29,6 +29,13 @@ export class AccessControlService implements OnModuleInit {
 
         roles.forEach(role => grants[role.id] = role.grants ? role.grants : {});
         this.ac.setGrants(grants);
+    }
 
+    getGrants() {
+        return this.ac.getGrants();
+    }
+
+    getResources() {
+        return this.ac.getResources();
     }
 }

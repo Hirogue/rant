@@ -63,7 +63,14 @@ export default props => {
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>
         <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-        <span className={styles.name}>{currentUser.realname || currentUser.account}</span>
+        <span className={styles.name}>
+          {currentUser.isSuperAdmin
+            ? '[超级管理员] '
+            : currentUser.role
+            ? `[${currentUser.role.name}] `
+            : ''}
+          {currentUser.realname || currentUser.account}
+        </span>
       </span>
     </HeaderDropdown>
   );

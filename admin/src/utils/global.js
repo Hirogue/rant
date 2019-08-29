@@ -1,9 +1,11 @@
-import Logger from '@/utils/logger';
-import { RequestQueryBuilder } from '@nestjsx/crud-request';
-import { isArray, isEmpty } from 'lodash';
+import { Q_FETCH_CURRENT_USER, Q_GET_ORG_DESCENDANTS } from '@/gql';
+import Auth from '@/utils/access-control';
 import client from '@/utils/apollo-client';
+import Logger from '@/utils/logger';
+import { RequestQueryBuilder, CondOperator } from '@nestjsx/crud-request';
+import { isArray, isEmpty } from 'lodash';
 import { router } from 'umi';
-import { Q_FETCH_CURRENT_USER } from '@/gql';
+import moment from 'moment';
 
 export const fetchCurrentUser = async () => {
   return await client.query({
@@ -12,12 +14,126 @@ export const fetchCurrentUser = async () => {
   });
 };
 
+export const getOrgDescendants = async id => {
+  return await client.query({
+    query: Q_GET_ORG_DESCENDANTS,
+    variables: { id },
+    notifyOnNetworkStatusChange: true,
+  });
+};
+
+export const getUserInfo = async () => {
+  const { data } = await fetchCurrentUser();
+
+  if (data) {
+    const orgTrees = data.orgTrees;
+    const user = data.me || {};
+    const role = user.role;
+    const org = user.org;
+
+    let grants = {};
+
+    if (role && role.grants) {
+      grants = JSON.parse(role.grants);
+    }
+
+    const grantsObj = {};
+    grantsObj[role.id] = grants;
+
+    if (org) {
+      const { data } = await getOrgDescendants(org.id);
+
+      Auth.org = org.id;
+
+      if (data) {
+        Auth.orgDescendants = data.orgDescendants;
+        Auth.orgDescendantsTrees = data.orgDescendantsTrees;
+      }
+    }
+
+    Auth.isSuperAdmin = user.isSuperAdmin;
+    Auth.user = user;
+    Auth.orgTrees = orgTrees;
+
+    Auth.role = role.id;
+    Auth.setGrants(grantsObj);
+
+    return user;
+  }
+
+  return null;
+};
+
 export const logout = () => {
   localStorage.removeItem('token');
 
   router.replace('/user/login');
 
   return false;
+};
+
+export const filterOrg = resource => {
+  if (Auth.user) {
+    if (Auth.isSuperAdmin) return Auth.orgTrees;
+    if (!Auth.org) return [];
+
+    let permission = Auth.can(Auth.role).readAny(resource);
+
+    if (permission.granted) return Auth.orgDescendantsTrees;
+
+    permission = Auth.can(Auth.role).readOwn(resource);
+    if (permission.granted) return [Auth.user.org];
+  }
+
+  return [];
+};
+
+export const paramsAuth = (resource, params) => {
+  if (Auth.isSuperAdmin) return params;
+
+  if (Auth.org) {
+    let permission = Auth.can(Auth.role).readAny(resource);
+    if (permission.granted) {
+      if (params.filter) {
+        if (params.filter.findIndex(item => item.field === 'org.id') >= 0) {
+          return params;
+        }
+      }
+
+      return mergeParams(params, {
+        filter: [
+          {
+            field: 'org.id',
+            operator: CondOperator.IN,
+            value: Auth.orgDescendants.map(item => item.id),
+          },
+        ],
+      });
+    }
+
+    permission = Auth.can(Auth.role).readOwn(resource);
+    if (permission.granted) {
+      return mergeParams(params, {
+        filter: [
+          {
+            field: 'org.id',
+            operator: CondOperator.EQUALS,
+            value: Auth.org,
+          },
+        ],
+      });
+    }
+  }
+
+  return mergeParams(params, {
+    filter: [
+      {
+        field: 'create_at',
+        operator: CondOperator.EQUALS,
+        value: moment('1900-01-01').format('YYYY-MM-DD HH:mm:ss'),
+      },
+    ],
+  });
 };
 
 export const getTreeData = (data, root) =>
