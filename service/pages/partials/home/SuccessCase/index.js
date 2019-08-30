@@ -22,9 +22,8 @@ export default class SuccessCase extends React.Component {
 	render() {
 		const { data } = this.props;
 
-		const caseList = data.caseList;
 
-		if (!caseList) return '';
+		if (!data.length) return '';
 
 		return (
 			<div id="success-case" className="success-case-container">
@@ -41,13 +40,13 @@ export default class SuccessCase extends React.Component {
 						</p>
 						<div className="swiper-container">
 							<div className="swiper-wrapper">
-								{caseList.map((item, index) => (
-									<div className="swiper-slide" key={'swiper-slide' + index}>
+								{data.map(item => (
+									<div className="swiper-slide" key={'swiper-slide ' + item.id}>
 										<div className="item">
 											<a href={item.link}>
-												<img src={!!item.thumbnail ? item.thumbnail.url : ''} />
+												<img src={item.cover} />
 												<h4>{item.title}</h4>
-												<p>{item.subtitle}</p>
+												<p>{item.summary}</p>
 											</a>
 										</div>
 									</div>

@@ -30,7 +30,7 @@ export default (props) => {
 							</div>
 							<div className="footer-middle">
 								<div className="item">
-									<img src={siteInfo.wechatQRCode || "https://www.lvyoto.com/static/img/saoma.jpeg"} alt="saoma" />
+									<img src={siteInfo.wechatQRCode || "/static/img/saoma.jpeg"} alt="saoma" />
 									<p>扫码关注</p>
 									<p>官方微信公众号</p>
 								</div>
@@ -63,21 +63,21 @@ export default (props) => {
 							<div className="footer-right">
 								<ul className="nav-list">
 									<li className="nav-li">新手帮助</li>
-									<li className="nav-sub-li"><a href="http://www.lvyoto.com/help/detail?id=9bee2f4c-a690-4da3-85b5-b25a139c37c3" target="_blank">新手指引</a></li>
-									<li className="nav-sub-li"><a href="http://www.lvyoto.com/help/detail?id=a4ff99c4-5b7d-4cc4-9b11-c9749cb4b922" target="_blank">帮助中心</a></li>
-									<li className="nav-sub-li"><a href="http://www.lvyoto.com/help/detail?id=a653bed2-a1ca-4862-8364-1942d88bf83e" target="_blank">会员等级</a></li>
+									<li className="nav-sub-li"><a href="/help/detail?id=9bee2f4c-a690-4da3-85b5-b25a139c37c3" target="_blank">新手指引</a></li>
+									<li className="nav-sub-li"><a href="/help/detail?id=a4ff99c4-5b7d-4cc4-9b11-c9749cb4b922" target="_blank">帮助中心</a></li>
+									<li className="nav-sub-li"><a href="/help/detail?id=a653bed2-a1ca-4862-8364-1942d88bf83e" target="_blank">会员等级</a></li>
 								</ul>
 								<ul className="nav-list">
 									<li className="nav-li">保障体系</li>
-									<li className="nav-sub-li"><a href="http://www.lvyoto.com/help/detail?id=cdc95df0-44ee-4399-b4db-248bf48a51c8" target="_blank">法律声明</a></li>
-									<li className="nav-sub-li"><a href="http://www.lvyoto.com/help/detail?id=e3149a68-a83c-43bf-8843-515a87dab94b" target="_blank">隐私服务</a></li>
-									<li className="nav-sub-li"><a href="http://www.lvyoto.com/help/detail?id=812422ec-6c53-4ee1-b54c-4473250ee66a" target="_blank">服务协议</a></li>
+									<li className="nav-sub-li"><a href="/help/detail?id=cdc95df0-44ee-4399-b4db-248bf48a51c8" target="_blank">法律声明</a></li>
+									<li className="nav-sub-li"><a href="/help/detail?id=e3149a68-a83c-43bf-8843-515a87dab94b" target="_blank">隐私服务</a></li>
+									<li className="nav-sub-li"><a href="/help/detail?id=812422ec-6c53-4ee1-b54c-4473250ee66a" target="_blank">服务协议</a></li>
 								</ul>
 								<ul className="nav-list">
 									<li className="nav-li">关于我们</li>
-									<li className="nav-sub-li"><a href="http://www.lvyoto.com/help/detail?id=2c495098-a6a3-4b9c-9b16-585084193751" target="_blank">公司简介</a></li>
-									<li className="nav-sub-li"><a href="http://www.lvyoto.com/help/detail?id=9d97befd-9ed2-4fd7-9c46-562d6c7447ea" target="_blank">联系我们</a></li>
-									<li className="nav-sub-li"><a href="http://www.lvyoto.com/help/detail?id=9b8e0146-1fec-41fc-a6b6-3b307536a43d" target="_blank">网站公告</a></li>
+									<li className="nav-sub-li"><a href="/help/detail?id=2c495098-a6a3-4b9c-9b16-585084193751" target="_blank">公司简介</a></li>
+									<li className="nav-sub-li"><a href="/help/detail?id=9d97befd-9ed2-4fd7-9c46-562d6c7447ea" target="_blank">联系我们</a></li>
+									<li className="nav-sub-li"><a href="/help/detail?id=9b8e0146-1fec-41fc-a6b6-3b307536a43d" target="_blank">网站公告</a></li>
 								</ul>
 							</div>
 						</div>
@@ -142,7 +142,7 @@ export default (props) => {
 							|{' '}
 							<img
 								className="icon-img"
-								src={"https://www.lvyoto.com/static/img/WechatIMG110.png"}
+								src={"/static/img/WechatIMG110.png"}
 								style={{ marginLeft: 4, marginRight: 4 }}
 							/>
 							<a target="_blank" href={siteInfo.picpLink || "http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=36010802000252"}>

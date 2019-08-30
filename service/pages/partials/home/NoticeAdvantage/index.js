@@ -7,22 +7,22 @@ import './notice_advantage.scss';
 export default (props) => {
 	const { data, siteInfo } = props;
 
-	const noticeTop1 = !!data.noticeTop1 && data.noticeTop1.length > 0 ? data.noticeTop1[0] : {};
+	const noticeTop1 = data.length > 0 ? data[0] : {};
 
-	if (!siteInfo.entryCount) return '';
+	// if (!siteInfo.entryCount) return '';
 
-	const entryCountArr = [];
-	const projectCountArr = [];
-	const amountArr = [];
-	for (let i = 0; i < siteInfo.entryCount.length; i++) {
-		entryCountArr.push(siteInfo.entryCount[i]);
-	}
-	for (let i = 0; i < siteInfo.projectCount.length; i++) {
-		projectCountArr.push(siteInfo.projectCount[i]);
-	}
-	for (let i = 0; i < siteInfo.amount.length; i++) {
-		amountArr.push(siteInfo.amount[i]);
-	}
+	// const entryCountArr = [];
+	// const projectCountArr = [];
+	// const amountArr = [];
+	// for (let i = 0; i < siteInfo.entryCount.length; i++) {
+	// 	entryCountArr.push(siteInfo.entryCount[i]);
+	// }
+	// for (let i = 0; i < siteInfo.projectCount.length; i++) {
+	// 	projectCountArr.push(siteInfo.projectCount[i]);
+	// }
+	// for (let i = 0; i < siteInfo.amount.length; i++) {
+	// 	amountArr.push(siteInfo.amount[i]);
+	// }
 
 	return (
 		<div className="notice-advantage">
@@ -32,7 +32,7 @@ export default (props) => {
 
 					<h4>
 						<a href={`/news/detail?id=${noticeTop1.id}`}>
-							<span>{moment(noticeTop1.release_datetime).format('YYYY-MM-DD')}</span>
+							<span>{moment(noticeTop1.create_at).format('YYYY-MM-DD')}</span>
 							<span style={{ marginLeft: 10 }}>{noticeTop1.title}</span>
 						</a>
 					</h4>

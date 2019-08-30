@@ -17,12 +17,13 @@ const HomeLoginForm = Form.create({
 	return (
 		<Form
 			onSubmit={(e) => {
+				e.preventDefault();
 				handleLoginSubmit(e, props);
 			}}
 			className="login-form"
 		>
 			<Form.Item>
-				{getFieldDecorator('phone', {
+				{getFieldDecorator('account', {
 					initialValue: phone,
 					rules: [
 						{ required: true, message: '请输入您的手机号!' },

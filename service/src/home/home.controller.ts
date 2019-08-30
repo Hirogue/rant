@@ -10,10 +10,15 @@ export class HomeController {
     @Get()
     @Render('Index')
     @ApiOperation({ title: 'Index Page' })
-    index() {
+    Index() { }
 
-        return {
-            a: 1
-        }
-    }
+    @Get('/help')
+    @Render('help')
+    @ApiOperation({ title: 'help Page' })
+    help() { }
+
+    @Get('/forgot')
+    @Render('fotgot')
+    @ApiOperation({ title: 'fotgot Page' })
+    fotgot() { }
 }

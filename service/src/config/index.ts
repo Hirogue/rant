@@ -76,7 +76,7 @@ let Config = {
         // type: 'sqlite',
         // database: 'db.sql',
         type: 'postgres',
-        host: '127.0.0.1',
+        host: '192.168.100.30',
         port: 5432,
         database: 'rant',
         username: 'rant',
