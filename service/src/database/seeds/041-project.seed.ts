@@ -85,6 +85,7 @@ export default class implements Seeder {
                         
                     }
                     await connection.getRepository(Project).save(project);
+                    await connection.getRepository(Project).update({title: item.title}, {create_at: item.created_when});
 
                 } else { //资金
                     
@@ -186,6 +187,7 @@ export default class implements Seeder {
 
                     }
                     await connection.getRepository(Capital).save(capital);
+                    await connection.getRepository(Capital).update({title: item.title}, {create_at: item.created_when});
                     
                 }
             }
