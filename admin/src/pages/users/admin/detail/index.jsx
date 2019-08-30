@@ -214,7 +214,7 @@ const BasicForm = Form.create()(props => {
                 message: '请选择所属组织',
               },
             ],
-          })(<TreeSelect showSearch treeData={orgTrees} />)}
+          })(<TreeSelect showSearch treeNodeFilterProp="title" treeData={orgTrees} />)}
         </FormItem>
         <FormItem {...formItemLayout} label="角色">
           {getFieldDecorator('role.id', {

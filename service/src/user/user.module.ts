@@ -2,7 +2,6 @@ import { forwardRef, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ApplyCapital, ApplyProject, User } from "../database";
 import { VerificationModule } from "../verification";
-import { WorkflowModule } from "../workflow";
 import { UserController } from "./user.controller";
 import { UserResolver } from "./user.resolver";
 import { UserService } from "./user.service";
@@ -11,7 +10,6 @@ import { UserService } from "./user.service";
     imports: [
         TypeOrmModule.forFeature([User, ApplyProject, ApplyCapital]),
         forwardRef(() => VerificationModule),
-        WorkflowModule
     ],
     controllers: [UserController],
     providers: [UserService, UserResolver],

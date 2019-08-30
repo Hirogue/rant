@@ -19,3 +19,4 @@ export * from './expert';
 export * from './seo';
 export * from './role';
 export * from './authority';
+export * from './log';

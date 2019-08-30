@@ -1,6 +1,7 @@
-import { Inject } from '@nestjs/common';
+import { Inject, UseGuards } from '@nestjs/common';
 import { Args, CONTEXT, Mutation, Resolver } from '@nestjs/graphql';
 import { ObjectType } from 'type-graphql';
+import { GqlJwtAuthGuard } from '../auth';
 import { BasePaginate, BaseResolver } from '../core';
 import { Provider } from '../database';
 import { ProviderService } from './provider.service';
@@ -16,6 +17,7 @@ export class ProviderResolver extends BaseResolver(Provider, ProviderPaginate) {
     ) { super(context, 'provider'); }
 
     @Mutation(returns => Boolean, { description: 'Approval provider' })
+    @UseGuards(GqlJwtAuthGuard)
     async approvalProvider(@Args('data') data: Provider) {
         return await this.service.approval(data);
     }

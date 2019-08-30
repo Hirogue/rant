@@ -20,13 +20,13 @@ export class ProjectResolver extends BaseResolver(Project, ProjectPaginate) {
 
     @Mutation(returns => Boolean, { description: 'Publish project' })
     @UseGuards(GqlJwtAuthGuard)
-    async publishProject(@Args('data') data: Project, @Me() me: User) {
-        return await this.projectService.publish(data, me);
+    async publishProject(@Args('data') data: Project, @Me() user: User) {
+        return await this.projectService.publish(data, user);
     }
 
     @Mutation(returns => Boolean, { description: 'Approval project' })
     @UseGuards(GqlJwtAuthGuard)
-    async approvalProject(@Args('data') data: Project) {
-        return await this.projectService.approval(data);
+    async approvalProject(@Args('data') data: Project, @Me() user: User) {
+        return await this.projectService.approval(data, user);
     }
 }

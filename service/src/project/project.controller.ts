@@ -9,18 +9,20 @@ import { ProjectService } from "./project.service";
 export class ProjectController extends BaseController(Project, {
     query: {
         join: {
-            creator: {},
+            creator: { eager: true },
+            org: { eager: true },
+            own: { eager: true },
             applicants: {},
-            industry: {},
-            area: {},
-            stage: {},
-            exit_mode: {},
-            withdrawal_year: {},
-            ratio: {},
-            data: {},
-            risk: {},
-            interest: {},
-            occupancy_time: {},
+            industry: { eager: true },
+            area: { eager: true },
+            stage: { eager: true },
+            exit_mode: { eager: true },
+            withdrawal_year: { eager: true },
+            ratio: { eager: true },
+            data: { eager: true },
+            risk: { eager: true },
+            interest: { eager: true },
+            occupancy_time: { eager: true },
         }
     }
 }) {
