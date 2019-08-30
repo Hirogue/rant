@@ -11,11 +11,7 @@ export class AboutController {
 
     @Get()
     @Render(PAGE_URL)
-    async index() {
-        const common = await this.localService.getCommon(PAGE_URL);
-
-        return {
-            ...common
-        };
+    @ApiOperation({ title: 'About Page' })
+    index() {
     }
 }

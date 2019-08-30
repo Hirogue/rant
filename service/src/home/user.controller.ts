@@ -9,56 +9,71 @@ export class UserController {
 
     @Get('')
     @Render(PAGE_URL)
-    async user() { }
+    @ApiOperation({ title: 'Index Page' })
+    user() { }
 
     @Get('/publish/funding/:id')
     @Render(`${PAGE_URL}/publish/funding`)
-    async publishFunding() {}
+    @ApiOperation({ title: 'publish' })
+    publishFunding() {}
 
     @Get('/apply')
-    async apply() {}
+    @ApiOperation({ title: 'apply' })
+    apply() {}
 
     @Get('/apply/project')
     @Render(`${PAGE_URL}/apply/project`)
-    async applyProject() {}
+    @ApiOperation({ title: 'apply project' })
+    applyProject() {}
 
     @Post('/apply/project')
-    async applyProjectPost() {}
+    @ApiOperation({ title: 'apply project post' })
+    applyProjectPost() {}
 
     @Post('/apply/product')
-    async applyProductPost() {}
+    @ApiOperation({ title: 'apply product post' })
+    applyProductPost() {}
 
     @Post('/apply/service')
-    async applyServicePost() {}
+    @ApiOperation({ title: 'apply service post' })
+    applyServicePost() {}
 
     @Post('/apply/content')
-    async applyContentPost() {}
+    @ApiOperation({ title: 'apply content post' })
+    applyContentPost() {}
 
     @Get('/apply/service')
     @Render(`${PAGE_URL}/apply/service`)
-    async applyService() {}
+    @ApiOperation({ title: 'apply service' })
+    applyService() {}
 
     @Get('/funding')
     @Render(`${PAGE_URL}/funding`)
-    async userFunding() {}
+    @ApiOperation({ title: 'user funding' })
+    userFunding() {}
 
     @Get('/product')
     @Render(`${PAGE_URL}/product`)
-    async userProduct() {}
+    @ApiOperation({ title: 'user product' })
+    userProduct() {}
 
     @Get('/project')
     @Render(`${PAGE_URL}/project`)
-    async userProject() {}
+    @ApiOperation({ title: 'user project' })
+    userProject() {}
 
     @Get('/service')
     @Render(`${PAGE_URL}/service`)
-    async userService() {}
+    @ApiOperation({ title: 'user service' })
+    userService() {}
 
     @Get('/publish/funding')
     @Render(`${PAGE_URL}/publish/funding`)
-    async userPublishFunding() {}
+    @ApiOperation({ title: 'user publish funding' })
+    userPublishFunding() {}
 
     @Get('/publish/project')
     @Render(`${PAGE_URL}/publish/project`)
-    async userPublishProject() {}
+    @ApiOperation({ title: 'user publish project' })
+    userPublishProject() {}
 }

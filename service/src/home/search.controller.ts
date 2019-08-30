@@ -11,16 +11,8 @@ export class SearchController {
 
     @Get()
     @Render(PAGE_URL)
-    async index(@Query() payload) {
-        const common = await this.localService.getCommon();
+    @ApiOperation({ title: 'Index Page' })
+    index() {
 
-        const list = await this.localService.search(payload.searchCategory, payload.keyword);
-
-        return {
-            ...common,
-            list,
-            searchCategory: payload.searchCategory,
-            keyword: payload.keyword
-        };
     }
 }
