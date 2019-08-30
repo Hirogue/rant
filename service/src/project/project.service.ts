@@ -27,7 +27,7 @@ export class ProjectService extends BaseService<Project> {
         const target = await projectRepo.save(project);
 
         const log = new Log();
-        log.info = `${currentUser.realname} 创建项目`;
+        log.info = `${currentUser.realname} 发布项目`;
         log.own = currentUser;
         log.target = target.id;
         log.type = LogTypeEnum.PROJECT;

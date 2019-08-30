@@ -20,6 +20,15 @@ export const F_CAPITAL_FIELDS = gql`
     }
     area {
       id
+      title
+    }
+    org {
+      id
+      title
+    }
+    own {
+      id
+      realname
     }
   }
 `;

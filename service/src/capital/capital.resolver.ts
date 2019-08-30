@@ -18,13 +18,13 @@ export class CapitalResolver extends BaseResolver(Capital, CapitalPaginate) {
 
     @Mutation(returns => Boolean, { description: 'Publish capital' })
     @UseGuards(GqlJwtAuthGuard)
-    async publishCapital(@Args('data') data: Capital, @Me() me: User) {
-        return await this.capitalService.publish(data, me);
+    async publishCapital(@Args('data') data: Capital, @Me() user: User) {
+        return await this.capitalService.publish(data, user);
     }
 
     @Mutation(returns => Boolean, { description: 'Approval capital' })
     @UseGuards(GqlJwtAuthGuard)
-    async approvalCapital(@Args('data') data: Capital) {
-        return await this.capitalService.approval(data);
+    async approvalCapital(@Args('data') data: Capital, @Me() user: User) {
+        return await this.capitalService.approval(data, user);
     }
 }

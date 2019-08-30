@@ -104,6 +104,7 @@ export default () => {
           >
             [驳回]
           </a>
+          <Divider type="vertical" />
         </Fragment>
       ) : null}
       {(ProjectStatusEnum.CHECKED === record.status ||
@@ -119,7 +120,7 @@ export default () => {
           >
             [{`${ProjectStatusEnum.CHECKED === record.status ? '' : '重新'}`}分配部门]
           </a>
-          {ProjectStatusEnum.CHECKED === record.status ? '' : <Divider type="vertical" />}
+          <Divider type="vertical" />
         </Fragment>
       ) : null}
       {(ProjectStatusEnum.WAITING === record.status ||
@@ -135,7 +136,7 @@ export default () => {
           >
             [{`${ProjectStatusEnum.WAITING === record.status ? '' : '重新'}`}分配业务员]
           </a>
-          {ProjectStatusEnum.WAITING === record.status ? '' : <Divider type="vertical" />}
+          <Divider type="vertical" />
         </Fragment>
       ) : null}
       {ProjectStatusEnum.FOLLOWING === record.status && canUpdateOwn(AUTH_RESOURCE) ? (
