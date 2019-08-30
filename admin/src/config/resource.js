@@ -135,9 +135,29 @@ export default [
     value: '/users',
     children: [
       {
-        name: '用户列表',
-        value: '/user',
-        route: '/users/list',
+        name: '后台用户',
+        value: '/user/admin',
+        route: '/users/admin/list',
+      },
+      {
+        name: '项目方',
+        value: '/user/project',
+        route: '/users/project/list',
+      },
+      {
+        name: '资金方',
+        value: '/user/capital',
+        route: '/users/capital/list',
+      },
+      {
+        name: '服务商',
+        value: '/user/provider',
+        route: '/users/provider/list',
+      },
+      {
+        name: '游客',
+        value: '/user/tourist',
+        route: '/users/tourist/list',
       },
     ],
   },

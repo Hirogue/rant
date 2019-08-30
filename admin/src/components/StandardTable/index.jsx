@@ -2,7 +2,7 @@ import { mergeParams, getTreeData } from '@/utils/global';
 import Logger from '@/utils/logger';
 import { CondOperator } from '@nestjsx/crud-request';
 import { Button, Card, Divider, Icon, Input, Table, TreeSelect } from 'antd';
-import { isEmpty } from 'lodash';
+import { isEmpty, merge } from 'lodash';
 import React, { useState } from 'react';
 import Highlighter from 'react-highlight-words';
 
@@ -12,6 +12,7 @@ export default props => {
     columns,
     rowKey,
     size,
+    defaultFilter,
     state,
     pagination,
     dataSource,
@@ -132,10 +133,12 @@ export default props => {
 
       setSearchTexts(searchTextObj);
 
+      const filter = defaultFilter || [];
+
       const newParams = {
         page: pagination.current,
         limit: pagination.pageSize,
-        filter: filterParams,
+        filter: [...filter, ...filterParams],
         sort: [{ field: sort, order }],
       };
 

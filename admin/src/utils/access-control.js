@@ -50,4 +50,36 @@ export const check = (resource, action = AccessAction.READ_ANY) => {
   return permission.granted;
 };
 
+export const canCreateAny = resource => {
+  return check(resource, AccessAction.CREATE_ANY);
+};
+
+export const canCreateOwn = resource => {
+  return check(resource, AccessAction.CREATE_OWN);
+};
+
+export const canReadAny = resource => {
+  return check(resource, AccessAction.READ_ANY);
+};
+
+export const canReadOwn = resource => {
+  return check(resource, AccessAction.READ_OWN);
+};
+
+export const canUpdateAny = resource => {
+  return check(resource, AccessAction.UPDATE_ANY);
+};
+
+export const canUpdateOwn = resource => {
+  return check(resource, AccessAction.UPDATE_OWN);
+};
+
+export const canDeleteAny = resource => {
+  return check(resource, AccessAction.DELETE_ANY);
+};
+
+export const canDeleteOwn = resource => {
+  return check(resource, AccessAction.DELETE_OWN);
+};
+
 export default ac;
