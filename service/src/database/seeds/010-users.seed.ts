@@ -62,9 +62,14 @@ export default class implements Seeder {
                 const area = await connection.getRepository(Metadata).findOne({ where: { title: Like(`${item.area}%`), } });
                 user.area = area;
 
-                if (item.id_name == "游客") {
-                    user.identity = IdentityEnum.TOURIST;
-                    user.org = org6;
+                if (item.id_name == "游客" || item.id_name.trim().length == 0) {
+                    if (item.role_id != '00000000-0000-0000-0000-111111111111') {
+                        user.org = org1;
+                        user.identity = IdentityEnum.USER;
+                    } else {
+                        user.identity = IdentityEnum.TOURIST;
+                        user.org = org6;
+                    }
                 } else if (item.id_name == "项目方") {
                     user.identity = IdentityEnum.FINANCER;
                     user.org = org7;
