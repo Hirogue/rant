@@ -27,7 +27,7 @@ export default class implements Seeder {
                     project.creator = creator;
 
                     if (item.status == "OVER") {
-                        project.status = ProjectStatusEnum.FINISHED;
+                        project.status = ProjectStatusEnum.CHECKED;
                     } else if (item.status == "PENDING") {
                         project.status = ProjectStatusEnum.PENDING;
                     } else if (item.status == "FOLLOW") {
@@ -102,7 +102,7 @@ export default class implements Seeder {
                     capital.company = item.company;
 
                     if (item.status == "OVER") {
-                        capital.status = ProjectStatusEnum.FINISHED;
+                        capital.status = ProjectStatusEnum.CHECKED;
                     } else if (item.status == "PENDING") {
                         capital.status = ProjectStatusEnum.PENDING;
                     } else if (item.status == "FOLLOW") {
