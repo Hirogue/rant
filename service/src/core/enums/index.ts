@@ -6,3 +6,4 @@ export * from './if-mode.enum';
 export * from './project-status.enum';
 export * from './sms-type.enum';
 export * from './application.enum';
+export * from './log-type.enum';

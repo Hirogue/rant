@@ -4,17 +4,15 @@ import * as bcrypt from 'bcryptjs';
 import * as moment from 'moment';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { Config } from '../config';
-import { BaseService, UserLevelEnum, UserStatusEnum } from '../core';
+import { BaseService, IdentityEnum, ProjectStatusEnum, UserLevelEnum, UserStatusEnum } from '../core';
 import { ApplyCapital, ApplyProduct, ApplyProject, ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
 import { Logger } from '../logger';
-import { FlowEventEnum, FlowIdEnum, WorkflowService } from '../workflow';
 import { LevelUpInput, RegisterDto, ResetPasswordDto } from './dtos';
 
 
 @Injectable()
 export class UserService extends BaseService<User> {
     constructor(
-        private readonly wf: WorkflowService,
         @InjectRepository(User)
         protected readonly repo: Repository<User>,
         @InjectRepository(ApplyProject)
@@ -176,9 +174,30 @@ export class UserService extends BaseService<User> {
         return await this.repo.save(user);
     }
 
-    async levelUp(data: LevelUpInput) {
+    async levelUp(
+        data: LevelUpInput,
+        @TransactionRepository(User) userRepo?: Repository<User>,
+        @TransactionRepository(Provider) providerRepo?: Repository<Provider>,
+    ) {
 
-        await this.wf.start(FlowIdEnum.LEVEL_UP, data);
+        const user = data.user as User;
+        user.status = UserStatusEnum.PENDING;
+
+        await userRepo.save(user);
+
+        if (IdentityEnum.PROVIDER === user.identity) {
+
+            const provider = data.provider as Provider;
+            provider.status = ProjectStatusEnum.PENDING;
+            provider.creator = user;
+
+            if (provider) {
+                await providerRepo.save(provider);
+            }
+
+        }
+
+        // await this.wf.start(FlowIdEnum.LEVEL_UP, data);
         return true;
     }
 

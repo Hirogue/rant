@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { F_METADATA_FIELDS, F_METADATA_RECURSIVE } from './metadata';
+import { F_ORG_FIELDS, F_ORG_RECURSIVE } from './org';
 
 export const F_PROJECT_FIELDS = gql`
   fragment ProjectFields on Project {
@@ -21,6 +22,15 @@ export const F_PROJECT_FIELDS = gql`
     }
     area {
       id
+      title
+    }
+    org {
+      id
+      title
+    }
+    own {
+      id
+      realname
     }
   }
 `;

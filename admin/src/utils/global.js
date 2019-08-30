@@ -74,15 +74,15 @@ export const logout = () => {
 
 export const filterOrg = resource => {
   if (Auth.user) {
-    if (Auth.isSuperAdmin) return Auth.orgTrees;
+    if (Auth.isSuperAdmin) return getTreeData(Auth.orgTrees);
     if (!Auth.org) return [];
 
     let permission = Auth.can(Auth.role).readAny(resource);
 
-    if (permission.granted) return Auth.orgDescendantsTrees;
+    if (permission.granted) return getTreeData(Auth.orgDescendantsTrees);
 
     permission = Auth.can(Auth.role).readOwn(resource);
-    if (permission.granted) return [Auth.user.org];
+    if (permission.granted) return getTreeData([Auth.user.org]);
   }
 
   return [];

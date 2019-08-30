@@ -1,10 +1,10 @@
 import { CacheModule, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import * as redisStore from 'cache-manager-redis-store';
 import { RenderModule } from 'nest-next';
-import { AccessControlModule, AccessGuard } from './access-control';
+import { AccessControlModule } from './access-control';
 import { ArticleModule } from './artilce';
 import { AuthModule } from './auth';
 import { CapitalModule } from './capital';
@@ -14,6 +14,7 @@ import { BaseDataSource, CoreModule, HttpCacheInterceptor } from './core';
 import { DocumentModule } from './document';
 import { ExpertModule } from './expert';
 import { HomeModule } from './home';
+import { LogModule } from './log';
 import { LoggerMiddleware, LoggerModule } from './logger';
 import { MetadataModule } from './metadata';
 import { OrgModule } from './org';
@@ -27,7 +28,6 @@ import { StorageModule } from './storage';
 import { SuccessCaseModule } from './success-case';
 import { UserModule } from './user';
 import { VerificationModule } from './verification';
-import { WorkflowModule } from './workflow';
 
 @Module({
   imports: [
@@ -47,7 +47,7 @@ import { WorkflowModule } from './workflow';
     RenderModule,
     LoggerModule,
     VerificationModule,
-    // WorkflowModule,
+    LogModule,
     StorageModule,
     RoleModule,
     HomeModule,
@@ -68,13 +68,9 @@ import { WorkflowModule } from './workflow';
   ],
   providers: [
     // {
-    //   provide: APP_GUARD,
-    //   useClass: AccessGuard,
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: HttpCacheInterceptor,
     // },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: HttpCacheInterceptor,
-    },
   ],
   controllers: [SpaController]
 })

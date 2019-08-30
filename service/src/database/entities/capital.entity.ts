@@ -6,6 +6,7 @@ import { IFModeEnum, ProjectStatusEnum } from "../../core";
 import { ApplyCapital } from './apply-capital.entity';
 import { Base } from "./base";
 import { Metadata } from "./metadata.entity";
+import { Org } from './org.entity';
 import { User } from "./user.entity";
 
 @Entity()
@@ -87,6 +88,16 @@ export class Capital extends Base {
     @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
     reason: string;
+
+    @Field(type => Org, { nullable: true })
+    @ManyToOne(type => Org)
+    @ApiModelProperty({ nullable: true })
+    org: Org;
+
+    @Field({ nullable: true })
+    @ManyToOne(type => User)
+    @ApiModelProperty({ nullable: true })
+    own: User;
 
     @Field(type => User, { nullable: true })
     @ManyToOne(type => User, target => target.capitals)
