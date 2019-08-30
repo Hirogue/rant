@@ -1,15 +1,13 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Capital } from "../database";
-import { WorkflowModule } from "../workflow";
 import { CapitalController } from "./capital.controller";
 import { CapitalResolver } from "./capital.resolver";
 import { CapitalService } from "./capital.service";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Capital]),
-        WorkflowModule
+        TypeOrmModule.forFeature([Capital])
     ],
     controllers: [CapitalController],
     providers: [

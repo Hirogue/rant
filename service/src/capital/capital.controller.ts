@@ -9,18 +9,20 @@ import { CapitalService } from "./capital.service";
 export class CapitalController extends BaseController(Capital, {
     query: {
         join: {
-            creator: {},
+            creator: { eager: true },
+            org: { eager: true },
+            own: { eager: true },
             applicants: {},
-            industry: {},
-            type: {},
-            area: {},
-            invest_area: {},
-            risk: {},
-            data: {},
-            equity_type: {},
-            stage: {},
-            invest_type: {},
-            ratio: {},
+            industry: { eager: true },
+            type: { eager: true },
+            area: { eager: true },
+            invest_area: { eager: true },
+            risk: { eager: true },
+            data: { eager: true },
+            equity_type: { eager: true },
+            stage: { eager: true },
+            invest_type: { eager: true },
+            ratio: { eager: true },
         }
     }
 }) {
