@@ -19,7 +19,9 @@ const PATH = '/users/admin';
 const AUTH_RESOURCE = '/user/admin';
 
 export default () => {
-  const defaultFilter = [{ field: 'identity', operator: CondOperator.EQUALS, value: IdentityEnum.USER }];
+  const defaultFilter = [
+    { field: 'identity', operator: CondOperator.EQUALS, value: IdentityEnum.USER },
+  ];
   const defaultVariables = {
     page: 0,
     limit: 10,
@@ -41,7 +43,6 @@ export default () => {
   });
 
   useEffect(() => {
-
     const queryString = buildingQuery(paramsAuth(AUTH_RESOURCE, variables, defaultFilter));
 
     refetch({ queryString });
@@ -100,9 +101,8 @@ export default () => {
   const columns = [
     {
       title: '详情',
-
-      render: (val, row) => canUpdateAny(AUTH_RESOURCE) ?
-        <Link to={`${PATH}/detail/${row.id}`}>详情</Link> : '--'
+      render: (val, row) =>
+        canUpdateAny(AUTH_RESOURCE) ? <Link to={`${PATH}/detail/${row.id}`}>详情</Link> : '--',
     },
     {
       title: '头像',
@@ -198,7 +198,7 @@ export default () => {
       name: '新增',
       icon: 'file-add',
       action: () => router.push(`${PATH}/create`),
-      hide: !canCreateAny(AUTH_RESOURCE)
+      hide: !canCreateAny(AUTH_RESOURCE),
     },
     {
       name: '删除',
@@ -221,9 +221,12 @@ export default () => {
       confirmTitle: `确定要删除吗?`,
     },
     {
-      name: '导入', icon: 'import', action: () => refetch(), hide: !canCreateAny(AUTH_RESOURCE),
+      name: '导入',
+      icon: 'import',
+      action: () => refetch(),
+      hide: !canCreateAny(AUTH_RESOURCE),
     },
-    { name: '导出', icon: 'export', action: () => refetch(), hide: !canReadAny(AUTH_RESOURCE), },
+    { name: '导出', icon: 'export', action: () => refetch(), hide: !canReadAny(AUTH_RESOURCE) },
   ];
 
   return (

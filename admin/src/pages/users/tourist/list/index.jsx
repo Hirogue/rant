@@ -168,32 +168,6 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    // {
-    //   name: '新增',
-    //   icon: 'file-add',
-    //   action: () => router.push(`${PATH}/create`),
-    //   hide: !canCreateAny(AUTH_RESOURCE)
-    // },
-    // {
-    //   name: '删除',
-    //   icon: 'delete',
-    //   action: () => {
-    //     client.mutate({
-    //       mutation: M_DELETE_USER,
-    //       variables: { ids: selectedRows.map(item => item.id).join(',') },
-    //       update: (proxy, { data }) => {
-    //         if (data.deleteUser) {
-    //           message.success('删除成功');
-    //           refetch();
-    //         }
-    //       },
-    //     });
-    //   },
-    //   disabled: selectedRows.length <= 0,
-    //   hide: !canDeleteAny(AUTH_RESOURCE),
-    //   confirm: true,
-    //   confirmTitle: `确定要删除吗?`,
-    // },
     {
       name: '导入',
       icon: 'import',

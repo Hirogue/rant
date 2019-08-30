@@ -160,7 +160,7 @@ const BasicForm = Form.create()(props => {
           e.preventDefault();
           form.validateFields((err, values) => {
             if (!err) {
-              values.identity = IdentityEnum.USER;
+              values.identity = IdentityEnum.TOURIST;
               const variables = { data: values };
 
               if (target.id) {

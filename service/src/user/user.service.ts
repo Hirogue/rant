@@ -4,7 +4,7 @@ import * as bcrypt from 'bcryptjs';
 import * as moment from 'moment';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { Config } from '../config';
-import { BaseService, UserLevelEnum } from '../core';
+import { BaseService, UserLevelEnum, UserStatusEnum } from '../core';
 import { ApplyCapital, ApplyProduct, ApplyProject, ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
 import { Logger } from '../logger';
 import { FlowEventEnum, FlowIdEnum, WorkflowService } from '../workflow';
@@ -184,12 +184,20 @@ export class UserService extends BaseService<User> {
 
     async approvalUser(data: User) {
 
-        await this.wf.publish(
-            FlowEventEnum.APPROVAL_USER,
-            `${FlowEventEnum.APPROVAL_USER}-${data.id}`,
-            data
-        );
-        return true;
+        const user = await this.repo.findOne(data.id);
+        user.status = data.status;
+        user.reason = data.reason;
+
+        user.vip = UserStatusEnum.CHECKED === user.status ? UserLevelEnum.V1 : UserLevelEnum.V0;
+
+        return !!await this.repo.save(user);
+
+        // await this.wf.publish(
+        //     FlowEventEnum.APPROVAL_USER,
+        //     `${FlowEventEnum.APPROVAL_USER}-${data.id}`,
+        //     data
+        // );
+        // return true;
     }
 
     private async checkLimit(user: User, type: string) {

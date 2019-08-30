@@ -160,7 +160,7 @@ const BasicForm = Form.create()(props => {
           e.preventDefault();
           form.validateFields((err, values) => {
             if (!err) {
-              // values.identity = IdentityEnum.USER;
+              values.identity = IdentityEnum.USER;
               const variables = { data: values };
 
               if (target.id) {
@@ -227,7 +227,7 @@ const BasicForm = Form.create()(props => {
             ],
           })(<TreeSelect showSearch treeData={roles} />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="身份">
+        {/* <FormItem {...formItemLayout} label="身份">
           {getFieldDecorator('identity', {
             initialValue: target.identity,
             rules: [
@@ -245,7 +245,7 @@ const BasicForm = Form.create()(props => {
               ))}
             </Select>,
           )}
-        </FormItem>
+        </FormItem> */}
         <FormItem {...formItemLayout} label="状态">
           {getFieldDecorator('status', {
             initialValue: target.status,

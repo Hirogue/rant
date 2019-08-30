@@ -59,6 +59,11 @@ export class Provider extends Base {
     applicants: ApplyProvider[];
 
     @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    reason: string;
+
+    @Field({ nullable: true })
     @Column({ default: ProjectStatusEnum.PENDING })
     @ApiModelProperty({ nullable: true })
     status: ProjectStatusEnum;
