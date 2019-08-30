@@ -47,7 +47,7 @@ import { WorkflowModule } from './workflow';
     RenderModule,
     LoggerModule,
     VerificationModule,
-    WorkflowModule,
+    // WorkflowModule,
     StorageModule,
     RoleModule,
     HomeModule,

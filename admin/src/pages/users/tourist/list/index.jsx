@@ -2,29 +2,32 @@ import StandardActions from '@/components/StandardActions';
 import StandardConfirm from '@/components/StandardConfirm';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
-import { M_DELETE_PROVIDER, Q_GET_PROVIDERS } from '@/gql';
-import { canCreateAny, canDeleteAny, canReadAny, canUpdateAny } from '@/utils/access-control';
-import { ProjectStatusEnum } from '@/utils/enum';
-import { buildingQuery, ProjectStatusMaps } from '@/utils/global';
+import { Q_GET_USERS } from '@/gql';
+import { canCreateAny, canReadAny, canUpdateAny } from '@/utils/access-control';
+import { IdentityEnum, UserStatusEnum } from '@/utils/enum';
+import { buildingQuery, UserLevelMaps, UserStatusMaps, UserTypeMaps } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
+import { useApolloClient, useQuery } from '@apollo/react-hooks';
+import { CondOperator } from '@nestjsx/crud-request';
 import { Affix, Col, Divider, message, Popconfirm, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
-import { Link, router } from 'umi';
-import { M_APPROVAL_PROVIDER } from '../gql';
+import { Link } from 'umi';
+import { M_APPROVAL_USER } from '../../gql';
 
-const PATH = '/providers';
-const AUTH_RESOURCE = '/provider';
+const PATH = '/users/tourist';
+const AUTH_RESOURCE = '/user/tourist';
 
 export default () => {
+  const defaultFilter = [
+    { field: 'identity', operator: CondOperator.EQUALS, value: IdentityEnum.TOURIST },
+  ];
   const defaultVariables = {
     page: 0,
     limit: 10,
-    join: [{ field: 'category' }, { field: 'area' }, { field: 'creator' }],
+    filter: defaultFilter,
     sort: [{ field: 'create_at', order: 'DESC' }],
   };
-
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -32,21 +35,10 @@ export default () => {
 
   const client = useApolloClient();
 
-  const { loading, data, refetch } = useQuery(Q_GET_PROVIDERS, {
+  const { loading, data, refetch } = useQuery(Q_GET_USERS, {
     notifyOnNetworkStatusChange: true,
     variables: {
       queryString: buildingQuery(defaultVariables),
-    },
-  });
-
-  const [deleteProvider] = useMutation(M_DELETE_PROVIDER, {
-    update: (proxy, { data }) => {
-      if (data.deleteProvider) {
-        message.success('删除成功');
-        refetch();
-      } else {
-        message.error('删除失败');
-      }
     },
   });
 
@@ -56,27 +48,27 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { queryProvider, providerCategoryTrees } = data;
+  const { queryUser, roles } = data;
 
-  if (!queryProvider) return <Skeleton loading={loading} active avatar />;
+  if (!queryUser) return <Skeleton loading={loading} active avatar />;
 
   const renderActions = record => {
-    if (ProjectStatusEnum.PENDING === record.status && canUpdateAny(AUTH_RESOURCE)) {
+    if (UserStatusEnum.PENDING === record.status && canUpdateAny(AUTH_RESOURCE)) {
       return (
         <Fragment>
           <Popconfirm
             title="确定要审核吗?"
             onConfirm={() => {
               client.mutate({
-                mutation: M_APPROVAL_PROVIDER,
+                mutation: M_APPROVAL_USER,
                 variables: {
                   data: {
                     id: record.id,
-                    status: ProjectStatusEnum.CHECKED,
+                    status: UserStatusEnum.CHECKED,
                   },
                 },
                 update: (cache, { data }) => {
-                  if (data.approvalProvider) {
+                  if (data.approvalUser) {
                     message.success('操作成功');
                     refetch();
                   }
@@ -103,37 +95,30 @@ export default () => {
     }
   };
 
-  const dataSource = queryProvider.data;
-  const total = queryProvider.total;
+  const dataSource = queryUser.data;
+  const total = queryUser.total;
 
   const columns = [
     {
       title: '详情',
-      dataIndex: 'id',
+
       render: (val, row) =>
         canUpdateAny(AUTH_RESOURCE) ? <Link to={`${PATH}/detail/${row.id}`}>详情</Link> : '--',
     },
     {
-      title: '图标',
-      dataIndex: 'logo',
-      render: val => <img src={val} width="100" height="60" />,
-    },
-    {
-      title: '名称',
-      dataIndex: 'name',
+      title: '账户',
+      dataIndex: 'account',
       search: true,
     },
-    // {
-    //   title: '简称',
-    //   dataIndex: 'slogan',
-    //   search: true,
-    // },
     {
-      title: '分类',
-      dataIndex: 'category.id',
-      render: (val, record) => (record.category ? record.category.title : ''),
-      treeSelector: true,
-      treeFilters: providerCategoryTrees,
+      title: '姓名',
+      dataIndex: 'realname',
+      search: true,
+    },
+    {
+      title: '手机号',
+      dataIndex: 'phone',
+      search: true,
     },
     {
       title: '地区',
@@ -142,28 +127,26 @@ export default () => {
       search: true,
     },
     {
+      title: '类型',
+      dataIndex: 'type',
+      render: val => UserTypeMaps[val],
+      filters: Object.keys(UserTypeMaps).map(key => ({ text: UserTypeMaps[key], value: key })),
+    },
+    {
       title: '状态',
       dataIndex: 'status',
-      render: val => ProjectStatusMaps[val],
-      filters: Object.keys(ProjectStatusMaps).map(key => ({
-        text: ProjectStatusMaps[key],
-        value: key,
-      })),
+      render: val => UserStatusMaps[val],
+      filters: Object.keys(UserStatusMaps).map(key => ({ text: UserStatusMaps[key], value: key })),
     },
     {
-      title: '创建人',
-      dataIndex: 'creator.realname',
-      search: true,
+      title: '等级',
+      dataIndex: 'vip',
+      render: val => UserLevelMaps[val],
+      filters: Object.keys(UserLevelMaps).map(key => ({ text: UserLevelMaps[key], value: key })),
     },
     {
-      title: '创建时间',
+      title: '注册时间',
       dataIndex: 'create_at',
-      render: val => (val ? moment(val).format('YYYY-MM-DD HH:mm:ss') : ''),
-      sorter: true,
-    },
-    {
-      title: '更新时间',
-      dataIndex: 'update_at',
       render: val => moment(val).format('YYYY-MM-DD HH:mm:ss'),
       sorter: true,
     },
@@ -186,23 +169,11 @@ export default () => {
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
     {
-      name: '新增',
-      icon: 'file-add',
-      action: () => router.push(`${PATH}/create`),
+      name: '导入',
+      icon: 'import',
+      action: () => refetch(),
       hide: !canCreateAny(AUTH_RESOURCE),
     },
-    {
-      name: '删除',
-      icon: 'delete',
-      action: () => {
-        deleteProvider({ variables: { ids: selectedRows.map(item => item.id).join(',') } });
-      },
-      disabled: selectedRows.length <= 0,
-      hide: !canDeleteAny(AUTH_RESOURCE),
-      confirm: true,
-      confirmTitle: `确定要删除吗?`,
-    },
-    { name: '导入', icon: 'import', action: () => refetch(), hide: !canCreateAny(AUTH_RESOURCE) },
     { name: '导出', icon: 'export', action: () => refetch(), hide: !canReadAny(AUTH_RESOURCE) },
   ];
 
@@ -215,16 +186,16 @@ export default () => {
           setVisible={setVisible}
           onConfirm={reason => {
             client.mutate({
-              mutation: M_APPROVAL_PROVIDER,
+              mutation: M_APPROVAL_USER,
               variables: {
                 data: {
                   id: current.id,
-                  status: ProjectStatusEnum.REJECTED,
+                  status: UserStatusEnum.REJECTED,
                   reason,
                 },
               },
               update: (proxy, { data }) => {
-                if (data.approvalProject) {
+                if (data.approvalUser) {
                   message.success('操作成功');
                   refetch();
                 }
@@ -248,6 +219,7 @@ export default () => {
           dataSource={dataSource}
           columns={columns}
           pagination={pagination}
+          defaultFilter={defaultFilter}
           state={variables}
           onChange={values => setVariables({ ...values })}
           onRowSelectionChange={selectedRows => setSelectedRows(selectedRows)}
