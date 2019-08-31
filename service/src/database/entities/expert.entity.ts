@@ -1,7 +1,8 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Field, InputType, Int, ObjectType } from "type-graphql";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 import { Base } from "./base";
+import { ApplyExpert } from './apply-expert.entity';
 
 @Entity()
 @ObjectType()
@@ -47,5 +48,10 @@ export class Expert extends Base {
     @Column({ default: 0 })
     @ApiModelProperty({ nullable: true })
     sort: number;
+
+    @Field(type => ApplyExpert, { nullable: true })
+    @OneToMany(type => ApplyExpert, target => target.expert)
+    @ApiModelProperty({ nullable: true })
+    applicants: ApplyExpert[];
 
 }
