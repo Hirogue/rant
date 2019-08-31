@@ -38,6 +38,11 @@ export class UserResolver extends BaseResolver(User, UserPaginate) {
         return await this.userService.applyProviders(id, me.id);
     }
 
+    @Mutation(returns => Boolean, { description: 'Apply expert' })
+    async applyExperts(@Args('id') id: string, @Me() me: User) {
+        return await this.userService.applyExperts(id, me.id);
+    }
+
     @Mutation(returns => Boolean, { description: 'User level up' })
     async levelUp(@Args('data') data: LevelUpInput) {
         return await this.userService.levelUp(data);

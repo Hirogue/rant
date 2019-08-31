@@ -21,6 +21,10 @@ import {
 import { useEffect, useState } from 'react';
 import { M_CREATE_ORG, M_DELETE_ORG, M_UPDATE_ORG, Q_GET_ORG_TREES } from '@/gql';
 
+import { canCreateAny, canDeleteAny, canUpdateAny } from '@/utils/access-control';
+
+const AUTH_RESOURCE = '/org';
+
 const { TreeNode } = Tree;
 const FormItem = Form.Item;
 
@@ -101,16 +105,18 @@ const InfoForm = Form.create()(props => {
             ],
           })(<InputNumber min={0} placeholder="请填写排序" />)}
         </FormItem>
-        <FormItem
-          {...submitFormLayout}
-          style={{
-            marginTop: 32,
-          }}
-        >
-          <Button type="primary" htmlType="submit">
-            保存
-          </Button>
-        </FormItem>
+        {canUpdateAny(AUTH_RESOURCE) ? (
+          <FormItem
+            {...submitFormLayout}
+            style={{
+              marginTop: 32,
+            }}
+          >
+            <Button type="primary" htmlType="submit">
+              保存
+            </Button>
+          </FormItem>
+        ) : null}
       </Form>
     </Card>
   );
@@ -158,7 +164,12 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => setPanelVisible(true) },
+    {
+      name: '新增',
+      icon: 'file-add',
+      action: () => setPanelVisible(true),
+      hide: !canCreateAny(AUTH_RESOURCE),
+    },
     {
       name: '删除',
       icon: 'delete',
@@ -166,6 +177,7 @@ export default () => {
         deleteOrg({ variables: { ids: checkedKeys.join(',') } });
       },
       disabled: checkedKeys ? checkedKeys.length <= 0 : false,
+      hide: !canDeleteAny(AUTH_RESOURCE),
       confirm: true,
       confirmTitle: `确定要删除吗?`,
     },

@@ -6,6 +6,7 @@ import { BeforeInsert, Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Config } from '../../config';
 import { IdentityEnum, UserLevelEnum, UserStatusEnum, UserTypeEnum } from '../../core/enums';
 import { ApplyCapital } from './apply-capital.entity';
+import { ApplyExpert } from './apply-expert.entity';
 import { ApplyProduct } from './apply-product.entity';
 import { ApplyProject } from './apply-project.entity';
 import { ApplyProvider } from './apply-provider.entity';
@@ -168,6 +169,11 @@ export class User extends Base {
     @OneToMany(type => ApplyProvider, target => target.applicant)
     @ApiModelProperty({ nullable: true })
     apply_providers: ApplyProvider[];
+
+    @Field(type => [ApplyExpert]!, { nullable: true })
+    @OneToMany(type => ApplyExpert, target => target.applicant)
+    @ApiModelProperty({ nullable: true })
+    apply_experts: ApplyExpert[];
 
     @Field(type => Role, { nullable: true })
     @ManyToOne(type => Role, target => target.users)

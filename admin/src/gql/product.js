@@ -13,6 +13,7 @@ export const F_PRODUCT_FIELDS = gql`
     slogan
     advantage
     introduction
+    is_published
     sort
     update_at
     create_at

@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { Config } from '../config';
 import { BaseService, IdentityEnum, ProjectStatusEnum, UserLevelEnum, UserStatusEnum } from '../core';
-import { ApplyCapital, ApplyProduct, ApplyProject, ApplyProvider, Capital, Product, Project, Provider, User } from '../database/entities';
+import { ApplyCapital, ApplyExpert, ApplyProduct, ApplyProject, ApplyProvider, Capital, Expert, Product, Project, Provider, User } from '../database/entities';
 import { Logger } from '../logger';
 import { LevelUpInput, RegisterDto, ResetPasswordDto } from './dtos';
 
@@ -135,6 +135,34 @@ export class UserService extends BaseService<User> {
         applyProvider.provider = provider;
         applyProvider.applicant = user;
         await applyProviderRepo.save(applyProvider);
+
+        return true;
+    }
+
+    @Transaction()
+    async applyExperts(
+        id: string, userId: string,
+        @TransactionRepository(User) userRepo?: Repository<User>,
+        @TransactionRepository(Expert) expertRepo?: Repository<Expert>,
+        @TransactionRepository(ApplyExpert) applyExpertRepo?: Repository<ApplyExpert>,
+    ) {
+        const user = await userRepo.findOne({
+            where: { id: userId },
+            relations: ['apply_experts', 'apply_experts.expert']
+        });
+
+        user.apply_experts.forEach(item => {
+            if (item.expert.id === id) {
+                throw new BadRequestException('请勿重复申请');
+            }
+        });
+
+        const expert = await expertRepo.findOne({ id });
+
+        const applyExpert = new ApplyExpert();
+        applyExpert.expert = expert;
+        applyExpert.applicant = user;
+        await applyExpertRepo.save(applyExpert);
 
         return true;
     }
