@@ -1,5 +1,5 @@
 import { ApiModelProperty } from "@nestjs/swagger";
-import { Field, InputType, ObjectType } from "type-graphql";
+import { Field, InputType, ObjectType, Int } from "type-graphql";
 import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import { ProjectStatusEnum } from "../../core";
 import { Base } from "./base";
@@ -37,6 +37,16 @@ export class Provider extends Base {
     @Column({ type: 'text', nullable: true })
     @ApiModelProperty({ nullable: true })
     introduction: string;
+
+    @Field(type => Int, { nullable: true })
+    @Column({ default: 0 })
+    @ApiModelProperty({ nullable: true })
+    sort: number;
+
+    @Field(type => Int, { nullable: true })
+    @Column({ default: 0 })
+    @ApiModelProperty({ nullable: true })
+    views: number;
 
     @Field(type => ProviderCategory, { nullable: true })
     @ManyToOne(type => ProviderCategory, target => target.providers)

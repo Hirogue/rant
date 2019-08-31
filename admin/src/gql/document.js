@@ -13,6 +13,7 @@ export const F_DOCUMENT_FIELDS = gql`
     is_top
     is_published
     sort
+    views
     summary
     text
     publish_at

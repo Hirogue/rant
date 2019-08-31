@@ -23,18 +23,20 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
     }
 
     private handleChange(entity: User) {
-        entity.hideName = entity.realname
-            ? entity.realname.substr(0, 1).padEnd(entity.realname.length, '*')
-            : '';
+        if (entity) {
+            entity.hideName = entity.realname
+                ? entity.realname.substr(0, 1).padEnd(entity.realname.length, '*')
+                : '';
 
-        entity.hidePhone = entity.phone
-            ? entity.phone.replace(entity.phone.substring(3, 7), '****')
-            : '';
+            entity.hidePhone = entity.phone
+                ? entity.phone.replace(entity.phone.substring(3, 7), '****')
+                : '';
 
-        entity.hideCompany = entity.company
-            ? entity.company
-                .substr(entity.company.length - 2, entity.company.length)
-                .padStart(entity.company.length, '*')
-            : '';
+            entity.hideCompany = entity.company
+                ? entity.company
+                    .substr(entity.company.length - 2, entity.company.length)
+                    .padStart(entity.company.length, '*')
+                : '';
+        }
     }
 }

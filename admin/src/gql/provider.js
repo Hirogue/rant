@@ -15,6 +15,8 @@ export const F_PROVIDER_FIELDS = gql`
     slogan
     introduction
     status
+    sort
+    views
     update_at
     create_at
     category {

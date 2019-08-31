@@ -10,10 +10,16 @@ export class ProviderSubscriber implements EntitySubscriberInterface<Provider> {
     }
 
     beforeInsert(event: InsertEvent<Provider>) {
-        event.entity.summary = event.entity.introduction ? textInterception(event.entity.introduction, 40) : '';
+        this.handleChange(event.entity);
     }
 
     beforeUpdate(event: UpdateEvent<Provider>) {
-        event.entity.summary = event.entity.introduction ? textInterception(event.entity.introduction, 40) : '';
+        this.handleChange(event.entity);
+    }
+
+    private handleChange(entity: Provider) {
+        if (entity) {
+            entity.summary = entity.introduction ? textInterception(entity.introduction, 40) : '';
+        }
     }
 }

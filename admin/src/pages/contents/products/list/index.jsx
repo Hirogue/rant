@@ -101,8 +101,8 @@ export default () => {
         ) : !!val ? (
           '是'
         ) : (
-              '否'
-            ),
+          '否'
+        ),
       filterMultiple: false,
       filters: [{ text: '是', value: true }, { text: '否', value: false }],
     },
@@ -116,6 +116,11 @@ export default () => {
     {
       title: '排序',
       dataIndex: 'sort',
+      sorter: true,
+    },
+    {
+      title: '浏览量',
+      dataIndex: 'views',
       sorter: true,
     },
     {

@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { FieldType } from 'influx';
 import * as productionConfig from './production';
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -81,7 +82,7 @@ let Config = {
         database: 'rant',
         username: 'rant',
         password: '123456',
-        logging: ["error", "query", "log"],
+        logging: ["error"],
         dropSchema: false,
         synchronize: false,
         entityPrefix: 't_',
@@ -98,6 +99,21 @@ let Config = {
 
     mongo: {
         uri: 'mongodb://root:123456@127.0.0.1:27017/workflow-node'
+    },
+
+    influx: {
+        host: '127.0.0.1',
+        database: 'rant',
+        schema: [
+            {
+                measurement: 'module_access',
+                fields: {
+                    module: FieldType.STRING,
+                    id: FieldType.STRING,
+                },
+                tags: ['ip']
+            }
+        ]
     },
 
     graphql: {

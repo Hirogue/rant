@@ -91,6 +91,11 @@ export default () => {
       sorter: true,
     },
     {
+      title: '浏览量',
+      dataIndex: 'views',
+      sorter: true,
+    },
+    {
       title: '是否置顶',
       dataIndex: 'is_top',
       render: (val, record) =>
