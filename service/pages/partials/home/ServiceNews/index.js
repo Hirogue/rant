@@ -19,19 +19,19 @@ export default class extends React.Component {
 	render() {
 		const { data, mainData } = this.props;
 
-		if (!data || !mainData) return '';
+		if (!data.news || !mainData.length) return '';
 
-		const services = mainData.services;
-		if (!services) return '';
+		const providers = data.providers || [];
+		const news = data.news;
+		const newsCategory = Object.keys(data.news).filter(item => item.indexOf('通知') === -1);
 
-		const serviceList = data.serviceList || [];
-		const news1 = data.news1 || [ {} ];
-		const news2 = data.news2 || [ {} ];
-		const news3 = data.news3 || [ {} ];
+		const news1 = news[newsCategory[0]].data || [ {}, {} ];
+		const news2 = news[newsCategory[1]].data || [ {}, {} ];
+		const news3 = news[newsCategory[2]].data || [ {}, {} ];
 
-		const news1Top = news1[0] || {};
-		const news2Top = news2[0] || {};
-		const news3Top = news3[0] || {};
+		const news1Top = news1.shift();
+		const news2Top = news2.shift();
+		const news3Top = news3.shift();
 
 		return (
 			<div className="service-news-containar">
@@ -39,17 +39,17 @@ export default class extends React.Component {
 					<h4 className="team-box-title">项目服务商</h4>
 					<p className="line" />
 					<ul className="link-list">
-						{services.map((item, index) => (
-							<li key={index + item.id}>
-								<a href={`/service?category=${item.name}`}>{item.name}</a>
+						{mainData.map(item => (
+							<li key={item.id}>
+								<a href={`/service?category=${item.title}`}>{item.title}</a>
 							</li>
 						))}
 					</ul>
 					<div className="service-list">
-						{serviceList.map((item, index) => (
-							<a href={`/service/detail?id=${item.id}`} key={index + item.id}>
+						{providers.map(item => (
+							<a href={`/service/detail?id=${item.id}`} key={item.id}>
 								<div className="service-item">
-									<img src={!!item.thumbnail ? item.thumbnail.url : ''} />
+									<img src={item.logo} />
 								</div>
 							</a>
 						))}
@@ -58,124 +58,109 @@ export default class extends React.Component {
 				<div id="news" className="news-box">
 					<div className="news-list">
 						<div className="news-item">
-							<h4 className="type-title">行业快讯</h4>
+							<h4 className="type-title">{newsCategory[0]}</h4>
 
 							<a href={`/news/detail?id=${news1Top.id}`}>
 								<div className="thumbnail">
-									<img src={!!news1Top.thumbnail ? news1Top.thumbnail.url : ''} />
+									<img src={news1Top.cover} />
 									<p className="index-news-title">{news1Top.title}</p>
 								</div>
 							</a>
 							<a href={`/news/detail?id=${news1Top.id}`}>
 								<p className="index-news-content">
-									{!!news1Top.description && news1Top.description.length > 40 ? (
-										news1Top.description.substr(0, 40) + '...'
+									{!!news1Top.summary && news1Top.summary.length > 40 ? (
+										news1Top.summary.substr(0, 40) + '...'
 									) : (
-										news1Top.description
+										news1Top.summary
 									)}
 								</p>
 							</a>
 							<ul className="news-sub-list">
-								{news1.map(
-									(item, index) =>
-										index > 0 ? (
-											<a href={`/news/detail?id=${item.id}`} key={item.id}>
-												<li>
-													<p>
-														{!!item.title && item.title.length > 15 ? (
-															item.title.substr(0, 15) + '...'
-														) : (
-															item.title
-														)}
-													</p>
-													<p>{moment(item.release_datetime).format('MM-DD')}</p>
-												</li>
-											</a>
-										) : (
-											''
-										)
-								)}
+								{news1.map(item => (
+									<a href={`/news/detail?id=${item.id}`} key={item.id}>
+										<li>
+											<p>
+												{!!item.title && item.title.length > 15 ? (
+													item.title.substr(0, 15) + '...'
+												) : (
+														item.title
+													)}
+											</p>
+											<p>{moment(item.publish_at).format('MM-DD')}</p>
+										</li>
+									</a>
+								))}
 							</ul>
 						</div>
 						<div className="news-item">
-							<h4 className="type-title">投融研报</h4>
+							<h4 className="type-title">{newsCategory[1]}</h4>
 
 							<a href={`/news/detail?id=${news2Top.id}`}>
 								<div className="thumbnail">
-									<img src={!!news2Top.thumbnail ? news2Top.thumbnail.url : ''} />
+									<img src={news2Top.cover} />
 									<p className="index-news-title">{news2Top.title}</p>
 								</div>
 							</a>
 							<a href={`/news/detail?id=${news2Top.id}`}>
 								<p className="index-news-content">
-									{!!news2Top.description && news2Top.description.length > 40 ? (
-										news2Top.description.substr(0, 40) + '...'
+									{!!news2Top.summary && news2Top.summary.length > 40 ? (
+										news2Top.summary.substr(0, 40) + '...'
 									) : (
-										news2Top.description
+										news2Top.summary
 									)}
 								</p>
 							</a>
 							<ul className="news-sub-list">
-								{news2.map(
-									(item, index) =>
-										index > 0 ? (
-											<a href={`/news/detail?id=${item.id}`} key={item.id}>
-												<li>
-													<p>
-														{!!item.title && item.title.length > 15 ? (
-															item.title.substr(0, 15) + '...'
-														) : (
-															item.title
-														)}
-													</p>
-													<p>{moment(item.release_datetime).format('MM-DD')}</p>
-												</li>
-											</a>
-										) : (
-											''
-										)
-								)}
+								{news2.map(item => (
+									<a href={`/news/detail?id=${item.id}`} key={item.id}>
+										<li>
+											<p>
+												{!!item.title && item.title.length > 15 ? (
+													item.title.substr(0, 15) + '...'
+												) : (
+														item.title
+													)}
+											</p>
+											<p>{moment(item.publish_at).format('MM-DD')}</p>
+										</li>
+									</a>
+								))}
 							</ul>
 						</div>
 						<div className="news-item">
-							<h4 className="type-title">江旅资讯</h4>
+							<h4 className="type-title">{newsCategory[2]}</h4>
 
 							<a href={`/news/detail?id=${news3Top.id}`}>
 								<div className="thumbnail">
-									<img src={!!news3Top.thumbnail ? news3Top.thumbnail.url : ''} />
+									<img src={news3Top.cover} />
 									<p className="index-news-title">{news3Top.title}</p>
 								</div>
 							</a>
 							<a href={`/news/detail?id=${news3Top.id}`}>
 								<p className="index-news-content">
-									{!!news3Top.description && news3Top.description.length > 40 ? (
-										news3Top.description.substr(0, 40) + '...'
+									{!!news3Top.summary && news3Top.summary.length > 40 ? (
+										news3Top.summary.substr(0, 40) + '...'
 									) : (
-										news3Top.description
+										news3Top.summary
 									)}
 								</p>
 							</a>
 
 							<ul className="news-sub-list">
-								{news3.map(
-									(item, index) =>
-										index > 0 ? (
-											<a href={`/news/detail?id=${item.id}`} key={item.id}>
-												<li>
-													<p>
-														{!!item.title && item.title.length > 15 ? (
-															item.title.substr(0, 15) + '...'
-														) : (
-															item.title
-														)}
-													</p>
-													<p>{moment(item.release_datetime).format('MM-DD')}</p>
-												</li>
-											</a>
-										) : (
-											''
-										)
-								)}
+								{news3.map(item => (
+									<a href={`/news/detail?id=${item.id}`} key={item.id}>
+										<li>
+											<p>
+												{!!item.title && item.title.length > 15 ? (
+													item.title.substr(0, 15) + '...'
+												) : (
+														item.title
+													)}
+											</p>
+											<p>{moment(item.publish_at).format('MM-DD')}</p>
+										</li>
+									</a>
+								))}
 							</ul>
 						</div>
 					</div>

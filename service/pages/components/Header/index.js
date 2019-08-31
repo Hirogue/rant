@@ -50,7 +50,7 @@ export default class extends Component {
 									<div className="header-tel-text">
 										<IconFont className="iconfont" type="icon-telephone" />
 										<p>客服热线：</p>
-										<h4>{siteInfo.hotline}</h4>
+										<h4>{siteInfo.hotline || "0791-87705085"}</h4>
 									</div>
 									<ul className="header-top-nav">
 										{!!user ? (

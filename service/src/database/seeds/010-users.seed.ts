@@ -1,15 +1,26 @@
-import * as csv from 'csvtojson';
 import * as Faker from 'faker';
-import { existsSync } from "fs";
 import { sample } from "lodash";
-import { join } from "path";
 import { Connection, Like } from "typeorm";
 import { Factory, Seeder } from "typeorm-seeding";
-import { IdentityEnum, UserStatusEnum, UserTypeEnum } from "../../core";
-import { Metadata, User } from "../entities";
+import { IdentityEnum, UserTypeEnum, UserStatusEnum } from "../../core";
+import { Metadata, Org, User } from "../entities";
+import { join } from "path";
+import { existsSync } from "fs";
+import * as csv from 'csvtojson';
 
 export default class implements Seeder {
     public async run(factory: Factory, connection: Connection): Promise<any> {
+
+        const org1 = await connection.getRepository(Org).findOne({ where: { title: '后台' } });
+        const org2 = await connection.getRepository(Org).findOne({ where: { title: '基金部' } });
+        const org3 = await connection.getRepository(Org).findOne({ where: { title: '投资业务部' } });
+        const org4 = await connection.getRepository(Org).findOne({ where: { title: '风险管理部' } });
+        const org5 = await connection.getRepository(Org).findOne({ where: { title: '财务部' } });
+
+        const org6 = await connection.getRepository(Org).findOne({ where: { title: '游客' } });
+        const org7 = await connection.getRepository(Org).findOne({ where: { title: '项目方' } });
+        const org8 = await connection.getRepository(Org).findOne({ where: { title: '资金方' } });
+        const org9 = await connection.getRepository(Org).findOne({ where: { title: '服务商' } });
 
         const area = await connection.getTreeRepository(Metadata).findDescendants(
             await connection.getRepository(Metadata).findOne({ title: '地区' })
@@ -24,6 +35,7 @@ export default class implements Seeder {
         superAdmin.avatar = Faker.image.avatar();
         superAdmin.realname = 'Super Admin';
         superAdmin.profile = 'A mysterious person with arbitrary authority!';
+        superAdmin.org = org1;
         superAdmin.isSuperAdmin = true;
 
         await connection.getRepository(User).save(superAdmin);
@@ -42,7 +54,7 @@ export default class implements Seeder {
                 user.password = item.password;
                 user.lastPassword = item.password;
                 user.account = item.credential;
-                user.realname = item.real_name;
+                user.realname = item.real_name ? item.real_name : '';
                 user.phone = item.phonenumber;
                 user.vip = item.vip;
                 user.create_at = item.created_when;
@@ -50,16 +62,26 @@ export default class implements Seeder {
                 const area = await connection.getRepository(Metadata).findOne({ where: { title: Like(`${item.area}%`), } });
                 user.area = area;
 
-                if (item.id_name == "游客") {
-                    user.identity = IdentityEnum.TOURIST;
+                if (item.id_name == "游客" || item.id_name.trim().length == 0) {
+                    if (item.role_id != '00000000-0000-0000-0000-111111111111') {
+                        user.org = org1;
+                        user.identity = IdentityEnum.USER;
+                    } else {
+                        user.identity = IdentityEnum.TOURIST;
+                        user.org = org6;
+                    }
                 } else if (item.id_name == "项目方") {
                     user.identity = IdentityEnum.FINANCER;
+                    user.org = org7;
                 } else if (item.id_name == "资金方") {
                     user.identity = IdentityEnum.INVESTOR;
+                    user.org = org8;
                 } else if (item.id_name == "服务商") {
                     user.identity = IdentityEnum.PROVIDER;
+                    user.org = org9;
                 } else {
                     user.identity = IdentityEnum.USER;
+                    user.org = org6;
                 }
 
                 if (item.id_type == "个人") {
@@ -86,36 +108,43 @@ export default class implements Seeder {
 
 
                 await connection.getRepository(User).save(user);
+                await connection.getRepository(User).update({account: item.credential}, {create_at: item.created_when});
 
             }
         } else {
             await factory(User)({
                 identity: IdentityEnum.USER,
+                org: org2,
                 area: sample(area)
             }).seedMany(4);
 
             await factory(User)({
                 identity: IdentityEnum.USER,
+                org: org3,
                 area: sample(area)
             }).seedMany(4);
 
             await factory(User)({
                 identity: IdentityEnum.USER,
+                org: org4,
                 area: sample(area)
             }).seedMany(5);
 
             await factory(User)({
                 identity: IdentityEnum.USER,
+                org: org5,
                 area: sample(area)
             }).seedMany(2);
 
             await factory(User)({
                 identity: IdentityEnum.TOURIST,
+                org: org6,
                 area: sample(area)
             }).seedMany(10);
 
             await factory(User)({
                 identity: IdentityEnum.FINANCER,
+                org: org7,
                 area: sample(area),
                 type: UserTypeEnum[sample(typeList)],
                 status: UserStatusEnum[sample(status)],
@@ -123,6 +152,7 @@ export default class implements Seeder {
 
             await factory(User)({
                 identity: IdentityEnum.INVESTOR,
+                org: org8,
                 area: sample(area),
                 type: UserTypeEnum[sample(typeList)],
                 status: UserStatusEnum[sample(status)],
@@ -130,6 +160,7 @@ export default class implements Seeder {
 
             await factory(User)({
                 identity: IdentityEnum.PROVIDER,
+                org: org9,
                 area: sample(area),
                 type: UserTypeEnum[sample(typeList)],
                 status: UserStatusEnum[sample(status)],

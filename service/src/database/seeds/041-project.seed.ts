@@ -27,7 +27,7 @@ export default class implements Seeder {
                     project.creator = creator;
 
                     if (item.status == "OVER") {
-                        project.status = ProjectStatusEnum.FINISHED;
+                        project.status = ProjectStatusEnum.CHECKED;
                     } else if (item.status == "PENDING") {
                         project.status = ProjectStatusEnum.PENDING;
                     } else if (item.status == "FOLLOW") {
@@ -85,6 +85,7 @@ export default class implements Seeder {
                         
                     }
                     await connection.getRepository(Project).save(project);
+                    await connection.getRepository(Project).update({title: item.title}, {create_at: item.created_when});
 
                 } else { //资金
                     
@@ -101,7 +102,7 @@ export default class implements Seeder {
                     capital.company = item.company;
 
                     if (item.status == "OVER") {
-                        capital.status = ProjectStatusEnum.FINISHED;
+                        capital.status = ProjectStatusEnum.CHECKED;
                     } else if (item.status == "PENDING") {
                         capital.status = ProjectStatusEnum.PENDING;
                     } else if (item.status == "FOLLOW") {
@@ -186,6 +187,7 @@ export default class implements Seeder {
 
                     }
                     await connection.getRepository(Capital).save(capital);
+                    await connection.getRepository(Capital).update({title: item.title}, {create_at: item.created_when});
                     
                 }
             }

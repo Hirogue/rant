@@ -34,7 +34,7 @@ export default class implements Seeder {
                 const ex_info = item.ex_info ? JSON.parse(item.ex_info) : null;
 
                 await factory(Provider)({
-                    name: item.title,
+                    name: item.name,
                     logo: thumbnail ? thumbnail.url : null,
                     slogan: item.subtitle,
                     introduction: ex_info ? ex_info.richtext ? ex_info.richtext.html : null : null,

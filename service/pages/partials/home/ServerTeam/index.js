@@ -20,11 +20,9 @@ export default class extends React.Component {
 	render() {
 		const { data } = this.props;
 
-		if (!data) return '';
+		if (!data.length) return '';
 
-		const { teamList } = data;
-
-		const teams = _.take(_.filter(teamList, (item) => item.category_name === this.state.current), 3);
+		const teams = _.take(_.filter(data, (item) => item.category === this.state.current), 3);
 
 		return (
 			<GlobalContext.Consumer>
@@ -94,11 +92,11 @@ export default class extends React.Component {
 								<div className="team-list">
 									{teams.map((item) => (
 										<div className="team-item" key={item.id}>
-											<img className="avatar" src={!!item.thumbnail ? item.thumbnail.url : ''} />
+											<img className="avatar" src={item.avatar} />
 
-											<h4 className="name">{item.pro_name}</h4>
-											<p className="post">{item.subtitle}</p>
-											<p className="introduce">{item.description}</p>
+											<h4 className="name">{item.name}</h4>
+											<p className="post">{item.company}&nbsp;${item.position}</p>
+											<p className="introduce">{item.info}</p>
 
 											{contentApplys.find((apply) => apply.content_id === item.id) ? (
 												<a href="javascript:;" style={{ background: '#ccc' }}>

@@ -23,7 +23,7 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
     }
 
     private handleChange(entity: User) {
-        if (entity) {
+        if (!!entity) {
             entity.hideName = entity.realname
                 ? entity.realname.substr(0, 1).padEnd(entity.realname.length, '*')
                 : '';

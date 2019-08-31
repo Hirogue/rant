@@ -1,119 +1,141 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Carousel, Tabs, message } from 'antd';
 import { apiLogin, apiRegister } from '../../../services/common';
 import HomeLoginForm from './login_form';
 import HomeRegisterForm from './register_form';
 import config from '../../../config/config';
+import { createApolloClient } from "../../../lib/apollo";
+import { Fetch, toFetchCurrentUser } from "../../../lib/global";
+import { M_LOGIN } from '../../../gql';
 
 import './banner.scss';
-import GlobalContext from '../../../components/context/GlobalContext';
 
+const client = createApolloClient();
 const TabPane = Tabs.TabPane;
-class Banner extends Component {
-	handleLoginSubmit(e, props) {
+
+export default ({ data }) => {
+	let user = null;
+	try {
+		user = JSON.parse(localStorage.getItem('u_user'));
+	} catch (error) {
+		console.error(error.message);
+	}
+
+	console.log(user);
+	
+	const [thisUser, setUser] = useState(user);
+	const images = !data.data ? [{ id: 0, url: '', link: '' }] : data.data;
+
+	const handleLoginSubmit = (e, props) => {
 		e.preventDefault();
-		props.form.validateFields((err, values) => {
+		props.form.validateFields(async (err, values) => {
 			if (!err) {
 				if (values.remember) {
-					localStorage.setItem('user-phone-number', values.phone);
+					localStorage.setItem('user-phone-number', values.account);
 				} else {
 					localStorage.removeItem('user-phone-number');
 				}
+				delete values.remember;
+				
+				let { data } = await client.mutate({
+					mutation: M_LOGIN,
+					variables: { loginData: values }
+				});
 
-				apiLogin(values.phone, values.password)
-					.then((res) => {
-						window.location.href = '/user';
-					})
-					.catch((err) => {
-						// message.error('登录失败！用户名或密码错误。');
-					});
+				if (data && data.login && data.login.token) {
+					localStorage.setItem('u_token', data.login.token);
+					const user = await toFetchCurrentUser(client);
+					if (user) {
+						message.success('登录成功！', 1);
+						window.location.reload();
+						// window.location.href = '/user';
+					} else {
+						message.error('登录失败！请联系管理员！');
+					}
+				} else {
+					message.error('登录失败！请联系管理员！');
+				}
 			}
 		});
 	}
 
-	handleRegisterSubmit(e, props) {
+	const handleRegisterSubmit = (e, props) => {
 		e.preventDefault();
 
-		props.form.validateFields((err, values) => {
+		props.form.validateFields(async (err, values) => {
 			if (!err) {
-				console.log('Received values of form: ', values);
 
 				if (!values.remember) {
 					message.warning('请先阅读并同意服务协议！');
 					return false;
 				}
 
-				apiRegister(values.phone, values.password, values.smsCaptcha)
-					.then((result) => {
-						if (!!result.data) {
-							apiLogin(values.phone, values.password)
-								.then((res) => {
-									window.location.href = '/user';
-								})
-								.catch((err) => {
-									//message.error('登录失败！用户名或密码错误。');
-								});
+				const res = await Fetch(`/api/user/register`, {
+					"phone": values.phone,
+					"smsCode": values.smsCaptcha,
+					"password": values.password,
+					"confirmPassword": values.password
+				});
+
+				if (res.message) {
+					const { message: { error, message } } = res;
+					if (error) message.fail(message);
+				} else if (res.id) {
+					message.success('恭喜，注册成功！');
+					let { data } = await client.mutate({
+						mutation: M_LOGIN,
+						variables: { 
+							loginData: { 
+								account: values.phone, 
+								password: values.password 
+							} 
 						}
-					})
-					.catch((err) => {
-						// message.error('注册失败！');
 					});
+					if (data && data.login && data.login.token) {
+						localStorage.setItem('u_token', data.login.token);
+						
+						const user = await toFetchCurrentUser(client);
+						if (user) {
+							window.location.reload();
+						}
+					} else {
+						message.error('跳转登录失败！请联系管理员！');
+					}
+				}
+
 			}
 		});
 	}
 
-	render() {
-		return (
-			<GlobalContext.Consumer>
-				{(context) => {
-					const user = context.user || null;
-					const page = context.pagesSEO || null;
-
-					// 轮播图
-					const images = !!page ? (!!page.ex_info ? page.ex_info.gallery : []) : [];
-
-					return (
-						<div className="banner-container">
-							{!images || images.length <= 0 ? (
-								<Carousel autoplay>
-									<div className="banner-box">
-										<img src={config.staticImgUrl + 'banner1.png'} alt="banner" />
-									</div>
-									<div className="banner-box">
-										<img src={config.staticImgUrl + 'banner1.png'} alt="banner" />
-									</div>
-								</Carousel>
-							) : (
-									<Carousel autoplay>
-										{images.map((item, index) => (
-											<div className="banner-box" key={index}>
-												<img src={item.url} alt="banner" />
-											</div>
-										))}
-									</Carousel>
-								)}
-							{!user ? (
-								<div className="login-mod">
-									<div className="login-mod-box">
-										<Tabs type="card">
-											<TabPane tab="登录" key="1">
-												<HomeLoginForm handleLoginSubmit={this.handleLoginSubmit} />
-											</TabPane>
-											<TabPane tab="免费注册" key="2">
-												<HomeRegisterForm handleRegisterSubmit={this.handleRegisterSubmit} />
-											</TabPane>
-										</Tabs>
-									</div>
-								</div>
-							) : (
-									''
-								)}
-						</div>
-					);
-				}}
-			</GlobalContext.Consumer>
-		);
-	}
+	return (
+		<div className="banner-container">
+			<Carousel autoplay effect="fade">
+				{images.map(item => (
+					<a className="banner-box" href={item.link} key={item.id}>
+						<img src={item.url} alt="banner" />
+					</a>
+				))}
+			</Carousel>
+			{!thisUser ? (
+				<div className="login-mod">
+					<div className="login-mod-box">
+						<Tabs type="card">
+							<TabPane tab="登录" key="1">
+								<HomeLoginForm handleLoginSubmit={handleLoginSubmit} />
+							</TabPane>
+							<TabPane tab="免费注册" key="2">
+								<HomeRegisterForm handleRegisterSubmit={handleRegisterSubmit} />
+							</TabPane>
+						</Tabs>
+					</div>
+				</div>
+			) : (
+				''
+			)}
+		</div>
+	);
 }
 
-export default Banner;
+
+
+

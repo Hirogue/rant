@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react'
+import { message } from 'antd';
 import Head from 'next/head'
 import { ApolloProvider } from '@apollo/react-hooks'
-import { ApolloClient, InMemoryCache, HttpLink } from 'apollo-boost'
+import ApolloClient, { InMemoryCache, HttpLink } from 'apollo-boost'
 import fetch from 'isomorphic-unfetch'
 
 let apolloClient = null
@@ -120,7 +121,7 @@ export function createApolloClient (initialState = {}) {
     connectToDevTools: isBrowser,
     ssrMode: !isBrowser, // Disables forceFetch on the server (so queries are only run once)
     link: new HttpLink({
-      uri: 'https://api.graph.cool/simple/v1/cixmkt2ul01q00122mksg82pn', // Server URL (must be absolute)
+      uri: '/graphql', // Server URL (must be absolute)
       credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
       // Use fetch() polyfill on the server
       fetch: !isBrowser && fetch
@@ -136,20 +137,21 @@ export function createApolloClient (initialState = {}) {
       });
     },
     onError: ({ graphQLErrors, networkError }) => {
+      console.log('fawefweagaew')
       if (graphQLErrors) {
         message.error(
-          <Fragment>
+          <>
             <p>【操作错误】</p>
             {graphQLErrors.map(item => <p key={item.message}>{item.message}</p>)}
-          </Fragment>
+          </>
         );
       }
       if (networkError) {
         message.error(
-          <Fragment>
+          <>
             <p>【网络错误】</p>
             <p>{networkError.message}</p>
-          </Fragment>
+          </>
         );
       }
     },
