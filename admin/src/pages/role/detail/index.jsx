@@ -177,7 +177,7 @@ export default withRouter(props => {
     update: (proxy, { data }) => {
       if (data && data.createRole) {
         message.success('保存成功');
-        router.replace(`/accesss-control/role/detail/${data.createRole.id}`);
+        router.replace(`/role/detail/${data.createRole.id}`);
       }
     },
   });

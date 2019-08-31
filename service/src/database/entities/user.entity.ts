@@ -180,7 +180,7 @@ export class User extends Base {
     @ApiModelProperty({ nullable: true })
     role: Role;
 
-    @Field({ nullable: true })
+    @Field(type => User, { nullable: true })
     @ManyToOne(type => User)
     @ApiModelProperty({ nullable: true })
     own: User;

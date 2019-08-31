@@ -94,7 +94,7 @@ export class Capital extends Base {
     @ApiModelProperty({ nullable: true })
     org: Org;
 
-    @Field({ nullable: true })
+    @Field(type => User, { nullable: true })
     @ManyToOne(type => User)
     @ApiModelProperty({ nullable: true })
     own: User;

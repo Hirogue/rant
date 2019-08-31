@@ -338,7 +338,7 @@ export default withRouter(props => {
     update: (proxy, { data }) => {
       if (data && data.createProduct) {
         message.success('操作成功');
-        router.replace(`/products/detail/${data.createProduct.id}`);
+        router.replace(`/contents/products/detail/${data.createProduct.id}`);
       }
     },
   });

@@ -141,6 +141,78 @@ export default {
           path: '/contents',
           routes: [
             {
+              name: 'articles',
+              path: '/contents/articles',
+              routes: [
+                {
+                  name: 'list',
+                  path: '/contents/articles/list',
+                  component: './contents/articles/list',
+                },
+                {
+                  path: '/contents/articles/detail/:id',
+                  component: './contents/articles/detail',
+                },
+                {
+                  path: '/contents/articles/create',
+                  component: './contents/articles/detail',
+                },
+                {
+                  name: 'category',
+                  path: '/contents/articles/category',
+                  component: './contents/articles/category',
+                },
+              ],
+            },
+            {
+              name: 'products',
+              path: '/contents/products',
+              routes: [
+                {
+                  name: 'list',
+                  path: '/contents/products/list',
+                  component: './contents/products/list',
+                },
+                {
+                  path: '/contents/products/detail/:id',
+                  component: './contents/products/detail',
+                },
+                {
+                  path: '/contents/products/create',
+                  component: './contents/products/detail',
+                },
+                {
+                  name: 'category',
+                  path: '/contents/products/category',
+                  component: './contents/products/category',
+                },
+              ],
+            },
+            {
+              name: 'documents',
+              path: '/contents/documents',
+              routes: [
+                {
+                  name: 'list',
+                  path: '/contents/documents/list',
+                  component: './contents/documents/list',
+                },
+                {
+                  path: '/contents/documents/detail/:id',
+                  component: './contents/documents/detail',
+                },
+                {
+                  path: '/contents/documents/create',
+                  component: './contents/documents/detail',
+                },
+                {
+                  name: 'category',
+                  path: '/contents/documents/category',
+                  component: './contents/documents/category',
+                },
+              ],
+            },
+            {
               name: 'carousels',
               path: '/contents/carousels/list',
               component: './contents/carousels/list',
@@ -194,55 +266,6 @@ export default {
               path: '/contents/seo/create',
               component: './contents/seo/detail',
             },
-
-            {
-              name: 'articles',
-              path: '/contents/articles',
-              routes: [
-                {
-                  name: 'list',
-                  path: '/contents/articles/list',
-                  component: './contents/articles/list',
-                },
-                {
-                  path: '/contents/articles/detail/:id',
-                  component: './contents/articles/detail',
-                },
-                {
-                  path: '/contents/articles/create',
-                  component: './contents/articles/detail',
-                },
-                {
-                  name: 'category',
-                  path: '/contents/articles/category',
-                  component: './contents/articles/category',
-                },
-              ],
-            },
-            {
-              name: 'documents',
-              path: '/contents/documents',
-              routes: [
-                {
-                  name: 'list',
-                  path: '/contents/documents/list',
-                  component: './contents/documents/list',
-                },
-                {
-                  path: '/contents/documents/detail/:id',
-                  component: './contents/documents/detail',
-                },
-                {
-                  path: '/contents/documents/create',
-                  component: './contents/documents/detail',
-                },
-                {
-                  name: 'category',
-                  path: '/contents/documents/category',
-                  component: './contents/documents/category',
-                },
-              ],
-            },
           ],
         },
         {
@@ -279,6 +302,18 @@ export default {
           ],
         },
         {
+          name: 'apply-expert',
+          icon: 'eye',
+          path: '/apply-expert',
+          routes: [
+            {
+              name: 'list',
+              path: '/apply-expert/list',
+              component: './apply-expert/list',
+            },
+          ],
+        },
+        {
           name: 'providers',
           icon: 'audit',
           path: '/providers',
@@ -300,57 +335,6 @@ export default {
               name: 'category',
               path: '/providers/category',
               component: './providers/category',
-            },
-          ],
-        },
-        {
-          name: 'products',
-          icon: 'book',
-          path: '/products',
-          routes: [
-            {
-              name: 'list',
-              path: '/products/list',
-              component: './products/list',
-            },
-            {
-              path: '/products/detail/:id',
-              component: './products/detail',
-            },
-            {
-              path: '/products/create',
-              component: './products/detail',
-            },
-            {
-              name: 'category',
-              path: '/products/category',
-              component: './products/category',
-            },
-          ],
-        },
-        {
-          name: 'org',
-          icon: 'apartment',
-          path: '/org',
-          component: './org',
-        },
-        {
-          name: 'accesss-control',
-          icon: 'safety-certificate',
-          path: '/accesss-control',
-          routes: [
-            {
-              name: 'role.list',
-              path: '/accesss-control/role/list',
-              component: './accesss-control/role/list',
-            },
-            {
-              path: '/accesss-control/role/detail/:id',
-              component: './accesss-control/role/detail',
-            },
-            {
-              path: '/accesss-control/role/create',
-              component: './accesss-control/role/detail',
             },
           ],
         },
@@ -425,6 +409,32 @@ export default {
               component: './users/tourist/detail',
             },
           ],
+        },
+        {
+          name: 'role',
+          icon: 'safety-certificate',
+          path: '/role',
+          routes: [
+            {
+              name: 'list',
+              path: '/role/list',
+              component: './role/list',
+            },
+            {
+              path: '/role/detail/:id',
+              component: './role/detail',
+            },
+            {
+              path: '/role/create',
+              component: './role/detail',
+            },
+          ],
+        },
+        {
+          name: 'org',
+          icon: 'apartment',
+          path: '/org',
+          component: './org',
         },
         {
           name: 'metadata',

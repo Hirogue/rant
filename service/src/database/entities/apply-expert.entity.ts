@@ -1,8 +1,10 @@
 import { ApiModelProperty } from "@nestjs/swagger";
 import { Field, InputType, ObjectType } from "type-graphql";
 import { Column, Entity, ManyToOne } from "typeorm";
+import { ProjectStatusEnum } from "../../core";
 import { Base } from "./base";
 import { Expert } from "./expert.entity";
+import { Org } from "./org.entity";
 import { User } from "./user.entity";
 
 @Entity()
@@ -19,8 +21,23 @@ export class ApplyExpert extends Base {
     expert: Expert;
 
     @Field({ nullable: true })
-    @Column({ type: 'boolean', default: false })
+    @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
-    is_handled: boolean;
+    reason: string;
+
+    @Field(type => Org, { nullable: true })
+    @ManyToOne(type => Org)
+    @ApiModelProperty({ nullable: true })
+    org: Org;
+
+    @Field(type => User, { nullable: true })
+    @ManyToOne(type => User)
+    @ApiModelProperty({ nullable: true })
+    own: User;
+
+    @Field({ nullable: true })
+    @Column({ default: ProjectStatusEnum.PENDING })
+    @ApiModelProperty({ nullable: true })
+    status: ProjectStatusEnum;
 
 }

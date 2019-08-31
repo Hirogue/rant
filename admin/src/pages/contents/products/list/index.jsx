@@ -11,7 +11,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
 import { canDeleteAny, canCreateAny, canReadAny, canUpdateAny } from '@/utils/access-control';
 
-const PATH = '/products';
+const PATH = '/contents/products';
 const AUTH_RESOURCE = '/product';
 
 export default () => {
@@ -101,8 +101,8 @@ export default () => {
         ) : !!val ? (
           '是'
         ) : (
-          '否'
-        ),
+              '否'
+            ),
       filterMultiple: false,
       filters: [{ text: '是', value: true }, { text: '否', value: false }],
     },
