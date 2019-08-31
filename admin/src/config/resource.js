@@ -14,26 +14,6 @@ export default [
     value: '/contents',
     children: [
       {
-        name: '轮播图',
-        value: '/carousel',
-        route: '/contents/carousels/list',
-      },
-      {
-        name: '成功案例',
-        value: '/success-case',
-        route: '/contents/success-cases/list',
-      },
-      {
-        name: '专家团队',
-        value: '/expert',
-        route: '/contents/experts/list',
-      },
-      {
-        name: '搜索引擎优化',
-        value: '/seo',
-        route: '/contents/seo/list',
-      },
-      {
         name: '文章管理',
         value: '/contents/articles',
         children: [
@@ -46,6 +26,22 @@ export default [
             name: '文章分类',
             value: '/article/category',
             route: '/contents/articles/category',
+          },
+        ],
+      },
+      {
+        name: '产品管理',
+        value: '/contents/products',
+        children: [
+          {
+            name: '产品列表',
+            value: '/product',
+            route: '/contents/products/list',
+          },
+          {
+            name: '产品分类',
+            value: '/product/category',
+            route: '/contents/products/category',
           },
         ],
       },
@@ -64,6 +60,26 @@ export default [
             route: '/contents/documents/category',
           },
         ],
+      },
+      {
+        name: '轮播图',
+        value: '/carousel',
+        route: '/contents/carousels/list',
+      },
+      {
+        name: '成功案例',
+        value: '/success-case',
+        route: '/contents/success-cases/list',
+      },
+      {
+        name: '专家团队',
+        value: '/expert',
+        route: '/contents/experts/list',
+      },
+      {
+        name: '搜索引擎优化',
+        value: '/seo',
+        route: '/contents/seo/list',
       },
     ],
   },
@@ -96,22 +112,6 @@ export default [
         name: '服务商分类',
         value: '/provider/category',
         route: '/providers/category',
-      },
-    ],
-  },
-  {
-    name: '产品管理',
-    value: '/products',
-    children: [
-      {
-        name: '产品列表',
-        value: '/product',
-        route: '/products/list',
-      },
-      {
-        name: '产品分类',
-        value: '/product/category',
-        route: '/products/category',
       },
     ],
   },
