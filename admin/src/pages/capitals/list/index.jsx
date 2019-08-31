@@ -186,17 +186,15 @@ export default () => {
           <Divider type="vertical" />
         </Fragment>
       ) : null}
-      {canReadAny(AUTH_RESOURCE) ? (
-        <a
-          href="javascript:;"
-          onClick={() => {
-            setCurrent(record);
-            setLogVisible(true);
-          }}
-        >
-          [日志]
-        </a>
-      ) : null}
+      <a
+        href="javascript:;"
+        onClick={() => {
+          setCurrent(record);
+          setLogVisible(true);
+        }}
+      >
+        [日志]
+      </a>
     </Fragment>
   );
 
