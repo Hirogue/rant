@@ -2,11 +2,33 @@ import StandardActions from '@/components/StandardActions';
 import StandardPanel from '@/components/StandardPanel';
 import StandardRow from '@/components/StandardRow';
 import StandardTree from '@/components/StandardTree';
-import { M_CREATE_DOCUMENT_CATEGORY, M_DELETE_DOCUMENT_CATEGORY, M_UPDATE_DOCUMENT_CATEGORY, Q_GET_DOCUMENT_CATEGORY_TREES } from '@/gql';
+import {
+  M_CREATE_DOCUMENT_CATEGORY,
+  M_DELETE_DOCUMENT_CATEGORY,
+  M_UPDATE_DOCUMENT_CATEGORY,
+  Q_GET_DOCUMENT_CATEGORY_TREES,
+} from '@/gql';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Affix, Button, Card, Col, Divider, Form, Input, InputNumber, message, Row, Skeleton, Tree } from 'antd';
+import {
+  Affix,
+  Button,
+  Card,
+  Col,
+  Divider,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Row,
+  Skeleton,
+  Tree,
+} from 'antd';
 import { useEffect, useState } from 'react';
+
+import { canCreateAny, canDeleteAny, canUpdateAny } from '@/utils/access-control';
+
+const AUTH_RESOURCE = '/document/category';
 
 const { TreeNode } = Tree;
 const FormItem = Form.Item;
@@ -64,8 +86,8 @@ const InfoForm = Form.create()(props => {
             <Input disabled value={target.title} />
           </FormItem>
         ) : (
-            ''
-          )}
+          ''
+        )}
         <FormItem {...formItemLayout} label="名称">
           {getFieldDecorator('title', {
             initialValue: target && isUpdate ? target.title : '',
@@ -88,16 +110,18 @@ const InfoForm = Form.create()(props => {
             ],
           })(<InputNumber min={0} placeholder="请填写排序" />)}
         </FormItem>
-        <FormItem
-          {...submitFormLayout}
-          style={{
-            marginTop: 32,
-          }}
-        >
-          <Button type="primary" htmlType="submit">
-            保存
-          </Button>
-        </FormItem>
+        {canUpdateAny(AUTH_RESOURCE) ? (
+          <FormItem
+            {...submitFormLayout}
+            style={{
+              marginTop: 32,
+            }}
+          >
+            <Button type="primary" htmlType="submit">
+              保存
+            </Button>
+          </FormItem>
+        ) : null}
       </Form>
     </Card>
   );
@@ -145,7 +169,12 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => setPanelVisible(true) },
+    {
+      name: '新增',
+      icon: 'file-add',
+      action: () => setPanelVisible(true),
+      hide: !canCreateAny(AUTH_RESOURCE),
+    },
     {
       name: '删除',
       icon: 'delete',
@@ -153,6 +182,7 @@ export default () => {
         deleteDocumentCategory({ variables: { ids: checkedKeys.join(',') } });
       },
       disabled: checkedKeys.length <= 0,
+      hide: !canDeleteAny(AUTH_RESOURCE),
       confirm: true,
       confirmTitle: `确定要删除吗?`,
     },
@@ -195,8 +225,8 @@ export default () => {
             {selectedNode ? (
               <InfoForm isUpdate={true} mutation={updateDocumentCategory} target={selectedNode} />
             ) : (
-                ''
-              )}
+              ''
+            )}
           </Col>
         </Row>
       </StandardRow>

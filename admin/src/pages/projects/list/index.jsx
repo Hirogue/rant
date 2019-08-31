@@ -204,13 +204,8 @@ export default () => {
     {
       title: '详情',
       dataIndex: 'id',
-      render: (val, row) => {
-        return (
-          <Fragment>
-            <Link to={`${PATH}/detail/${val}`}>详情</Link>
-          </Fragment>
-        );
-      },
+      render: (val, row) =>
+        canUpdateAny(AUTH_RESOURCE) ? <Link to={`${PATH}/detail/${row.id}`}>详情</Link> : '--',
     },
     {
       title: '名称',

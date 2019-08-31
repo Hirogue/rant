@@ -18,6 +18,7 @@ import {
   message,
   Skeleton,
   TreeSelect,
+  Switch,
 } from 'antd';
 import React, { Fragment, useState } from 'react';
 import { router, withRouter } from 'umi';
@@ -180,6 +181,17 @@ const BasicForm = Form.create()(props => {
           {getFieldDecorator('sort', {
             initialValue: target.sort,
           })(<InputNumber min={0} placeholder="请填写排序" />)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="是否发布">
+          {getFieldDecorator('is_published', {
+            initialValue: target.is_published,
+          })(
+            <Switch
+              checkedChildren="是"
+              unCheckedChildren="否"
+              defaultChecked={target.is_published}
+            />,
+          )}
         </FormItem>
         <FormItem {...formItemLayout} label="简介">
           {getFieldDecorator('introduction', {

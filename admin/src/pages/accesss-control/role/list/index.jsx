@@ -9,11 +9,15 @@ import { Affix, Avatar, Col, message, Row, Skeleton, Switch } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
+import { canUpdateAny, canCreateAny, canDeleteAny } from '@/utils/access-control';
+
+const PATH = '/accesss-control/role';
+const AUTH_RESOURCE = '/role';
 
 export default () => {
   const defaultVariables = {
     page: 0,
-    limit: 10,
+    limit: 40,
     join: [],
     sort: [{ field: 'create_at', order: 'DESC' }],
   };
@@ -55,13 +59,8 @@ export default () => {
     {
       title: '详情',
       dataIndex: 'id',
-      render: (val, row) => {
-        return (
-          <Fragment>
-            <Link to={`/accesss-control/role/detail/${val}`}>详情</Link>
-          </Fragment>
-        );
-      },
+      render: (val, row) =>
+        canUpdateAny(AUTH_RESOURCE) ? <Link to={`${PATH}/detail/${row.id}`}>详情</Link> : '--',
     },
     {
       title: '名称',
@@ -93,7 +92,12 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => router.push('/accesss-control/role/create') },
+    {
+      name: '新增',
+      icon: 'file-add',
+      action: () => router.push(`${PATH}/create`),
+      hide: !canCreateAny(AUTH_RESOURCE),
+    },
     {
       name: '删除',
       icon: 'delete',
@@ -110,6 +114,7 @@ export default () => {
         });
       },
       disabled: selectedRows.length <= 0,
+      hide: !canDeleteAny(AUTH_RESOURCE),
       confirm: true,
       confirmTitle: `确定要删除吗?`,
     },

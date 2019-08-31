@@ -2,6 +2,7 @@ import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import { M_DELETE_EXPERT, M_UPDATE_EXPERT, Q_GET_EXPERTS } from '@/gql';
+import { canCreateAny, canDeleteAny, canUpdateAny } from '@/utils/access-control';
 import { buildingQuery } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
@@ -9,6 +10,9 @@ import { Affix, Avatar, Col, message, Row, Skeleton, Switch } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
+
+const PATH = '/contents/experts';
+const AUTH_RESOURCE = '/expert';
 
 export default () => {
   const defaultVariables = {
@@ -55,13 +59,8 @@ export default () => {
     {
       title: '详情',
       dataIndex: 'id',
-      render: (val, row) => {
-        return (
-          <Fragment>
-            <Link to={`/contents/experts/detail/${val}`}>详情</Link>
-          </Fragment>
-        );
-      },
+      render: (val, row) =>
+        canUpdateAny(AUTH_RESOURCE) ? <Link to={`${PATH}/detail/${row.id}`}>详情</Link> : '--',
     },
     {
       title: '头像',
@@ -96,25 +95,30 @@ export default () => {
     {
       title: '是否发布',
       dataIndex: 'is_published',
-      render: (val, record) => (
-        <Switch
-          checkedChildren="是"
-          unCheckedChildren="否"
-          checked={!!val}
-          onChange={checked => {
-            client.mutate({
-              mutation: M_UPDATE_EXPERT,
-              variables: { id: record.id, data: { is_published: checked } },
-              update: (proxy, { data }) => {
-                if (data.deleteExpert) {
-                  message.success('删除成功');
-                  refetch();
-                }
-              },
-            });
-          }}
-        />
-      ),
+      render: (val, record) =>
+        canUpdateAny(AUTH_RESOURCE) ? (
+          <Switch
+            checkedChildren="是"
+            unCheckedChildren="否"
+            checked={!!val}
+            onChange={checked => {
+              client.mutate({
+                mutation: M_UPDATE_EXPERT,
+                variables: { id: record.id, data: { is_published: checked } },
+                update: (proxy, { data }) => {
+                  if (data.deleteExpert) {
+                    message.success('删除成功');
+                    refetch();
+                  }
+                },
+              });
+            }}
+          />
+        ) : !!val ? (
+          '是'
+        ) : (
+          '否'
+        ),
       filterMultiple: false,
       filters: [{ text: '是', value: true }, { text: '否', value: false }],
     },
@@ -138,7 +142,12 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => router.push('/contents/experts/create') },
+    {
+      name: '新增',
+      icon: 'file-add',
+      action: () => router.push(`${PATH}/create`),
+      hide: !canCreateAny(AUTH_RESOURCE),
+    },
     {
       name: '删除',
       icon: 'delete',
@@ -155,11 +164,10 @@ export default () => {
         });
       },
       disabled: selectedRows.length <= 0,
+      hide: !canDeleteAny(AUTH_RESOURCE),
       confirm: true,
       confirmTitle: `确定要删除吗?`,
     },
-    { name: '导入', icon: 'import', action: () => refetch() },
-    { name: '导出', icon: 'export', action: () => refetch() },
   ];
 
   return (

@@ -9,6 +9,10 @@ import { Affix, Avatar, Col, message, Row, Skeleton, Switch } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
+import { canUpdateAny, canCreateAny, canDeleteAny, canReadAny } from '@/utils/access-control';
+
+const PATH = '/contents/seo';
+const AUTH_RESOURCE = '/seo';
 
 export default () => {
   const defaultVariables = {
@@ -55,13 +59,8 @@ export default () => {
     {
       title: '详情',
       dataIndex: 'id',
-      render: (val, row) => {
-        return (
-          <Fragment>
-            <Link to={`/contents/seo/detail/${val}`}>详情</Link>
-          </Fragment>
-        );
-      },
+      render: (val, row) =>
+        canUpdateAny(AUTH_RESOURCE) ? <Link to={`${PATH}/detail/${row.id}`}>详情</Link> : '--',
     },
     {
       title: '路径',
@@ -93,7 +92,12 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => router.push('/contents/seo/create') },
+    {
+      name: '新增',
+      icon: 'file-add',
+      action: () => router.push(`${PATH}/create`),
+      hide: !canCreateAny(AUTH_RESOURCE),
+    },
     {
       name: '删除',
       icon: 'delete',
@@ -110,11 +114,10 @@ export default () => {
         });
       },
       disabled: selectedRows.length <= 0,
+      hide: !canDeleteAny(AUTH_RESOURCE),
       confirm: true,
       confirmTitle: `确定要删除吗?`,
     },
-    { name: '导入', icon: 'import', action: () => refetch() },
-    { name: '导出', icon: 'export', action: () => refetch() },
   ];
 
   return (

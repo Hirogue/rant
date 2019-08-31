@@ -8,6 +8,7 @@ import {
   M_UPDATE_PRODUCT_CATEGORY,
   Q_GET_PRODUCT_CATEGORY_TREES,
 } from '@/gql';
+import { canCreateAny, canDeleteAny, canUpdateAny } from '@/utils/access-control';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import {
@@ -25,6 +26,8 @@ import {
   Tree,
 } from 'antd';
 import { useEffect, useState } from 'react';
+
+const AUTH_RESOURCE = '/product/category';
 
 const { TreeNode } = Tree;
 const FormItem = Form.Item;
@@ -106,16 +109,18 @@ const InfoForm = Form.create()(props => {
             ],
           })(<InputNumber min={0} placeholder="请填写排序" />)}
         </FormItem>
-        <FormItem
-          {...submitFormLayout}
-          style={{
-            marginTop: 32,
-          }}
-        >
-          <Button type="primary" htmlType="submit">
-            保存
-          </Button>
-        </FormItem>
+        {canUpdateAny(AUTH_RESOURCE) ? (
+          <FormItem
+            {...submitFormLayout}
+            style={{
+              marginTop: 32,
+            }}
+          >
+            <Button type="primary" htmlType="submit">
+              保存
+            </Button>
+          </FormItem>
+        ) : null}
       </Form>
     </Card>
   );
@@ -163,7 +168,12 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => setPanelVisible(true) },
+    {
+      name: '新增',
+      icon: 'file-add',
+      action: () => setPanelVisible(true),
+      hide: !canCreateAny(AUTH_RESOURCE),
+    },
     {
       name: '删除',
       icon: 'delete',
@@ -171,6 +181,7 @@ export default () => {
         deleteProductCategory({ variables: { ids: checkedKeys.join(',') } });
       },
       disabled: checkedKeys.length <= 0,
+      hide: !canDeleteAny(AUTH_RESOURCE),
       confirm: true,
       confirmTitle: `确定要删除吗?`,
     },

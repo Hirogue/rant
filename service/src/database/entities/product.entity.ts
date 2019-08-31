@@ -56,6 +56,11 @@ export class Product extends Base {
     @ApiModelProperty({ nullable: true })
     sort: number;
 
+    @Field({ nullable: true })
+    @Column({ type: 'boolean', default: false })
+    @ApiModelProperty({ nullable: true })
+    is_published: boolean;
+
     @Field(type => ProductCategory, { nullable: true })
     @ManyToOne(type => ProductCategory, target => target.products)
     @ApiModelProperty({ nullable: true })

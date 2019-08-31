@@ -2,6 +2,7 @@ import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import { M_DELETE_DOCUMENT, M_UPDATE_DOCUMENT, Q_GET_DOCUMENTS } from '@/gql';
+import { canCreateAny, canDeleteAny, canUpdateAny } from '@/utils/access-control';
 import { buildingQuery } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
@@ -9,6 +10,9 @@ import { Affix, Col, message, Row, Skeleton, Switch } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
+
+const PATH = '/contents/documents';
+const AUTH_RESOURCE = '/document';
 
 export default () => {
   const defaultVariables = {
@@ -63,13 +67,8 @@ export default () => {
     {
       title: '详情',
       dataIndex: 'id',
-      render: (val, row) => {
-        return (
-          <Fragment>
-            <Link to={`/contents/documents/detail/${val}`}>详情</Link>
-          </Fragment>
-        );
-      },
+      render: (val, row) =>
+        canUpdateAny(AUTH_RESOURCE) ? <Link to={`${PATH}/detail/${row.id}`}>详情</Link> : '--',
     },
     {
       title: '标题',
@@ -94,32 +93,42 @@ export default () => {
     {
       title: '是否置顶',
       dataIndex: 'is_top',
-      render: (val, record) => (
-        <Switch
-          checkedChildren="是"
-          unCheckedChildren="否"
-          checked={!!val}
-          onChange={checked =>
-            updateDocument({ variables: { id: record.id, data: { is_top: checked } } })
-          }
-        />
-      ),
+      render: (val, record) =>
+        canUpdateAny(AUTH_RESOURCE) ? (
+          <Switch
+            checkedChildren="是"
+            unCheckedChildren="否"
+            checked={!!val}
+            onChange={checked =>
+              updateDocument({ variables: { id: record.id, data: { is_top: checked } } })
+            }
+          />
+        ) : !!val ? (
+          '是'
+        ) : (
+          '否'
+        ),
       filterMultiple: false,
       filters: [{ text: '是', value: true }, { text: '否', value: false }],
     },
     {
       title: '是否发布',
       dataIndex: 'is_published',
-      render: (val, record) => (
-        <Switch
-          checkedChildren="是"
-          unCheckedChildren="否"
-          checked={!!val}
-          onChange={checked =>
-            updateDocument({ variables: { id: record.id, data: { is_published: checked } } })
-          }
-        />
-      ),
+      render: (val, record) =>
+        canUpdateAny(AUTH_RESOURCE) ? (
+          <Switch
+            checkedChildren="是"
+            unCheckedChildren="否"
+            checked={!!val}
+            onChange={checked =>
+              updateDocument({ variables: { id: record.id, data: { is_published: checked } } })
+            }
+          />
+        ) : !!val ? (
+          '是'
+        ) : (
+          '否'
+        ),
       filterMultiple: false,
       filters: [{ text: '是', value: true }, { text: '否', value: false }],
     },
@@ -156,7 +165,12 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '新增', icon: 'file-add', action: () => router.push('/contents/documents/create') },
+    {
+      name: '新增',
+      icon: 'file-add',
+      action: () => router.push(`${PATH}/create`),
+      hide: !canCreateAny(AUTH_RESOURCE),
+    },
     {
       name: '删除',
       icon: 'delete',
@@ -164,11 +178,10 @@ export default () => {
         deleteDocument({ variables: { ids: selectedRows.map(item => item.id).join(',') } });
       },
       disabled: selectedRows.length <= 0,
+      hide: !canDeleteAny(AUTH_RESOURCE),
       confirm: true,
       confirmTitle: `确定要删除吗?`,
     },
-    { name: '导入', icon: 'import', action: () => refetch() },
-    { name: '导出', icon: 'export', action: () => refetch() },
   ];
 
   return (
