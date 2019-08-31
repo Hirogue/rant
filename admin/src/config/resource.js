@@ -100,6 +100,11 @@ export default [
     ],
   },
   {
+    name: '约见管理',
+    value: '/apply-expert',
+    route: '/apply-expert/list',
+  },
+  {
     name: '服务商管理',
     value: '/providers',
     children: [

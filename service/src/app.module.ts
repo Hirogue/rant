@@ -28,6 +28,7 @@ import { StorageModule } from './storage';
 import { SuccessCaseModule } from './success-case';
 import { UserModule } from './user';
 import { VerificationModule } from './verification';
+import { ApplyExpertModule } from './apply-expert';
 
 @Module({
   imports: [
@@ -64,7 +65,8 @@ import { VerificationModule } from './verification';
     ExpertModule,
     CarouselModule,
     DocumentModule,
-    SeoModule
+    SeoModule,
+    ApplyExpertModule
   ],
   providers: [
     // {

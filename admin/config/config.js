@@ -302,6 +302,18 @@ export default {
           ],
         },
         {
+          name: 'apply-expert',
+          icon: 'eye',
+          path: '/apply-expert',
+          routes: [
+            {
+              name: 'list',
+              path: '/apply-expert/list',
+              component: './apply-expert/list',
+            },
+          ],
+        },
+        {
           name: 'providers',
           icon: 'audit',
           path: '/providers',

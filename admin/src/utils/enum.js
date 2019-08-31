@@ -43,4 +43,5 @@ export const UserTypeEnum = {
 export const LogTypeEnum = {
   PROJECT: 'project',
   CAPITAL: 'capital',
+  EXPERT: 'expert',
 };

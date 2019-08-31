@@ -15,6 +15,8 @@ export default {
   'menu.org': '组织架构',
   'menu.role': '权限管理',
   'menu.role.list': '角色列表',
+  'menu.apply-expert': '约见管理',
+  'menu.apply-expert.list': '约见列表',
   'menu.users': '用户管理',
   'menu.users.admin.list': '后台用户',
   'menu.users.project.list': '项目方',

@@ -231,13 +231,6 @@ export default () => {
       search: true,
     },
     {
-      title: '部门',
-      dataIndex: 'org.id',
-      render: (val, record) => (record.org ? record.org.title : ''),
-      treeSelector: true,
-      treeFilters: filterOrg(AUTH_RESOURCE),
-    },
-    {
       title: '分类',
       dataIndex: 'category',
       render: val => IFModeMaps[val],
@@ -253,6 +246,13 @@ export default () => {
       })),
     },
     {
+      title: '部门',
+      dataIndex: 'org.id',
+      render: (val, record) => (record.org ? record.org.title : ''),
+      treeSelector: true,
+      treeFilters: filterOrg(AUTH_RESOURCE),
+    },
+    {
       title: '业务员',
       dataIndex: 'own.realname',
       search: true,
@@ -261,12 +261,6 @@ export default () => {
       title: '发布时间',
       dataIndex: 'publish_at',
       render: val => (val ? moment(val).format('YYYY-MM-DD HH:mm:ss') : ''),
-      sorter: true,
-    },
-    {
-      title: '更新时间',
-      dataIndex: 'update_at',
-      render: val => moment(val).format('YYYY-MM-DD HH:mm:ss'),
       sorter: true,
     },
     {

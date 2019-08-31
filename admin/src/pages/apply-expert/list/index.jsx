@@ -5,7 +5,7 @@ import StandardConfirm from '@/components/StandardConfirm';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import UserSelector from '@/components/UserSelector';
-import { M_DELETE_CAPITAL, Q_GET_CAPITAL, Q_GET_CAPITALS } from '@/gql';
+import { M_DELETE_APPLY_EXPERT, Q_GET_APPLY_EXPERTS } from '@/gql';
 import {
   canCreateAny,
   canDeleteAny,
@@ -27,10 +27,10 @@ import { Affix, Col, Divider, message, Popconfirm, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
-import { M_APPROVAL_CAPITAL } from '../gql';
+import { M_APPROVAL_APPLY_EXPERT } from '../gql';
 
-const PATH = '/if/capitals';
-const AUTH_RESOURCE = '/capital';
+const PATH = '/apply-expert';
+const AUTH_RESOURCE = '/apply-expert';
 
 export default () => {
   const defaultVariables = {
@@ -50,7 +50,7 @@ export default () => {
 
   const client = useApolloClient();
 
-  const { loading, data, refetch } = useQuery(Q_GET_CAPITALS, {
+  const { loading, data, refetch } = useQuery(Q_GET_APPLY_EXPERTS, {
     notifyOnNetworkStatusChange: true,
     variables: { queryString: buildingQuery(paramsAuth(AUTH_RESOURCE, defaultVariables)) },
   });
@@ -61,12 +61,12 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { queryCapital, productCategoryTrees, areaTrees } = data;
+  const { queryApplyExpert } = data;
 
-  if (!queryCapital) return <Skeleton loading={loading} active avatar />;
+  if (!queryApplyExpert) return <Skeleton loading={loading} active avatar />;
 
-  const dataSource = queryCapital.data;
-  const total = queryCapital.total;
+  const dataSource = queryApplyExpert.data;
+  const total = queryApplyExpert.total;
 
   const renderActions = record => (
     <Fragment>
@@ -76,7 +76,7 @@ export default () => {
             title="确定要审核吗?"
             onConfirm={() => {
               client.mutate({
-                mutation: M_APPROVAL_CAPITAL,
+                mutation: M_APPROVAL_APPLY_EXPERT,
                 variables: {
                   data: {
                     id: record.id,
@@ -84,7 +84,7 @@ export default () => {
                   },
                 },
                 update: (cache, { data }) => {
-                  if (data.approvalCapital) {
+                  if (data.approvalApplyExpert) {
                     message.success('操作成功');
                     refetch();
                   }
@@ -155,7 +155,7 @@ export default () => {
             title="确定要完成吗?"
             onConfirm={() => {
               client.mutate({
-                mutation: M_APPROVAL_CAPITAL,
+                mutation: M_APPROVAL_APPLY_EXPERT,
                 variables: {
                   data: {
                     id: record.id,
@@ -163,7 +163,7 @@ export default () => {
                   },
                 },
                 update: (cache, { data }) => {
-                  if (data.approvalCapital) {
+                  if (data.approvalApplyExpert) {
                     message.success('操作成功');
                     refetch();
                   }
@@ -200,41 +200,19 @@ export default () => {
 
   const columns = [
     {
-      title: '详情',
-      dataIndex: 'id',
-      render: (val, row) =>
-        canUpdateAny(AUTH_RESOURCE) ? <Link to={`${PATH}/detail/${row.id}`}>详情</Link> : '--',
-    },
-    {
-      title: '名称',
-      dataIndex: 'title',
+      title: '申请人',
+      dataIndex: 'applicant.realname',
       search: true,
     },
     {
-      title: '联系人',
-      dataIndex: 'contact',
+      title: '专家',
+      dataIndex: 'expert.contact',
       search: true,
     },
     {
-      title: '电话',
-      dataIndex: 'phone',
+      title: '申请人电话',
+      dataIndex: 'applicant.phone',
       search: true,
-    },
-    {
-      title: '访问量',
-      dataIndex: 'views',
-    },
-    {
-      title: '地区',
-      dataIndex: 'area.title',
-      render: (val, record) => (record.area ? record.area.title : ''),
-      search: true,
-    },
-    {
-      title: '分类',
-      dataIndex: 'category',
-      render: val => IFModeMaps[val],
-      filters: Object.keys(IFModeMaps).map(key => ({ text: IFModeMaps[key], value: key })),
     },
     {
       title: '状态',
@@ -258,9 +236,9 @@ export default () => {
       search: true,
     },
     {
-      title: '发布时间',
-      dataIndex: 'publish_at',
-      render: val => (val ? moment(val).format('YYYY-MM-DD HH:mm:ss') : ''),
+      title: '申请时间',
+      dataIndex: 'create_at',
+      render: val => moment(val).format('YYYY-MM-DD HH:mm:ss'),
       sorter: true,
     },
     {
@@ -281,32 +259,6 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    {
-      name: '新增',
-      icon: 'file-add',
-      action: () => router.push(`${PATH}/create`),
-      hide: !canCreateAny(AUTH_RESOURCE),
-    },
-    {
-      name: '删除',
-      icon: 'delete',
-      action: () => {
-        client.mutate({
-          mutation: M_DELETE_CAPITAL,
-          variables: { ids: selectedRows.map(item => item.id).join(',') },
-          update: (proxy, { data }) => {
-            if (data.deleteCapital) {
-              message.success('删除成功');
-              refetch();
-            }
-          },
-        });
-      },
-      disabled: selectedRows.length <= 0,
-      hide: !canDeleteAny(AUTH_RESOURCE),
-      confirm: true,
-      confirmTitle: `确定要删除吗?`,
-    },
     { name: '导入', icon: 'import', action: () => refetch(), hide: !canCreateAny(AUTH_RESOURCE) },
     { name: '导出', icon: 'export', action: () => refetch(), hide: !canReadAny(AUTH_RESOURCE) },
   ];
@@ -317,7 +269,7 @@ export default () => {
         <LogReader
           title="日志"
           target={current ? current.id : null}
-          type={LogTypeEnum.CAPITAL}
+          type={LogTypeEnum.EXPERT}
           visible={logVisible}
           setVisible={setLogVisible}
         />
@@ -328,7 +280,7 @@ export default () => {
           setVisible={setUserSelectorVisible}
           onConfirm={own => {
             client.mutate({
-              mutation: M_APPROVAL_CAPITAL,
+              mutation: M_APPROVAL_APPLY_EXPERT,
               variables: {
                 data: {
                   id: current.id,
@@ -337,7 +289,7 @@ export default () => {
                 },
               },
               update: (proxy, { data }) => {
-                if (data.approvalCapital) {
+                if (data.approvalApplyExpert) {
                   message.success('操作成功');
                   refetch();
                 }
@@ -352,7 +304,7 @@ export default () => {
           setVisible={setOrgSelectorVisible}
           onConfirm={org => {
             client.mutate({
-              mutation: M_APPROVAL_CAPITAL,
+              mutation: M_APPROVAL_APPLY_EXPERT,
               variables: {
                 data: {
                   id: current.id,
@@ -361,7 +313,7 @@ export default () => {
                 },
               },
               update: (proxy, { data }) => {
-                if (data.approvalCapital) {
+                if (data.approvalApplyExpert) {
                   message.success('操作成功');
                   refetch();
                 }
@@ -375,7 +327,7 @@ export default () => {
           setVisible={setVisible}
           onConfirm={reason => {
             client.mutate({
-              mutation: M_APPROVAL_CAPITAL,
+              mutation: M_APPROVAL_APPLY_EXPERT,
               variables: {
                 data: {
                   id: current.id,
@@ -384,7 +336,7 @@ export default () => {
                 },
               },
               update: (proxy, { data }) => {
-                if (data.approvalCapital) {
+                if (data.approvalApplyExpert) {
                   message.success('操作成功');
                   refetch();
                 }
@@ -398,7 +350,7 @@ export default () => {
           setVisible={setFollowingVisible}
           onConfirm={reason => {
             client.mutate({
-              mutation: M_APPROVAL_CAPITAL,
+              mutation: M_APPROVAL_APPLY_EXPERT,
               variables: {
                 data: {
                   id: current.id,
@@ -407,7 +359,7 @@ export default () => {
                 },
               },
               update: (proxy, { data }) => {
-                if (data.approvalCapital) {
+                if (data.approvalApplyExpert) {
                   message.success('操作成功');
                   refetch();
                 }
@@ -421,7 +373,7 @@ export default () => {
           setVisible={setCancelledVisible}
           onConfirm={reason => {
             client.mutate({
-              mutation: M_APPROVAL_CAPITAL,
+              mutation: M_APPROVAL_APPLY_EXPERT,
               variables: {
                 data: {
                   id: current.id,
@@ -430,7 +382,7 @@ export default () => {
                 },
               },
               update: (proxy, { data }) => {
-                if (data.approvalCapital) {
+                if (data.approvalApplyExpert) {
                   message.success('操作成功');
                   refetch();
                 }
