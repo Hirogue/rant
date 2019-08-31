@@ -10,20 +10,6 @@ services:
         networks:
             - app
 
-    # mongo:
-    #     container_name: mongo
-    #     image: mongo
-    #     restart: always
-    #     ports:
-    #         - '27017:27017'
-    #     environment:
-    #         MONGO_INITDB_ROOT_USERNAME: root
-    #         MONGO_INITDB_ROOT_PASSWORD: 123456
-    #     volumes:
-    #         - mongo-db-data:/var/lib/mongodb/data
-    #     networks:
-    #         - app
-
     postgres:
         container_name: postgres
         image: postgres:9.6
@@ -48,37 +34,22 @@ services:
         networks:
             - app
 
-    # elasticsearch:
-    #     image: elasticsearch:5.6
-    #     restart: always
-    #     ports:
-    #         - '9200'
-    #         - '9300'
-    #     networks:
-    #         - app
-    # influxdb:
-    #     image: influxdb
-    #     restart: always
-    #     ports:
-    #         - '8086'
-    #         - '8083'
-    #     networks:
-    #         - app
-    # app:
-    #     build:
-    #         context: .
-    #         dockerfile: Dockerfile
-    #     ports:
-    #         - '3000'
-    #     volumes:
-    #         - .:/code
-    #     networks:
-    #         - app
+    influxdb:
+        image: influxdb
+        restart: always
+        ports:
+            - '8086:8086'
+        environment:
+            INFLUXDB_DB: rant
+        volumes:
+            - influx-db-data:/var/lib/influxdb     
+        networks:
+            - app
 
 networks:
     app:
 
 volumes:
     mongo-db-data:
+    influx-db-data:
     db-data:
-    es-data:

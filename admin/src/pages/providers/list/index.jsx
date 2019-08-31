@@ -142,6 +142,16 @@ export default () => {
       search: true,
     },
     {
+      title: '排序',
+      dataIndex: 'sort',
+      sorter: true,
+    },
+    {
+      title: '浏览量',
+      dataIndex: 'views',
+      sorter: true,
+    },
+    {
       title: '状态',
       dataIndex: 'status',
       render: val => ProjectStatusMaps[val],

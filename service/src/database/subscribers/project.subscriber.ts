@@ -20,15 +20,15 @@ export class ProjectSubscriber implements EntitySubscriberInterface<Project> {
     private handleChange(entity: Project) {
         if (!!entity) {
             entity.summary = entity.info ? textInterception(entity.info, 40) : '';
-    
+
             entity.hideContact = entity.contact
                 ? entity.contact.substr(0, 1).padEnd(entity.contact.length, '*')
                 : '';
-    
+
             entity.hidePhone = entity.phone
                 ? entity.phone.replace(entity.phone.substring(3, 7), '****')
                 : '';
-    
+
             entity.hideCompany = entity.company
                 ? entity.company
                     .substr(entity.company.length - 2, entity.company.length)

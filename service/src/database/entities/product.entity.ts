@@ -56,6 +56,11 @@ export class Product extends Base {
     @ApiModelProperty({ nullable: true })
     sort: number;
 
+    @Field(type => Int, { nullable: true })
+    @Column({ default: 0 })
+    @ApiModelProperty({ nullable: true })
+    views: number;
+
     @Field({ nullable: true })
     @Column({ type: 'boolean', default: false })
     @ApiModelProperty({ nullable: true })

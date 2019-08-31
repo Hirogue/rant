@@ -1,16 +1,17 @@
-import { CacheModule, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { CacheModule, MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import * as redisStore from 'cache-manager-redis-store';
 import { RenderModule } from 'nest-next';
 import { AccessControlModule } from './access-control';
+import { StatisticsModule } from './statistics';
+import { ApplyExpertModule } from './apply-expert';
 import { ArticleModule } from './artilce';
 import { AuthModule } from './auth';
 import { CapitalModule } from './capital';
 import { CarouselModule } from './carousel';
 import { Config } from "./config";
-import { BaseDataSource, CoreModule, HttpCacheInterceptor } from './core';
+import { BaseDataSource, CoreModule } from './core';
 import { DocumentModule } from './document';
 import { ExpertModule } from './expert';
 import { HomeModule } from './home';
@@ -28,7 +29,7 @@ import { StorageModule } from './storage';
 import { SuccessCaseModule } from './success-case';
 import { UserModule } from './user';
 import { VerificationModule } from './verification';
-import { ApplyExpertModule } from './apply-expert';
+import { StatisticsMiddleware } from './statistics/statistics.middleware';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { ApplyExpertModule } from './apply-expert';
     }),
     CoreModule,
     AccessControlModule,
+    StatisticsModule,
     RenderModule,
     LoggerModule,
     VerificationModule,
@@ -80,7 +82,9 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      .forRoutes('*');
+      .forRoutes('*')
+      .apply(StatisticsMiddleware)
+      .forRoutes({ path: '/api/*/*-*-*/', method: RequestMethod.GET });
   }
 }
 

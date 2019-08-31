@@ -15,6 +15,7 @@ export const F_PRODUCT_FIELDS = gql`
     introduction
     is_published
     sort
+    views
     update_at
     create_at
     category {

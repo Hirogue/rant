@@ -221,7 +221,7 @@ export default () => {
       search: true,
     },
     {
-      title: '访问量',
+      title: '浏览量',
       dataIndex: 'views',
     },
     {
