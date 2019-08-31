@@ -327,32 +327,6 @@ export default {
           ],
         },
         {
-          name: 'org',
-          icon: 'apartment',
-          path: '/org',
-          component: './org',
-        },
-        {
-          name: 'accesss-control',
-          icon: 'safety-certificate',
-          path: '/accesss-control',
-          routes: [
-            {
-              name: 'role.list',
-              path: '/accesss-control/role/list',
-              component: './accesss-control/role/list',
-            },
-            {
-              path: '/accesss-control/role/detail/:id',
-              component: './accesss-control/role/detail',
-            },
-            {
-              path: '/accesss-control/role/create',
-              component: './accesss-control/role/detail',
-            },
-          ],
-        },
-        {
           name: 'users',
           icon: 'team',
           path: '/users',
@@ -423,6 +397,32 @@ export default {
               component: './users/tourist/detail',
             },
           ],
+        },
+        {
+          name: 'role',
+          icon: 'safety-certificate',
+          path: '/role',
+          routes: [
+            {
+              name: 'list',
+              path: '/role/list',
+              component: './role/list',
+            },
+            {
+              path: '/role/detail/:id',
+              component: './role/detail',
+            },
+            {
+              path: '/role/create',
+              component: './role/detail',
+            },
+          ],
+        },
+        {
+          name: 'org',
+          icon: 'apartment',
+          path: '/org',
+          component: './org',
         },
         {
           name: 'metadata',

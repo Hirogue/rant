@@ -116,21 +116,6 @@ export default [
     ],
   },
   {
-    name: '组织架构',
-    value: '/org',
-  },
-  {
-    name: '权限管理',
-    value: '/accesss-control',
-    children: [
-      {
-        name: '角色列表',
-        value: '/role',
-        route: '/accesss-control/role/list',
-      },
-    ],
-  },
-  {
     name: '用户管理',
     value: '/users',
     children: [
@@ -160,6 +145,15 @@ export default [
         route: '/users/tourist/list',
       },
     ],
+  },
+  {
+    name: '权限管理',
+    value: '/role',
+    route: '/role/list',
+  },
+  {
+    name: '组织架构',
+    value: '/org',
   },
   {
     name: '元数据',

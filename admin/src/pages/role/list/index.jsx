@@ -11,7 +11,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
 import { canUpdateAny, canCreateAny, canDeleteAny } from '@/utils/access-control';
 
-const PATH = '/accesss-control/role';
+const PATH = '/role';
 const AUTH_RESOURCE = '/role';
 
 export default () => {
