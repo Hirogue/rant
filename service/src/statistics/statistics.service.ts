@@ -4,6 +4,7 @@ import { Connection } from 'typeorm';
 import { Article, Capital, Product, Project, Provider, Document } from '../database';
 import { Logger } from '../logger';
 import { MeasurementEnum, TimeSeriesService } from '../time-series';
+import * as moment from 'moment';
 
 @Injectable()
 export class StatisticsService {
@@ -16,11 +17,17 @@ export class StatisticsService {
 
     async logger(module: string, id: string, ip: string) {
 
+        const date = moment();
+
         // 查询当天当前 IP 是否访问过 当前资源
         const result = await this.timeSeries.Client.query(`
                 SELECT COUNT(id) 
                 FROM ${MeasurementEnum.MODULE_ACCESS}
-                WHERE module = '${module}' AND ip = '${ip}' AND id = '${id}'
+                WHERE module = '${module}' 
+                AND ip = '${ip}' 
+                AND id = '${id}'
+                AND time >= '${date.startOf('day').format('YYYY-MM-DD HH:mm:ss')}'
+                AND time <= '${date.endOf('day').format('YYYY-MM-DD HH:mm:ss')}'
                 GROUP BY TIME(1d)
             `);
 
