@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
+import * as moment from 'moment';
 import { Connection } from 'typeorm';
-import { Article, Capital, Product, Project, Provider, Document } from '../database';
+import { Article, Capital, Document, Product, Project, Provider } from '../database';
 import { Logger } from '../logger';
 import { MeasurementEnum, TimeSeriesService } from '../time-series';
-import * as moment from 'moment';
 
 @Injectable()
 export class StatisticsService {

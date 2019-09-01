@@ -1,24 +1,28 @@
-import { EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from "typeorm";
+import { EntityManager, EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from "typeorm";
 import { textInterception } from "../../core";
 import { Provider } from "../entities";
+import { BaseSubscriber } from "./base.subscriber";
 
 @EventSubscriber()
-export class ProviderSubscriber implements EntitySubscriberInterface<Provider> {
+export class ProviderSubscriber extends BaseSubscriber<Provider> implements EntitySubscriberInterface<Provider> {
 
     listenTo() {
         return Provider;
     }
 
-    beforeInsert(event: InsertEvent<Provider>) {
-        this.handleChange(event.entity);
+    async beforeInsert(event: InsertEvent<Provider>) {
+        await this.handleChange(event.entity, event.manager);
     }
 
-    beforeUpdate(event: UpdateEvent<Provider>) {
-        this.handleChange(event.entity);
+    async beforeUpdate(event: UpdateEvent<Provider>) {
+        await this.handleChange(event.entity, event.manager);
     }
 
-    private handleChange(entity: Provider) {
+    private async handleChange(entity: Provider, manager: EntityManager) {
         if (entity) {
+            if (entity.area) {
+                entity.area_path = await this.recordFullAreaPath(entity.area, manager);
+            }
             entity.summary = entity.introduction ? textInterception(entity.introduction, 40) : '';
         }
     }

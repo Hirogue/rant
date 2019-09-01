@@ -131,6 +131,11 @@ export class Capital extends Base {
     @ApiModelProperty({ nullable: true })
     area: Metadata;
 
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    area_path: string;
+
     @Field(type => Metadata, { nullable: true })
     @ManyToMany(type => Metadata, target => target.capitals_invest_area)
     @JoinTable()

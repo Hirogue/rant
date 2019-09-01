@@ -1,8 +1,9 @@
-import { EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from "typeorm";
+import { EntityManager, EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from "typeorm";
 import { Role, User } from "../entities";
+import { BaseSubscriber } from "./base.subscriber";
 
 @EventSubscriber()
-export class UserSubscriber implements EntitySubscriberInterface<User> {
+export class UserSubscriber extends BaseSubscriber<User> implements EntitySubscriberInterface<User> {
 
     listenTo() {
         return User;
@@ -15,15 +16,20 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
             event.entity.role = defaultRole;
         }
 
-        this.handleChange(event.entity);
+        await this.handleChange(event.entity, event.manager);
     }
 
     async beforeUpdate(event: UpdateEvent<User>) {
-        this.handleChange(event.entity);
+        await this.handleChange(event.entity, event.manager);
     }
 
-    private handleChange(entity: User) {
+    private async handleChange(entity: User, manager: EntityManager) {
         if (!!entity) {
+
+            if (entity.area) {
+                entity.area_path = await this.recordFullAreaPath(entity.area, manager);
+            }
+
             entity.hideName = entity.realname
                 ? entity.realname.substr(0, 1).padEnd(entity.realname.length, '*')
                 : '';

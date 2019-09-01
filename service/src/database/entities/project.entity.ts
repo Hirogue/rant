@@ -6,8 +6,8 @@ import { IFModeEnum, ProjectStatusEnum } from "../../core";
 import { ApplyProject } from './apply-project.entity';
 import { Base } from "./base";
 import { Metadata } from "./metadata.entity";
-import { User } from "./user.entity";
 import { Org } from './org.entity';
+import { User } from "./user.entity";
 
 @Entity()
 @ObjectType()
@@ -133,6 +133,11 @@ export class Project extends Base {
     @ManyToOne(type => Metadata, target => target.projects)
     @ApiModelProperty({ nullable: true })
     area: Metadata;
+
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    area_path: string;
 
     @Field(type => Metadata, { nullable: true })
     @ManyToOne(type => Metadata, target => target.projects)

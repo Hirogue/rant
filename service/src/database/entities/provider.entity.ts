@@ -58,6 +58,11 @@ export class Provider extends Base {
     @ApiModelProperty({ nullable: true })
     area: Metadata;
 
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    area_path: string;
+
     @Field(type => User, { nullable: true })
     @ManyToOne(type => User, target => target.providers)
     @ApiModelProperty({ nullable: true })
