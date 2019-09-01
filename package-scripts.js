@@ -30,6 +30,10 @@ module.exports = {
       clear: "cd ./service && yarn orm cache:clear"
     },
 
+    influx: {
+      init: "cd ./service && yarn influx:init"
+    },
+
     docker: {
       init: "node ./scripts/database/docker-init-db.sh.js",
       up: "docker-compose up -d",

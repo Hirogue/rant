@@ -1,2 +1,3 @@
 export * from './statistics.module';
-export * from './statistics.middleware';
+export * from './access-statistics.middleware';
+export * from './module-access-statistics.middleware';

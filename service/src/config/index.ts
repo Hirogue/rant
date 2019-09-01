@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import { FieldType } from 'influx';
 import * as productionConfig from './production';
+import { MeasurementEnum } from '../time-series';
 
 const dev = process.env.NODE_ENV !== 'production';
 
@@ -106,13 +107,23 @@ let Config = {
         database: 'rant',
         schema: [
             {
-                measurement: 'module_access',
+                measurement: MeasurementEnum.MODULE_ACCESS,
                 fields: {
                     module: FieldType.STRING,
                     id: FieldType.STRING,
                 },
                 tags: ['ip']
-            }
+            },
+            {
+                measurement: MeasurementEnum.ACCESS,
+                fields: {
+                    method: FieldType.STRING,
+                    path: FieldType.STRING,
+                    userAgent: FieldType.STRING,
+                    statusCode: FieldType.INTEGER
+                },
+                tags: ['ip']
+            },
         ]
     },
 

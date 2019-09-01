@@ -10,6 +10,7 @@
     "build:service": "rimraf ./dist && tsc -p tsconfig.build.json",
     "build:next": "next build",
     "seed": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js seed",
+    "influx:init": "ts-node -r tsconfig-paths/register ./src/time-series/init.script",
     "orm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "rimraf ./dist && ts-node -r tsconfig-paths/register src/main.ts",

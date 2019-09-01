@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
-import * as moment from 'moment';
 import { Connection } from 'typeorm';
 import { Article, Capital, Document, Product, Project, Provider } from '../database';
 import { Logger } from '../logger';
@@ -15,20 +14,40 @@ export class StatisticsService {
         private readonly timeSeries: TimeSeriesService
     ) { }
 
-    async logger(module: string, id: string, ip: string) {
+    async recordAccess(ip: string, method: string, path: string, userAgent: string, statusCode: number) {
 
-        const date = moment();
+        try {
+            await this.timeSeries.Client.writePoints([{
+                measurement: MeasurementEnum.ACCESS,
+                tags: { ip },
+                fields: {
+                    // @ts-ignore
+                    method,
+                    // @ts-ignore
+                    path,
+                    // @ts-ignore
+                    userAgent,
+                    // @ts-ignore
+                    statusCode
+                }
+            }], {
+                    retentionPolicy: '1year',
+                    precision: 's'
+                });
+        } catch (err) {
+            Logger.error(err);
+        }
+    }
+
+    async recordModuleAccess(module: string, id: string, ip: string) {
 
         // 查询当天当前 IP 是否访问过 当前资源
         const result = await this.timeSeries.Client.query(`
                 SELECT COUNT(id) 
-                FROM ${MeasurementEnum.MODULE_ACCESS}
+                FROM "1day".${MeasurementEnum.MODULE_ACCESS}
                 WHERE module = '${module}' 
                 AND ip = '${ip}' 
-                AND id = '${id}'
-                AND time >= '${date.startOf('day').format('YYYY-MM-DD HH:mm:ss')}'
-                AND time <= '${date.endOf('day').format('YYYY-MM-DD HH:mm:ss')}'
-                GROUP BY TIME(1d)
+                AND id = '${id}'     
             `);
 
         const info = result[0] || {};
@@ -39,12 +58,15 @@ export class StatisticsService {
             measurement: MeasurementEnum.MODULE_ACCESS,
             tags: { ip },
             fields: {
-                // @ts-ignore left join only
+                // @ts-ignore
                 module,
-                // @ts-ignore left join only
+                // @ts-ignore
                 id,
             }
-        }]);
+        }], {
+                retentionPolicy: '1day',
+                precision: 's'
+            });
 
         try {
             // 修改数据库访问量

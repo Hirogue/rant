@@ -1,5 +1,6 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
 import { InfluxDB } from 'influx';
+import { init } from './init.script';
 import { Config } from "../config";
 import { Logger } from "../logger";
 
@@ -15,7 +16,7 @@ export class TimeSeriesService implements OnModuleInit {
         const dbNames = await this.client.getDatabaseNames();
 
         if (!dbNames.includes(Config.influx.database)) {
-            await this.client.createDatabase(Config.influx.database);
+            await init();
         }
 
         Logger.trace('TimeSeries connected');
