@@ -100,9 +100,20 @@ export default [
     ],
   },
   {
-    name: '约见管理',
-    value: '/apply-expert',
-    route: '/apply-expert/list',
+    name: '审批管理',
+    value: '/apply',
+    children: [
+      {
+        name: '金融服务',
+        value: '/apply-product',
+        route: '/apply-product/list',
+      },
+      {
+        name: '约见专家',
+        value: '/apply-expert',
+        route: '/apply-expert/list',
+      },
+    ],
   },
   {
     name: '服务商管理',

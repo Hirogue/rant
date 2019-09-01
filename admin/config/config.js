@@ -302,14 +302,19 @@ export default {
           ],
         },
         {
-          name: 'apply-expert',
-          icon: 'eye',
-          path: '/apply-expert',
+          name: 'apply',
+          icon: 'check-circle',
+          path: '/apply',
           routes: [
             {
-              name: 'list',
-              path: '/apply-expert/list',
-              component: './apply-expert/list',
+              name: 'apply-product',
+              path: '/apply/apply-product/list',
+              component: './apply/apply-product/list',
+            },
+            {
+              name: 'apply-expert',
+              path: '/apply/apply-expert/list',
+              component: './apply/apply-expert/list',
             },
           ],
         },

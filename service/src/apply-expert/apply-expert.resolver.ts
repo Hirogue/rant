@@ -18,7 +18,7 @@ export class ApplyExpertResolver extends BaseResolver(ApplyExpert, ApplyExpertPa
         super(context, 'apply-expert');
     }
 
-    @Mutation(returns => Boolean, { description: 'Approval project' })
+    @Mutation(returns => Boolean, { description: 'Approval expert' })
     @UseGuards(GqlJwtAuthGuard)
     async approvalApplyExpert(@Args('data') data: ApplyExpert, @Me() user: User) {
         return await this.service.approval(data, user);
