@@ -2,49 +2,49 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { BaseService, ProjectStatusEnum, LogTypeEnum } from '../core';
-import { ApplyExpert, User, Org, Log } from '../database';
+import { ApplyProduct, User, Org, Log } from '../database';
 
 @Injectable()
-export class ApplyExpertService extends BaseService<ApplyExpert> {
-    constructor(@InjectRepository(ApplyExpert) protected readonly repo: Repository<ApplyExpert>) {
+export class ApplyProductService extends BaseService<ApplyProduct> {
+    constructor(@InjectRepository(ApplyProduct) protected readonly repo: Repository<ApplyProduct>) {
         super(repo);
     }
 
     @Transaction()
     async approval(
-        applyExpert: ApplyExpert,
+        applyProduct: ApplyProduct,
         user: User,
         @TransactionRepository(Log) logRepo?: Repository<Log>,
         @TransactionRepository(Org) orgRepo?: Repository<Org>,
         @TransactionRepository(User) userRepo?: Repository<User>,
-        @TransactionRepository(ApplyExpert) applyExpertRepo?: Repository<ApplyExpert>,
+        @TransactionRepository(ApplyProduct) applyProductRepo?: Repository<ApplyProduct>,
     ) {
         const log = new Log();
 
-        const target = await applyExpertRepo.findOne(applyExpert.id);
-        target.status = applyExpert.status;
-        target.reason = applyExpert.reason;
+        const target = await applyProductRepo.findOne(applyProduct.id);
+        target.status = applyProduct.status;
+        target.reason = applyProduct.reason;
 
         if (ProjectStatusEnum.CHECKED === target.status) {
-            log.info = `${user.realname} 审核约见通过`;
+            log.info = `${user.realname} 审核申请通过`;
         }
 
         if (ProjectStatusEnum.WAITING === target.status) {
-            if (applyExpert.org) {
-                const org = await orgRepo.findOne(applyExpert.org.id);
-                target.org = applyExpert.org;
+            if (applyProduct.org) {
+                const org = await orgRepo.findOne(applyProduct.org.id);
+                target.org = applyProduct.org;
 
-                log.info = `${user.realname} 将约见分配给 "${org.title}"`;
+                log.info = `${user.realname} 将申请分配给 "${org.title}"`;
             }
         }
 
         if (ProjectStatusEnum.FOLLOWING === target.status) {
-            if (applyExpert.own) {
+            if (applyProduct.own) {
 
-                const own = await userRepo.findOne(applyExpert.own.id);
+                const own = await userRepo.findOne(applyProduct.own.id);
                 target.own = own;
 
-                log.info = `${user.realname} 将约见分配给业务员 "${own.realname}"`;
+                log.info = `${user.realname} 将申请分配给业务员 "${own.realname}"`;
             }
 
             if (target.reason) {
@@ -53,15 +53,15 @@ export class ApplyExpertService extends BaseService<ApplyExpert> {
         }
 
         if (ProjectStatusEnum.REJECTED === target.status) {
-            log.info = `${user.realname} 驳回约见，理由："${target.reason}"`;
+            log.info = `${user.realname} 驳回申请，理由："${target.reason}"`;
         }
 
         if (ProjectStatusEnum.FINISHED === target.status) {
-            log.info = `${user.realname} 完成约见`;
+            log.info = `${user.realname} 完成申请`;
         }
 
         if (ProjectStatusEnum.CANCELLED === target.status) {
-            log.info = `${user.realname} 作废约见，理由："${applyExpert.reason}"`;
+            log.info = `${user.realname} 作废申请，理由："${applyProduct.reason}"`;
         }
 
         log.own = user;
@@ -70,7 +70,7 @@ export class ApplyExpertService extends BaseService<ApplyExpert> {
         log.type = LogTypeEnum.EXPERT;
 
         await logRepo.save(log);
-        await applyExpertRepo.save(applyExpert);
+        await applyProductRepo.save(applyProduct);
 
         return true;
     }

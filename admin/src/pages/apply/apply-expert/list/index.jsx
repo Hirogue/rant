@@ -29,7 +29,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
 import { M_APPROVAL_APPLY_EXPERT } from '../gql';
 
-const PATH = '/apply-expert';
+const PATH = '/apply/apply-expert';
 const AUTH_RESOURCE = '/apply-expert';
 
 export default () => {
@@ -109,36 +109,36 @@ export default () => {
       ) : null}
       {(ProjectStatusEnum.CHECKED === record.status ||
         ProjectStatusEnum.WAITING === record.status) &&
-      canUpdateAny(AUTH_RESOURCE) ? (
-        <Fragment>
-          <a
-            href="javascript:;"
-            onClick={() => {
-              setCurrent(record);
-              setOrgSelectorVisible(true);
-            }}
-          >
-            [{`${ProjectStatusEnum.CHECKED === record.status ? '' : '重新'}`}分配部门]
+        canUpdateAny(AUTH_RESOURCE) ? (
+          <Fragment>
+            <a
+              href="javascript:;"
+              onClick={() => {
+                setCurrent(record);
+                setOrgSelectorVisible(true);
+              }}
+            >
+              [{`${ProjectStatusEnum.CHECKED === record.status ? '' : '重新'}`}分配部门]
           </a>
-          <Divider type="vertical" />
-        </Fragment>
-      ) : null}
+            <Divider type="vertical" />
+          </Fragment>
+        ) : null}
       {(ProjectStatusEnum.WAITING === record.status ||
         ProjectStatusEnum.FOLLOWING === record.status) &&
-      canUpdateAny(AUTH_RESOURCE) ? (
-        <Fragment>
-          <a
-            href="javascript:;"
-            onClick={() => {
-              setCurrent(record);
-              setUserSelectorVisible(true);
-            }}
-          >
-            [{`${ProjectStatusEnum.WAITING === record.status ? '' : '重新'}`}分配业务员]
+        canUpdateAny(AUTH_RESOURCE) ? (
+          <Fragment>
+            <a
+              href="javascript:;"
+              onClick={() => {
+                setCurrent(record);
+                setUserSelectorVisible(true);
+              }}
+            >
+              [{`${ProjectStatusEnum.WAITING === record.status ? '' : '重新'}`}分配业务员]
           </a>
-          <Divider type="vertical" />
-        </Fragment>
-      ) : null}
+            <Divider type="vertical" />
+          </Fragment>
+        ) : null}
       {ProjectStatusEnum.FOLLOWING === record.status && canUpdateOwn(AUTH_RESOURCE) ? (
         <Fragment>
           <a
@@ -206,7 +206,7 @@ export default () => {
     },
     {
       title: '专家',
-      dataIndex: 'expert.contact',
+      dataIndex: 'expert.name',
       search: true,
     },
     {

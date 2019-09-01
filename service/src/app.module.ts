@@ -4,8 +4,8 @@ import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import * as redisStore from 'cache-manager-redis-store';
 import { RenderModule } from 'nest-next';
 import { AccessControlModule } from './access-control';
-import { StatisticsModule } from './statistics';
 import { ApplyExpertModule } from './apply-expert';
+import { ApplyProductModule } from './apply-product';
 import { ArticleModule } from './artilce';
 import { AuthModule } from './auth';
 import { CapitalModule } from './capital';
@@ -25,11 +25,12 @@ import { ProviderModule } from './provider';
 import { RoleModule } from './role';
 import { SeoModule } from './seo';
 import { SpaController } from './spa.controller';
+import { StatisticsModule } from './statistics';
+import { StatisticsMiddleware } from './statistics/statistics.middleware';
 import { StorageModule } from './storage';
 import { SuccessCaseModule } from './success-case';
 import { UserModule } from './user';
 import { VerificationModule } from './verification';
-import { StatisticsMiddleware } from './statistics/statistics.middleware';
 
 @Module({
   imports: [
@@ -68,7 +69,8 @@ import { StatisticsMiddleware } from './statistics/statistics.middleware';
     CarouselModule,
     DocumentModule,
     SeoModule,
-    ApplyExpertModule
+    ApplyExpertModule,
+    ApplyProductModule
   ],
   providers: [
     // {
