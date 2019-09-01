@@ -1,24 +1,31 @@
-import { EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from "typeorm";
+import { EntityManager, EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from "typeorm";
 import { textInterception } from "../../core";
 import { Capital } from "../entities";
+import { BaseSubscriber } from "./base.subscriber";
 
 @EventSubscriber()
-export class CapitalSubscriber implements EntitySubscriberInterface<Capital> {
+export class CapitalSubscriber extends BaseSubscriber<Capital> implements EntitySubscriberInterface<Capital> {
 
     listenTo() {
         return Capital;
     }
 
-    beforeInsert(event: InsertEvent<Capital>) {
-        this.handleChange(event.entity);
+    async beforeInsert(event: InsertEvent<Capital>) {
+        await this.handleChange(event.entity, event.manager);
     }
 
-    beforeUpdate(event: UpdateEvent<Capital>) {
-        this.handleChange(event.entity);
+    async beforeUpdate(event: UpdateEvent<Capital>) {
+        await this.handleChange(event.entity, event.manager);
     }
 
-    private handleChange(entity: Capital) {
+
+    private async handleChange(entity: Capital, manager: EntityManager) {
         if (!!entity) {
+
+            if (entity.area) {
+                entity.area_path = await this.recordFullAreaPath(entity.area, manager);
+            }
+
             entity.summary = entity.info ? textInterception(entity.info, 40) : '';
 
             entity.hideContact = entity.contact

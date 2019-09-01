@@ -135,6 +135,11 @@ export class User extends Base {
     @ApiModelProperty({ nullable: true })
     area: Metadata;
 
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
+    area_path: string;
+
     @Field(type => [Provider!], { nullable: true })
     @OneToMany(type => Provider, target => target.creator)
     @ApiModelProperty({ nullable: true })
