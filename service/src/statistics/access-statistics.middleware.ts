@@ -9,23 +9,26 @@ export class AccessStatisticsMiddleware implements NestMiddleware {
 
     async use(req: Request, res: Response, next: Function) {
 
-        next();
-
         const url = req.originalUrl;
+        const headers = req.headers;
 
-        if (!url.startsWith('/api') && !url.startsWith('/_next') && !url.startsWith('/graphql')) {
+        if ('backstage' !== headers.application) {
 
-            const headers = { ...req.headers };
-            const path = headers['x-path'];
-            const userAgent = headers['user-agent'];
+            if (!url.startsWith('/api') && !url.startsWith('/_next') && !url.startsWith('/graphql')) {
 
-            await this.statisticsService.recordAccess(
-                req.ip,
-                req.method,
-                path ? path.toString() : url,
-                userAgent,
-                res.statusCode
-            );
+                const path = headers['x-path'];
+                const userAgent = headers['user-agent'];
+
+                await this.statisticsService.recordAccess(
+                    req.ip,
+                    req.method,
+                    path ? path.toString() : url,
+                    userAgent,
+                    res.statusCode
+                );
+            }
         }
+
+        next();
     }
 }
