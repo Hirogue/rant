@@ -29,11 +29,11 @@ export function BaseTreeController<TEntity>(
             return this.service.findTrees();
         }
 
-        // @Get(`${PREFIX}/roots`)
-        // @ApiOperation({ title: 'Roots are entities that have no ancestors. Finds them all. Does not load children leafs.' })
-        // async roots() {
-        //     return this.service.findRoots();
-        // }
+        @Get(`${PREFIX}/roots`)
+        @ApiOperation({ title: 'Roots are entities that have no ancestors. Finds them all. Does not load children leafs.' })
+        async roots() {
+            return this.service.findRoots();
+        }
 
         @Get(`${PREFIX}/children/:id`)
         @ApiOperation({ title: 'Gets all children of the given entity. Returns them all in a flat array.' })

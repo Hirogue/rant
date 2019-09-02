@@ -33,6 +33,14 @@ export function BaseTreeResolver<TEntity, TPaginate>(
         }
 
         @Query(returns => [TEntityClass], {
+            name: camelCase(TEntityClass.name) + 'Roots',
+            description: `Get all ${TEntityClass.name} roots`
+        })
+        async roots() {
+            return await this.api.findRoots(this.root);
+        }
+
+        @Query(returns => [TEntityClass], {
             name: camelCase(TEntityClass.name) + 'Descendants',
             description: `Get all ${TEntityClass.name} descendants`
         })
