@@ -33,7 +33,6 @@ export class VerificationService implements OnModuleInit, OnModuleDestroy {
     }
 
     async handleSMS(content: any) {
-        Logger.log('handle sms:', content);
         const { phone, type, code } = content;
 
         let msg = Config.verification.sms.templates[type];
@@ -42,6 +41,8 @@ export class VerificationService implements OnModuleInit, OnModuleDestroy {
             .forEach((item, index) => {
                 msg = msg.replace(`{$var${index + 1}}`, item)
             });
+
+        Logger.log('sms content:', msg);
 
         try {
             return await SuperAgent.post(Config.verification.sms.url)
