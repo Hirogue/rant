@@ -1,13 +1,26 @@
 import { Inject } from "@nestjs/common";
-import { CONTEXT } from "@nestjs/graphql";
+import { CONTEXT, Query, Args } from "@nestjs/graphql";
 import { ObjectType, Resolver } from "type-graphql";
 import { BasePaginate, BaseTreeResolver } from "../core";
 import { Metadata } from "../database";
+import { MetadataService } from "./metadata.service";
 
 @ObjectType()
 export class MetadataPaginate extends BasePaginate(Metadata) { }
 
 @Resolver(of => Metadata)
 export class MetadataResolver extends BaseTreeResolver(Metadata, MetadataPaginate) {
-    constructor(@Inject(CONTEXT) context) { super(context, 'metadata') }
+    constructor(
+        private readonly service: MetadataService,
+        @Inject(CONTEXT) context
+    ) {
+        super(context, 'metadata')
+    }
+
+    @Query(returns => [Metadata], {
+        description: `Get all  children by title`
+    })
+    async findMetadataChildrenByTitle(@Args('title') title: string) {
+        return await this.service.findChildrenByTitle(title);
+    }
 }

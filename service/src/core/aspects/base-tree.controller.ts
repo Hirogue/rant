@@ -35,11 +35,11 @@ export function BaseTreeController<TEntity>(
         //     return this.service.findRoots();
         // }
 
-        // @Get(`${PREFIX}/children/:id`)
-        // @ApiOperation({ title: 'Gets all children of the given entity. Returns them all in a flat array.' })
-        // async children(@Param('id') id: string) {
-        //     return this.service.findChildren(id);
-        // }
+        @Get(`${PREFIX}/children/:id`)
+        @ApiOperation({ title: 'Gets all children of the given entity. Returns them all in a flat array.' })
+        async children(@Param('id') id: string) {
+            return this.service.findChildren(id);
+        }
 
         // @Get(`${PREFIX}/descendants/:id`)
         // @ApiOperation({ title: 'Gets all descendants of the given entity. Returns them all in a flat array.' })
