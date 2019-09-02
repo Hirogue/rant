@@ -1,15 +1,9 @@
 import ImageCropper from '@/components/ImageCropper';
 import StandardTabList from '@/components/StandardTabList';
 import { M_CREATE_USER, M_UPDATE_USER, Q_GET_USER } from '@/gql';
+import { IdentityEnum, UserStatusEnum } from '@/utils/enum';
 import { uploadOne } from '@/utils/fetch';
-import {
-  buildingQuery,
-  getTreeData,
-  IdentityMaps,
-  UserStatusMaps,
-  UserLevelMaps,
-} from '@/utils/global';
-import Logger from '@/utils/logger';
+import { buildingQuery, getTreeData, IdentityMaps, UserStatusMaps } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import {
@@ -32,7 +26,6 @@ import {
 import React, { Fragment, useState } from 'react';
 import { router, withRouter } from 'umi';
 import styles from './style.less';
-import { IdentityEnum } from '@/utils/enum';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -161,6 +154,7 @@ const BasicForm = Form.create()(props => {
           form.validateFields((err, values) => {
             if (!err) {
               values.identity = IdentityEnum.USER;
+
               const variables = { data: values };
 
               if (target.id) {
@@ -205,13 +199,13 @@ const BasicForm = Form.create()(props => {
             ],
           })(<Input placeholder="请填写手机号" />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="所属">
+        <FormItem {...formItemLayout} label="部门">
           {getFieldDecorator('org.id', {
             initialValue: target.org ? target.org.id : null,
             rules: [
               {
                 required: true,
-                message: '请选择所属组织',
+                message: '请选择所属部门',
               },
             ],
           })(<TreeSelect showSearch treeNodeFilterProp="title" treeData={orgTrees} />)}
@@ -227,61 +221,6 @@ const BasicForm = Form.create()(props => {
             ],
           })(<TreeSelect showSearch treeData={roles} />)}
         </FormItem>
-        {/* <FormItem {...formItemLayout} label="身份">
-          {getFieldDecorator('identity', {
-            initialValue: target.identity,
-            rules: [
-              {
-                required: true,
-                message: '请选择身份',
-              },
-            ],
-          })(
-            <Select>
-              {Object.keys(IdentityMaps).map(key => (
-                <Option key={key} value={key}>
-                  {IdentityMaps[key]}
-                </Option>
-              ))}
-            </Select>,
-          )}
-        </FormItem> */}
-        <FormItem {...formItemLayout} label="状态">
-          {getFieldDecorator('status', {
-            initialValue: target.status,
-          })(
-            <Select>
-              {Object.keys(UserStatusMaps).map(key => (
-                <Option key={key} value={parseInt(key)}>
-                  {UserStatusMaps[key]}
-                </Option>
-              ))}
-            </Select>,
-          )}
-        </FormItem>
-        {/* <FormItem {...formItemLayout} label="等级">
-          {getFieldDecorator('vip', {
-            initialValue: target.vip,
-          })(
-            <Select>
-              {Object.keys(UserLevelMaps).map(key => (
-                <Option key={key} value={parseInt(key)}>
-                  {UserLevelMaps[key]}
-                </Option>
-              ))}
-            </Select>,
-          )}
-        </FormItem> */}
-        {/* <FormItem {...formItemLayout} label="地址">
-          {getFieldDecorator('address', {
-            initialValue: target.address,
-          })(<TextArea placeholder="请填写地址" rows={4} />)}
-        </FormItem>
-        <FormItem {...formItemLayout} label="简介">
-          {getFieldDecorator('profile', {
-            initialValue: target.profile,
-          })(<TextArea placeholder="请填写简介" rows={4} />)}
-        </FormItem> */}
         <FormItem
           {...submitFormLayout}
           style={{
@@ -296,64 +235,6 @@ const BasicForm = Form.create()(props => {
     </Card>
   );
 });
-
-const renderContent = (orgTrees, roles, data, mutation, tabKey, setTabKey) => {
-  let tabList = {
-    basic: {
-      name: '基础信息',
-      render: () => (
-        <BasicForm
-          orgTrees={getTreeData(orgTrees)}
-          roles={getTreeData(roles.map(item => ({ title: item.name, ...item })))}
-          target={data || {}}
-          mutation={mutation}
-        />
-      ),
-    },
-  };
-
-  if (data) {
-    tabList = Object.assign(tabList, {
-      avatar: {
-        name: '头像',
-        render: () => (
-          <ImageCropper
-            url={data.avatar}
-            onUpload={file => onAvatarUpload(file, data, mutation)}
-            width={128}
-            height={128}
-          />
-        ),
-      },
-    });
-  }
-
-  return (
-    <PageHeaderWrapper
-      title={data ? '编辑' : '新增'}
-      extra={action}
-      className={styles.pageHeader}
-      content={data ? <PageHeaderContent user={data} /> : null}
-      extraContent={
-        data ? (
-          <div className={styles.moreInfo}>
-            <Statistic title="状态" value={UserStatusMaps[data.status]} />
-          </div>
-        ) : null
-      }
-    >
-      <div className={styles.main}>
-        <GridContent>
-          <StandardTabList
-            activeTabKey={tabKey}
-            onActiveTabKeyChange={key => setTabKey(key)}
-            tabList={tabList}
-          />
-        </GridContent>
-      </div>
-    </PageHeaderWrapper>
-  );
-};
 
 export default withRouter(props => {
   const [tabKey, setTabKey] = useState('basic');
@@ -394,12 +275,67 @@ export default withRouter(props => {
 
   const { user, orgTrees, roles } = data;
 
-  return renderContent(
-    orgTrees,
-    roles,
-    id ? user : null,
-    id ? updateUser : createUser,
-    tabKey,
-    setTabKey,
+  let mutation = createUser;
+
+  if (id) {
+    mutation = updateUser;
+  }
+
+  const target = user;
+
+  let tabList = {
+    basic: {
+      name: '基础信息',
+      render: () => (
+        <BasicForm
+          orgTrees={getTreeData(orgTrees)}
+          roles={getTreeData(roles.map(item => ({ title: item.name, ...item })))}
+          target={target || {}}
+          mutation={mutation}
+        />
+      ),
+    },
+  };
+
+  if (target) {
+    tabList = Object.assign(tabList, {
+      avatar: {
+        name: '头像',
+        render: () => (
+          <ImageCropper
+            url={target.avatar}
+            onUpload={file => onAvatarUpload(file, target, mutation)}
+            width={128}
+            height={128}
+          />
+        ),
+      },
+    });
+  }
+
+  return (
+    <PageHeaderWrapper
+      title={target ? '编辑' : '新增'}
+      extra={action}
+      className={styles.pageHeader}
+      content={target ? <PageHeaderContent user={target} /> : null}
+      extraContent={
+        target ? (
+          <div className={styles.moreInfo}>
+            <Statistic title="状态" value={UserStatusMaps[target.status]} />
+          </div>
+        ) : null
+      }
+    >
+      <div className={styles.main}>
+        <GridContent>
+          <StandardTabList
+            activeTabKey={tabKey}
+            onActiveTabKeyChange={key => setTabKey(key)}
+            tabList={tabList}
+          />
+        </GridContent>
+      </div>
+    </PageHeaderWrapper>
   );
 });

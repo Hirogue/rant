@@ -17,10 +17,8 @@ export class MetadataResolver extends BaseTreeResolver(Metadata, MetadataPaginat
         super(context, 'metadata')
     }
 
-    @Query(returns => [Metadata], {
-        description: `Get all  children by title`
-    })
-    async findMetadataChildrenByTitle(@Args('title') title: string) {
-        return await this.service.findChildrenByTitle(title);
+    @Query(returns => [Metadata])
+    async findRootsAndChildren() {
+        return await this.service.findRootsAndChildren();
     }
 }

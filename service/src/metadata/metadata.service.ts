@@ -10,11 +10,13 @@ export class MetadataService extends BaseTreeService<Metadata> {
         super(repo);
     }
 
-    async findChildrenByTitle(title: string) {
+    async findRootsAndChildren() {
 
-        return await this.repository.createQueryBuilder('t')
-            .leftJoin('t.parent', 'p')
-            .where(`p.title = :title`, { title })
+        const roots = await this.repository.findRoots();
+
+        return await this.repo.createQueryBuilder('t')
+            .leftJoinAndSelect('t.children', 'children')
+            .whereInIds(roots.map(root => root.id))
             .getMany();
     }
 }
