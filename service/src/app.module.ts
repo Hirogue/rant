@@ -71,12 +71,6 @@ import { VerificationModule } from './verification';
     ApplyExpertModule,
     ApplyProductModule
   ],
-  providers: [
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: HttpCacheInterceptor,
-    // },
-  ],
   controllers: [SpaController]
 })
 export class AppModule implements NestModule {

@@ -6,6 +6,6 @@ export abstract class BaseSubscriber<T> {
 
         const ancestors = await manager.getTreeRepository(Metadata).findAncestors(area);
 
-        return ancestors.map(item => item.id).join('.');
+        return ancestors.map(item => item.title).join('.');
     }
 }
