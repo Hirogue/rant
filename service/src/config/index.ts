@@ -50,7 +50,7 @@ let Config = {
     },
 
     mq: {
-        url: 'amqp://guest:guest@192.168.100.30:5672',
+        url: 'amqp://guest:guest@127.0.0.1:5672',
         options: {}
     },
 
@@ -70,8 +70,15 @@ let Config = {
             expire: 5 * 60
         },
         sms: {
-            expire: 5 * 60
-        }
+            expire: 5 * 60,
+            url: '',
+            account: '',
+            secret: '',
+            templates: {
+                register: '【旅游项目通】尊敬的用户，您的注册验证码是{$var1}, {$var2}分钟内有效,如非本人操作，请勿泄露！',
+                password: '【旅游项目通】尊敬的用户，您在尝试重置密码，验证码是：{$var1}，{$var2}分钟内有效，如非本人操作，请勿泄露！'
+            }
+        },
     },
 
     orm: {

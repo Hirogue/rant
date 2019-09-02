@@ -1,5 +1,6 @@
 import { BadRequestException, forwardRef, Inject, Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { range, shuffle, take } from 'lodash';
+import * as SuperAgent from 'superagent';
 import * as UUID from 'node-uuid';
 import * as SVG from 'svg-captcha';
 import { CacheService } from "../cache";
@@ -33,6 +34,27 @@ export class VerificationService implements OnModuleInit, OnModuleDestroy {
 
     async handleSMS(content: any) {
         Logger.log('handle sms:', content);
+        const { phone, type, code } = content;
+
+        let msg = Config.verification.sms.templates[type];
+
+        [code, Config.verification.sms.expire / 60]
+            .forEach((item, index) => {
+                msg = msg.replace(`{$var${index + 1}}`, item)
+            });
+
+        try {
+            return await SuperAgent.post(Config.verification.sms.url)
+                .set('Content-Type', 'application/json; charset=UTF-8')
+                .send({
+                    account: Config.verification.sms.account,
+                    password: Config.verification.sms.secret,
+                    msg,
+                    phone
+                });
+        } catch (err) {
+            Logger.error(err);
+        }
     }
 
     async generateSvg() {

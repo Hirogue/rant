@@ -13,16 +13,18 @@ export class MessageChannel {
 
     async send(content: any) {
 
-        await this.ch.assertQueue(this.Name);
+        await this.ch.assertQueue(this.name);
 
         content = Buffer.from(JSON.stringify(content));
 
-        return await this.ch.sendToQueue(this.Name, content);
+        return await this.ch.sendToQueue(this.name, content);
     }
 
     async consume(handler) {
-        await this.ch.assertQueue(this.Name);
-        await this.ch.consume(this.Name, async (msg) => {
+
+        await this.ch.assertQueue(this.name);
+        await this.ch.consume(this.name, async (msg) => {
+
             const content = JSON.parse(msg.content.toString());
 
             await handler(content);
