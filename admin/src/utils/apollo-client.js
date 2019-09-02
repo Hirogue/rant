@@ -36,15 +36,16 @@ const errorHandler = onError(error => {
     const result = graphQLErrors.shift();
     Logger.log('error result:', result);
 
-    const errorMsg = formatMessage({
-      id: result.message,
-    });
+    const errorMsg = result.message;
+    // formatMessage({
+    //   id: result.message,
+    // });
 
     const errorCode = parseInt(result.extensions ? result.extensions.code : 0);
     Logger.log('error code:', errorCode);
 
     if (401 === errorCode) {
-      message.error(errorMsg);
+      message.error(errorMsg || '身份验证失败');
       router.replace('/user/login');
       return false;
     }
