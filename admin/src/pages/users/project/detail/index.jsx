@@ -44,19 +44,6 @@ const PATH = '/users/admin';
 const action = (
   <RouteContext.Consumer>
     {({ isMobile }) => {
-      if (isMobile) {
-        return (
-          <Dropdown.Button
-            type="primary"
-            icon={<Icon type="down" />}
-            overlay={mobileMenu}
-            placement="bottomRight"
-          >
-            主操作
-          </Dropdown.Button>
-        );
-      }
-
       return (
         <Fragment>
           <Affix style={{ display: 'inline-block' }} offsetTop={80}>
@@ -70,51 +57,8 @@ const action = (
   </RouteContext.Consumer>
 );
 
-const extra = (
-  <div className={styles.moreInfo}>
-    <Statistic title="状态" value="待审批" />
-  </div>
-);
-
-const PageHeaderContent = ({ user }) => {
-  return (
-    <div className={styles.pageHeaderContent}>
-      <div className={styles.avatar}>
-        <Avatar size="large" src={user.avatar} />
-      </div>
-      <div className={styles.content}>{renderDescription(user)}</div>
-    </div>
-  );
-};
-
-const renderDescription = user => (
-  <RouteContext.Consumer>
-    {({ isMobile }) => (
-      <Descriptions className={styles.headerList} size="small" column={1}>
-        <Descriptions.Item label="账户名:">{user.account}</Descriptions.Item>
-        <Descriptions.Item label="身份:">{IdentityMaps[user.identity]}</Descriptions.Item>
-      </Descriptions>
-    )}
-  </RouteContext.Consumer>
-);
-
-const onAvatarUpload = async (file, target, mutation) => {
-  const res = await uploadOne(file);
-
-  if (!!res && res.relativePath) {
-    mutation({
-      variables: {
-        id: target.id,
-        data: {
-          avatar: res.relativePath,
-        },
-      },
-    });
-  }
-};
-
 const BasicForm = Form.create()(props => {
-  const { orgTrees, roles, target, mutation, form } = props;
+  const { target, mutation, form } = props;
 
   const { getFieldDecorator, getFieldValue } = form;
 
@@ -205,47 +149,6 @@ const BasicForm = Form.create()(props => {
             ],
           })(<Input placeholder="请填写手机号" />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="所属">
-          {getFieldDecorator('org.id', {
-            initialValue: target.org ? target.org.id : null,
-            rules: [
-              {
-                required: true,
-                message: '请选择所属组织',
-              },
-            ],
-          })(<TreeSelect showSearch treeData={orgTrees} />)}
-        </FormItem>
-        <FormItem {...formItemLayout} label="角色">
-          {getFieldDecorator('role.id', {
-            initialValue: target.role ? target.role.id : null,
-            rules: [
-              {
-                required: true,
-                message: '请分配角色',
-              },
-            ],
-          })(<TreeSelect showSearch treeData={roles} />)}
-        </FormItem>
-        {/* <FormItem {...formItemLayout} label="身份">
-          {getFieldDecorator('identity', {
-            initialValue: target.identity,
-            rules: [
-              {
-                required: true,
-                message: '请选择身份',
-              },
-            ],
-          })(
-            <Select>
-              {Object.keys(IdentityMaps).map(key => (
-                <Option key={key} value={key}>
-                  {IdentityMaps[key]}
-                </Option>
-              ))}
-            </Select>,
-          )}
-        </FormItem> */}
         <FormItem {...formItemLayout} label="状态">
           {getFieldDecorator('status', {
             initialValue: target.status,
@@ -259,29 +162,6 @@ const BasicForm = Form.create()(props => {
             </Select>,
           )}
         </FormItem>
-        {/* <FormItem {...formItemLayout} label="等级">
-          {getFieldDecorator('vip', {
-            initialValue: target.vip,
-          })(
-            <Select>
-              {Object.keys(UserLevelMaps).map(key => (
-                <Option key={key} value={parseInt(key)}>
-                  {UserLevelMaps[key]}
-                </Option>
-              ))}
-            </Select>,
-          )}
-        </FormItem> */}
-        {/* <FormItem {...formItemLayout} label="地址">
-          {getFieldDecorator('address', {
-            initialValue: target.address,
-          })(<TextArea placeholder="请填写地址" rows={4} />)}
-        </FormItem>
-        <FormItem {...formItemLayout} label="简介">
-          {getFieldDecorator('profile', {
-            initialValue: target.profile,
-          })(<TextArea placeholder="请填写简介" rows={4} />)}
-        </FormItem> */}
         <FormItem
           {...submitFormLayout}
           style={{
@@ -297,50 +177,21 @@ const BasicForm = Form.create()(props => {
   );
 });
 
-const renderContent = (orgTrees, roles, data, mutation, tabKey, setTabKey) => {
-  let tabList = {
+const renderContent = (data, mutation, tabKey, setTabKey) => {
+  const tabList = {
     basic: {
       name: '基础信息',
-      render: () => (
-        <BasicForm
-          orgTrees={getTreeData(orgTrees)}
-          roles={getTreeData(roles.map(item => ({ title: item.name, ...item })))}
-          target={data || {}}
-          mutation={mutation}
-        />
-      ),
+      render: () => <BasicForm target={data || {}} mutation={mutation} />,
     },
   };
-
-  if (data) {
-    tabList = Object.assign(tabList, {
-      avatar: {
-        name: '头像',
-        render: () => (
-          <ImageCropper
-            url={data.avatar}
-            onUpload={file => onAvatarUpload(file, data, mutation)}
-            width={128}
-            height={128}
-          />
-        ),
-      },
-    });
-  }
 
   return (
     <PageHeaderWrapper
       title={data ? '编辑' : '新增'}
       extra={action}
       className={styles.pageHeader}
-      content={data ? <PageHeaderContent user={data} /> : null}
-      extraContent={
-        data ? (
-          <div className={styles.moreInfo}>
-            <Statistic title="状态" value={UserStatusMaps[data.status]} />
-          </div>
-        ) : null
-      }
+      content={null}
+      extraContent={null}
     >
       <div className={styles.main}>
         <GridContent>
@@ -368,16 +219,7 @@ export default withRouter(props => {
     notifyOnNetworkStatusChange: true,
     variables: {
       id: id || '',
-      queryString: buildingQuery({ join: [{ field: 'role' }, { field: 'org' }] }),
-    },
-  });
-
-  const [createUser] = useMutation(M_CREATE_USER, {
-    update: (proxy, { data }) => {
-      if (data && data.createUser) {
-        message.success('保存成功');
-        router.replace(`${PATH}/detail/${data.createUser.id}`);
-      }
+      queryString: buildingQuery({}),
     },
   });
 
@@ -392,14 +234,7 @@ export default withRouter(props => {
 
   if (loading || !data) return <Skeleton loading={loading} />;
 
-  const { user, orgTrees, roles } = data;
+  const { user } = data;
 
-  return renderContent(
-    orgTrees,
-    roles,
-    id ? user : null,
-    id ? updateUser : createUser,
-    tabKey,
-    setTabKey,
-  );
+  return renderContent(id ? user : null, id ? updateUser : createUser, tabKey, setTabKey);
 });

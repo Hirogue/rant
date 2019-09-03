@@ -84,8 +84,8 @@ const renderDescription = user => (
   <RouteContext.Consumer>
     {({ isMobile }) => (
       <Descriptions className={styles.headerList} size="small" column={1}>
-        <Descriptions.Item label="账户名:">{user.account}</Descriptions.Item>
-        <Descriptions.Item label="身份:">{IdentityMaps[user.identity]}</Descriptions.Item>
+        <Descriptions.Item label="账户名">{user.account}</Descriptions.Item>
+        <Descriptions.Item label="身份">{IdentityMaps[user.identity]}</Descriptions.Item>
       </Descriptions>
     )}
   </RouteContext.Consumer>

@@ -8,7 +8,7 @@ import { buildingQuery, filterOrg, paramsAuth } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { CondOperator } from '@nestjsx/crud-request';
-import { Affix, Avatar, Col, message, Row, Skeleton } from 'antd';
+import { Affix, Avatar, Col, message, Row } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
