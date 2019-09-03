@@ -32,7 +32,6 @@ export const UserStatusEnum = {
 export const UserLevelEnum = {
   V0: 0,
   V1: 1,
-  V2: 2,
 };
 
 export const UserTypeEnum = {
@@ -45,4 +44,5 @@ export const LogTypeEnum = {
   CAPITAL: 'capital',
   EXPERT: 'expert',
   PRODUCT: 'product',
+  USER: 'user',
 };
