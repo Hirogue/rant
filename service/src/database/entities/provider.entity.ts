@@ -1,12 +1,12 @@
 import { ApiModelProperty } from "@nestjs/swagger";
-import { Field, InputType, ObjectType, Int } from "type-graphql";
-import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from "typeorm";
+import { Field, InputType, Int, ObjectType } from "type-graphql";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { ProjectStatusEnum } from "../../core";
+import { ApplyProvider } from "./apply-provider.entity";
 import { Base } from "./base";
 import { Metadata } from "./metadata.entity";
 import { ProviderCategory } from "./provider-category.entity";
 import { User } from "./user.entity";
-import { ApplyProvider } from "./apply-provider.entity";
 
 @Entity()
 @ObjectType()

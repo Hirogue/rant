@@ -4,8 +4,8 @@ import * as bcrypt from 'bcryptjs';
 import * as moment from 'moment';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { Config } from '../config';
-import { BaseService, IdentityEnum, ProjectStatusEnum, UserLevelEnum, UserStatusEnum } from '../core';
-import { ApplyCapital, ApplyExpert, ApplyProduct, ApplyProject, ApplyProvider, Capital, Expert, Product, Project, Provider, User } from '../database/entities';
+import { BaseService, IdentityEnum, ProjectStatusEnum, UserLevelEnum, UserStatusEnum, LogTypeEnum } from '../core';
+import { ApplyCapital, ApplyExpert, ApplyProduct, ApplyProject, ApplyProvider, Capital, Expert, Product, Project, Provider, User, Log, Org } from '../database/entities';
 import { Logger } from '../logger';
 import { LevelUpInput, RegisterDto, ResetPasswordDto } from './dtos';
 
@@ -229,22 +229,60 @@ export class UserService extends BaseService<User> {
         return true;
     }
 
-    async approvalUser(data: User) {
+    @Transaction()
+    async approvalUser(
+        data: User,
+        user: User,
+        @TransactionRepository(Log) logRepo?: Repository<Log>,
+        @TransactionRepository(Org) orgRepo?: Repository<Org>,
+        @TransactionRepository(User) userRepo?: Repository<User>
+    ) {
+        const log = new Log();
 
-        const user = await this.repo.findOne(data.id);
-        user.status = data.status;
-        user.reason = data.reason;
+        const target = await userRepo.findOne(data.id);
+        target.status = data.status;
+        target.reason = data.reason;
 
-        user.vip = UserStatusEnum.CHECKED === user.status ? UserLevelEnum.V1 : UserLevelEnum.V0;
+        if (UserStatusEnum.PENDING === target.status) {
+            if (data.org) {
+                const org = await orgRepo.findOne(data.org.id);
+                target.org = data.org;
 
-        return !!await this.repo.save(user);
+                log.info = `${user.realname} 将用户分配给 "${org.title}"`;
+            }
 
-        // await this.wf.publish(
-        //     FlowEventEnum.APPROVAL_USER,
-        //     `${FlowEventEnum.APPROVAL_USER}-${data.id}`,
-        //     data
-        // );
-        // return true;
+            if (data.own) {
+
+                const own = await userRepo.findOne(data.own.id);
+                target.own = own;
+
+                log.info = `${user.realname} 将用户分配给业务员 "${own.realname}"`;
+            }
+
+            if (data.reason) {
+                log.info = `${user.realname} 跟进："${data.reason}"`;
+            }
+        }
+
+        if (UserStatusEnum.CHECKED === target.status) {
+            log.info = `${user.realname} 审核通过，总结："${data.reason}"`;
+            user.vip = UserLevelEnum.V1;
+        }
+
+        if (UserStatusEnum.REJECTED === target.status) {
+            log.info = `${user.realname} 驳回，理由："${data.reason}"`;
+            user.vip = UserLevelEnum.V0;
+        }
+
+        log.own = user;
+        log.target = target.id;
+        log.status = target.status.toString();
+        log.type = LogTypeEnum.USER;
+
+        await logRepo.save(log);
+        await userRepo.save(target);
+
+        return true;
     }
 
     private async checkLimit(user: User, type: string) {

@@ -17,6 +17,8 @@ export const F_USER_FIELDS = gql`
     realname
     phone
     idcard
+    idcardA
+    idcardB
     address
     company
     profile
@@ -24,6 +26,7 @@ export const F_USER_FIELDS = gql`
     type
     status
     vip
+    area_path
     isSuperAdmin
     role {
       ...RoleFields
@@ -33,6 +36,10 @@ export const F_USER_FIELDS = gql`
     }
     area {
       ...MetadataFields
+    }
+    own {
+      id
+      realname
     }
   }
 `;

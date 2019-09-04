@@ -87,6 +87,7 @@
     "react-highlight-words": "^0.16.0",
     "react-media": "^1.9.2",
     "react-media-hook2": "^1.0.5",
+    "react-zmage": "^0.8.5",
     "redux": "^4.0.1",
     "shortid": "^2.2.14",
     "umi": "^2.8.7",

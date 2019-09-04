@@ -49,7 +49,7 @@ export class UserResolver extends BaseResolver(User, UserPaginate) {
     }
 
     @Mutation(returns => Boolean, { description: 'Approval user' })
-    async approvalUser(@Args('data') data: User) {
-        return await this.userService.approvalUser(data);
+    async approvalUser(@Args('data') data: User, @Me() user: User) {
+        return await this.userService.approvalUser(data, user);
     }
 }
