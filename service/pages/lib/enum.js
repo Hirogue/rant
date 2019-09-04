@@ -36,9 +36,10 @@ module.exports = {
         V1: 1,
         V2: 2,
     },
-    PROJECT_METADATA_TITLE_CN: {
+    METADATA_TITLE_CN: {
         '行业': "industry.title",
         '融资方式': "category",
+        '投资方式': "category",
         '阶段': "stage.title",
         '比例': "ratio.title",
         '退出方式': "exit_mode.title",

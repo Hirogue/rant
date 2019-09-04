@@ -1,8 +1,8 @@
+import { Fragment } from 'react';
 import { RequestQueryBuilder } from '@nestjsx/crud-request';
 import { Q_FETCH_CURRENT_USER, Q_GET_METADATA_TREES } from '../gql';
 import { createApolloClient } from "./apollo";
 import { message, Modal } from 'antd';
-import { withRouter } from 'next/router';
 
 export const buildingQuery = params => {
     return RequestQueryBuilder.create(params).query();
@@ -187,26 +187,72 @@ export const toGetMetadata = async () => {
 
 
 export const getUrlParam = (router, name) => {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-    var r = router.asPath.split('?')[1].match(reg);
-    if (r != null) return decodeURI(r[2]); return null;
+    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    let res = router.asPath.split('?')[1];
+    if (!res) return null;
+    let param = res.match(reg);
+    if (!param) return null;
+    return decodeURI(param[2]);
 }
 
-export const toApplayProject = (router, project) => {
-    console.log(router, project);
+export const toApply = async (key, target, gql) => {
+
+    let client = createApolloClient();
+    let user = {};
+    try {
+        user = JSON.parse(localStorage.getItem('u_user'));
+    } catch (error) {
+        console.info('您还未登录！');
+    }
+
+
+    console.log(target.id, gql);
     
-    Modal.info({
+    if (user) {
+        const { data } = await client.mutate({
+            mutation: gql,
+            variables: { id: target.id }
+        })
+        if (data && Object.keys(data).length) {
+            const user = await toFetchCurrentUser(client);
+            if (user[`apply_${key}s`].findIndex(application => application[key] && (application[key].id === target.id)) !== -1) {
+                return [true, `申请【${target.title}】成功！`]
+            } else {
+                return [false, `申请【${target.title}】失败！`]
+            }
+        } else {
+            return [false, `申请【${target.title}】失败！`]
+        }
+    } else {
+        return [false, '您尚未登录，请登陆后再申请！', '/login'];
+    }
+}
+
+export const toApplayCommonHandler = (router, KV, gql) => {
+
+    let key = Object.keys(KV).shift();
+    let target = KV[key];
+    
+    Modal.confirm({
         title: "您正在提交一个申请",
         content: (
-            <>
-                <p>请确认是否申请项目：</p>
-                <p>【{project.title}】</p>
-            </>
+            <Fragment>
+                <p>请确认是否申请：</p>
+                <p>【{target.title}】</p>
+            </Fragment>
         ),
         okText: "确认",
         cancelText: "取消",
-        onOk: () => console.log('ok'),
-        onCancel: () => console.info(`您已取消申请项目【${project.title}】！`)
-
+        onOk: async () => {
+            const [flag, content, url] = await toApply(key, target, gql);
+            if (flag) {
+                message.success(content);
+            } else {
+                message.error(content);
+            }
+            if (url) router.push(url);
+        },
+        onCancel: () => console.info(`您已取消申请项目【${target.title}】！`),
+        centered: true
     })
 }

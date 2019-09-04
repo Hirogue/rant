@@ -14,3 +14,4 @@ export * from './user';
 export * from './project';
 export * from './pc_home';
 export * from './pc_project';
+export * from './pc_capital';

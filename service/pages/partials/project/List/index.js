@@ -2,12 +2,12 @@ import { Fragment } from 'react';
 import _ from 'lodash';
 import { withRouter } from 'next/router';
 import moment from 'moment';
-import { message } from 'antd';
 import IconFont from '../../../components/IconFont';
 
 import { IF_MODE_ENUM } from '../../../lib/enum';
+import { toApplayCommonHandler } from '../../../lib/global';
+import { M_APPLY_PROJECTS } from '../../../gql';
 import './list.scss';
-import GlobalContext from '../../../components/context/GlobalContext';
 
 
 export default withRouter(({ data, router }) => {
@@ -33,7 +33,7 @@ export default withRouter(({ data, router }) => {
 			)
 		}
 		return (
-			<a className="btn-a" onClick={() => router.push('/login')}>
+			<a className="btn-a" onClick={() => toApplayCommonHandler(router, { project: data }, M_APPLY_PROJECTS)}>
 				<span>立即投递</span>
 				<IconFont className="iconfont" type="icon-jiantou-right" />
 			</a>

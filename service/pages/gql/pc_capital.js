@@ -1,8 +1,8 @@
 import { gql } from 'apollo-boost';
-import { F_PROJECT_FIELDS } from '../gql';
+import { F_CAPITAL_FIELDS } from '../gql';
 
 
-export const Q_GET_PROJECT_DATA = gql`
+export const Q_GET_CAPITAL_DATA = gql`
 
     query getProjectData($queryString: String!) {
         findRootsAndChildren {
@@ -14,61 +14,32 @@ export const Q_GET_PROJECT_DATA = gql`
             }
         }
 
-        queryProject(queryString: $queryString) {
+        queryCapital(queryString: $queryString) {
             total
             count
             page
             pageCount
             data {
                 id
+                amount
                 title
-                cover
                 contact
-                area_path
                 phone
-                hideCompany
+                company
                 views
                 category
                 status
                 update_at
                 create_at
                 publish_at
-                amount
-                progress
-                team_info
-                advantage
-                purposes
-                payment
-                summary
-                stage {
-                    id
-                    title
-                }
-                exit_mode {
-                    id
-                    title
-                }
-                withdrawal_year {
-                    id
-                    title
-                }
-                ratio {
-                    id
-                    title
-                }
-                data {
-                    id
-                    title
-                }
-                risk {
-                    id
-                    title
-                }
-                interest {
-                    id
-                    title
-                }
-                occupancy_time {
+                info
+                return
+                pledge
+                discount
+                pre_payment
+                term
+                area_path
+                type {
                     id
                     title
                 }
@@ -76,27 +47,59 @@ export const Q_GET_PROJECT_DATA = gql`
                     id
                     title
                 }
+                stage {
+                    id
+                    title
+                }
                 creator {
                     id
+                    avatar
                     hideName
                     hideCompany
-                    avatar
+                }
+                area {
+                    id
+                    title
+                }
+                equity_type {
+                    id
+                    title
+                }
+                invest_type {
+                    id
+                    title
+                }
+                invest_area {
+                    id
+                    title
+                }
+                risk {
+                    id
+                    title
+                }
+                data {
+                    id
+                    title
+                }
+                ratio {
+                    id
+                    title
                 }
             }
         }
     }
 `
 
-export const Q_GET_PROJECT_DETAIL = gql`
-  ${F_PROJECT_FIELDS}
+export const Q_GET_CAPITAL_DETAIL = gql`
+  ${F_CAPITAL_FIELDS}
 
     query getProject($id: String!, $queryString: String! = "", $queryMore: String! = "") {
-        project(id: $id, queryString: $queryString) {
+        capital(id: $id, queryString: $queryString) {
             area_path
-            ...ProjectFields
+            ...CapitalFields
         }
 
-        queryProject(queryString: $queryMore) {
+        queryCapital(queryString: $queryMore) {
             total
             count
             page
