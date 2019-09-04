@@ -19,10 +19,15 @@ export default App => {
     @withRouter
     @withClient
     class WithContext extends Component {
-        render() {
 
+        state = {
+            serviceAgreementVisible: false,
+            setServiceAgreementVisible: status => { this.setState(state => ({ ...state, serviceAgreementVisible: status })) }
+        }
+
+        render() {
             return (
-                <GlobalContext.Provider value={{ router: this.props.router, ...config }}>
+                <GlobalContext.Provider value={{ ...this.state, router: this.props.router, ...config }}>
                     <Consult siteInfo={{}} />
                     <App props={this.props} />
                 </GlobalContext.Provider>

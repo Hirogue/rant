@@ -7,7 +7,7 @@ export const createFetch = (url, config) => {
       authorization: 'Bearer ' + localStorage.getItem('u_token'),
     },
   };
-  return fetch(Config.basePath + url, merge(defaultConfig, config))
+  return fetch(url, merge(defaultConfig, config))
     .then(res => {
       const data = !!res ? res.json() : {};
       return data;
