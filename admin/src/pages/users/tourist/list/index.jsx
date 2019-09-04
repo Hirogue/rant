@@ -1,28 +1,16 @@
-import LogReader from '@/components/LogReader';
-import OrgSelector from '@/components/OrgSelector';
 import StandardActions from '@/components/StandardActions';
-import StandardConfirm from '@/components/StandardConfirm';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
-import UserSelector from '@/components/UserSelector';
 import { Q_GET_USERS } from '@/gql';
 import { canReadAny, canUpdateAny, canUpdateOwn } from '@/utils/access-control';
-import { IdentityEnum, LogTypeEnum, UserStatusEnum } from '@/utils/enum';
-import {
-  buildingQuery,
-  filterOrg,
-  paramsAuth,
-  UserLevelMaps,
-  UserStatusMaps,
-  UserTypeMaps,
-} from '@/utils/global';
+import { IdentityEnum, UserStatusEnum } from '@/utils/enum';
+import { buildingQuery, paramsAuth } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { CondOperator } from '@nestjsx/crud-request';
-import { Affix, Col, Divider, message, Row, Skeleton } from 'antd';
+import { Affix, Col, Divider, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
-import { M_APPROVAL_USER } from '../../gql';
 
 const PATH = '/users/tourist';
 const AUTH_RESOURCE = '/user/tourist';
@@ -39,14 +27,6 @@ export default () => {
   };
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [checkedVisible, setCheckedVisible] = useState(false);
-  const [rejectedVisible, setRejectedVisible] = useState(false);
-  const [logVisible, setLogVisible] = useState(false);
-  const [followingVisible, setFollowingVisible] = useState(false);
-  const [cancelledVisible, setCancelledVisible] = useState(false);
-  const [orgSelectorVisible, setOrgSelectorVisible] = useState(false);
-  const [userSelectorVisible, setUserSelectorVisible] = useState(false);
-  const [current, setCurrent] = useState(null);
 
   const client = useApolloClient();
 
@@ -66,72 +46,6 @@ export default () => {
   const { queryUser, roles } = data;
 
   if (!queryUser) return <Skeleton loading={loading} active avatar />;
-
-  const renderActions = record => (
-    <Fragment>
-      {UserStatusEnum.PENDING === record.status ? (
-        <Fragment>
-          {canUpdateOwn(AUTH_RESOURCE) ? (
-            <Fragment>
-              <a
-                href="javascript:;"
-                onClick={() => {
-                  setCurrent(record);
-                  setCheckedVisible(true);
-                }}
-              >
-                [审核]
-              </a>
-              <Divider type="vertical" />
-              <a
-                href="javascript:;"
-                onClick={() => {
-                  setCurrent(record);
-                  setRejectedVisible(true);
-                }}
-              >
-                [驳回]
-              </a>
-              <Divider type="vertical" />
-            </Fragment>
-          ) : null}
-          {canUpdateAny(AUTH_RESOURCE) ? (
-            <Fragment>
-              <a
-                href="javascript:;"
-                onClick={() => {
-                  setCurrent(record);
-                  setOrgSelectorVisible(true);
-                }}
-              >
-                [{`${!record.org ? '' : '重新'}`}分配部门]
-              </a>
-              <Divider type="vertical" />
-              <a
-                href="javascript:;"
-                onClick={() => {
-                  setCurrent(record);
-                  setUserSelectorVisible(true);
-                }}
-              >
-                [{`${!record.own ? '' : '重新'}`}分配业务员]
-              </a>
-              <Divider type="vertical" />
-            </Fragment>
-          ) : null}
-        </Fragment>
-      ) : null}
-      <a
-        href="javascript:;"
-        onClick={() => {
-          setCurrent(record);
-          setLogVisible(true);
-        }}
-      >
-        [日志]
-      </a>
-    </Fragment>
-  );
 
   const dataSource = queryUser.data;
   const total = queryUser.total;
@@ -153,49 +67,10 @@ export default () => {
       search: true,
     },
     {
-      title: '地区',
-      dataIndex: 'area_path',
-      search: true,
-    },
-    {
-      title: '类型',
-      dataIndex: 'type',
-      render: val => UserTypeMaps[val],
-      filters: Object.keys(UserTypeMaps).map(key => ({ text: UserTypeMaps[key], value: key })),
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      render: val => UserStatusMaps[val],
-      filters: Object.keys(UserStatusMaps).map(key => ({ text: UserStatusMaps[key], value: key })),
-    },
-    {
-      title: '等级',
-      dataIndex: 'vip',
-      render: val => UserLevelMaps[val],
-      filters: Object.keys(UserLevelMaps).map(key => ({ text: UserLevelMaps[key], value: key })),
-    },
-    {
-      title: '部门',
-      dataIndex: 'org.id',
-      render: (val, record) => (record.org ? record.org.title : ''),
-      treeSelector: true,
-      treeFilters: filterOrg(AUTH_RESOURCE),
-    },
-    {
-      title: '业务员',
-      dataIndex: 'own.realname',
-      search: true,
-    },
-    {
       title: '注册时间',
       dataIndex: 'create_at',
       render: val => moment(val).format('YYYY-MM-DD HH:mm:ss'),
       sorter: true,
-    },
-    {
-      title: '操作',
-      render: (val, record) => renderActions(record),
     },
   ];
 
@@ -217,108 +92,6 @@ export default () => {
   return (
     <Fragment>
       <PageHeaderWrapper>
-        <LogReader
-          title="日志"
-          target={current ? current.id : null}
-          type={LogTypeEnum.USER}
-          visible={logVisible}
-          setVisible={setLogVisible}
-        />
-        <UserSelector
-          title="请选择要分配的业务员"
-          orgTree={filterOrg(AUTH_RESOURCE)}
-          visible={userSelectorVisible}
-          setVisible={setUserSelectorVisible}
-          onConfirm={own => {
-            client.mutate({
-              mutation: M_APPROVAL_USER,
-              variables: {
-                data: {
-                  id: current.id,
-                  status: UserStatusEnum.PENDING,
-                  own,
-                },
-              },
-              update: (proxy, { data }) => {
-                if (data.approvalUser) {
-                  message.success('操作成功');
-                  refetch();
-                }
-              },
-            });
-          }}
-        />
-        <OrgSelector
-          title="请选择要分配的部门"
-          data={filterOrg(AUTH_RESOURCE)}
-          visible={orgSelectorVisible}
-          setVisible={setOrgSelectorVisible}
-          onConfirm={org => {
-            client.mutate({
-              mutation: M_APPROVAL_USER,
-              variables: {
-                data: {
-                  id: current.id,
-                  status: UserStatusEnum.PENDING,
-                  org,
-                },
-              },
-              update: (proxy, { data }) => {
-                if (data.approvalUser) {
-                  message.success('操作成功');
-                  refetch();
-                }
-              },
-            });
-          }}
-        />
-        <StandardConfirm
-          title="请输入审批总结"
-          visible={checkedVisible}
-          setVisible={setCheckedVisible}
-          onConfirm={reason => {
-            client.mutate({
-              mutation: M_APPROVAL_USER,
-              variables: {
-                data: {
-                  id: current.id,
-                  status: UserStatusEnum.CHECKED,
-                  reason,
-                },
-              },
-              update: (proxy, { data }) => {
-                if (data.approvalUser) {
-                  message.success('操作成功');
-                  refetch();
-                }
-              },
-            });
-          }}
-        />
-        <StandardConfirm
-          title="请输入驳回理由"
-          visible={rejectedVisible}
-          setVisible={setRejectedVisible}
-          onConfirm={reason => {
-            client.mutate({
-              mutation: M_APPROVAL_USER,
-              variables: {
-                data: {
-                  id: current.id,
-                  status: UserStatusEnum.REJECTED,
-                  reason,
-                },
-              },
-              update: (proxy, { data }) => {
-                if (data.approvalUser) {
-                  message.success('操作成功');
-                  refetch();
-                }
-              },
-            });
-          }}
-        />
-
         <StandardRow>
           <Row gutter={16}>
             <Col lg={6}>

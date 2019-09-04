@@ -17,6 +17,8 @@ export const F_USER_FIELDS = gql`
     realname
     phone
     idcard
+    idcardA
+    idcardB
     address
     company
     profile
