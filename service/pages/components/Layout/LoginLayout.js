@@ -1,17 +1,14 @@
 import { Layout } from 'antd';
-import Head from "next/head";
 import LoginHeader from "../LoginHeader";
-import withContext from './withContext';
-
+import GlobalLayout from './GlobalLayout';
 import './login_layout.scss';
 
 const { Header, Content } = Layout;
 
-export default withContext(({ props }) => {
+export default props => {
 
 	return (
-		<Layout>
-			<Head seo={{}} />
+		<GlobalLayout>
 			<Header
 				style={{
 					position: 'fixed',
@@ -26,6 +23,6 @@ export default withContext(({ props }) => {
 			<Content style={{ paddingTop: 72, paddingBottom: 255 }}>
 				{props.children}
 			</Content>
-		</Layout>
+		</GlobalLayout>
 	)
-});
+};
