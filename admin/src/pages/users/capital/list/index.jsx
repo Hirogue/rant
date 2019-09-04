@@ -1,3 +1,4 @@
+import DetailPanel from '@/components/DetailPanel';
 import LogReader from '@/components/LogReader';
 import OrgSelector from '@/components/OrgSelector';
 import StandardActions from '@/components/StandardActions';
@@ -7,7 +8,7 @@ import StandardTable from '@/components/StandardTable';
 import UserSelector from '@/components/UserSelector';
 import { Q_GET_USERS } from '@/gql';
 import { canReadAny, canUpdateAny, canUpdateOwn } from '@/utils/access-control';
-import { IdentityEnum, LogTypeEnum, UserStatusEnum } from '@/utils/enum';
+import { IdentityEnum, LogTypeEnum, UserStatusEnum, UserTypeEnum } from '@/utils/enum';
 import {
   buildingQuery,
   filterOrg,
@@ -19,9 +20,10 @@ import {
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { CondOperator } from '@nestjsx/crud-request';
-import { Affix, Col, Divider, message, Row, Skeleton } from 'antd';
+import { Affix, Col, Descriptions, Divider, message, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
+import Zmage from 'react-zmage';
 import { M_APPROVAL_USER } from '../../gql';
 
 const PATH = '/users/capital';
@@ -39,6 +41,7 @@ export default () => {
   };
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [detailVisible, setDetailVisible] = useState(false);
   const [checkedVisible, setCheckedVisible] = useState(false);
   const [rejectedVisible, setRejectedVisible] = useState(false);
   const [logVisible, setLogVisible] = useState(false);
@@ -46,7 +49,7 @@ export default () => {
   const [cancelledVisible, setCancelledVisible] = useState(false);
   const [orgSelectorVisible, setOrgSelectorVisible] = useState(false);
   const [userSelectorVisible, setUserSelectorVisible] = useState(false);
-  const [current, setCurrent] = useState(null);
+  const [current, setCurrent] = useState({});
 
   const client = useApolloClient();
 
@@ -121,6 +124,16 @@ export default () => {
           ) : null}
         </Fragment>
       ) : null}
+      <a
+        href="javascript:;"
+        onClick={() => {
+          setCurrent(record);
+          setDetailVisible(true);
+        }}
+      >
+        [详情]
+      </a>
+      <Divider type="vertical" />
       <a
         href="javascript:;"
         onClick={() => {
@@ -217,6 +230,38 @@ export default () => {
   return (
     <Fragment>
       <PageHeaderWrapper>
+        <DetailPanel title="详细信息" visible={detailVisible} setVisible={setDetailVisible}>
+          {UserTypeEnum.PERSONAL === current.type ? (
+            <Descriptions title="个人用户" layout="vertical">
+              <Descriptions.Item label="真实姓名">{current.realname}</Descriptions.Item>
+              <Descriptions.Item label="手机号">{current.phone}</Descriptions.Item>
+              <Descriptions.Item label="身份证号">{current.idCard}</Descriptions.Item>
+              <Descriptions.Item label="身份证头像面" span={2}>
+                <Zmage width={320} height={200} src={current.idCardA} />
+              </Descriptions.Item>
+              <Descriptions.Item label="身份证国徽面">
+                <Zmage width={320} height={200} src={current.idCardB} />
+              </Descriptions.Item>
+            </Descriptions>
+          ) : null}
+          {UserTypeEnum.ENTERPRISE === current.type ? (
+            <Descriptions title="企业用户" layout="vertical">
+              <Descriptions.Item label="负责人姓名">{current.realname}</Descriptions.Item>
+              <Descriptions.Item label="联系电话" span={2}>
+                {current.phone}
+              </Descriptions.Item>
+              <Descriptions.Item label="企业名称" span={2}>
+                {current.company}
+              </Descriptions.Item>
+              <Descriptions.Item label="组织机构代码" span={2}>
+                {current.org_code}
+              </Descriptions.Item>
+              <Descriptions.Item label="营业执照">
+                <Zmage width={400} height={573} src={current.business_license} />
+              </Descriptions.Item>
+            </Descriptions>
+          ) : null}
+        </DetailPanel>
         <LogReader
           title="日志"
           target={current ? current.id : null}

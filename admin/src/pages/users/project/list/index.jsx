@@ -20,9 +20,10 @@ import {
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { CondOperator } from '@nestjsx/crud-request';
-import { Descriptions, Affix, Col, Divider, message, Row, Skeleton } from 'antd';
+import { Affix, Col, Descriptions, Divider, message, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
+import Zmage from 'react-zmage';
 import { M_APPROVAL_USER } from '../../gql';
 
 const PATH = '/users/project';
@@ -231,17 +232,35 @@ export default () => {
       <PageHeaderWrapper>
         <DetailPanel title="详细信息" visible={detailVisible} setVisible={setDetailVisible}>
           {UserTypeEnum.PERSONAL === current.type ? (
-            <Descriptions title="个人" layout="vertical">
+            <Descriptions title="个人用户" layout="vertical">
               <Descriptions.Item label="真实姓名">{current.realname}</Descriptions.Item>
               <Descriptions.Item label="手机号">{current.phone}</Descriptions.Item>
               <Descriptions.Item label="身份证号">{current.idCard}</Descriptions.Item>
-              <Descriptions.Item label="身份证头像面">
-                No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
+              <Descriptions.Item label="身份证头像面" span={2}>
+                <Zmage width={320} height={200} src={current.idCardA} />
               </Descriptions.Item>
-              <Descriptions.Item label="身份证国徽面">empty</Descriptions.Item>
+              <Descriptions.Item label="身份证国徽面">
+                <Zmage width={320} height={200} src={current.idCardB} />
+              </Descriptions.Item>
             </Descriptions>
           ) : null}
-          {UserTypeEnum.ENTERPRISE === current.type ? 111 : null}
+          {UserTypeEnum.ENTERPRISE === current.type ? (
+            <Descriptions title="企业用户" layout="vertical">
+              <Descriptions.Item label="负责人姓名">{current.realname}</Descriptions.Item>
+              <Descriptions.Item label="联系电话" span={2}>
+                {current.phone}
+              </Descriptions.Item>
+              <Descriptions.Item label="企业名称" span={2}>
+                {current.company}
+              </Descriptions.Item>
+              <Descriptions.Item label="组织机构代码" span={2}>
+                {current.org_code}
+              </Descriptions.Item>
+              <Descriptions.Item label="营业执照">
+                <Zmage width={400} height={573} src={current.business_license} />
+              </Descriptions.Item>
+            </Descriptions>
+          ) : null}
         </DetailPanel>
         <LogReader
           title="日志"
