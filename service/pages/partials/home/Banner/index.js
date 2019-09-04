@@ -21,8 +21,6 @@ export default ({ data }) => {
 		console.error(error.message);
 	}
 
-	console.log(user);
-	
 	const [thisUser, setUser] = useState(user);
 	const images = !data.data ? [{ id: 0, url: '', link: '' }] : data.data;
 
@@ -75,8 +73,7 @@ export default ({ data }) => {
 					"smsCode": values.smsCaptcha,
 					"password": values.password,
 					"confirmPassword": values.password
-				});
-
+				}).then(r => r.json());
 				if (res.message) {
 					const { message: { error, message } } = res;
 					if (error) message.fail(message);
@@ -93,7 +90,6 @@ export default ({ data }) => {
 					});
 					if (data && data.login && data.login.token) {
 						localStorage.setItem('u_token', data.login.token);
-						
 						const user = await toFetchCurrentUser(client);
 						if (user) {
 							window.location.reload();

@@ -10,9 +10,8 @@ import ServiceNews from '../partials/home/ServiceNews';
 import IndexNav from '../partials/home/IndexNav';
 import SuccessCase from '../partials/home/SuccessCase';
 import { withApollo, createApolloClient } from "../lib/apollo";
-import { buildingQuery, asyncEffectHandler, Fetch } from "../lib/global";
-import { Q_GET_HOME_DATA, Q_GET_HOME_ARTICLES } from '../gql'
-import Header from 'antd/lib/calendar/Header';
+import { buildingQuery, asyncEffectHandler, toGetMetadata } from "../lib/global";
+import { Q_GET_HOME_DATA, Q_GET_HOME_ARTICLES, Q_GET_METADATA_TREES } from '../gql'
 
 const client = createApolloClient();
 
@@ -85,18 +84,12 @@ export default withRouter(withApollo((props) => {
 					article[articleCategoryArray[count++]] = data.queryArticle;
 				}
 			}
-			
 			setState(Object.assign(homeData, { article }));
+			toGetMetadata();
 		})
 	}, [])
 
-	console.log(thisState);
-	
-	
-	const { data } = props.router.query;
-
 	const siteInfo = { aboutData: [] };
-	const mainData = {};
 
 	const newsAndProviderData = {
 		news: thisState.article || {},

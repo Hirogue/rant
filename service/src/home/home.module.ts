@@ -13,15 +13,15 @@ import { HomeController } from './home.controller';
 @Module({
     controllers: [
         HomeController,
-        // ProjectController,
-        // FinanceController,
-        // ProductController,
-        // ServiceController,
-        // NewsController,
-        // HelpController,
-        // AboutController,
-        // SearchController,
-        // UserController
+        ProjectController,
+        FinanceController,
+        ProductController,
+        ServiceController,
+        NewsController,
+        HelpController,
+        AboutController,
+        SearchController,
+        UserController
     ]
 })
 export class HomeModule { }

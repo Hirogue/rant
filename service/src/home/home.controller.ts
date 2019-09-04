@@ -17,6 +17,11 @@ export class HomeController {
     @ApiOperation({ title: 'help Page' })
     help() { }
 
+    @Get('/login')
+    @Render('login')
+    @ApiOperation({ title: 'login Page' })
+    login() { }
+
     @Get('/forgot')
     @Render('fotgot')
     @ApiOperation({ title: 'fotgot Page' })

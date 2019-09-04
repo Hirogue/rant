@@ -1,6 +1,8 @@
 import { RequestQueryBuilder } from '@nestjsx/crud-request';
-import { Q_FETCH_CURRENT_USER } from '../gql';
+import { Q_FETCH_CURRENT_USER, Q_GET_METADATA_TREES } from '../gql';
 import { createApolloClient } from "./apollo";
+import { message, Modal } from 'antd';
+import { withRouter } from 'next/router';
 
 export const buildingQuery = params => {
     return RequestQueryBuilder.create(params).query();
@@ -119,3 +121,92 @@ export const toGetParentArrayByChildNode = (tree, target) => {
 
 
 export const asyncEffectHandler = async (fn) => await fn();
+
+
+export const mergeParams = (params, partialParams) => {
+    let newParams = { ...params };
+
+    const keys = Object.keys(partialParams);
+
+    keys.forEach(key => {
+        if (partialParams[key]) {
+            newParams[key] = partialParams[key];
+
+            if (['filter', 'or', 'join', 'sort'].includes[key]) {
+                if (!!params[key]) {
+
+                    const oldParams = params[key]
+                        .filter(item => partialParams[key].findIndex(temp => temp.field === item.field) < 0)
+                        .map(item => item);
+
+                    if (oldParams.length > 0) {
+                        newParams[key] = [...newParams[key], ...oldParams];
+                    }
+                }
+            }
+
+            if (isArray(newParams[key])) {
+                if (['filter', 'or'].includes(key)) {
+                    newParams[key] = newParams[key].filter(item => !isEmpty(item.value));
+                }
+
+                if (['join', 'sort'].includes(key)) {
+                    newParams[key] = newParams[key].filter(item => !isEmpty(item.field));
+                }
+            }
+        }
+    });
+
+    return newParams;
+};
+
+export const toGetMetadata = async () => {
+    let metadata = null;
+    try {
+        metadata = JSON.parse(sessionStorage.getItem('metadata'));
+    } catch (error) {
+        console.info('解析类型数据失败！');
+    }
+    if (!metadata) {
+        const res = await createApolloClient().query({
+            query: Q_GET_METADATA_TREES,
+            fetchPolicy: "no-cache"
+        });
+        
+        if (res.data) {
+            sessionStorage.setItem('metadata', JSON.stringify(res.data.metadataTrees));
+            return res.data.metadataTrees;
+        } else {
+            message.error('获取类型数据失败！');
+            return null;
+        }
+    } else {
+        return metadata;
+    }
+}
+
+
+export const getUrlParam = (router, name) => {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = router.asPath.split('?')[1].match(reg);
+    if (r != null) return decodeURI(r[2]); return null;
+}
+
+export const toApplayProject = (router, project) => {
+    console.log(router, project);
+    
+    Modal.info({
+        title: "您正在提交一个申请",
+        content: (
+            <>
+                <p>请确认是否申请项目：</p>
+                <p>【{project.title}】</p>
+            </>
+        ),
+        okText: "确认",
+        cancelText: "取消",
+        onOk: () => console.log('ok'),
+        onCancel: () => console.info(`您已取消申请项目【${project.title}】！`)
+
+    })
+}

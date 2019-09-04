@@ -4,23 +4,21 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 
 import './page_mod.scss';
 
-export default class PageMod extends Component {
-	render() {
-		const { total, pageSize, onChnage } = this.props;
+export default ({ total, current, pageSize, onChange }) => {
 
-		return (
-			<div className="page-mod">
-				<LocaleProvider locale={zhCN}>
-					<Pagination
-						className="page-ui"
-						showQuickJumper
-						pageSize={pageSize || 10}
-						defaultCurrent={1}
-						total={total}
-						onChange={onChnage}
-					/>
-				</LocaleProvider>
-			</div>
-		);
-	}
+	return (
+		<div className="page-mod">
+			<LocaleProvider locale={zhCN}>
+				<Pagination
+					className="page-ui"
+					showQuickJumper
+					current={current}
+					pageSize={pageSize || 10}
+					defaultCurrent={1}
+					total={total}
+					onChange={onChange}
+				/>
+			</LocaleProvider>
+		</div>
+	);
 }

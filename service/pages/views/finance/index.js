@@ -21,6 +21,13 @@ const amountObj = {
 	'5亿以上': { min: 50000, max: 9999 * 1000000000 }
 };
 
+
+
+
+
+
+
+
 @withRouter
 export default class extends React.Component {
 	state = {

@@ -1,6 +1,9 @@
 import React, { Fragment } from 'react';
 import _ from 'lodash';
 import { withRouter } from 'next/router';
+import { Spin } from 'antd';
+import { useQuery } from '@apollo/react-hooks';
+import { CondOperator } from '@nestjsx/crud-request';
 import IconFont from '../../../components/IconFont';
 import config from '../../../config/config';
 import BaseLayout from '../../../components/Layout/BaseLayout';
@@ -8,341 +11,227 @@ import BreadCrumb from '../../../components/BreadCrumb';
 
 import './project_detail.scss';
 import GlobalContext from '../../../components/context/GlobalContext';
+import { createApolloClient } from "../../../lib/apollo";
+import { buildingQuery, getUrlParam, toApplayProject } from "../../../lib/global";
+import { Q_GET_PROJECT_DETAIL } from '../../../gql'
+import { PROJECT_METADATA_TITLE_CN, IF_MODE_ENUM, DEFAULT_AVATAR } from '../../../lib/enum';
 
-@withRouter
-export default class extends React.Component {
-	getInfo = (item) => {
-		const ex_info = item.ex_info || {};
+const client = createApolloClient();
+const defaultVariables = {
+	join: [
+		{ field: 'creator' },
+		{ field: 'exit_mode' },
+		{ field: 'industry' },
+		{ field: 'ratio' },
+		{ field: 'stage' },
+		{ field: 'withdrawal_year' },
+		{ field: 'data' },
+		{ field: 'area' },
+		{ field: 'risk' },
+		{ field: 'interest' },
+		{ field: 'occupancy_time' },
+	]
+};
 
-		const tags = ex_info.tags ? JSON.parse(ex_info.tags) : {};
+export default withRouter((props) => {
 
-		const selectedTags = tags.selectedTags || {};
+	let { router } = props;
+	let id = getUrlParam(router, 'id');
+	let user = {};
 
-		const mode = tags.selectedCategory;
-		return `${mode} ${selectedTags['所属行业'] ? _.take(selectedTags['所属行业'].tags, 2).join(',') : ''} `;
-	};
+	try {
+		user = JSON.parse(localStorage.getItem('u_user'));
+	} catch (error) {
+		console.info('您还未登录！');
+	}
 
-	render() {
-		const { list, detail } = this.props.router.query;
+	const { loading, data: { project, queryProject } } = useQuery(Q_GET_PROJECT_DETAIL, {
+		fetchPolicy: "no-cache",
+		client: client,
+		variables: {
+			id,
+			queryString: buildingQuery(defaultVariables),
+			queryMore: buildingQuery({
+				page: 1,
+				limit: 20,
+				join: [{ field: "industry" }],
+				filter: [
+					{ field: "status", operator: CondOperator.IN, value: "checked,waitting,following" },
+					{ field: "id", operator: CondOperator.NOT_EQUALS, value: id }
+				],
+				sort: [{ field: 'publish_at', order: 'DESC' }],
+			})
+		}
+	});
 
-		const ex_info = detail.ex_info || {};
+	const toSetVal = (val) => (key) => (def) => val ? val[key] : def;
 
-		const tags = ex_info.tags ? JSON.parse(ex_info.tags) : {};
+	const toShowApplyButton = (data) => (applyArray) => {
+		if (data.status === 'finished') {
+			return <a className="btn-finished" href="javascript:;" style={{ background: '#ccc' }}>已结束</a>;
+		}
+		if (applyArray && applyArray.find(apply => apply.id === data.id)) {
+			return <a className="btn" href="javascript:;" style={{ background: '#ccc' }}>已投递</a>;
+		}
+		return <a className="btn" onClick={() => toApplayProject(router, project)}>立即投递</a>;
+	}
 
-		const selectedTags = tags.selectedTags || {};
+	const recommendation = queryProject && queryProject.data ? queryProject.data.sort(() => Math.random() > 0.5 ? 1 : -1).slice(0,4) : [];
 
-		const mode = tags.selectedCategory;
+	if (loading) return <Spin style={{ position: "fixed", top: "50%", left: "50%" }} tip="正在加载中" />;
 
-		return (
-			<BaseLayout>
-				<GlobalContext.Consumer>
-					{(context) => {
-						const projectApplys = context.projectApplys || [];
-						const visits = context.visits || [];
-
-						return (
-							<div className="project-detail-page">
-								<BreadCrumb adrname_two={'项目招商'} adrname_thr={'全部项目'} />
-								<div className="project-summary-main clearfix">
-									<div className="right-main">
-										<h4 className="title">会员名片</h4>
-										<img className="service-bg-img" src={config.staticImgUrl + 'avatar-img.png'} />
-										<p className="name">
-											{detail.contacts ? (
-												_.padEnd(detail.contacts.substr(0, 1), detail.contacts.length, '*')
-											) : (
-												''
-											)}
-										</p>
-										<p className="text" style={{ textAlign: 'center' }}>
-											{detail.company ? (
-												`所在公司： ${_.padStart(
-													detail.company.substr(
-														detail.company.length - 2,
-														detail.company.length
-													),
-													detail.company.length,
-													'*'
-												)}`
-											) : (
-												'个人投资者'
-											)}
-										</p>
-
-										{projectApplys.find((apply) => apply.project_id === detail.id) ? (
-											<a className="btn" href="javascript:;" style={{ background: '#ccc' }}>
-												已投递
-											</a>
-										) : (
-											<a className="btn" onClick={() => context.applyProject(detail)}>
-												立即投递
-											</a>
-										)}
-									</div>
-									<div className="left-main">
-										<div className="project-summary">
-											<div className="left">
-												<img
-													className="project-top-img"
-													src={!!detail.thumbnail ? detail.thumbnail.url : ''}
-												/>
-											</div>
-											<div className="right">
-												<h4 className="title">{detail.title}</h4>
-												<ul className="join">
-													<li>
-														<p>融资方式</p>
-														<h5>{mode}</h5>
-													</li>
-													<li>
-														<p>所属行业</p>
-														<h5>
-															{selectedTags['所属行业'] ? (
-																_.take(selectedTags['所属行业'].tags, 2).join(',')
-															) : (
-																''
-															)}
-														</h5>
-													</li>
-												</ul>
-												<ul className="assets">
-													<li>
-														<p>可提供资料</p>
-														<h5>
-															{selectedTags['可提供资料'] ? (
-																selectedTags['可提供资料'].tags.join(',')
-															) : (
-																''
-															)}
-														</h5>
-													</li>
-													<li>
-														<p>融资金额</p>
-														<h5>
-															{selectedTags['融资金额'] ? selectedTags['融资金额'].value : ''}万元
-														</h5>
-													</li>
-												</ul>
-												{mode === '股权融资' ? (
-													<Fragment>
-														<ul className="assets-list">
-															<li>
-																<p>
-																	资金方占股比例：
-																	{selectedTags['占股比例'] ? (
-																		selectedTags['占股比例'].tags.join(',')
-																	) : (
-																		''
-																	)}
-																</p>
-															</li>
-															<li>
-																<p>
-																	项目所处阶段：
-																	{selectedTags['所处阶段'] ? (
-																		selectedTags['所处阶段'].tags.join(',')
-																	) : (
-																		''
-																	)}
-																</p>
-															</li>
-														</ul>
-														<ul className="assets-list">
-															<li>
-																<p>
-																	投资退出方式：
-																	{selectedTags['退出方式'] ? (
-																		selectedTags['退出方式'].tags.join(',')
-																	) : (
-																		''
-																	)}
-																</p>
-															</li>
-															<li>
-																<p>
-																	最短退出年限：
-																	{selectedTags['最短退出年限'] ? (
-																		selectedTags['最短退出年限'].tags.join(',')
-																	) : (
-																		''
-																	)}
-																</p>
-															</li>
-														</ul>
-													</Fragment>
-												) : (
-													''
-												)}
-
-												{mode === '债权融资' ? (
-													<Fragment>
-														<ul className="assets-list">
-															<li>
-																<p>
-																	资金占用时长：
-																	{selectedTags['资金占用时长'] ? (
-																		selectedTags['资金占用时长'].tags.join(',')
-																	) : (
-																		''
-																	)}
-																</p>
-															</li>
-															<li>
-																<p>
-																	可承担最高利息：
-																	{selectedTags['承担利息'] ? (
-																		selectedTags['承担利息'].tags.join(',')
-																	) : (
-																		''
-																	)}
-																</p>
-															</li>
-														</ul>
-														<ul className="assets-list">
-															<li>
-																<p>
-																	可提供风控：
-																	{selectedTags['风控要求'] ? (
-																		`${selectedTags['风控要求'].tags.join(
-																			','
-																		)}${selectedTags['风控要求'].value
-																			? ' -' + selectedTags['风控要求'].value
-																			: ''}`
-																	) : (
-																		''
-																	)}
-																</p>
-															</li>
-															<li>
-																<p>
-																	{!!selectedTags['还款来源'] &&
-																	!!selectedTags['还款来源'].value ? (
-																		<p className="icon-text">
-																			还款来源：
-																			{selectedTags['还款来源'].value}
-																		</p>
-																	) : (
-																		''
-																	)}
-																</p>
-															</li>
-														</ul>
-													</Fragment>
-												) : (
-													''
-												)}
-												<ul className="assets-list">
-													<li>
-														<p>
-															所在地区：{' '}
-															{selectedTags['所在地区'] ? (
-																selectedTags['所在地区'].tags.join(',')
-															) : (
-																''
-															)}
-														</p>
-													</li>
-													{/*
-													<li>
-														<p>
-															浏览量：{visits.find(
-																(item) => item.url.search(detail.id) >= 0
-															) ? (
-																visits.find((item) => item.url.search(detail.id) >= 0)
-																	.visits_count
-															) : (
-																0
-															)}次
-														</p>
-													</li>
-													*/}
-												</ul>
-											</div>
-										</div>
-										{!selectedTags['项目介绍'] || !selectedTags['项目介绍'].value ? (
-											' '
-										) : (
-											<div className="item-main">
-												<div className="item-top">
-													<div className="icon">
-														<IconFont className="iconfont" type="icon-gaishu" />
-														<span>项目介绍</span>
-													</div>
-												</div>
-												<div className="item-content">{selectedTags['项目介绍'].value}</div>
-											</div>
-										)}
-										{!selectedTags['融资用途'] || !selectedTags['融资用途'].value ? (
-											' '
-										) : (
-											<div className="item-main">
-												<div className="item-top">
-													<div className="icon">
-														<IconFont className="iconfont" type="icon-gaishu" />
-														<span>融资用途</span>
-													</div>
-												</div>
-												<div className="item-content">{selectedTags['融资用途'].value}</div>
-											</div>
-										)}
-										{!selectedTags['团队介绍'] || !selectedTags['团队介绍'].value ? (
-											' '
-										) : (
-											<div className="item-main">
-												<div className="item-top">
-													<div className="icon">
-														<IconFont className="iconfont" type="icon-gaishu" />
-														<span>团队介绍</span>
-													</div>
-												</div>
-												<div className="item-content">{selectedTags['团队介绍'].value}</div>
-											</div>
-										)}
-										{!selectedTags['项目优势'] || !selectedTags['项目优势'].value ? (
-											' '
-										) : (
-											<div className="item-main">
-												<div className="item-top">
-													<div className="icon">
-														<IconFont className="iconfont" type="icon-gaishu" />
-														<span>项目优势</span>
-													</div>
-												</div>
-												<div className="item-content">{selectedTags['项目优势'].value}</div>
-											</div>
-										)}
-										{!selectedTags['项目进展'] || !selectedTags['项目进展'].value ? (
-											' '
-										) : (
-											<div className="item-main">
-												<div className="item-top">
-													<div className="icon">
-														<IconFont className="iconfont" type="icon-gaishu" />
-														<span>项目进展</span>
-													</div>
-												</div>
-												<div className="item-content">{selectedTags['项目进展'].value}</div>
-											</div>
-										)}
-										<p className="recommend-title">项目推荐</p>
-										<div className="recommend">
-											{list.map((item) => (
-												<div className="item" key={item.id}>
-													<a href={`/project/detail?id=${item.id}`}>
-														<img src={!!item.thumbnail ? item.thumbnail.url : ''} />
-														<h4>{item.title}</h4>
-														<p>{this.getInfo(item)}</p>
-													</a>
-												</div>
-											))}
-										</div>
-									</div>
+	return (
+		<BaseLayout>
+			<div className="project-detail-page">
+				<BreadCrumb adrname_two={'项目招商'} adrname_thr={'全部项目'} />
+				<div className="project-summary-main clearfix">
+					<div className="right-main">
+						<h4 className="title">会员名片</h4>
+						<img className="service-bg-img" src={toSetVal(project.creator)('avatar')(DEFAULT_AVATAR)} />
+						<p className="name">{toSetVal(project.creator)('hideName')('未知姓名')}</p>
+						<p className="text" style={{ textAlign: 'center' }}>{toSetVal(project.creator)('hideCompany')('未知公司')}</p>
+						{toShowApplyButton(project)(user.apply_projects)}
+					</div>
+					<div className="left-main">
+						<div className="project-summary">
+							<div className="left">
+								<img
+									className="project-top-img"
+									src={project.cover}
+								/>
+							</div>
+							<div className="right">
+								<h4 className="title">{project.title}</h4>
+								<ul className="join">
+									<li>
+										<p>融资方式</p>
+										<h5>{IF_MODE_ENUM[project.category]}</h5>
+									</li>
+									<li>
+										<p>所属行业</p>
+										<h5>{toSetVal(project.industry)('title')('未知')}</h5>
+									</li>
+								</ul>
+								<ul className="assets">
+									<li>
+										<p>可提供资料</p>
+										<h5>{project.data && project.data.map(item => item.title).join(',')}</h5>
+									</li>
+									<li>
+										<p>融资金额</p>
+										<h5>{project.amount}万元</h5>
+									</li>
+								</ul>
+								{IF_MODE_ENUM[project.category] === '股权融资' &&(
+									<Fragment>
+										<ul className="assets-list">
+											<li>
+												<p>资金方占股比例：{toSetVal(project.ratio)('title')('未知')}</p>
+											</li>
+											<li>
+												<p>项目所处阶段：{toSetVal(project.stage)('title')('未知')}</p>
+											</li>
+										</ul>
+										<ul className="assets-list">
+											<li>
+												<p>投资退出方式：{toSetVal(project.exit_mode)('title')('未知')}</p>
+											</li>
+											<li>
+												<p>最短退出年限：{toSetVal(project.withdrawal_year)('title')('未知')}</p>
+											</li>
+										</ul>
+									</Fragment>
+								)}
+								{IF_MODE_ENUM[project.category] === '债权融资' && (
+									<Fragment>
+										<ul className="assets-list">
+											<li>
+												<p>资金占用时长：{toSetVal(project.occupancy_time)('title')('未知')}</p>
+											</li>
+											<li>
+												<p>可承担最高利息：{toSetVal(project.interest)('title')('未知')}</p>
+											</li>
+										</ul>
+										<ul className="assets-list">
+											<li>
+												<p>可提供风控：{toSetVal(project.risk)('title')('未知')}</p>
+											</li>
+											<li>
+												<p>还款来源：{project.payment}</p>
+											</li>
+										</ul>
+									</Fragment>
+								)}
+								<ul className="assets-list">
+									<li>
+										<p>所在地区：{project.area_path}</p>
+									</li>
+									<li>
+										<p>浏览量：{project.views}次</p>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div className="item-main">
+							<div className="item-top">
+								<div className="icon">
+									<IconFont className="iconfont" type="icon-gaishu" />
+									<span>项目介绍</span>
 								</div>
 							</div>
-						);
-					}}
-				</GlobalContext.Consumer>
-			</BaseLayout>
-		);
-	}
-}
+							<div className="item-content">{project.info}</div>
+						</div>
+						<div className="item-main">
+							<div className="item-top">
+								<div className="icon">
+									<IconFont className="iconfont" type="icon-gaishu" />
+									<span>融资用途</span>
+								</div>
+							</div>
+							<div className="item-content">{project.purposes}</div>
+						</div>
+						<div className="item-main">
+							<div className="item-top">
+								<div className="icon">
+									<IconFont className="iconfont" type="icon-gaishu" />
+									<span>团队介绍</span>
+								</div>
+							</div>
+							<div className="item-content">{project.team_info}</div>
+						</div>
+						<div className="item-main">
+							<div className="item-top">
+								<div className="icon">
+									<IconFont className="iconfont" type="icon-gaishu" />
+									<span>项目优势</span>
+								</div>
+							</div>
+							<div className="item-content">{project.advantage}</div>
+						</div>
+						<div className="item-main">
+							<div className="item-top">
+								<div className="icon">
+									<IconFont className="iconfont" type="icon-gaishu" />
+									<span>项目进展</span>
+								</div>
+							</div>
+							<div className="item-content">{project.progress}</div>
+						</div>
+						<p className="recommend-title">项目推荐</p>
+						<div className="recommend">
+							{recommendation.map((item) => (
+								<div className="item" key={item.id}>
+									<a href={`/project/detail?id=${item.id}`}>
+										<img src={item.cover} />
+										<h4>{item.title}</h4>
+										<p>{IF_MODE_ENUM[item.category]}&nbsp;{toSetVal(item.industry)('title')('')}</p>
+									</a>
+								</div>
+							))}
+						</div>
+					</div>
+				</div>
+			</div>
+		</BaseLayout>
+	);
+})

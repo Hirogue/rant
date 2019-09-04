@@ -29,5 +29,8 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "@apollo/react-hooks": "^3.0.1"
   }
 }

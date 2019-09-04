@@ -2,7 +2,7 @@ import { Controller, Get, Render, Post, Body, Query, Put } from '@nestjs/common'
 import { ApiUseTags, ApiOperation } from "@nestjs/swagger";
 
 
-const PAGE_URL = '/project';
+const PAGE_URL = 'project';
 
 @ApiUseTags('ssr')
 @Controller(PAGE_URL)
@@ -13,7 +13,7 @@ export class ProjectController {
     @Render(PAGE_URL)
     @ApiOperation({ title: 'Index Page' })
     index() {
-
+        
     }
 
     @Get('/detail')

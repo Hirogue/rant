@@ -137,7 +137,6 @@ export function createApolloClient (initialState = {}) {
       });
     },
     onError: ({ graphQLErrors, networkError }) => {
-      console.log('fawefweagaew')
       if (graphQLErrors) {
         message.error(
           <>
