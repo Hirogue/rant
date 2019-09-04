@@ -1,11 +1,9 @@
 import { Controller, Get, Render } from "@nestjs/common";
 import { ApiUseTags, ApiOperation } from "@nestjs/swagger";
 
-
 @ApiUseTags('ssr')
 @Controller()
 export class HomeController {
-
 
     @Get()
     @Render('Index')
@@ -14,16 +12,21 @@ export class HomeController {
 
     @Get('/help')
     @Render('help')
-    @ApiOperation({ title: 'help Page' })
+    @ApiOperation({ title: 'Help Page' })
     help() { }
 
     @Get('/login')
     @Render('login')
-    @ApiOperation({ title: 'login Page' })
+    @ApiOperation({ title: 'Login Page' })
     login() { }
 
+    @Get('/register')
+    @Render('login')
+    @ApiOperation({ title: 'Register Page' })
+    register() { }
+
     @Get('/forgot')
-    @Render('fotgot')
-    @ApiOperation({ title: 'fotgot Page' })
+    @Render('forgot')
+    @ApiOperation({ title: 'Fotgot Page' })
     fotgot() { }
 }
