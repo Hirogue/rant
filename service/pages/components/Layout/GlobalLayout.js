@@ -21,7 +21,7 @@ export default withContext(({ props }) => {
                 placement="right"
                 onClose={() => setServiceAgreementVisible(false)}
                 visible={serviceAgreementVisible}
-                maskClosable={false}
+                maskClosable={true}
                 width={800}
             >
                 <div

@@ -20,8 +20,13 @@ export class HomeController {
     @ApiOperation({ title: 'Login Page' })
     login() { }
 
+    @Get('/register')
+    @Render('login')
+    @ApiOperation({ title: 'Register Page' })
+    register() { }
+
     @Get('/forgot')
-    @Render('fotgot')
+    @Render('forgot')
     @ApiOperation({ title: 'Fotgot Page' })
     fotgot() { }
 }
