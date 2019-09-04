@@ -4,6 +4,10 @@ import { createApolloClient } from "./apollo";
 import { message, Modal } from 'antd';
 import { withRouter } from 'next/router';
 
+export const jump = url => {
+    window.location.href = url;
+}
+
 export const buildingQuery = params => {
     return RequestQueryBuilder.create(params).query();
 };
@@ -172,7 +176,7 @@ export const toGetMetadata = async () => {
             query: Q_GET_METADATA_TREES,
             fetchPolicy: "no-cache"
         });
-        
+
         if (res.data) {
             sessionStorage.setItem('metadata', JSON.stringify(res.data.metadataTrees));
             return res.data.metadataTrees;
@@ -194,7 +198,7 @@ export const getUrlParam = (router, name) => {
 
 export const toApplayProject = (router, project) => {
     console.log(router, project);
-    
+
     Modal.info({
         title: "您正在提交一个申请",
         content: (

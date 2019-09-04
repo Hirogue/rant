@@ -1,13 +1,24 @@
+import { useMutation } from '@apollo/react-hooks';
+import { Button, Checkbox, Form, Icon, Input } from 'antd';
 import React from 'react';
-import Link from 'next/link';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import { M_LOGIN } from '../../gql';
+import { jump } from '../../lib/global';
 
-const LoginForm = Form.create({
-	name: 'home_login_form'
-})((props) => {
-	const { handleLoginSubmit, form } = props;
+export default Form.create()((props) => {
+	const { form } = props;
+	const { getFieldDecorator } = form;
 
-	const { getFieldDecorator, getFieldsValue } = form;
+	const [login] = useMutation(M_LOGIN, {
+		update: async (cache, { data }) => {
+			const login = data.login;
+
+			if (login && login.token) {
+				localStorage.setItem('u_token', login.token);
+				jump('/user');
+			}
+		},
+	});
+
 
 	let phone = '';
 
@@ -18,7 +29,25 @@ const LoginForm = Form.create({
 	return (
 		<Form
 			onSubmit={(e) => {
-				handleLoginSubmit(e, props);
+				e.preventDefault();
+				form.validateFields((err, values) => {
+					if (!err) {
+						if (values.remember) {
+							localStorage.setItem('user-phone-number', values.phone);
+						} else {
+							localStorage.removeItem('user-phone-number');
+						}
+
+						login({
+							variables: {
+								loginData: {
+									account: values.phone,
+									password: values.password,
+								}
+							},
+						});
+					}
+				});
 			}}
 			className="login-form"
 		>
@@ -36,7 +65,7 @@ const LoginForm = Form.create({
 			</Form.Item>
 			<Form.Item>
 				{getFieldDecorator('password', {
-					rules: [ { required: true, message: '请输入你的密码!' } ]
+					rules: [{ required: true, message: '请输入你的密码!' }]
 				})(
 					<Input
 						prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -59,10 +88,7 @@ const LoginForm = Form.create({
 				<Button type="primary" htmlType="submit" className="login-form-button">
 					登录
 				</Button>
-				{/* <a className="login-text-links" href="">还不是会员？免费注册</a> */}
 			</Form.Item>
 		</Form>
 	);
 });
-
-export default LoginForm;
