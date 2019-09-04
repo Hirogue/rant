@@ -81,7 +81,7 @@ export default Form.create()(props => {
 				post('/api/user/register', values).then(res => {
 					if (!!res) {
 						message.success('注册成功');
-						jump('/user');
+						jump('/login');
 					}
 				});
 			}
@@ -148,6 +148,7 @@ export default Form.create()(props => {
 						</Col>
 						<Col span={6}>
 							<span
+								style={{ display: 'flex' }}
 								onClick={() => setSvgRefresh(Date.now())}
 								dangerouslySetInnerHTML={{ __html: svgData ? svgData.data : '' }}
 							></span>

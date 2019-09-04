@@ -202,6 +202,7 @@ export class UserService extends BaseService<User> {
         return await this.repo.save(user);
     }
 
+    @Transaction()
     async levelUp(
         data: LevelUpInput,
         @TransactionRepository(User) userRepo?: Repository<User>,
@@ -225,7 +226,6 @@ export class UserService extends BaseService<User> {
 
         }
 
-        // await this.wf.start(FlowIdEnum.LEVEL_UP, data);
         return true;
     }
 
