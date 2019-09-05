@@ -1,31 +1,46 @@
+import { useApolloClient } from '@apollo/react-hooks';
 import { Alert, Radio, Spin } from 'antd';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import IconFont from '../../components/IconFont';
 import UserLayout from '../../components/Layout/UserLayout';
 import withContext, { GlobalContext } from '../../components/Layout/withContext';
 import { IdentityEnum, UserStatusEnum, UserTypeEnum } from '../../lib/enum';
+import { getAreaList, toFetchCurrentUser, toGetParentArrayByChildNode } from '../../lib/global';
 import EnterpriseForm from '../../partials/user/enterprise';
 import PersonalForm from '../../partials/user/personal';
 import './user.scss';
-import { toFetchCurrentUser } from '../../lib/global';
-
 
 const RadioGroup = Radio.Group;
 
 export default withContext(props => {
+	const client = useApolloClient();
 	const ctx = useContext(GlobalContext);
 	const [flag, setFlag] = useState(false);
+
+	const [areaList, setAreaList] = useState([]);
+	const [area, setArea] = useState([]);
+
+	const [userType, setUserType] = useState(user ? user.type : UserTypeEnum.ENTERPRISE);
+	const [userIdentity, setIdentity] = useState(user ? user.identity : IdentityEnum.FINANCER);
 
 	useEffect(() => {
 		(async () => {
 			const currentUser = await toFetchCurrentUser();
 			ctx.setCurrentUser(currentUser);
 			setFlag(true);
+
+
+			const list = await getAreaList(client);
+			setAreaList(list);
+
+			const userArea = toGetParentArrayByChildNode(list, { id: currentUser.area.id }) || [];
+			setArea(userArea.map(item => item.id));
+
+			setIdentity(currentUser.identity);
+			setUserType(currentUser.type);
+
 		})();
 	}, []);
-
-	const [userType, setUserType] = useState(user ? user.type : UserTypeEnum.ENTERPRISE);
-	const [userIdentity, setIdentity] = useState(user ? user.identity : IdentityEnum.FINANCER);
 
 	if (!flag) return <Spin style={{ position: 'fixed', top: '50%', left: '50%' }} tip="loading..." />;
 
@@ -108,13 +123,16 @@ export default withContext(props => {
 							<EnterpriseForm
 								enabled={enabled}
 								user={user}
+								areaList={areaList}
+								area={area}
 								identity={userIdentity}
 							/>
 							:
 							<PersonalForm
 								enabled={enabled}
 								user={user}
-								area={[]}
+								areaList={areaList}
+								area={area}
 								identity={userIdentity}
 							/>
 						}

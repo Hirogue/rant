@@ -4,32 +4,23 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { M_LEVEL_UP } from '../../../gql';
 import { UserStatusEnum, UserTypeEnum } from '../../../lib/enum';
 import { uploadOne } from '../../../lib/fetch';
-import { getAreaList, jump, toGetParentArrayByChildNode, toFetchCurrentUser } from '../../../lib/global';
+import { jump } from '../../../lib/global';
 import './index.scss';
 
 export default Form.create()(props => {
 
-	const { enabled, user, identity, form } = props;
+	const { area, areaList, enabled, user, identity, form } = props;
 	const { getFieldDecorator } = form;
 
 	const client = useApolloClient();
 
-	const [areaList, setAreaList] = useState([]);
-	const [area, setArea] = useState([]);
 	const [businessLicense, setBusinessLicense] = useState(null);
 
 	useEffect(() => {
-		(async () => {
-			const list = await getAreaList(client);
-			setAreaList(list);
-
-			const userArea = toGetParentArrayByChildNode(list, { id: user.area.id }) || [];
-			setArea(userArea.map(item => item.id));
-		})();
 		setBusinessLicense(user.business_license);
 	}, []);
 
-	const handleSubmit = (e, user) => {
+	const handleSubmit = (e) => {
 		e.preventDefault();
 
 		form.validateFields((err, values) => {
@@ -63,7 +54,7 @@ export default Form.create()(props => {
 		});
 	}
 
-	const onAvatarUpload = async (file) => {
+	const onUpload = async (file) => {
 		const res = await uploadOne(file);
 
 		if (!!res && res.relativePath) {
@@ -74,7 +65,7 @@ export default Form.create()(props => {
 	return (
 		<Row>
 			<Col span={16}>
-				<Form onSubmit={(e) => handleSubmit(e, user)}>
+				<Form onSubmit={handleSubmit}>
 					<Form.Item label={'企业全称：'}>
 						{getFieldDecorator('company', {
 							initialValue: user.company,
@@ -164,7 +155,7 @@ export default Form.create()(props => {
 							message.error('请上传小于2M的图片');
 							return false;
 						}
-						onAvatarUpload(file);
+						onUpload(file);
 						return false;
 					}}
 				>
