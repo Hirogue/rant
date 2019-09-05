@@ -16,7 +16,7 @@ export default withRouter((props) => {
 
 	let user = null;
 	try {
-		user = JSON.parse(localStorage.getItem('u_user')) || {};
+		user = JSON.parse(localStorage.getItem('u_user')) || null;
 	} catch (error) {
 		console.error(error.message);
 	}

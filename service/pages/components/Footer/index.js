@@ -34,6 +34,11 @@ export default (props) => {
 									<p>扫码关注</p>
 									<p>官方微信公众号</p>
 								</div>
+								<div className="item">
+									<img src={siteInfo.wechatQRCode || "/static/img/移动端二维码.png"} alt="mobile" />
+									<p>扫码进入</p>
+									<p>移动端官网</p>
+								</div>
 							</div>
 							{/* <div className="footer-right">
 								{siteInfo.mapLinks ? (

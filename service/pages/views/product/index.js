@@ -1,90 +1,80 @@
-import React, { Component } from 'react';
+import React, { Fragment, useState } from 'react';
 import _ from 'lodash';
+import { Spin } from 'antd';
+import { withRouter } from 'next/router';
+import { CondOperator } from '@nestjsx/crud-request';
+import { useQuery } from '@apollo/react-hooks';
 import BaseLayout from '../../components/Layout/BaseLayout';
 import BreadCrumb from '../../components/BreadCrumb';
 import TagTop from '../../components/TagTop';
 import List from '../../partials/product/List';
 import config from '../../config/config';
-import { withRouter } from 'next/router';
 
+import { createApolloClient } from "../../lib/apollo";
+import { buildingQuery, getUrlParam, toApplayCommonHandler } from "../../lib/global";
+import { Q_GET_PRODUCTS } from '../../gql'
 import '../../partials/product/product.scss';
-import GlobalContext from '../../components/context/GlobalContext';
 
-@withRouter
-export default class ProductPage extends Component {
-	state = {
-		category: ''
-	};
+const client = createApolloClient();
 
-	componentDidMount() {
-		const { list, category } = this.props.router.query;
-
-		this.setState((state) => ({
-			...state,
-			list,
-			category
-		}));
-	}
-
-	onChange = (category) => {
-		this.setState((state) => ({
-			...state,
-			category
-		}));
-	};
-
-	render() {
-		const { list, category } = this.state;
-
-		const newList = _.filter(list, (item) => {
-			if (!!category && item.category !== category) return false;
-
-			return item;
-		});
-
-		return (
-			<BaseLayout>
-				<GlobalContext.Consumer>
-					{(context) => {
-						const { mainData } = context;
-
-						if (!mainData) return '';
-
-						return (
-							<React.Fragment>
-								<div className="product-page">
-									<img className="banner-bg-img" src={config.staticImgUrl + 'product-banner.png'} />
-									<BreadCrumb adrname_two={'江旅金融'} adrname_thr={'所有产品'} />
-									<div className="product-list">
-										<TagTop name={'江旅金融'} />
-										<div className="nav">
-											<p
-												className={`${!category ? 'active' : ''}`}
-												onClick={() => this.onChange('')}
-											>
-												全部
-											</p>
-											{mainData.products.map((item) => (
-												<p
-													key={item.id}
-													className={`${category === item.name ? 'active' : ''}`}
-													onClick={() => this.onChange(item.name)}
-												>
-													{item.name}
-												</p>
-											))}
-										</div>
-										<div className="product-items">
-											{newList.map((item) => <List data={item} key={item.id} />)}
-										</div>
-										{/* <PageMod total={data.length} pageSize={pageSize} onChnage={this.onPageChange} /> */}
-									</div>
-								</div>
-							</React.Fragment>
-						);
-					}}
-				</GlobalContext.Consumer>
-			</BaseLayout>
-		);
-	}
+const defaultVariables = {
+	page: 1,
+	limit: 1000,
+	join: [{ field: "category" }],
+	filter: [{ field: 'is_published', operator: CondOperator.EQUALS, value: true }],
+	sort: [{ field: 'create_at', order: 'DESC' }],
 }
+
+export default withRouter((props) => {
+
+	const { router } = props;
+	const [ category, setCategory ] = useState(getUrlParam(router, 'category') || '')
+
+	const { loading, data: { queryProduct, productCategoryTrees } } = useQuery(Q_GET_PRODUCTS, {
+		client: client,
+		variables: {
+			queryString: buildingQuery(defaultVariables)
+		},
+	});
+
+	const onChange = (nextCategory) => () => {
+		window.history.pushState({}, '', `${window.location.pathname}?category=${nextCategory}`)
+		setCategory(nextCategory);
+	};
+
+	return (
+		<BaseLayout>
+			<div className="product-page">
+				<img className="banner-bg-img" src={config.staticImgUrl + 'product-banner.png'} />
+				<BreadCrumb adrname_two={'江旅金融'} adrname_thr={'所有产品'} />
+				<div className="product-list">
+					<TagTop name={'江旅金融'} />
+					{loading ? (
+						<Spin style={{ position: "fixed", top: "50%", left: "50%" }} tip="正在加载中" />
+					) : (
+						<Fragment>
+							<div className="nav">
+								<p className={`${!category ? 'active' : ''}`} onClick={onChange('')}>全部</p>
+								{!!productCategoryTrees && productCategoryTrees.map((item) => (
+									<p
+										key={item.id}
+										className={`${category === item.title ? 'active' : ''}`}
+										onClick={onChange(item.title)}
+									>
+										{item.title}
+									</p>
+								))}
+							</div>
+							<div className="product-items">
+								{queryProduct && queryProduct.data.filter(item => !category || item.category.title === category).map((item) => <List data={item} key={item.id} />)}
+							</div>
+						</Fragment>
+					)}
+					
+					{/* <PageMod total={data.length} pageSize={pageSize} onChnage={this.onPageChange} /> */}
+				</div>
+			</div>
+		</BaseLayout>
+	)
+})
+
