@@ -4,6 +4,7 @@
 	height: 350px;
 	border: 1px #ccc dashed;
 	position: relative;
+	overflow: hidden;
 
 	&:hover {
 		border: 1px #1890ff dashed;

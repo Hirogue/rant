@@ -1,19 +1,24 @@
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import { Button, Checkbox, Form, Icon, Input } from 'antd';
 import React from 'react';
 import { M_LOGIN } from '../../gql';
-import { jump } from '../../lib/global';
+import { jump, toFetchCurrentUser } from '../../lib/global';
 
 export default Form.create()((props) => {
 	const { form } = props;
 	const { getFieldDecorator } = form;
 
-	const [login] = useMutation(M_LOGIN, {
+	const client = useApolloClient();
+
+	const [login, { loading }] = useMutation(M_LOGIN, {
 		update: async (cache, { data }) => {
 			const login = data.login;
 
 			if (login && login.token) {
 				localStorage.setItem('u_token', login.token);
+
+				await toFetchCurrentUser(client);
+
 				jump('/user');
 			}
 		},
@@ -85,7 +90,7 @@ export default Form.create()((props) => {
 				</a>
 			</Form.Item>
 			<Form.Item>
-				<Button type="primary" htmlType="submit" className="login-form-button">
+				<Button loading={loading} type="primary" htmlType="submit" className="login-form-button">
 					登录
 				</Button>
 			</Form.Item>
