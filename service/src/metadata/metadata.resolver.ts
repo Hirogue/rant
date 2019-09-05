@@ -21,4 +21,14 @@ export class MetadataResolver extends BaseTreeResolver(Metadata, MetadataPaginat
     async findRootsAndChildren() {
         return await this.service.findRootsAndChildren();
     }
+
+    @Query(returns => [Metadata])
+    async findMetadataChildrenByTitle(@Args('title') title: string) {
+        return await this.service.findChildrenByTitle(title);
+    }
+
+    @Query(returns => [Metadata])
+    async findMetadataChildrenById(@Args('id') id: string) {
+        return await this.service.findChildrenById(id);
+    }
 }

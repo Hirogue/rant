@@ -23,7 +23,7 @@ export const Q_FETCH_CURRENT_USER = gql`
       identity
       type
       status
-
+      reason
       org {
         id
         title

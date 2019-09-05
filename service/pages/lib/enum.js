@@ -1,4 +1,50 @@
+export const IFModeEnum = {
+    EQUITY: 'equity',
+    CLAIM: 'claim',
+};
+
+export const ProjectStatusEnum = {
+    PENDING: 'pending',
+    REJECTED: 'rejected',
+    CHECKED: 'checked',
+    WAITING: 'waiting',
+    FOLLOWING: 'following',
+    CANCELLED: 'cancelled',
+    FINISHED: 'finished',
+};
+
+export const UserLevelEnum = {
+    V0: 0,
+    V1: 1,
+};
+
+export const LogTypeEnum = {
+    PROJECT: 'project',
+    CAPITAL: 'capital',
+    EXPERT: 'expert',
+    PRODUCT: 'product',
+    USER: 'user',
+};
+
 module.exports = {
+    UserTypeEnum: {
+        PERSONAL: 'personal',
+        ENTERPRISE: 'enterprise',
+    },
+    IdentityEnum: {
+        USER: 'user',
+        INVESTOR: 'investor',
+        FINANCER: 'financer',
+        PROVIDER: 'provider',
+        TOURIST: 'tourist',
+    },
+    UserStatusEnum: {
+        NORMAL: 0,
+        PENDING: 1,
+        REJECTED: 2,
+        CHECKED: 3,
+        DELETED: 4,
+    },
     IF_MODE_ENUM: {
         equity: '股权融资',
         claim: '债权融资',

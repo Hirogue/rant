@@ -15,6 +15,8 @@ export const Q_FETCH_CURRENT_USER = gql`
       realname
       profile
       address
+      reason
+      status
       isSuperAdmin
       role {
         ...RoleFields

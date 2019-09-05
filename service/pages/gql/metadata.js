@@ -41,6 +41,43 @@ export const F_METADATA_RECURSIVE = gql`
   }
 `;
 
+export const Q_METADATA_DESCENDANTS_TREE = gql`
+  ${F_METADATA_FIELDS}
+  ${F_METADATA_RECURSIVE}
+
+  query metadataDescendantsTree($root: String!) {
+    metadataDescendantsTree(root: $root) {
+      ...MetadataRecursive
+    }
+  }
+`;
+
+export const Q_FIND_METADATA_CHILDREN_BY_TITLE = gql`
+  query findMetadataChildrenByTitle($title: String!) {
+    findMetadataChildrenByTitle(title: $title) {
+      id
+      title
+      children {
+        id
+        title
+      }
+    }
+  }
+`;
+
+export const Q_FIND_METADATA_CHILDREN_BY_ID = gql`
+  query findMetadataChildrenById($title: String!) {
+    findMetadataChildrenById(title: $title) {
+      id
+      title
+      children {
+        id
+        title
+      }
+    }
+  }
+`;
+
 export const Q_GET_METADATA_TREES = gql`
   ${F_METADATA_FIELDS}
   ${F_METADATA_RECURSIVE}
