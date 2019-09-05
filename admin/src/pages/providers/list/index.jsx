@@ -177,10 +177,10 @@ export default () => {
       render: val => moment(val).format('YYYY-MM-DD HH:mm:ss'),
       sorter: true,
     },
-    {
-      title: '操作',
-      render: (val, record) => renderActions(record),
-    },
+    // {
+    //   title: '操作',
+    //   render: (val, record) => renderActions(record),
+    // },
   ];
 
   const pagination = {

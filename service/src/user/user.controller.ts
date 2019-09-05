@@ -15,6 +15,8 @@ export class UserController extends BaseController(User, {
             area: { eager: true },
             role: { eager: true },
             own: { eager: true },
+            providers: { eager: true },
+            'providers.category': { eager: true },
             apply_products: {},
             apply_projects: {},
             apply_capitals: {},
