@@ -50,6 +50,7 @@ export default () => {
   const [orgSelectorVisible, setOrgSelectorVisible] = useState(false);
   const [userSelectorVisible, setUserSelectorVisible] = useState(false);
   const [current, setCurrent] = useState({});
+  const [provider, setProvider] = useState({});
 
   const client = useApolloClient();
 
@@ -128,6 +129,10 @@ export default () => {
         href="javascript:;"
         onClick={() => {
           setCurrent(record);
+          if (record.providers && record.providers.length > 0) {
+            const target = record.providers[0];
+            setProvider(target);
+          }
           setDetailVisible(true);
         }}
       >
@@ -256,8 +261,17 @@ export default () => {
               <Descriptions.Item label="组织机构代码" span={2}>
                 {current.org_code}
               </Descriptions.Item>
-              <Descriptions.Item label="营业执照">
+              <Descriptions.Item label="营业执照" span={4}>
                 <Zmage width={400} height={573} src={current.business_license} />
+              </Descriptions.Item>
+              <Descriptions.Item label="机构logo">
+                <Zmage width={150} height={62} src={provider.logo} />
+              </Descriptions.Item>
+              <Descriptions.Item label="机构类型" span={2}>
+                {provider.category ? provider.category.title : ''}
+              </Descriptions.Item>
+              <Descriptions.Item label="机构简介" span={4}>
+                {provider.introduction}
               </Descriptions.Item>
             </Descriptions>
           ) : null}

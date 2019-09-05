@@ -29,6 +29,18 @@ export const F_USER_FIELDS = gql`
     vip
     area_path
     isSuperAdmin
+    providers {
+      id
+      name
+      status
+      logo
+      slogan
+      category {
+        id
+        title
+      }
+      introduction
+    }
     role {
       ...RoleFields
     }
