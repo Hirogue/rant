@@ -90,7 +90,7 @@ export default withRouter((props) => {
 						<img className="service-bg-img" src={toSetVal(project.creator)('avatar')(DEFAULT_AVATAR)} />
 						<p className="name">{toSetVal(project.creator)('hideName')('未知姓名')}</p>
 						<p className="text" style={{ textAlign: 'center' }}>{toSetVal(project.creator)('hideCompany')('未知公司')}</p>
-						{toShowApplyButton(project)(user.apply_projects)}
+						{toShowApplyButton(project)(user ? user.apply_projects : null)}
 					</div>
 					<div className="left-main">
 						<div className="project-summary">
@@ -134,7 +134,7 @@ export default withRouter((props) => {
 										</ul>
 										<ul className="assets-list">
 											<li>
-												<p>投资退出方式：{toSetVal(project.exit_mode)('title')('未知')}</p>
+												<p>投资退出方式：{project.exit_mode && project.exit_mode.map(item => item.title).join(',')}</p>
 											</li>
 											<li>
 												<p>最短退出年限：{toSetVal(project.withdrawal_year)('title')('未知')}</p>

@@ -14,7 +14,7 @@ import List from '../../partials/project/List';
 import { createApolloClient } from "../../lib/apollo";
 import { buildingQuery, getUrlParam } from "../../lib/global";
 import { Q_GET_PROJECT_DATA } from '../../gql'
-import { PROJECT_METADATA_TITLE_CN, IF_MODE_ENUM_R } from '../../lib/enum';
+import { METADATA_TITLE_CN, IF_MODE_ENUM_R } from '../../lib/enum';
 
 import '../../partials/project/selected_items.scss';
 
@@ -232,7 +232,7 @@ export default withRouter((props) => {
 					{loading ? (
 						<Spin style={{ margin: "10vw 46%" }} tip="正在加载中..." />
 					) : (
-						!!queryProject.data && !!queryProject.data.length ? (
+						!!queryProject && !!queryProject.data.length ? (
 							queryProject.data.map(item => <List data={item} key={item.id} />)
 						) : (
 							<Empty style={{ margin: "10vw auto" }} description={false} />
