@@ -10,6 +10,7 @@ export const F_PROJECT_FIELDS = gql`
     contact
     phone
     company
+    area_path
     views
     category
     status

@@ -17,6 +17,7 @@ export const F_PROVIDER_FIELDS = gql`
     status
     sort
     views
+    area_path
     update_at
     create_at
     category {

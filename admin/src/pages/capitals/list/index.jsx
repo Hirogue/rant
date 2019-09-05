@@ -1,11 +1,11 @@
-import OrgSelector from '@/components/OrgSelector';
 import LogReader from '@/components/LogReader';
+import OrgSelector from '@/components/OrgSelector';
 import StandardActions from '@/components/StandardActions';
 import StandardConfirm from '@/components/StandardConfirm';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import UserSelector from '@/components/UserSelector';
-import { M_DELETE_CAPITAL, Q_GET_CAPITAL, Q_GET_CAPITALS } from '@/gql';
+import { M_DELETE_CAPITAL, Q_GET_CAPITALS } from '@/gql';
 import {
   canCreateAny,
   canDeleteAny,
@@ -13,7 +13,7 @@ import {
   canUpdateAny,
   canUpdateOwn,
 } from '@/utils/access-control';
-import { ProjectStatusEnum, LogTypeEnum } from '@/utils/enum';
+import { LogTypeEnum, ProjectStatusEnum } from '@/utils/enum';
 import {
   buildingQuery,
   filterOrg,
@@ -226,8 +226,7 @@ export default () => {
     },
     {
       title: '地区',
-      dataIndex: 'area.title',
-      render: (val, record) => (record.area ? record.area.title : ''),
+      dataIndex: 'area_path',
       search: true,
     },
     {
