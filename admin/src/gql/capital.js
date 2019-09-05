@@ -8,6 +8,7 @@ export const F_CAPITAL_FIELDS = gql`
     contact
     phone
     company
+    area_path
     views
     category
     status
