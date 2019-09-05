@@ -39,10 +39,7 @@ export default ({ data, router }) => {
 			</a>
 			<div className="content">
 				<a as={`/service/detail/${data.id}`} href={`/service/detail?id=${data.id}`} target="_blank">
-					<h4 className="title">
-						{data.name}
-						<span>({data.slogan})</span>
-					</h4>
+					<h4 className="title">{data.name}</h4>
 				</a>
 				<p className="text">{data.summary}</p>
 			</div>
