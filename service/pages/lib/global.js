@@ -1,11 +1,8 @@
-import { Fragment } from 'react';
 import { RequestQueryBuilder } from '@nestjsx/crud-request';
 import { message, Modal } from 'antd';
-<<<<<<< HEAD
+import { Fragment } from 'react';
 import { Q_FETCH_CURRENT_USER, Q_GET_METADATA_TREES, Q_METADATA_DESCENDANTS_TREE } from '../gql';
 import { createApolloClient } from "./apollo";
-=======
->>>>>>> 9e739041ec0aa6948865eeae224880ec9dfc9cee
 
 export const jump = url => {
     window.location.href = url;
