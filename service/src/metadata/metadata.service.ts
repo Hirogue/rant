@@ -19,4 +19,24 @@ export class MetadataService extends BaseTreeService<Metadata> {
             .whereInIds(roots.map(root => root.id))
             .getMany();
     }
+
+    async findChildrenByTitle(title: string) {
+
+        const result = await this.repo.createQueryBuilder('t')
+            .leftJoinAndSelect('t.children', 'children')
+            .where('t.title = :title', { title })
+            .getOne();
+
+        return result.children;
+    }
+
+    async findChildrenById(id: string) {
+
+        const result = await this.repo.createQueryBuilder('t')
+            .leftJoinAndSelect('t.children', 'children')
+            .where('t.id = :id', { id })
+            .getOne();
+
+        return result.children;
+    }
 }

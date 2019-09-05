@@ -1,12 +1,52 @@
-import { Fragment } from 'react';
 import { RequestQueryBuilder } from '@nestjsx/crud-request';
-import { Q_FETCH_CURRENT_USER, Q_GET_METADATA_TREES } from '../gql';
-import { createApolloClient } from "./apollo";
 import { message, Modal } from 'antd';
+import { Fragment } from 'react';
+import { Q_FETCH_CURRENT_USER, Q_GET_METADATA_TREES, Q_METADATA_DESCENDANTS_TREE } from '../gql';
+import { createApolloClient } from "./apollo";
 
 export const jump = url => {
     window.location.href = url;
 }
+
+export const getAreaList = async (client) => {
+    const result = await client.query({
+        query: Q_METADATA_DESCENDANTS_TREE,
+        variables: { root: '地区' }
+    });
+
+    if (result && result.data && result.data.metadataDescendantsTree) {
+        return getTreeData(result.data.metadataDescendantsTree);
+    } else {
+        return [];
+    }
+}
+
+export const getTreeData = (data, root) =>
+    data.map(item => {
+        item.__typename && delete item.__typename;
+
+        if (item.children && item.children.length > 0) {
+            return {
+                ...item,
+                key: item.id,
+                value: item.id,
+                label: item.title,
+                root,
+                children: getTreeData(item.children, root || item),
+                dataRef: item,
+            };
+        }
+
+        return {
+            ...item,
+            key: item.id,
+            value: item.id,
+            label: item.title,
+            root,
+            children: null,
+            dataRef: item,
+        };
+    });
 
 export const buildingQuery = params => {
     return RequestQueryBuilder.create(params).query();
@@ -211,7 +251,7 @@ export const toApply = async (key, target, gql) => {
 
 
     console.log(target.id, gql);
-    
+
     if (user) {
         const { data } = await client.mutate({
             mutation: gql,

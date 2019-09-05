@@ -83,6 +83,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-apollo": "^2.5.8",
+    "react-avatar-editor": "^11.0.7",
     "react-dom": "^16.8.6",
     "redis": "^2.8.0",
     "reflect-metadata": "^0.1.12",

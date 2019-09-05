@@ -25,6 +25,7 @@ export const F_USER_FIELDS = gql`
     identity
     type
     status
+    reason
     vip
     area_path
     isSuperAdmin
