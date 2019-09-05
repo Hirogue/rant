@@ -172,51 +172,66 @@ export default withRouter((props) => {
 								</ul>
 							</div>
 						</div>
-						<div className="item-main">
-							<div className="item-top">
-								<div className="icon">
-									<IconFont className="iconfont" type="icon-gaishu" />
-									<span>项目介绍</span>
+						{project.info ? (
+							<div className="item-main">
+								<div className="item-top">
+									<div className="icon">
+										<IconFont className="iconfont" type="icon-gaishu" />
+										<span>项目介绍</span>
+									</div>
 								</div>
-							</div>
 							<div className="item-content">{project.info}</div>
-						</div>
-						<div className="item-main">
-							<div className="item-top">
-								<div className="icon">
-									<IconFont className="iconfont" type="icon-gaishu" />
-									<span>融资用途</span>
+						</div>	
+						): ''}
+						
+						{project.purposes ? (
+							<div className="item-main">
+								<div className="item-top">
+									<div className="icon">
+										<IconFont className="iconfont" type="icon-gaishu" />
+										<span>融资用途</span>
+									</div>
 								</div>
-							</div>
 							<div className="item-content">{project.purposes}</div>
-						</div>
-						<div className="item-main">
-							<div className="item-top">
-								<div className="icon">
-									<IconFont className="iconfont" type="icon-gaishu" />
-									<span>团队介绍</span>
+						</div>	
+						): ''}
+						
+						{project.team_info ? (
+							<div className="item-main">
+								<div className="item-top">
+									<div className="icon">
+										<IconFont className="iconfont" type="icon-gaishu" />
+										<span>团队介绍</span>
+									</div>
 								</div>
-							</div>
 							<div className="item-content">{project.team_info}</div>
-						</div>
-						<div className="item-main">
-							<div className="item-top">
-								<div className="icon">
-									<IconFont className="iconfont" type="icon-gaishu" />
-									<span>项目优势</span>
+						</div>	
+						): ''}
+						
+						{project.advantage ? (
+							<div className="item-main">
+								<div className="item-top">
+									<div className="icon">
+										<IconFont className="iconfont" type="icon-gaishu" />
+										<span>项目优势</span>
+									</div>
 								</div>
-							</div>
 							<div className="item-content">{project.advantage}</div>
-						</div>
-						<div className="item-main">
-							<div className="item-top">
-								<div className="icon">
-									<IconFont className="iconfont" type="icon-gaishu" />
-									<span>项目进展</span>
+						</div>	
+						): ''}
+						
+						{project.progress ? (
+							<div className="item-main">
+								<div className="item-top">
+									<div className="icon">
+										<IconFont className="iconfont" type="icon-gaishu" />
+										<span>项目进展</span>
+									</div>
 								</div>
-							</div>
 							<div className="item-content">{project.progress}</div>
-						</div>
+						</div>	
+						): ''}
+						
 						<p className="recommend-title">项目推荐</p>
 						<div className="recommend">
 							{recommendation.map((item) => (

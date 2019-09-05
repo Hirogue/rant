@@ -210,15 +210,17 @@ export default withRouter((props) => {
 								</div>
 								{toShowApplyButton(capital)(user ? user.apply_capitals : null)}
 							</div>
-							<div className="item-main">
-								<div className="item-top">
-									<div className="icon">
-										<IconFont className="iconfont" type="icon-gaishu" />
-										<span>资金详情</span>
+							{capital.info ? (
+								<div className="item-main">
+									<div className="item-top">
+										<div className="icon">
+											<IconFont className="iconfont" type="icon-gaishu" />
+											<span>资金详情</span>
+										</div>
 									</div>
+									<div className="item-content">{capital.info || "暂无详情"}</div>
 								</div>
-								<div className="item-content">{capital.info || "暂无详情"}</div>
-							</div>
+							) : ''}
 						</div>
 						<p className="recommend-title">资金推荐</p>
 						<div className="recommend">
