@@ -235,11 +235,15 @@ export class UserService extends BaseService<User> {
         user: User,
         @TransactionRepository(Log) logRepo?: Repository<Log>,
         @TransactionRepository(Org) orgRepo?: Repository<Org>,
-        @TransactionRepository(User) userRepo?: Repository<User>
+        @TransactionRepository(User) userRepo?: Repository<User>,
+        @TransactionRepository(Provider) providerRepo?: Repository<Provider>,
     ) {
         const log = new Log();
 
-        const target = await userRepo.findOne(data.id);
+        const target = await userRepo.findOne({
+            where: { id: data.id },
+            relations: ['providers']
+        });
         target.status = data.status;
         target.reason = data.reason;
 
@@ -266,12 +270,39 @@ export class UserService extends BaseService<User> {
 
         if (UserStatusEnum.CHECKED === target.status) {
             log.info = `${user.realname} 审核通过，总结："${data.reason}"`;
-            user.vip = UserLevelEnum.V1;
+            target.vip = UserLevelEnum.V1;
+
+            if (IdentityEnum.PROVIDER === target.identity) {
+                if (target.providers && target.providers.length > 0) {
+                    const provider = target.providers[0];
+
+                    if (!!provider) {
+                        provider.status = ProjectStatusEnum.CHECKED;
+                        provider.creator = target;
+
+                        await providerRepo.save(provider);
+                    }
+                }
+            }
         }
 
         if (UserStatusEnum.REJECTED === target.status) {
             log.info = `${user.realname} 驳回，理由："${data.reason}"`;
-            user.vip = UserLevelEnum.V0;
+            target.vip = UserLevelEnum.V0;
+
+            if (IdentityEnum.PROVIDER === target.identity) {
+                if (target.providers && target.providers.length > 0) {
+                    const provider = target.providers[0];
+
+                    if (!!provider) {
+                        provider.status = ProjectStatusEnum.REJECTED;
+                        provider.reason = data.reason;
+                        provider.creator = target;
+
+                        await providerRepo.save(provider);
+                    }
+                }
+            }
         }
 
         log.own = user;

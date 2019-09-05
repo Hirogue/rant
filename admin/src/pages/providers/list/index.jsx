@@ -123,11 +123,6 @@ export default () => {
       dataIndex: 'name',
       search: true,
     },
-    // {
-    //   title: '简称',
-    //   dataIndex: 'slogan',
-    //   search: true,
-    // },
     {
       title: '分类',
       dataIndex: 'category.id',
@@ -137,8 +132,7 @@ export default () => {
     },
     {
       title: '地区',
-      dataIndex: 'area.title',
-      render: (val, record) => (record.area ? record.area.title : ''),
+      dataIndex: 'area_path',
       search: true,
     },
     {
@@ -177,10 +171,10 @@ export default () => {
       render: val => moment(val).format('YYYY-MM-DD HH:mm:ss'),
       sorter: true,
     },
-    {
-      title: '操作',
-      render: (val, record) => renderActions(record),
-    },
+    // {
+    //   title: '操作',
+    //   render: (val, record) => renderActions(record),
+    // },
   ];
 
   const pagination = {

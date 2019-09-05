@@ -1,35 +1,47 @@
-import { useApolloClient } from '@apollo/react-hooks';
-import { Button, Cascader, Col, Form, Icon, Input, message, Row, Upload } from 'antd';
+import { useApolloClient, useQuery } from '@apollo/react-hooks';
+import { TreeSelect, Button, Cascader, Col, Form, Icon, Input, message, Row, Upload } from 'antd';
 import React, { Fragment, useEffect, useState } from 'react';
-import { M_LEVEL_UP } from '../../../gql';
-import { UserStatusEnum, UserTypeEnum } from '../../../lib/enum';
+import { M_LEVEL_UP, Q_GET_PROVIDER_CATEGORY_TREES } from '../../../gql';
+import { IdentityEnum, UserStatusEnum, UserTypeEnum } from '../../../lib/enum';
 import { uploadOne } from '../../../lib/fetch';
-import { getAreaList, jump, toGetParentArrayByChildNode, toFetchCurrentUser } from '../../../lib/global';
+import { jump, getTreeData } from '../../../lib/global';
 import './index.scss';
+import ImageCropper from '../../../components/ImageCropper';
+
+const { TextArea } = Input;
 
 export default Form.create()(props => {
 
-	const { enabled, user, identity, form } = props;
+	const { area, areaList, enabled, user, identity, form } = props;
 	const { getFieldDecorator } = form;
 
 	const client = useApolloClient();
 
-	const [areaList, setAreaList] = useState([]);
-	const [area, setArea] = useState([]);
 	const [businessLicense, setBusinessLicense] = useState(null);
+	const [logo, setLogo] = useState(null);
+	const [provider, setProvider] = useState({});
+
+	const { data: { providerCategoryTrees } } = useQuery(Q_GET_PROVIDER_CATEGORY_TREES, {
+		notifyOnNetworkStatusChange: true,
+		variables: {
+			root: '机构类别'
+		},
+	});
 
 	useEffect(() => {
-		(async () => {
-			const list = await getAreaList(client);
-			setAreaList(list);
+		if (IdentityEnum.PROVIDER === user.identity) {
+			const userProvider = user.providers[0];
 
-			const userArea = toGetParentArrayByChildNode(list, { id: user.area.id }) || [];
-			setArea(userArea.map(item => item.id));
-		})();
+			if (!!userProvider) {
+				setLogo(userProvider.logo);
+				setProvider(userProvider);
+			}
+		}
+
 		setBusinessLicense(user.business_license);
 	}, []);
 
-	const handleSubmit = (e, user) => {
+	const handleSubmit = (e) => {
 		e.preventDefault();
 
 		form.validateFields((err, values) => {
@@ -48,10 +60,39 @@ export default Form.create()(props => {
 			values.business_license = businessLicense;
 			values.area = { id: values.area.pop() };
 
+			const data = {};
+
+			if (IdentityEnum.PROVIDER === identity) {
+
+				if (!logo) {
+					message.error('请先上传机构logo');
+					return false;
+				}
+
+				const target = {
+					name: values.company,
+					logo,
+					area: values.area,
+					category: { id: values.category },
+					introduction: values.introduction,
+				};
+
+				delete values.category;
+				delete values.introduction;
+
+				if (provider) {
+					target.id = provider.id;
+				}
+
+				data.provider = target;
+			}
+
+			data.user = values;
+
 			client.mutate({
 				mutation: M_LEVEL_UP,
 				variables: {
-					data: { user: values }
+					data
 				},
 				update: (_, { data }) => {
 					if (data && data.levelUp) {
@@ -63,7 +104,7 @@ export default Form.create()(props => {
 		});
 	}
 
-	const onAvatarUpload = async (file) => {
+	const onUpload = async (file) => {
 		const res = await uploadOne(file);
 
 		if (!!res && res.relativePath) {
@@ -71,10 +112,18 @@ export default Form.create()(props => {
 		}
 	};
 
+	const onUploadLogo = async (file) => {
+		const res = await uploadOne(file);
+
+		if (!!res && res.relativePath) {
+			setLogo(res.relativePath);
+		}
+	};
+
 	return (
 		<Row>
 			<Col span={16}>
-				<Form onSubmit={(e) => handleSubmit(e, user)}>
+				<Form onSubmit={handleSubmit}>
 					<Form.Item label={'企业全称：'}>
 						{getFieldDecorator('company', {
 							initialValue: user.company,
@@ -122,6 +171,34 @@ export default Form.create()(props => {
 								options={areaList} />
 						)}
 					</Form.Item>
+					{IdentityEnum.PROVIDER === identity ?
+						<>
+							<Form.Item label="机构类别：" hasFeedback>
+								{getFieldDecorator('category', {
+									initialValue: provider.category ? provider.category.id : null,
+									rules: [
+										{
+											required: true,
+											message: '请选择机构类别',
+										},
+									],
+								})(<TreeSelect
+									disabled={!enabled}
+									showSearch
+									treeNodeFilterProp="title"
+									treeData={providerCategoryTrees ? getTreeData(providerCategoryTrees) : []}
+								/>)}
+							</Form.Item>
+							<Form.Item label={'简介'}>
+								{getFieldDecorator('introduction', {
+									initialValue: provider.introduction,
+									rules: [
+										{ required: true, message: '简介', whitespace: true },
+									]
+								})(<TextArea disabled={!enabled} autosize={{ minRows: 10, maxRows: 30 }} />)}
+							</Form.Item>
+						</>
+						: null}
 					<Form.Item>
 						{UserStatusEnum.NORMAL === user.status ? (
 							<Button type="primary" htmlType="submit">
@@ -155,6 +232,25 @@ export default Form.create()(props => {
 				</Form>
 			</Col>
 			<Col span={4}>
+				{IdentityEnum.PROVIDER === identity ?
+					<div style={{ width: '300px', margin: '0 0 30px 0' }}>
+						<ImageCropper
+							disabled={!enabled}
+							title='请上传机构logo'
+							url={logo}
+							onUpload={file => {
+								if (file.size > 2 * 1024 * 1024) {
+									message.error('请上传小于2M的图片');
+									return false;
+								}
+								onUploadLogo(file);
+								return false;
+							}}
+							width={150}
+							height={62}
+						/>
+					</div>
+					: null}
 				<Upload
 					disabled={!enabled}
 					action={null}
@@ -164,7 +260,7 @@ export default Form.create()(props => {
 							message.error('请上传小于2M的图片');
 							return false;
 						}
-						onAvatarUpload(file);
+						onUpload(file);
 						return false;
 					}}
 				>
