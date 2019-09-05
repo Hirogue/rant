@@ -52,14 +52,32 @@ export default withRouter((props) => {
 
 	const { current, selectedTags } = state;
 
-	const { loading, fetchMore, refetch, data: { findRootsAndChildren, queryCapital } } = useQuery(Q_GET_CAPITAL_DATA, {
+	const { loading, fetchMore, refetch, data: { findRootsAndChildren, queryCapital, queryProduct } } = useQuery(Q_GET_CAPITAL_DATA, {
 		fetchPolicy: "no-cache",
 		notifyOnNetworkStatusChange: true,
 		client: client,
 		variables: {
-			queryString: buildingQuery(defaultVariables)
+			queryCapital: buildingQuery(defaultVariables),
+			queryProduct: buildingQuery({
+				page: 0,
+				limit: 5,
+				sort: [{ field: 'create_at', order: 'DESC' }],
+			})
 		}
-	})
+	});
+
+	useEffect(() => {
+		!!industry && defaultVariables.filter.push({ field: "industry.title", operator: CondOperator.EQUALS, value: industry });
+		!!category && defaultVariables.filter.push({ field: "category", operator: CondOperator.EQUALS, value: IF_MODE_ENUM_R[category] });
+		refetch({
+			queryCapital: buildingQuery(defaultVariables),
+			queryProduct: buildingQuery({
+				page: 0,
+				limit: 5,
+				sort: [{ field: 'create_at', order: 'DESC' }],
+			})
+		})
+	}, [])
 
 	const onPageChange = (page, pageSize) => {
 		let variables = Object.assign(defaultVariables, {
@@ -68,7 +86,12 @@ export default withRouter((props) => {
 		});
 		fetchMore({
 			variables: {
-				queryString: buildingQuery(variables)
+				queryCapital: buildingQuery(variables),
+				queryProduct: buildingQuery({
+					page: 0,
+					limit: 5,
+					sort: [{ field: 'create_at', order: 'DESC' }],
+				})
 			},
 			updateQuery: (prev, { fetchMoreResult }) => {
 				return fetchMoreResult
@@ -102,7 +125,7 @@ export default withRouter((props) => {
 					rangeA && variablesFilter.push({ field: "amount", operator: CondOperator.GREATER_THAN_EQUALS, value: rangeA });
 					rangeB && variablesFilter.push({ field: "amount", operator: CondOperator.LOWER_THAN_EQAULS, value: rangeB });
 				} else if (key === '投资地区' && selectedTags[key][0]) {
-					variablesFilter.push({ field: 'area_path', operator: CondOperator.CONTAINS, value: selectedTags[key][0] })
+					variablesFilter.push({ field: 'invest_area.title', operator: CondOperator.CONTAINS, value: selectedTags[key][0] })
 				} else if (key === '投资方式' && selectedTags[key].length) {
 					variablesFilter.push({ field: 'category', operator: CondOperator.EQUALS, value: IFT_MODE_ENUM_R[selectedTags[key][0]] })
 				} else {
@@ -120,7 +143,12 @@ export default withRouter((props) => {
 
 		fetchMore({
 			variables: {
-				queryString: buildingQuery(variables)
+				queryCapital: buildingQuery(variables),
+				queryProduct: buildingQuery({
+					page: 0,
+					limit: 5,
+					sort: [{ field: 'create_at', order: 'DESC' }],
+				})
 			},
 			updateQuery: (prev, { fetchMoreResult }) => {
 				return Object.assign({}, prev, {
@@ -210,9 +238,6 @@ export default withRouter((props) => {
 		}
 	]);
 
-	console.log(tagItems);
-	
-
 	return (
 		<BaseLayout>
 			<div className="finance-page">
@@ -241,7 +266,7 @@ export default withRouter((props) => {
 						<div className="tab-title">
 							<p>江旅金融</p>
 						</div>
-						{/* products.map((item) => (
+						{!!queryProduct && queryProduct.data.map((item) => (
 							<a
 								as={`/product/detail/${item.id}`}
 								href={`/product/detail?id=${item.id}`}
@@ -249,14 +274,14 @@ export default withRouter((props) => {
 							>
 								<div className="product-items">
 									<div className="product-item" style={{ marginBottom: 0 }}>
-										<img src={!!item.thumbnail ? item.thumbnail.url : ''} />
+										<img src={item.cover} />
 
 										<h4>{item.name}</h4>
 									</div>
-									<p style={{ textIndent: 20 }}>{'getInfo(item)'}</p>
+									<p style={{ textIndent: 20 }}>{item.summary}</p>
 								</div>
 							</a>
-						)) */}
+						))}
 					</div>
 				</div>
 				<PageMod current={current} total={queryCapital ? queryCapital.total : 0} pageSize={10} onChange={onPageChange} />
@@ -264,148 +289,3 @@ export default withRouter((props) => {
 		</BaseLayout>
 	)
 })
-
-// @withRouter
-// export default class extends React.Component {
-// 	state = {
-// 		products: [],
-// 		data: [],
-// 		list: [],
-// 		current: 1,
-// 		pageSize: 10,
-// 		search: '',
-// 		selectedTags: {
-// 			投资行业: [],
-// 			投资方式: [],
-// 			投资金额: [],
-// 			投资地区: [],
-// 			资金类型: [],
-// 			投资类型: [],
-// 			投资阶段: [],
-// 			退出方式: [],
-// 			回报要求: [],
-// 			占用时长: [],
-// 			风控要求: []
-// 		}
-// 	};
-
-// 	async componentDidMount() {
-// 		const { list, category, industry, products } = this.props.router.query;
-
-// 		setState((state) => ({
-// 			...state,
-// 			data: list,
-// 			products,
-// 			selectedTags: {
-// 				投资行业: !!industry ? [ industry ] : [],
-// 				投资方式: !!category ? [ category ] : [],
-// 				投资金额: [],
-// 				投资地区: [],
-// 				资金类型: [],
-// 				投资类型: [],
-// 				投资阶段: [],
-// 				退出方式: [],
-// 				回报要求: [],
-// 				占用时长: [],
-// 				风控要求: []
-// 			},
-// 			list: [].concat(list).splice((state.current - 1) * state.pageSize, state.pageSize)
-// 		}));
-// 	}
-
-	
-
-// 	getInfo = (item) => {
-// 		const introduce = !!item.ex_info ? (item.ex_info.richtext ? item.ex_info.richtext.html : '') : '';
-// 		const plainText = !!introduce ? introduce.replace(new RegExp('<.+?>', 'g'), '') : '';
-// 		const subtitle = plainText.length >= 45 ? plainText.substr(0, 45) + '...' : plainText;
-
-// 		return subtitle;
-// 	};
-
-// 	render() {
-// 		const { products, data, list, pageSize, selectedTags } = this.state;
-
-// 		const newList = _.filter(list, (item) => {
-// 			const ex_info = item.ex_info || {};
-// 			const tags = ex_info.tags ? JSON.parse(ex_info.tags) : {};
-// 			const itemTags = tags.selectedTags || {};
-
-// 			if (!!itemTags['行业类型'] && selectedTags['投资行业'].length > 0) {
-// 				if (itemTags['行业类型'].tags.filter((val) => selectedTags['投资行业'].indexOf(val) !== -1).length <= 0)
-// 					return false;
-// 			}
-
-// 			if (selectedTags['投资方式'].length > 0) {
-// 				if (selectedTags['投资方式'].indexOf(tags.selectedCategory) < 0) return false;
-// 			}
-
-// 			if (!!itemTags['投资金额'] && selectedTags['投资金额'].length > 0) {
-// 				const amount = itemTags['投资金额'].value || 0;
-
-// 				if (
-// 					selectedTags['投资金额'].filter((val) => {
-// 						const obj = amountObj[val];
-
-// 						if (amount >= obj.min && amount <= obj.max) return val;
-// 					}).length <= 0
-// 				)
-// 					return false;
-// 			}
-
-// 			if (!!itemTags['投资地区'] && selectedTags['投资地区'].length > 0) {
-// 				if (itemTags['投资地区'].tags.filter((val) => selectedTags['投资地区'].indexOf(val) !== -1).length <= 0)
-// 					return false;
-// 			}
-// 			if (!!itemTags['资金类型'] && selectedTags['资金类型'].length > 0) {
-// 				if (itemTags['资金类型'].tags.filter((val) => selectedTags['资金类型'].indexOf(val) !== -1).length <= 0)
-// 					return false;
-// 			}
-// 			if (!!itemTags['投资类型'] && selectedTags['投资类型'].length > 0) {
-// 				if (itemTags['投资类型'].tags.filter((val) => selectedTags['投资类型'].indexOf(val) !== -1).length <= 0)
-// 					return false;
-// 			}
-// 			if (!!itemTags['投资阶段'] && selectedTags['投资阶段'].length > 0) {
-// 				if (itemTags['投资阶段'].tags.filter((val) => selectedTags['投资阶段'].indexOf(val) !== -1).length <= 0)
-// 					return false;
-// 			}
-// 			if (!!itemTags['最低回报要求'] && selectedTags['回报要求'].length > 0) {
-// 				if (itemTags['最低回报要求'].tags.filter((val) => selectedTags['回报要求'].indexOf(val) !== -1).length <= 0)
-// 					return false;
-// 			}
-// 			if (!!itemTags['资金占用时长'] && selectedTags['占用时长'].length > 0) {
-// 				if (itemTags['资金占用时长'].tags.filter((val) => selectedTags['占用时长'].indexOf(val) !== -1).length <= 0)
-// 					return false;
-// 			}
-// 			if (!!itemTags['风控要求'] && selectedTags['风控要求'].length > 0) {
-// 				if (itemTags['风控要求'].tags.filter((val) => selectedTags['风控要求'].indexOf(val) !== -1).length <= 0)
-// 					return false;
-// 			}
-
-// 			return item;
-// 		});
-
-// 		// 资金
-// 		// 默认筛选项有投资方式、资金主体、投资行业、投资地区、投资金额
-// 		// 选择不同的投资方式后新增的筛选项分别有：
-// 		// 股权投资：投资类型（控股/参股）、投资阶段
-// 		// 债券投资：最低回报要求、风控要求
-
-// 		return (
-// 			<BaseLayout>
-// 				<GlobalContext.Consumer>
-// 					{(context) => {
-// 						const { mainData: { fundingTags, projectTags } } = context;
-
-
-// 						return (
-// 							<React.Fragment>
-								
-// 							</React.Fragment>
-// 						);
-// 					}}
-// 				</GlobalContext.Consumer>
-// 			</BaseLayout>
-// 		);
-// 	}
-// }

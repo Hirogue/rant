@@ -16,7 +16,7 @@ const TabPane = Tabs.TabPane;
 export default ({ data }) => {
 	let user = null;
 	try {
-		user = JSON.parse(localStorage.getItem('u_user'));
+		user = JSON.parse(localStorage.getItem('u_user')) || {};
 	} catch (error) {
 		console.error(error.message);
 	}

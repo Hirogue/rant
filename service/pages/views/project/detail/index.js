@@ -12,8 +12,8 @@ import BreadCrumb from '../../../components/BreadCrumb';
 import './project_detail.scss';
 import GlobalContext from '../../../components/context/GlobalContext';
 import { createApolloClient } from "../../../lib/apollo";
-import { buildingQuery, getUrlParam, toApplayProject } from "../../../lib/global";
-import { Q_GET_PROJECT_DETAIL } from '../../../gql'
+import { buildingQuery, getUrlParam, toApplayCommonHandler } from "../../../lib/global";
+import { Q_GET_PROJECT_DETAIL, M_APPLY_PROJECTS } from '../../../gql'
 import { PROJECT_METADATA_TITLE_CN, IF_MODE_ENUM, DEFAULT_AVATAR } from '../../../lib/enum';
 
 const client = createApolloClient();
@@ -40,7 +40,7 @@ export default withRouter((props) => {
 	let user = {};
 
 	try {
-		user = JSON.parse(localStorage.getItem('u_user'));
+		user = JSON.parse(localStorage.getItem('u_user')) || {};
 	} catch (error) {
 		console.info('您还未登录！');
 	}
@@ -73,7 +73,7 @@ export default withRouter((props) => {
 		if (applyArray && applyArray.find(apply => apply.id === data.id)) {
 			return <a className="btn" href="javascript:;" style={{ background: '#ccc' }}>已投递</a>;
 		}
-		return <a className="btn" onClick={() => toApplayProject(router, project)}>立即投递</a>;
+		return <a className="btn" onClick={() => toApplayCommonHandler(router, { project: data }, M_APPLY_PROJECTS)}>立即投递</a>;
 	}
 
 	const recommendation = queryProject && queryProject.data ? queryProject.data.sort(() => Math.random() > 0.5 ? 1 : -1).slice(0,4) : [];

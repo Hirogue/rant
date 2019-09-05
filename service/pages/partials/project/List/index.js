@@ -43,7 +43,7 @@ export default withRouter(({ data, router }) => {
 	let user = {};
 
 	try {
-		user = JSON.parse(localStorage.getItem('u_user'));
+		user = JSON.parse(localStorage.getItem('u_user')) || {};
 	} catch (error) {
 		console.info('您还未登录！');
 	}

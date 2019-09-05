@@ -2,7 +2,7 @@ import { Controller, Get, Render, Query } from '@nestjs/common';
 import { ApiUseTags, ApiOperation } from "@nestjs/swagger";
 
 
-const PAGE_URL = '/search';
+const PAGE_URL = 'search';
 
 @ApiUseTags('ssr')
 @Controller(PAGE_URL)

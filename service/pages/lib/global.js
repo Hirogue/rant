@@ -199,13 +199,12 @@ export const getUrlParam = (router, name) => {
     return decodeURI(param[2]);
 }
 
-<<<<<<< HEAD
 export const toApply = async (key, target, gql) => {
 
     let client = createApolloClient();
     let user = {};
     try {
-        user = JSON.parse(localStorage.getItem('u_user'));
+        user = JSON.parse(localStorage.getItem('u_user')) || {};
     } catch (error) {
         console.info('您还未登录！');
     }
@@ -239,12 +238,6 @@ export const toApplayCommonHandler = (router, KV, gql) => {
     let target = KV[key];
     
     Modal.confirm({
-=======
-export const toApplayProject = (router, project) => {
-    console.log(router, project);
-
-    Modal.info({
->>>>>>> 8d072e1e0d3d12fe48770d51886661280a55fb22
         title: "您正在提交一个申请",
         content: (
             <Fragment>
@@ -263,7 +256,7 @@ export const toApplayProject = (router, project) => {
             }
             if (url) router.push(url);
         },
-        onCancel: () => console.info(`您已取消申请项目【${target.title}】！`),
+        onCancel: () => console.info(`您已取消申请【${target.title}】！`),
         centered: true
     })
 }

@@ -65,9 +65,7 @@ export default withRouter((props) => {
 		!!industry && defaultVariables.filter.push({ field: "industry.title", operator: CondOperator.EQUALS, value: industry });
 		!!category && defaultVariables.filter.push({ field: "category", operator: CondOperator.EQUALS, value: IF_MODE_ENUM_R[category] });
 		refetch({
-			variables: {
-				queryString: buildingQuery(defaultVariables)
-			}
+			queryString: buildingQuery(defaultVariables)
 		})
 	}, [])
 
@@ -114,7 +112,7 @@ export default withRouter((props) => {
 				} else if (key === '融资方式' && selectedTags[key].length) {
 					variablesFilter.push({ field: 'category', operator: CondOperator.EQUALS, value: IF_MODE_ENUM_R[selectedTags[key][0]] })
 				} else {
-					selectedTags[key].length && variablesFilter.push({ field: PROJECT_METADATA_TITLE_CN[key], operator: CondOperator.IN, value: selectedTags[key].join(',') })
+					selectedTags[key].length && variablesFilter.push({ field: METADATA_TITLE_CN[key], operator: CondOperator.IN, value: selectedTags[key].join(',') })
 				}
 			}
 		}

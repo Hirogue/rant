@@ -1,292 +1,295 @@
-import _ from 'lodash';
 import React, { Fragment } from 'react';
-import moment from 'moment';
+import _ from 'lodash';
 import { withRouter } from 'next/router';
+import { Spin } from 'antd';
+import { useQuery } from '@apollo/react-hooks';
+import { CondOperator } from '@nestjsx/crud-request';
+import moment from 'moment';
 import IconFont from '../../../components/IconFont';
-import config from '../../../config/config';
 import BaseLayout from '../../../components/Layout/BaseLayout';
 import BreadCrumb from '../../../components/BreadCrumb';
 
 import './finance_detail.scss';
 
-import GlobalContext from '../../../components/context/GlobalContext';
+import { createApolloClient } from "../../../lib/apollo";
+import { buildingQuery, getUrlParam, toApplayCommonHandler } from "../../../lib/global";
+import { Q_GET_CAPITAL_DETAIL, M_APPLY_CAPITALS } from '../../../gql'
+import { IFT_MODE_ENUM, DEFAULT_AVATAR } from '../../../lib/enum';
 
-@withRouter
-export default class extends React.Component {
-	getInfo = (item) => {
-		const ex_info = item.ex_info || {};
+const client = createApolloClient();
+const defaultVariables = {
+	join: [
+		{ field: 'creator' },
+		{ field: 'industry' },
+		{ field: 'area' },
+		{ field: 'stage' },
+		{ field: 'type' },
+		{ field: 'equity_type' },
+		{ field: 'invest_type' },
+		{ field: 'invest_area' },
+		{ field: 'risk' },
+		{ field: 'data' },
+		{ field: 'term' },
+		{ field: 'ratio' },
+		{ field: 'return' },
+		{ field: 'pledge' },
+		{ field: 'discount' },
+		{ field: 'pre_payment' },
+	],
+};
 
-		const tags = ex_info.tags ? JSON.parse(ex_info.tags) : {};
+export default withRouter((props) => {
 
-		const selectedTags = tags.selectedTags || {};
+	let { router } = props;
+	let id = getUrlParam(router, 'id');
+	let user = {};
 
-		const mode = tags.selectedCategory;
-		return `${mode} ${selectedTags['行业类型'] ? _.take(selectedTags['行业类型'].tags, 3).join(',') : ''} `;
-	};
+	try {
+		user = JSON.parse(localStorage.getItem('u_user')) || {};
+	} catch (error) {
+		console.info('您还未登录！');
+	}
 
-	render() {
-		const { list, detail } = this.props.router.query;
+	const { loading, data: { capital, queryCapital } } = useQuery(Q_GET_CAPITAL_DETAIL, {
+		fetchPolicy: "no-cache",
+		client: client,
+		variables: {
+			id,
+			queryString: buildingQuery(defaultVariables),
+			queryMore: buildingQuery({
+				page: 1,
+				limit: 20,
+				join: [{ field: "industry" }],
+				filter: [
+					{ field: "status", operator: CondOperator.IN, value: "checked,waitting,following" },
+					{ field: "id", operator: CondOperator.NOT_EQUALS, value: id }
+				],
+				sort: [{ field: 'publish_at', order: 'DESC' }],
+			})
+		}
+	});
 
-		const ex_info = detail.ex_info || {};
+	const toSetVal = (val) => (key) => (def) => val ? val[key] : def;
 
-		const tags = ex_info.tags ? JSON.parse(ex_info.tags) : {};
+	const toShowApplyButton = (data) => (applyArray) => {
+		if (data.status === 'finished') {
+			return <a className="btn-finished" href="javascript:;" style={{ background: '#ccc' }}>已结束</a>;
+		}
+		if (applyArray && applyArray.find(apply => apply.id === data.id)) {
+			return <a className="btn" href="javascript:;" style={{ background: '#ccc' }}>已投递</a>;
+		}
+		return <a className="btn" onClick={() => toApplayCommonHandler(router, { capital: data }, M_APPLY_CAPITALS)}><IconFont className="iconfont" type="icon-iLinkapp-" />立即投递</a>;
+	}	
 
-		const selectedTags = tags.selectedTags || {};
+	const recommendation = queryCapital && queryCapital.data ? queryCapital.data.sort(() => Math.random() > 0.5 ? 1 : -1).slice(0,4) : [];	
+	const mode = capital ? IFT_MODE_ENUM[capital.category] : '';
 
-		const mode = tags.selectedCategory;
+	if (loading) return <Spin style={{ position: "fixed", top: "50%", left: "50%" }} tip="正在加载中" />;
 
-		return (
-			<BaseLayout>
-				<GlobalContext.Consumer>
-					{(context) => {
-						const projectApplys = context.projectApplys || [];
-						const visits = context.visits || [];
-
-						return (
-							<div className="finance-detail-page">
-								<BreadCrumb adrname_two={'金融资本'} adrname_thr={'所有资金'} />
-								<div className="finance-detail-main clearfix">
-									<div className="left-main">
-										<div className="summary-box">
-											<div className="summary-box-top">
-												<h4 className="title">{detail.title}</h4>
-												<div className="icon-list">
-													<ul className="left-ul">
-														<li>
-															<IconFont className="iconfont" type="icon-shijian" />
-															<span>
-																{moment(detail.release_datetime).format('YYYY-MM-DD')}
-															</span>
-														</li>
-														{/*
-														<li>
-															<IconFont className="iconfont" type="icon-liulan1" />
-															<span>
-																浏览量：{visits.find(
-																	(item) => item.url.search(detail.id) >= 0
-																) ? (
-																		visits.find(
-																			(item) => item.url.search(detail.id) >= 0
-																		).visits_count
-																	) : (
-																		0
-																	)}次
-															</span>
-														</li>
-																	*/}
-													</ul>
-													<ul className="right-ul">
-														{/* <li>
-										<IconFont className="iconfont" type="icon-iphone" />
-										<span>免费发送至手机</span>
-									</li>
-									<li>
-										<IconFont className="iconfont" type="icon-shoucang1" />
-										<span>收藏</span>
-									</li>
-									<li>
-										<IconFont className="iconfont" type="icon-jubao1" />
-										<span>举报</span>
-									</li> */}
-													</ul>
-												</div>
-											</div>
-											<div className="summary-list">
-												<ul className="left-ul">
-													<li>投资方式：{mode}</li>
-													<li>
-														投资金额：{selectedTags['投资金额'] ? selectedTags['投资金额'].value : ''}万元
-													</li>
-													<li>
-														需提供资料：{selectedTags['需提供资料'] ? (
-															selectedTags['需提供资料'].tags.join(',')
-														) : (
-																''
-															)}
-													</li>
-													<li>
-														所在地区：{selectedTags['所在地区'] ? (
-															selectedTags['所在地区'].tags.join(',')
-														) : (
-																''
-															)}
-													</li>
-													{mode === '股权投资' ? (
-														<Fragment>
+	return (
+		<BaseLayout>
+			<div className="finance-detail-page">
+				<BreadCrumb adrname_two={'金融资本'} adrname_thr={'所有资金'} />
+				<div className="finance-detail-main clearfix">
+					<div className="left-main">
+						<div className="summary-box">
+							<div className="summary-box-top">
+								<h4 className="title">{capital.title}</h4>
+								<div className="icon-list">
+									<ul className="left-ul">
+										<li>
+											<IconFont className="iconfont" type="icon-shijian" />
+											<span>
+												{moment(capital.publish_at).format('YYYY-MM-DD')}
+											</span>
+										</li>
+										{/*
 															<li>
-																投资阶段：{selectedTags['投资阶段'] ? selectedTags['投资阶段'].tags.join(',') : ''}
-															</li>
-															<li>
-																投资类型：{selectedTags['投资类型'] ? selectedTags['投资类型'].tags.join(',') : ''}
-															</li>
-															<li>
-																投资期限：{selectedTags['投资期限'] ? selectedTags['投资期限'].value : ''}年
-															</li>
-														</Fragment>
-													) : (
-															<Fragment>
-																<li>
-																	最低回报：{selectedTags['最低回报要求'] ? selectedTags['最低回报要求'].value : ''}
-																</li>
-																<li>
-																	风控要求：{selectedTags['风控要求'] ? selectedTags['风控要求'].tags.join(',') : ''}
-																</li>
-															</Fragment>
-														)}
-												</ul>
-												<ul className="right-ul">
-													<li>
-														资金类型：{selectedTags['资金类型'] ? (
-															selectedTags['资金类型'].tags.join(',')
-														) : (
-																''
-															)}
-													</li>
-													<li>
-														投资行业：{selectedTags['行业类型'] ? (
-															_.take(selectedTags['行业类型'].tags, 3).join(',')
-														) : (
-																''
-															)}
-													</li>
-													<li>
-														投资地区：{selectedTags['投资地区'] ? (
-															selectedTags['投资地区'].tags.join(',')
-														) : (
-																''
-															)}
-													</li>
-													<li>
-														前期费用：{selectedTags['前期费用'] && !!selectedTags['前期费用'].value ? (
-															selectedTags['前期费用'].value
-														) : (
-																'无'
-															)}
-													</li>
-													{mode === '股权投资' ? (
-														<Fragment>
-															<li>
-																占股比例：{selectedTags['占股比例'] ? selectedTags['占股比例'].tags.join(',') : ''}
-															</li>
-															<li>
-																参股类型：{selectedTags['参股类型'] ? selectedTags['参股类型'].tags.join(',') : ''}
-															</li>
-														</Fragment>
-													) : (
-															<Fragment>
-																<li>
-																	抵押物类型：{selectedTags['抵押物类型'] &&
-																		!!selectedTags['抵押物类型'].value ? (
-																			selectedTags['抵押物类型'].value
+																<IconFont className="iconfont" type="icon-liulan1" />
+																<span>
+																	浏览量：{visits.find(
+																		(item) => item.url.search(detail.id) >= 0
+																	) ? (
+																			visits.find(
+																				(item) => item.url.search(detail.id) >= 0
+																			).visits_count
 																		) : (
-																			'无'
-																		)}
-																</li>
-																<li>
-																	抵质押物折扣率：{selectedTags['抵质押物折扣率'] ? selectedTags['抵质押物折扣率'].value : ''}
-																</li>
-															</Fragment>
-														)}
-												</ul>
-											</div>
-											<div className="delivery-box">
-												<img
-													className="service-bg-img"
-													src={config.staticImgUrl + 'finance-icon.png'}
-												/>
-												<div className="content">
-													<h4>投递项目让融资更主动！</h4>
-													{/* <p>将信息直接发送到投资人手机，</p> */}
-												</div>
-
-												{projectApplys.find((apply) => apply.project_id === detail.id) ? (
-													<a
-														className="btn"
-														href="javascript:;"
-														style={{ background: '#ccc' }}
-													>
-														已投递
-													</a>
-												) : (
-														<a className="btn" onClick={() => context.applyProject(detail)}>
-															<IconFont className="iconfont" type="icon-iLinkapp-" />立即投递
-													</a>
-													)}
-											</div>
-											{!selectedTags['资金详情'] ? (
-												' '
-											) : (
-													<div className="item-main">
-														<div className="item-top">
-															<div className="icon">
-																<IconFont className="iconfont" type="icon-gaishu" />
-																<span>资金详情</span>
-															</div>
-														</div>
-														<div className="item-content">{selectedTags['资金详情'].value}</div>
-													</div>
-												)}
-										</div>
-										<p className="recommend-title">资金推荐</p>
-										<div className="recommend">
-											{list.map((item) => (
-												<a
-													as={`/finance/detail/${item.id}`}
-													href={`/finance/detail?id=${item.id}`}
-													key={item.id}
-												>
-													<div className="item">
-														{/* <img src={!!item.thumbnail ? item.thumbnail.url : ''} /> */}
-														<h4>{item.title}</h4>
-														<p>
-															<p>{this.getInfo(item)}</p>
-														</p>
-													</div>
-												</a>
-											))}
-										</div>
-									</div>
-									<div className="right-main">
-										<h4 className="title">会员名片</h4>
-										<img className="service-bg-img" src={config.staticImgUrl + 'avatar-img.png'} />
-										<p className="name">
-											{detail.contacts ? (
-												_.padEnd(detail.contacts.substr(0, 1), detail.contacts.length, '*')
-											) : (
-													''
-												)}
-										</p>
-										<p className="text" style={{ textAlign: 'center' }}>
-											{detail.company ? (
-												`所在公司： ${_.padStart(
-													detail.company.substr(
-														detail.company.length - 2,
-														detail.company.length
-													),
-													detail.company.length,
-													'*'
-												)}`
-											) : (
-													'个人投资者'
-												)}
-										</p>
-
-										{projectApplys.find((apply) => apply.project_id === detail.id) ? (
-											<a className="btn" href="javascript:;" style={{ background: '#ccc' }}>
-												已投递
-											</a>
-										) : (
-												<a className="btn" onClick={() => context.applyProject(detail)}>
-													<IconFont className="iconfont" type="icon-iLinkapp-" />立即投递
-											</a>
-											)}
-									</div>
+																			0
+																		)}次
+																</span>
+															</li>
+																		*/}
+									</ul>
+									<ul className="right-ul">
+										{/* <li>
+											<IconFont className="iconfont" type="icon-iphone" />
+											<span>免费发送至手机</span>
+										</li>
+										<li>
+											<IconFont className="iconfont" type="icon-shoucang1" />
+											<span>收藏</span>
+										</li>
+										<li>
+											<IconFont className="iconfont" type="icon-jubao1" />
+											<span>举报</span>
+										</li> */}
+									</ul>
 								</div>
 							</div>
-						);
-					}}
-				</GlobalContext.Consumer>
-			</BaseLayout>
-		);
-	}
-}
+							<div className="summary-list">
+								<ul className="left-ul">
+									<li>投资方式：{IFT_MODE_ENUM[capital.category]}</li>
+									<li>投资金额：{capital.amount}万元</li>
+									<li>需提供资料：{capital.data && capital.data.map(item => item.title).join(',')}</li>
+									<li>所在地区：{capital.area_path}</li>
+									{mode === '股权投资' ? (
+										<Fragment>
+											<li>
+												投资阶段：{capital.stage.length ? capital.stage.map(item => item.title).join('，') : '未知'}
+											</li>
+											<li>
+												投资类型：{capital.invest_type.length ? capital.invest_type.map(item => item.title).join('，') : "未知"}
+											</li>
+											<li>
+												投资期限：{capital.term ? capital.term.title : '未知'}
+											</li>
+										</Fragment>
+									) : (
+											<Fragment>
+												<li>
+													最低回报：{capital.return || "未知"}
+												</li>
+												<li>
+													风控要求：{capital.risk ? capital.risk.title : '未知'}
+												</li>
+											</Fragment>
+										)}
+								</ul>
+								<ul className="right-ul">
+									<li>
+										资金类型：{capital.type.length ? capital.type.map(item => item.title).join('，') : '未知'}
+									</li>
+									<li>
+										投资行业：{capital.industry.length ? capital.industry.map(item => item.title).join('，') : '暂无'}
+									</li>
+									<li>
+										投资地区：{capital.invest_area.length ? capital.invest_area.map(item => item.title).join('，') : '未知'}
+									</li>
+									<li>
+										前期费用：{capital.pre_payment || '未知'}
+									</li>
+									{mode === '股权投资' ? (
+										<Fragment>
+											<li>
+												占股比例：{capital.ratio ? capital.ratio.title : '未知'}
+											</li>
+											<li>
+												参股类型：{capital.equity_type ? capital.equity_type.title : '未知'}
+											</li>
+										</Fragment>
+									) : (
+											<Fragment>
+												<li>
+													抵押物类型：{capital.pledge || '未知'}
+												</li>
+												<li>
+													抵质押物折扣率：{capital.discount || '未知'}
+												</li>
+											</Fragment>
+										)}
+								</ul>
+							</div>
+							<div className="delivery-box">
+								<img
+									className="service-bg-img"
+									src={'/static/img/finance-icon.png'}
+								/>
+								<div className="content">
+									<h4>投递项目让融资更主动！</h4>
+									{/* <p>将信息直接发送到投资人手机，</p> */}
+								</div>
+								{toShowApplyButton(capital)(user ? user.apply_capitals : null)}
+							</div>
+							<div className="item-main">
+								<div className="item-top">
+									<div className="icon">
+										<IconFont className="iconfont" type="icon-gaishu" />
+										<span>资金详情</span>
+									</div>
+								</div>
+								<div className="item-content">{capital.info || "暂无详情"}</div>
+							</div>
+						</div>
+						<p className="recommend-title">资金推荐</p>
+						<div className="recommend">
+							{recommendation.map((item) => (
+								<a
+									as={`/finance/detail/${item.id}`}
+									href={`/finance/detail?id=${item.id}`}
+									key={item.id}
+								>
+									<div className="item">
+										{/* <img src={!!item.thumbnail ? item.thumbnail.url : ''} /> */}
+										<h4>{item.title}</h4>
+										<p>
+											<p>{IFT_MODE_ENUM[item.category]}&nbsp;{!!item.industry.length && item.industry.map(item => item.title).join('，')}</p>
+										</p>
+									</div>
+								</a>
+							))}
+						</div>
+					</div>
+					<div className="right-main">
+						<h4 className="title">会员名片</h4>
+						<img className="service-bg-img" src={toSetVal(capital.creator)('avatar')(DEFAULT_AVATAR)} />
+						<p className="name">{toSetVal(capital.creator)('hideName')('未知姓名')}</p>
+						<p className="text" style={{ textAlign: 'center' }}>{toSetVal(capital.creator)('hideCompany')('未知公司')}</p>
+						{toShowApplyButton(capital)(user ? user.apply_capitals : null)}
+					</div>
+				</div>
+			</div>
+		</BaseLayout>
+	)
+})
+
+
+// @withRouter
+// export default class extends React.Component {
+// 	getInfo = (item) => {
+// 		const ex_info = item.ex_info || {};
+
+// 		const tags = ex_info.tags ? JSON.parse(ex_info.tags) : {};
+
+// 		const selectedTags = tags.selectedTags || {};
+
+// 		const mode = tags.selectedCategory;
+// 		return `${mode} ${selectedTags['行业类型'] ? _.take(selectedTags['行业类型'].tags, 3).join(',') : ''} `;
+// 	};
+
+// 	render() {
+// 		const { list, detail } = this.props.router.query;
+
+// 		const ex_info = detail.ex_info || {};
+
+// 		const tags = ex_info.tags ? JSON.parse(ex_info.tags) : {};
+
+// 		const selectedTags = tags.selectedTags || {};
+
+// 		const mode = tags.selectedCategory;
+
+// 		return (
+			
+// 				<GlobalContext.Consumer>
+// 					{(context) => {
+// 						const projectApplys = context.projectApplys || [];
+// 						const visits = context.visits || [];
+
+// 						return (
+							
+// 						);
+// 					}}
+// 				</GlobalContext.Consumer>
+// 			</BaseLayout>
+// 		);
+// 	}
+// }

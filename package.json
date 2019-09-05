@@ -31,6 +31,7 @@
     }
   },
   "dependencies": {
-    "@apollo/react-hooks": "^3.0.1"
+    "@apollo/react-hooks": "^3.0.1",
+    "@apollo/react-ssr": "^3.0.1"
   }
 }

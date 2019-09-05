@@ -4,7 +4,7 @@ import { F_CAPITAL_FIELDS } from '../gql';
 
 export const Q_GET_CAPITAL_DATA = gql`
 
-    query getProjectData($queryString: String!) {
+    query getProjectData($queryCapital: String!, $queryProduct: String!) {
         findRootsAndChildren {
             id
             title
@@ -14,7 +14,7 @@ export const Q_GET_CAPITAL_DATA = gql`
             }
         }
 
-        queryCapital(queryString: $queryString) {
+        queryCapital(queryString: $queryCapital) {
             total
             count
             page
@@ -87,6 +87,19 @@ export const Q_GET_CAPITAL_DATA = gql`
                 }
             }
         }
+
+        queryProduct(queryString: $queryProduct) {
+            total
+            count
+            page
+            pageCount
+            data {
+                id
+                name
+                cover
+                summary
+            }
+        }
     }
 `
 
@@ -107,7 +120,6 @@ export const Q_GET_CAPITAL_DETAIL = gql`
             data {
                 id
                 title
-                cover
                 category
                 industry {
                     id

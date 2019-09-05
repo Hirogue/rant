@@ -7,7 +7,6 @@ import './screen_mode.scss';
 export default (props) => {
 	const { onChange, tagItems, tag_name, icon_type } = props;
 
-
 	return (
 		<div className="screen-mod">
 			<div className="tag-box">
