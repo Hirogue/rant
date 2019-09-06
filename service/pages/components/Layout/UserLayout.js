@@ -121,22 +121,6 @@ export default withContext(({ props }) => {
 												) : (
 													''
 												)}
-
-										{
-											IdentityEnum.PROVIDER === user.identity
-												&&
-												UserStatusEnum.CHECKED === user.status ? (
-													<div
-														className={`navitem ${asPath === '/user/funding'
-															? 'active'
-															: ''}`}
-														onClick={() => jump('/user/funding')}
-													>
-														<p>服务商入驻</p>
-													</div>
-												) : (
-													''
-												)}
 									</div>
 								</div>
 								<div className="right">{props.children}</div>

@@ -1,12 +1,12 @@
-import { useApolloClient, useQuery } from '@apollo/react-hooks';
-import { TreeSelect, Button, Cascader, Col, Form, Icon, Input, message, Row, Upload } from 'antd';
+import { useApolloClient } from '@apollo/react-hooks';
+import { Button, Cascader, Col, Form, Icon, Input, message, Row, TreeSelect, Upload } from 'antd';
 import React, { Fragment, useEffect, useState } from 'react';
+import ImageCropper from '../../../components/ImageCropper';
 import { M_LEVEL_UP, Q_GET_PROVIDER_CATEGORY_TREES } from '../../../gql';
 import { IdentityEnum, UserStatusEnum, UserTypeEnum } from '../../../lib/enum';
 import { uploadOne } from '../../../lib/fetch';
-import { jump, getTreeData } from '../../../lib/global';
+import { getTreeData, jump } from '../../../lib/global';
 import './index.scss';
-import ImageCropper from '../../../components/ImageCropper';
 
 const { TextArea } = Input;
 
@@ -20,13 +20,7 @@ export default Form.create()(props => {
 	const [businessLicense, setBusinessLicense] = useState(null);
 	const [logo, setLogo] = useState(null);
 	const [provider, setProvider] = useState({});
-
-	const { data: { providerCategoryTrees } } = useQuery(Q_GET_PROVIDER_CATEGORY_TREES, {
-		notifyOnNetworkStatusChange: true,
-		variables: {
-			root: '机构类别'
-		},
-	});
+	const [categoryTrees, setCategoryTrees] = useState([]);
 
 	useEffect(() => {
 		if (IdentityEnum.PROVIDER === user.identity) {
@@ -37,6 +31,17 @@ export default Form.create()(props => {
 				setProvider(userProvider);
 			}
 		}
+
+		(async () => {
+
+			const { data: { providerCategoryTrees } } = await client.query({
+				query: Q_GET_PROVIDER_CATEGORY_TREES,
+				variables: { root: '机构类别' }
+			});
+
+			setCategoryTrees(getTreeData(providerCategoryTrees));
+
+		})();
 
 		setBusinessLicense(user.business_license);
 	}, []);
@@ -186,7 +191,7 @@ export default Form.create()(props => {
 									disabled={!enabled}
 									showSearch
 									treeNodeFilterProp="title"
-									treeData={providerCategoryTrees ? getTreeData(providerCategoryTrees) : []}
+									treeData={categoryTrees}
 								/>)}
 							</Form.Item>
 							<Form.Item label={'简介'}>

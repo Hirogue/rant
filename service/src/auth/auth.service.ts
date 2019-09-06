@@ -22,7 +22,7 @@ export class AuthService {
             relations: ['role', 'org']
         });
 
-        if (!user) throw new ApolloException('user-login.login.result.account.notexist');
+        if (!user) throw new ApolloException('账户不存在');
 
         const compareRes = await bcrypt.compare(password, user.password);
 
@@ -32,7 +32,7 @@ export class AuthService {
                 return await this.userService.changePassword(user.account, password);
             }
 
-            throw new ApolloException('user-login.login.result.password.incorrect');
+            throw new ApolloException('密码错误');
         }
 
         return user;

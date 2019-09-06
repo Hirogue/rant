@@ -278,7 +278,6 @@ export class UserService extends BaseService<User> {
 
                     if (!!provider) {
                         provider.status = ProjectStatusEnum.CHECKED;
-                        provider.creator = target;
 
                         await providerRepo.save(provider);
                     }
@@ -297,7 +296,6 @@ export class UserService extends BaseService<User> {
                     if (!!provider) {
                         provider.status = ProjectStatusEnum.REJECTED;
                         provider.reason = data.reason;
-                        provider.creator = target;
 
                         await providerRepo.save(provider);
                     }

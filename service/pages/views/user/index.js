@@ -36,6 +36,7 @@ export default withContext(props => {
 			) : null;
 
 			setArea(userArea ? userArea.map(item => item.id) : null);
+
 			setIdentity(currentUser.identity);
 			setUserType(currentUser.type);
 
