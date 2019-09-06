@@ -1,10 +1,11 @@
+import * as csv from 'csvtojson';
+import { existsSync } from "fs";
 import { sample } from "lodash";
+import { join } from "path";
 import { Connection, Like } from "typeorm";
 import { Factory, Seeder } from "typeorm-seeding";
-import { Provider, ProviderCategory, User, Metadata } from "../entities";
-import { join } from "path";
-import { existsSync } from "fs";
-import * as csv from 'csvtojson';
+import { ProjectStatusEnum } from "../../core";
+import { Metadata, Provider, ProviderCategory, User } from "../entities";
 
 export default class implements Seeder {
     public async run(factory: Factory, connection: Connection): Promise<any> {
@@ -17,8 +18,6 @@ export default class implements Seeder {
 
         if (existsSync(rootPath) && existsSync(filePath)) {
             const res = await csv().fromFile(filePath);
-            console.log(res);
-
             for (let item of res) {
 
                 if (!['评估机构', '会计事务所', '律师事务所', '运营机构', '策划机构', '宣传机构', '其他'].includes(item.category)) continue;
@@ -27,7 +26,7 @@ export default class implements Seeder {
 
                 const creator = await connection.getRepository(User).findOne({ where: { account: item.credential } });
 
-                const area = await connection.getRepository(Metadata).findOne({ where: { title: Like(`${item.area}%` ) } });
+                const area = await connection.getRepository(Metadata).findOne({ where: { title: Like(`${item.area}%`) } });
 
                 const thumbnail = item.thumbnail ? JSON.parse(item.thumbnail) : null;
 
@@ -36,11 +35,11 @@ export default class implements Seeder {
                 await factory(Provider)({
                     name: item.name,
                     logo: thumbnail ? thumbnail.url : null,
-                    slogan: item.subtitle,
                     introduction: ex_info ? ex_info.richtext ? ex_info.richtext.html : null : null,
                     area,
                     creator,
                     category,
+                    status: ProjectStatusEnum.CHECKED
                 }).seed();
             }
         } else {
@@ -54,7 +53,7 @@ export default class implements Seeder {
 
             const area = await connection.getTreeRepository(Metadata).findOne({ title: '地区' });
             const areaList = await connection.getTreeRepository(Metadata).findDescendants(area);
-    
+
             await factory(Provider)({ category: cate1, creator: user, area: sample(areaList) }).seedMany(5);
             await factory(Provider)({ category: cate2, creator: user, area: sample(areaList) }).seedMany(5);
             await factory(Provider)({ category: cate3, creator: user, area: sample(areaList) }).seedMany(5);

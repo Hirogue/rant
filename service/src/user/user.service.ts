@@ -4,11 +4,9 @@ import * as bcrypt from 'bcryptjs';
 import * as moment from 'moment';
 import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { Config } from '../config';
-import { BaseService, IdentityEnum, ProjectStatusEnum, UserLevelEnum, UserStatusEnum, LogTypeEnum } from '../core';
-import { ApplyCapital, ApplyExpert, ApplyProduct, ApplyProject, ApplyProvider, Capital, Expert, Product, Project, Provider, User, Log, Org } from '../database/entities';
-import { Logger } from '../logger';
+import { BaseService, IdentityEnum, LogTypeEnum, ProjectStatusEnum, UserLevelEnum, UserStatusEnum } from '../core';
+import { ApplyCapital, ApplyExpert, ApplyProduct, ApplyProject, ApplyProvider, Capital, Expert, Log, Org, Product, Project, Provider, User } from '../database/entities';
 import { LevelUpInput, RegisterDto, ResetPasswordDto } from './dtos';
-
 
 @Injectable()
 export class UserService extends BaseService<User> {
@@ -315,39 +313,46 @@ export class UserService extends BaseService<User> {
     }
 
     private async checkLimit(user: User, type: string) {
+
+        const count = await this.remainderApplyCount(user.id);
+
+        if (count <= 0) {
+            throw new BadRequestException('今日可投递次数不足');
+        }
+
+    }
+
+    async remainderApplyCount(id: string) {
         const currentDate = moment();
         const startOfDay = currentDate.startOf('day').format('YYYY-MM-DD HH:mm:ss');
         const endOfDay = currentDate.endOf('day').format('YYYY-MM-DD HH:mm:ss');
 
-        let builder = null;
-        let appliedyCount = -1;
-
-        if ('project' === type) {
-            builder = await this.applyProjectRepository.createQueryBuilder('t');
-        } else {
-            builder = await this.applyCapitalRepository.createQueryBuilder('t');
-        }
-
-        appliedyCount = await builder
+        const projectCount = await this.applyProjectRepository
+            .createQueryBuilder('t')
             .leftJoin('t.applicant', 'applicant')
-            .where('applicant.id = :id', { id: user.id })
+            .where('applicant.id = :id', { id })
             .andWhere('t.create_at BETWEEN :startOfDay AND :endOfDay', {
                 startOfDay,
                 endOfDay,
             })
-            .printSql()
             .getCount();
 
-        const total = UserLevelEnum.V0 <= user.vip
+        const capitalCount = await this.applyCapitalRepository
+            .createQueryBuilder('t')
+            .leftJoin('t.applicant', 'applicant')
+            .where('applicant.id = :id', { id })
+            .andWhere('t.create_at BETWEEN :startOfDay AND :endOfDay', {
+                startOfDay,
+                endOfDay,
+            })
+            .getCount();
+
+        const user = await this.repo.findOne(id);
+
+        const total = user.vip <= UserLevelEnum.V0
             ? Config.apply.v0Limit
             : Config.apply.v1Limit;
 
-        Logger.log('total', total);
-        Logger.log('appliedyCount', appliedyCount);
-
-        if (total - appliedyCount <= 0) {
-            throw new BadRequestException('今日可投递次数不足');
-        }
-
+        return total - (projectCount + capitalCount);
     }
 }

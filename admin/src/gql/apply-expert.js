@@ -1,6 +1,4 @@
 import gql from 'graphql-tag';
-import { F_METADATA_FIELDS, F_METADATA_RECURSIVE } from './metadata';
-import { F_ORG_FIELDS, F_ORG_RECURSIVE } from './org';
 
 export const F_APPLY_EXPERT_FIELDS = gql`
   fragment ApplyExpertFields on ApplyExpert {

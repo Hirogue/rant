@@ -4,8 +4,20 @@ import { Fragment } from 'react';
 import { Q_FETCH_CURRENT_USER, Q_GET_METADATA_TREES, Q_METADATA_DESCENDANTS_TREE } from '../gql';
 import { createApolloClient } from "./apollo";
 
-export const jump = url => {
-    window.location.href = url;
+export const jump = (url, timeout = 0) => {
+    if (typeof window !== 'undefined') {
+        setTimeout(() => {
+            window.location.href = url;
+        }, timeout)
+    }
+}
+
+export const reload = (timeout = 0) => {
+    if (typeof window !== 'undefined') {
+        setTimeout(() => {
+            window.location.reload();
+        }, timeout)
+    }
 }
 
 export const getAreaList = async (client) => {
@@ -58,8 +70,13 @@ export const toFetchCurrentUser = async (client) => {
         fetchPolicy: "no-cache"
     });
     if (result && result.data && result.data.me) {
-        localStorage.setItem('u_user', JSON.stringify(result.data.me));
-        return result.data.me;
+
+        const { me, remainderApplyCount = 0 } = result.data;
+        me.remainderApplyCount = remainderApplyCount;
+
+        localStorage.setItem('u_user', JSON.stringify(me));
+
+        return me;
     } else {
         return null;
     }
@@ -276,7 +293,7 @@ export const toApplayCommonHandler = (router, KV, gql) => {
 
     let key = Object.keys(KV).shift();
     let target = KV[key];
-    
+
     Modal.confirm({
         title: "您正在提交一个申请",
         content: (
@@ -300,3 +317,13 @@ export const toApplayCommonHandler = (router, KV, gql) => {
         centered: true
     })
 }
+
+export const ProjectStatusMaps = {
+    pending: '待审核',
+    rejected: '已驳回',
+    checked: '已审核',
+    waiting: '待分配',
+    following: '待跟进',
+    cancelled: '已作废',
+    finished: '已完成',
+};

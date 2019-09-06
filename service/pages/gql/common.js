@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 
 export const Q_FETCH_CURRENT_USER = gql`
   query fetchCurrentUser {
+    remainderApplyCount
     me {
       id
       create_at
@@ -167,11 +168,13 @@ export const Q_FETCH_CURRENT_USER = gql`
         }
       }
       apply_products {
+        id
         create_at
         product {
           id
           name
           cover
+          status
           category {
             id
             title
@@ -179,6 +182,7 @@ export const Q_FETCH_CURRENT_USER = gql`
         }
       }
       apply_projects {
+        id
         create_at
         project {
           id
@@ -195,6 +199,7 @@ export const Q_FETCH_CURRENT_USER = gql`
         }
       }
       apply_capitals {
+        id
         create_at
         capital {
           id
@@ -218,6 +223,7 @@ export const Q_FETCH_CURRENT_USER = gql`
         }
       }
       apply_providers {
+        id
         create_at
         provider {
           id

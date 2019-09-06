@@ -70,7 +70,7 @@ export default Form.create()(props => {
 				update: (_, { data }) => {
 					if (data && data.levelUp) {
 						message.success('申请已提交，请等待工作人员审核！');
-						jump('/user');
+						jump('/user', 1500);
 					}
 				}
 			});

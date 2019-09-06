@@ -20,8 +20,8 @@ export default withContext(props => {
 	const [areaList, setAreaList] = useState([]);
 	const [area, setArea] = useState(null);
 
-	const [userType, setUserType] = useState(user ? user.type : UserTypeEnum.ENTERPRISE);
-	const [userIdentity, setIdentity] = useState(user ? user.identity : IdentityEnum.FINANCER);
+	const [userType, setUserType] = useState(UserTypeEnum.ENTERPRISE);
+	const [userIdentity, setIdentity] = useState(IdentityEnum.FINANCER);
 
 	useEffect(() => {
 		(async () => {
@@ -37,7 +37,9 @@ export default withContext(props => {
 
 			setArea(userArea ? userArea.map(item => item.id) : null);
 
-			setIdentity(currentUser.identity);
+			if (IdentityEnum.TOURIST !== currentUser.identity) {
+				setIdentity(currentUser.identity);
+			}
 			setUserType(currentUser.type);
 
 			setFlag(true);
@@ -57,7 +59,7 @@ export default withContext(props => {
 				<div className="top-tips">
 					<IconFont className="iconfont" type="icon-dengpao1" />
 					<p>
-						尊敬的V{user.vip}级用户，本日剩余可查看项目方或资金方信息数为 {user.applyCount < 0 ? 0 : user.applyCount} 条。
+						尊敬的V{user.vip}级用户，本日剩余可查看项目方或资金方信息数为 {user.remainderApplyCount < 0 ? 0 : user.remainderApplyCount} 条。
 					</p>
 				</div>
 				<div className="top-tips">

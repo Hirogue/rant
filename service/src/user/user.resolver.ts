@@ -1,6 +1,6 @@
 import { Inject, UseGuards } from '@nestjs/common';
-import { Args, CONTEXT, Mutation, Resolver } from '@nestjs/graphql';
-import { ObjectType } from 'type-graphql';
+import { Args, CONTEXT, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Int, ObjectType } from 'type-graphql';
 import { GqlJwtAuthGuard } from '../auth/gql-jwt-auth.guard';
 import { BasePaginate, BaseResolver, Me } from '../core';
 import { User } from '../database';
@@ -17,6 +17,11 @@ export class UserResolver extends BaseResolver(User, UserPaginate) {
         @Inject(CONTEXT) context,
         private readonly userService: UserService
     ) { super(context, 'user'); }
+
+    @Query(returns => Int, { description: 'Remainder apply count' })
+    async remainderApplyCount(@Me() me: User) {
+        return await this.userService.remainderApplyCount(me.id);
+    }
 
     @Mutation(returns => Boolean, { description: 'Apply product' })
     async applyProducts(@Args('id') id: string, @Me() me: User) {
