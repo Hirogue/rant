@@ -9,7 +9,7 @@ export default (props) => (
 			<IconFont className="iconfont" type="icon-weixin1" />
 			<p>微信订阅</p>
 			<div className="saoma">
-				<img className="about-banner" src={!!props.siteInfo ? props.siteInfo.wechatQRCode : ''} />
+				<img className="about-banner" src={''} />
 			</div>
 		</div>
 		<div className="top">
