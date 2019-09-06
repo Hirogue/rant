@@ -1,145 +1,149 @@
-import React from 'react';
+import { useApolloClient, useQuery } from '@apollo/react-hooks';
+import { Button, Divider, message, Spin } from 'antd';
 import moment from 'moment';
-import { Table, Button, Badge, message } from 'antd';
-import { withRouter } from 'next/router';
+import React, { useContext, useEffect, useState } from 'react';
 import UserLayout from '../../../components/Layout/UserLayout';
-import { apiUpdateProject } from '../../../services/common';
+import withContext, { GlobalContext } from '../../../components/Layout/withContext';
+import LogReader from '../../../components/LogReader';
+import StandardTable from '../../../components/StandardTable';
+import { M_DELETE_APPLY_PRODUCT, Q_GET_PROJECTS } from '../../../gql';
+import { LogTypeEnum, ProjectStatusEnum } from '../../../lib/enum';
+import { buildingQuery, jump, ProjectStatusMaps, toFetchCurrentUser } from '../../../lib/global';
 import './project_manage.scss';
 
-const orderStatus = [
-	{ value: 'PENDING', text: '待审核', icon: <Badge status="default" text="待审核" /> },
-	{ value: 'FOLLOW', text: '待跟进', icon: <Badge status="processing" text="待跟进" /> },
-	{ value: 'REJECT', text: '已驳回', icon: <Badge status="error" text="已驳回" /> },
-	{ value: 'OVER', text: '已审核', icon: <Badge status="success" text="已审核" /> }
-];
+export default withContext(props => {
 
-@withRouter
-export default class extends React.Component {
-	state = {
-		data: []
+	const client = useApolloClient();
+	const ctx = useContext(GlobalContext);
+	const [flag, setFlag] = useState(false);
+	const [logVisible, setLogVisible] = useState(false);
+	const [current, setCurrent] = useState(null);
+
+	const defaultVariables = {
+		page: 0,
+		limit: 10,
+		sort: [{ field: 'create_at', order: 'DESC' }],
 	};
 
-	columns = [
+	const [variables, setVariables] = useState(defaultVariables);
+
+	const { loading, data: { queryProject: res }, refetch } = useQuery(Q_GET_PROJECTS, {
+		notifyOnNetworkStatusChange: true,
+		variables: { queryString: buildingQuery(defaultVariables) },
+	});
+
+	useEffect(() => {
+		const queryString = buildingQuery(variables);
+		refetch({ queryString });
+	}, [variables]);
+
+	useEffect(() => {
+		(async () => {
+			const currentUser = await toFetchCurrentUser();
+			ctx.setCurrentUser(currentUser);
+			setFlag(true);
+		})();
+	}, []);
+
+	if (!flag) return <Spin style={{ position: 'fixed', top: '50%', left: '50%' }} tip="loading..." />;
+
+	const { data: list, total } = res || {};
+
+	const columns = [
+		{
+			title: '封面',
+			dataIndex: 'cover',
+			render: val => <img src={val} width="100" />
+		},
 		{
 			title: '标题',
-			width: 150,
 			dataIndex: 'title',
-			key: 'title'
-			// fixed: 'left'
+			render: (val, row) => <a href={`/project/detail?id=${row.id}`} target="_blank">{val}</a>
 		},
 		{
 			title: '状态',
-			// fixed: 'left',
 			dataIndex: 'status',
-			key: 'status',
-			render: (text, row, index) => orderStatus.find((item) => item.value === row.status).icon
+			render: val => ProjectStatusMaps[val]
 		},
-		// {
-		// 	title: '融资方式',
-		// 	dataIndex: 'project_mode',
-		// 	key: 'project_mode',
-		// 	sorter: (a, b) => !!a['project_mode'] && a['project_mode'].localeCompare(b['project_mode'], 'zh-Hans-CN'),
-		// 	render: (text, row, index) => (!!text ? text.split(':').pop() : ''),
-		// 	searchable: true
-		// },
-		// {
-		// 	title: '项目阶段',
-		// 	dataIndex: 'project_state',
-		// 	key: 'project_state',
-		// 	sorter: (a, b) =>
-		// 		!!a['project_state'] && a['project_state'].localeCompare(b['project_state'], 'zh-Hans-CN'),
-		// 	render: (text, row, index) => (!!text ? text.split(':').pop() : ''),
-		// 	searchable: true
-		// },
-		// {
-		// 	title: '金额',
-		// 	dataIndex: 'capital_amount',
-		// 	key: 'capital_amount',
-		// 	sorter: (a, b) =>
-		// 		!!a['capital_amount'] && a['capital_amount'].localeCompare(b['capital_amount'], 'zh-Hans-CN'),
-		// 	render: (text, row, index) => (!!text ? text.split(':').pop() : ''),
-		// 	searchable: true
-		// },
-		// {
-		// 	title: '所在地区',
-		// 	dataIndex: 'area',
-		// 	key: 'area',
-		// 	sorter: (a, b) => !!a['area'] && a['area'].localeCompare(b['area'], 'zh-Hans-CN'),
-		// 	render: (text, row, index) => (!!text ? text.split(':').pop() : ''),
-		// 	searchable: true
-		// },
-		// {
-		// 	title: '行业',
-		// 	dataIndex: 'industry',
-		// 	key: 'industry',
-		// 	sorter: (a, b) => !!a['industry'] && a['industry'].localeCompare(b['industry'], 'zh-Hans-CN'),
-		// 	render: (text, row, index) => (!!text ? text.split(':').pop() : ''),
-		// 	searchable: true
-		// },
 		{
 			title: '发布时间',
-			dataIndex: 'release_datetime',
-			key: 'release_datetime',
-			sorter: (a, b) =>
-				new Date(a['release_datetime']).getTime() < new Date(b['release_datetime']).getTime() ? -1 : 1,
-			render: (text, row, index) => moment(text).format('YYYY-MM-DD HH:mm:ss')
+			dataIndex: 'create_at',
+			sorter: true,
+			render: val => moment(val).format('YYYY-MM-DD HH:mm:ss')
 		},
 		{
 			title: '操作',
 			key: 'operation',
-			fixed: 'right',
-			width: 120,
-			render: (text, row) => (
-				<div className="tabs-btns">
-					<a as={`/user/publish/project/${row.id}`} href={`/user/publish/project?id=${row.id}`}>
-						<Button>编辑</Button>
-					</a>
-					<Button
-						type="danger"
-						onClick={() =>
-							this.update({
-								criteria: {
-									id: row.id
-								},
-								newvalue: {
-									is_reserved: true
-								}
-							})}
+			render: (val, row) => (
+				<>
+					{ProjectStatusEnum.CHECKED !== val ?
+						<>
+							<a
+								href="javascript:;"
+								onClick={() => {
+									client.mutate({
+										mutation: M_DELETE_APPLY_PRODUCT,
+										variables: { ids: row.id },
+										update: (_, { data }) => {
+											const { deleteApplyProduct } = data;
+
+											if (deleteApplyProduct) {
+												message.success('取消成功');
+												refetch();
+											}
+										}
+									})
+								}}
+							>
+								[取消]
+							</a>
+							<Divider type="vertical" />
+						</>
+						: null}
+					<a
+						href="javascript:;"
+						onClick={() => {
+							setCurrent(row);
+							setLogVisible(true);
+						}}
 					>
-						删除
-					</Button>
-				</div>
+						[日志]
+			   		</a>
+				</>
 			)
 		}
-	];
+	]
 
-	update = (payload) => {
-		apiUpdateProject(payload)
-			.then((res) => {
-				window.location.reload();
-			})
-			.catch((err) => message.error('操作失败！'));
-	};
-
-	render() {
-		const { data } = this.props.router.query;
-
-		return (
-			<UserLayout>
-				<div className="fund-manage">
-					<p className="right-title">
-						<Button type="primary" onClick={() => (window.location.href = '/user/publish/project')}>
-							发布
-						</Button>
-					</p>
-					<Table
-						columns={this.columns}
-						dataSource={data}
-						scroll={{ x: 1200 }}
-						pagination={{ pageSize: 8, total: data.length }}
-					/>
-				</div>
-			</UserLayout>
-		);
-	}
-}
+	return (
+		<UserLayout>
+			<div className="fund-manage">
+				<LogReader
+					title="日志"
+					target={current ? current.id : null}
+					type={LogTypeEnum.PROJECT}
+					visible={logVisible}
+					setVisible={setLogVisible}
+				/>
+				<p className="right-title">
+					<Button type="primary" onClick={() => jump('/publish/project')}>
+						立即发布
+ 					</Button>
+				</p>
+				<StandardTable
+					loading={loading}
+					dataSource={list}
+					columns={columns}
+					pagination={{
+						size: 'small',
+						total,
+						current: variables.page,
+						pageSize: variables.limit,
+						showTotal: total => `共 ${total} 条记录`,
+					}}
+					state={variables}
+					onChange={values => setVariables({ ...values })}
+				/>
+			</div>
+		</UserLayout>
+	)
+});
