@@ -8,7 +8,7 @@ import * as csv from 'csvtojson';
 export default class implements Seeder {
     public async run(factory: Factory, connection: Connection): Promise<any> {
 
-        
+
 
         const rootPath = join(__dirname, '../../../../csv');
         const filePath = rootPath + '/dbt_products.csv';
@@ -31,10 +31,11 @@ export default class implements Seeder {
 
                 const flows = [];
                 //console.log(item.DynamicKV);
-                ex_info.DynamicKV.forEach( ( step, i ) => {
-                    flows.push({key : step.key, sort : i, value:step.value});
-                } );
+                ex_info.DynamicKV.forEach((step, i) => {
+                    flows.push({ key: step.key, sort: i, value: step.value });
+                });
                 product.flows = flows;
+                product.is_published = true;
 
                 await connection.getRepository(Product).save(product);
 
@@ -50,7 +51,7 @@ export default class implements Seeder {
                 { value: 'step 4', sort: 3 },
                 { value: 'step 5', sort: 4 },
             ];
-    
+
             await factory(Product)({ category: cate1, flows }).seedMany(15);
             await factory(Product)({ category: cate2, flows }).seedMany(16);
             await factory(Product)({ category: cate3, flows }).seedMany(5);

@@ -69,8 +69,8 @@ export default Form.create()(props => {
 			if (!err) {
 				post('/api/user/reset-password', values).then(res => {
 					if (!!res) {
-						message.success('重置成功，自动登录');
-						jump('/login');
+						message.success('重置成功，2秒后自动登录');
+						jump('/login', 2000);
 					}
 				});
 			}

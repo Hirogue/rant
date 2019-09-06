@@ -18,7 +18,7 @@ const httpLink = new HttpLink({
         application: 'frontstage',
         authorization: `Bearer ${token}`
     }
-})
+});
 
 const errorHandler = onError(error => {
     console.error('error:', error);

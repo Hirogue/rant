@@ -1,5 +1,6 @@
 import * as Faker from 'faker';
 import { define } from "typeorm-seeding";
+import { ProjectStatusEnum } from '../../core';
 import { Metadata, Provider, ProviderCategory, User } from '../entities';
 
 interface IProviderSetting {
@@ -10,6 +11,7 @@ interface IProviderSetting {
     category: ProviderCategory;
     creator: User;
     area: Metadata;
+    status: ProjectStatusEnum;
 }
 
 define(Provider, (faker: typeof Faker, settings: IProviderSetting) => {
@@ -21,6 +23,7 @@ define(Provider, (faker: typeof Faker, settings: IProviderSetting) => {
     instance.category = settings.category;
     instance.creator = settings.creator;
     instance.area = settings.area;
+    instance.status = settings.status || ProjectStatusEnum.CHECKED;
 
     return instance;
 })

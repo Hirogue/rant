@@ -81,10 +81,7 @@ export default Form.create()(props => {
 				post('/api/user/register', values).then(res => {
 					if (!!res) {
 						message.success('注册成功');
-
-						setTimeout(() => {
-							jump('/login');
-						}, 1000);
+						jump('/login', 2000);
 					}
 				});
 			}
