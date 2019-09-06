@@ -7,6 +7,8 @@ import { getTreeData, mergeParams } from '../../lib/global';
 
 export default props => {
   const {
+    loading,
+    scroll,
     columns,
     rowKey,
     size,
@@ -145,13 +147,14 @@ export default props => {
   return (
     <Card bordered={false} style={{ marginTop: 10 }} bodyStyle={{ padding: '0 10px' }}>
       <Table
+        loading={loading}
         size={size || 'middle'}
         rowKey={rowKey || 'id'}
         columns={tableColumns}
         dataSource={dataSource}
         onChange={onTableChange}
-        rowSelection={rowSelection}
         pagination={pagination}
+        scroll={scroll}
       />
     </Card>
   );

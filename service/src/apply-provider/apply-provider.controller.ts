@@ -11,6 +11,8 @@ export class ApplyProviderController extends BaseController(ApplyProvider, {
         join: {
             applicant: { eager: true },
             provider: { eager: true },
+            'provider.category': { eager: true },
+            creator: { eager: true },
             org: { eager: true },
             own: { eager: true },
         }

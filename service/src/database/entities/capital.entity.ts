@@ -45,7 +45,7 @@ export class Capital extends Base {
     publish_at: string;
 
     @Field({ nullable: true })
-    @Column({ nullable: true })
+    @Column({ nullable: true, type: 'int' })
     @ApiModelProperty({ nullable: true })
     amount: number;
 

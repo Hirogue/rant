@@ -11,8 +11,7 @@ export class ApplyProjectController extends BaseController(ApplyProject, {
         join: {
             applicant: { eager: true },
             project: { eager: true },
-            org: { eager: true },
-            own: { eager: true },
+            'project.creator': { eager: true }
         }
     }
 }) {

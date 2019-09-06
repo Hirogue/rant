@@ -11,8 +11,7 @@ export class ApplyCapitalController extends BaseController(ApplyCapital, {
         join: {
             applicant: { eager: true },
             capital: { eager: true },
-            org: { eager: true },
-            own: { eager: true },
+            'capital.creator': { eager: true }
         }
     }
 }) {

@@ -153,6 +153,7 @@ export default props => {
         } 项`}</Divider>
       )}
       <Table
+        loading={loading}
         size={size || 'middle'}
         rowKey={rowKey || 'id'}
         columns={tableColumns}

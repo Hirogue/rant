@@ -11,6 +11,7 @@ export class ApplyProductController extends BaseController(ApplyProduct, {
         join: {
             applicant: { eager: true },
             product: { eager: true },
+            'product.category': { eager: true },
             org: { eager: true },
             own: { eager: true },
         }

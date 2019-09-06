@@ -1,32 +1,28 @@
-export const IFModeEnum = {
-    EQUITY: 'equity',
-    CLAIM: 'claim',
-};
-
-export const ProjectStatusEnum = {
-    PENDING: 'pending',
-    REJECTED: 'rejected',
-    CHECKED: 'checked',
-    WAITING: 'waiting',
-    FOLLOWING: 'following',
-    CANCELLED: 'cancelled',
-    FINISHED: 'finished',
-};
-
-export const UserLevelEnum = {
-    V0: 0,
-    V1: 1,
-};
-
-export const LogTypeEnum = {
-    PROJECT: 'project',
-    CAPITAL: 'capital',
-    EXPERT: 'expert',
-    PRODUCT: 'product',
-    USER: 'user',
-};
-
 module.exports = {
+    IFModeEnum: {
+        EQUITY: 'equity',
+        CLAIM: 'claim',
+    },
+    ProjectStatusEnum: {
+        PENDING: 'pending',
+        REJECTED: 'rejected',
+        CHECKED: 'checked',
+        WAITING: 'waiting',
+        FOLLOWING: 'following',
+        CANCELLED: 'cancelled',
+        FINISHED: 'finished',
+    },
+    UserLevelEnum: {
+        V0: 0,
+        V1: 1,
+    },
+    LogTypeEnum: {
+        PROJECT: 'project',
+        CAPITAL: 'capital',
+        EXPERT: 'expert',
+        PRODUCT: 'product',
+        USER: 'user',
+    },
     UserTypeEnum: {
         PERSONAL: 'personal',
         ENTERPRISE: 'enterprise',

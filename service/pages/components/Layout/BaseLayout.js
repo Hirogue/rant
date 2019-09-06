@@ -49,7 +49,7 @@ export default class extends Component {
 		const { csrfToken } = this.props.router.query;
 		localStorage.setItem('csrf-token', csrfToken);
 
-		
+
 		const checkCountDown = parseInt(JSON.parse(localStorage.getItem('user-sms-countdown') || 0));
 		if (checkCountDown > 0) {
 			this.sendSMSCode();

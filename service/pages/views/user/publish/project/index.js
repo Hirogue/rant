@@ -199,8 +199,8 @@ export default class extends React.Component {
 													<ImageCropper
 														imageUrl={!thumbnail ? '' : thumbnail.url}
 														onUpload={(file) => {
-															if (file.size > 2 * 1024 * 1024) {
-																message.error('请上传小于2M的图片');
+															if (file.size > 5 * 1024 * 1024) {
+																message.error('请上传小于5M的图片');
 																return false;
 															}
 															uploadFile(file).then((res) => {

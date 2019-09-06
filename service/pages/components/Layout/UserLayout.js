@@ -69,10 +69,10 @@ export default withContext(({ props }) => {
 										</Button>
 									</div>
 									<div className="left-bottom">
-										<div className={`navitem ${asPath === '/user/product'
+										<div className={`navitem ${asPath === '/user/apply/product'
 											? 'active'
 											: ''}`}
-											onClick={() => jump('/user/product')}
+											onClick={() => jump('/user/apply/product')}
 										>
 											<p>金融服务</p>
 										</div>
@@ -81,7 +81,14 @@ export default withContext(({ props }) => {
 											: ''}`}
 											onClick={() => jump('/user/apply/project')}
 										>
-											<p>我的投递</p>
+											<p>我投递的项目</p>
+										</div>
+										<div className={`navitem ${asPath === '/user/apply/capital'
+											? 'active'
+											: ''}`}
+											onClick={() => jump('/user/apply/capital')}
+										>
+											<p>我投递的资金</p>
 										</div>
 										<div className={`navitem ${asPath === '/user/apply/service'
 											? 'active'
