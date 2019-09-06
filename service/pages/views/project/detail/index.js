@@ -10,11 +10,10 @@ import BaseLayout from '../../../components/Layout/BaseLayout';
 import BreadCrumb from '../../../components/BreadCrumb';
 
 import './project_detail.scss';
-import GlobalContext from '../../../components/context/GlobalContext';
 import { createApolloClient } from "../../../lib/apollo";
 import { buildingQuery, getUrlParam, toApplayCommonHandler } from "../../../lib/global";
 import { Q_GET_PROJECT_DETAIL, M_APPLY_PROJECTS } from '../../../gql'
-import { PROJECT_METADATA_TITLE_CN, IF_MODE_ENUM, DEFAULT_AVATAR } from '../../../lib/enum';
+import { IF_MODE_ENUM, DEFAULT_AVATAR } from '../../../lib/enum';
 
 const client = createApolloClient();
 const defaultVariables = {
@@ -40,7 +39,7 @@ export default withRouter((props) => {
 	let user = {};
 
 	try {
-		user = JSON.parse(localStorage.getItem('u_user')) || {};
+		user = JSON.parse(localStorage.getItem('u_user')) || null;
 	} catch (error) {
 		console.info('您还未登录！');
 	}

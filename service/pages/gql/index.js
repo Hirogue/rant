@@ -16,3 +16,4 @@ export * from './pc_home';
 export * from './pc_project';
 export * from './pc_capital';
 export * from './pc_service';
+export * from './pc_news';

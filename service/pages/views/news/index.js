@@ -1,218 +1,255 @@
-import React, { Component } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import _ from 'lodash';
+import { Spin, Empty } from 'antd';
 import { withRouter } from 'next/router';
+import { CondOperator } from '@nestjsx/crud-request';
+import { useQuery } from '@apollo/react-hooks';
 import { Tabs } from 'antd';
 import BaseLayout from '../../components/Layout/BaseLayout';
 import BreadCrumb from '../../components/BreadCrumb';
 import LatestNews from '../../partials/news/LatestNews';
 import List from '../../partials/news/List';
 
+import { createApolloClient } from "../../lib/apollo";
+import { buildingQuery, getUrlParam } from "../../lib/global";
+import { Q_GET_ARTICLE_DATA } from '../../gql'
+import { METADATA_TITLE_CN, IF_MODE_ENUM_R } from '../../lib/enum';
+
 import '../../partials/news/news.scss';
 
-import GlobalContext from '../../components/context/GlobalContext';
-
 const TabPane = Tabs.TabPane;
+const client = createApolloClient();
+const defaultFilter = { field: 'is_published', operator: CondOperator.EQUALS, value: true };
+const defaultVariables = {
+	page: 1,
+	join: [{ field: 'category' }],
+	sort: [{ field: 'publish_at', order: 'DESC' }, { field: 'sort', order: 'DESC' }],
+};
 
+const latestNewsVariables = Object.assign({}, defaultVariables, {
+	limit: 10,
+	filter: [
+		{ ...defaultFilter }
+	]
+})
+const newsVariables_1 = Object.assign({}, defaultVariables, {
+	limit: 6,
+	filter: [
+		{ ...defaultFilter },
+		{ field: 'category.title', operator: CondOperator.EQUALS, value: '行业快讯' }
+	]
+})
+const newsVariables_2 = Object.assign({}, defaultVariables, {
+	limit: 6,
+	filter: [
+		{ ...defaultFilter },
+		{ field: 'category.title', operator: CondOperator.EQUALS, value: '江旅资讯' }
+	]
+})
+const newsVariables_3 = Object.assign({}, defaultVariables, {
+	limit: 6,
+	filter: [
+		{ ...defaultFilter },
+		{ field: 'category.title', operator: CondOperator.EQUALS, value: '投融研报' }
+	]
+})
+const newsVariables_4 = Object.assign({}, defaultVariables, {
+	limit: 6,
+	filter: [
+		{ ...defaultFilter },
+		{ field: 'category.title', operator: CondOperator.EQUALS, value: '投融学堂' }
+	]
+})
+const newsVariables_5 = Object.assign({}, defaultVariables, {
+	limit: 6,
+	filter: [
+		{ ...defaultFilter },
+		{ field: 'category.title', operator: CondOperator.EQUALS, value: '通知公告' }
+	]
+});
+
+const categoryArray = ['行业快讯','江旅资讯','投融研报','投融学堂','通知公告'];
 
 export default withRouter((props) => {
 
 	let { router } = props;
 
-	let category = getUrlParam(router, 'category');
+	const [category, setCategory] = useState(getUrlParam(router, 'category') || '1');
+
+	const { loading, fetchMore, data: { latestNews, news1,  news2,  news3,  news4,  news5 } } = useQuery(Q_GET_ARTICLE_DATA, {
+		fetchPolicy: "cache-first",
+		notifyOnNetworkStatusChange: true,
+		client: client,
+		variables: {
+			latestNewsString: buildingQuery(latestNewsVariables),
+			newsString1: buildingQuery(newsVariables_1),
+			newsString2: buildingQuery(newsVariables_2),
+			newsString3: buildingQuery(newsVariables_3),
+			newsString4: buildingQuery(newsVariables_4),
+			newsString5: buildingQuery(newsVariables_5)
+		}
+	});
+
+	const loadMore = (key) => () => {
+		if (key === 1) {
+			fetchMore({
+				variables: {
+					newsString1: buildingQuery({
+						...newsVariables_1,
+						page: newsVariables_1.page + 1
+					}),
+				},
+				updateQuery: (prev, { fetchMoreResult }) => ({
+					...prev,
+					news1: {
+						...fetchMoreResult.news1,
+						data: prev.news1.data.concat(fetchMoreResult.news1.data)
+					},
+				})
+			});
+		}
+
+		if (key === 2) {
+			fetchMore({
+				variables: {
+					newsString2: buildingQuery({
+						...newsVariables_2,
+						page: newsVariables_2.page + 1
+					}),
+				},
+				updateQuery: (prev, { fetchMoreResult }) => ({
+					...prev,
+					news2: {
+						...fetchMoreResult.news2,
+						data: prev.news2.data.concat(fetchMoreResult.news2.data)
+					},
+				})
+			});
+		}
+
+		if (key === 3) {
+			fetchMore({
+				variables: {
+					newsString3: buildingQuery({
+						...newsVariables_3,
+						page: newsVariables_3.page + 1
+					}),
+				},
+				updateQuery: (prev, { fetchMoreResult }) => ({
+					...prev,
+					news3: {
+						...fetchMoreResult.news3,
+						data: prev.news3.data.concat(fetchMoreResult.news3.data)
+					},
+				})
+			});
+		}
+
+		if (key === 4) {
+			fetchMore({
+				variables: {
+					newsString4: buildingQuery({
+						...newsVariables_4,
+						page: newsVariables_4.page + 1
+					}),
+				},
+				updateQuery: (prev, { fetchMoreResult }) => ({
+					...prev,
+					news4: {
+						...fetchMoreResult.news4,
+						data: prev.news4.data.concat(fetchMoreResult.news4.data)
+					},
+				})
+			});
+		}
+		if (key === 5) {
+			fetchMore({
+				variables: {
+					newsString5: buildingQuery({
+						...newsVariables_5,
+						page: newsVariables_5.page + 1
+					}),
+				},
+				updateQuery: (prev, { fetchMoreResult }) => ({
+					...prev,
+					news5: {
+						...fetchMoreResult.news5,
+						data: prev.news5.data.concat(fetchMoreResult.news5.data)
+					},
+				})
+			});
+		}
+	};
 
 	return (
 		<BaseLayout>
-
+			{<div className="news-page">
+				<BreadCrumb adrname_two={categoryArray[category-1]} />
+				<LatestNews news={latestNews ? latestNews.data : []} />
+				<Tabs activeKey={category} animated={false} onChange={(key) => setCategory(key) || window.history.pushState({}, '', `${window.location.pathname}?category=${key}`)}>
+					<TabPane tab="行业快讯" key={1}>
+						<div className="news-list">
+							{!!news1 && !!news1.data && !!news1.data.length && news1.data.map((item) => (
+								<List item={item} key={item.id} />
+							))}
+						</div>
+						<div className="btn-box">
+							{!!news1 && !!news1.page && !!news1.pageCount && news1.page < news1.pageCount && (
+								<a className="more-btn" onClick={loadMore(1)}>加载更多...</a>
+							)}
+						</div>
+					</TabPane>
+					<TabPane tab="江旅资讯" key={2}>
+						<div className="news-list">
+							{!!news2 && !!news2.data && !!news2.data.length && news2.data.map((item) => (
+								<List item={item} key={item.id} />
+							))}
+						</div>
+						<div className="btn-box">
+							{!!news2 && !!news2.page && !!news2.pageCount && news2.page < news2.pageCount && (
+								<a className="more-btn" onClick={loadMore(2)}>加载更多...</a>
+							)}
+						</div>
+					</TabPane>
+					<TabPane tab="投融研报" key={3}>
+						<div className="news-list">
+							{!!news3 && !!news3.data && !!news3.data.length && news3.data.map((item) => (
+								<List item={item} key={item.id} />
+							))}
+						</div>
+						<div className="btn-box">
+							{!!news3 && !!news3.page && !!news3.pageCount && news3.page < news3.pageCount && (
+								<a className="more-btn" onClick={loadMore(3)}>加载更多...</a>
+							)}
+						</div>
+					</TabPane>
+					<TabPane tab="投融学堂" key={4}>
+						<div className="news-list">
+							{!!news4 && !!news4.data && !!news4.data.length && news4.data.map((item) => (
+								<List item={item} key={item.id} />
+							))}
+						</div>
+						<div className="btn-box">
+							{!!news4 && !!news4.page && !!news4.pageCount && news4.page < news4.pageCount && (
+								<a className="more-btn" onClick={loadMore(4)}>加载更多...</a>
+							)}
+						</div>
+					</TabPane>
+					<TabPane tab="通知公告" key={5}>
+						<div className="news-list">
+							{!!news5 && !!news5.data && !!news5.data.length && news5.data.map((item) => (
+								<List item={item} key={item.id} />
+							))}
+						</div>
+						<div className="btn-box">
+							{!!news5 && !!news5.page && !!news5.pageCount && news5.page < news5.pageCount && (
+								<a className="more-btn" onClick={loadMore(5)}>加载更多...</a>
+							)}
+						</div>
+					</TabPane>
+				</Tabs>
+				{loading && <Spin style={{ margin: "10vw 46%" }} tip="正在加载中..." />}
+			</div>}
 		</BaseLayout>
 	)
 })
-
-// @withRouter
-// export default class extends Component {
-// 	state = {
-// 		news: [],
-// 		industryNews: {},
-// 		jlNews: {},
-// 		researchReports: {},
-// 		schoolNews: {}
-// 	};
-
-// 	async componentDidMount() {
-// 		const { news } = this.props.router.query;
-
-// 		this.setState((state) => ({
-// 			...state,
-// 			news,
-// 			industryNews: {
-// 				list: _.take(news.industryNews, 3) || [],
-// 				current: 1,
-// 				length: Math.ceil(news.industryNews.length / 3)
-// 			},
-// 			jlNews: { list: _.take(news.jlNews, 3) || [], current: 1, length: Math.ceil(news.jlNews.length / 3) },
-// 			researchReports: {
-// 				list: _.take(news.researchReports, 3) || [],
-// 				current: 1,
-// 				length: Math.ceil(news.researchReports.length / 3)
-// 			},
-// 			schoolNews: {
-// 				list: _.take(news.schoolNews, 3) || [],
-// 				current: 1,
-// 				length: Math.ceil(news.schoolNews.length / 3)
-// 			}
-// 		}));
-// 	}
-
-// 	loadMore = (key) => () => {
-// 		if (key === 1) {
-// 			const industryNews = this.state.industryNews;
-
-// 			industryNews.list = industryNews.list.concat(
-// 				this.state.news.industryNews.map((item) => item).splice(industryNews.current++ * 3, 6)
-// 			);
-// 			industryNews.current ++;
-
-// 			this.setState((state) => ({
-// 				...state,
-// 				industryNews
-// 			}));
-// 		}
-
-// 		if (key === 2) {
-// 			const jlNews = this.state.jlNews;
-
-// 			jlNews.list = jlNews.list.concat(
-// 				this.state.news.jlNews.map((item) => item).splice(jlNews.current++ * 3, 6)
-// 			);
-// 			jlNews.current ++;
-
-// 			this.setState((state) => ({
-// 				...state,
-// 				jlNews
-// 			}));
-// 		}
-
-// 		if (key === 3) {
-// 			const researchReports = this.state.researchReports;
-
-// 			researchReports.list = researchReports.list.concat(
-// 				this.state.news.researchReports.map((item) => item).splice(researchReports.current++ * 3, 6)
-// 			);
-// 			researchReports.current ++;
-
-// 			this.setState((state) => ({
-// 				...state,
-// 				researchReports
-// 			}));
-// 		}
-
-// 		if (key === 4) {
-// 			const schoolNews = this.state.schoolNews;
-
-// 			schoolNews.list = schoolNews.list.concat(
-// 				this.state.news.schoolNews.map((item) => item).splice(schoolNews.current++ * 3, 6)
-// 			);
-// 			schoolNews.current ++;
-
-// 			this.setState((state) => ({
-// 				...state,
-// 				schoolNews
-// 			}));
-// 		}
-// 	};
-
-// 	render() {
-// 		const { category } = this.props.router.query;
-
-// 		return (
-// 			<BaseLayout>
-// 				<GlobalContext.Consumer>
-// 					{(context) => {
-// 						return (
-// 							<React.Fragment>
-// 								<div className="news-page">
-// 									<BreadCrumb adrname_two={'行业资讯'} />
-// 									<LatestNews news={this.state.news} />
-// 									<Tabs defaultActiveKey={category} animated={false}>
-// 										<TabPane tab="行业快讯" key={1}>
-// 											<div className="news-list">
-// 												{!!this.state.news.industryNews &&
-// 													this.state.industryNews.list.map((item) => (
-// 														<List item={item} key={item.id} />
-// 													))}
-// 											</div>
-// 											<div className="btn-box">
-// 												{this.state.industryNews.length > this.state.industryNews.current ? (
-// 													<a className="more-btn" onClick={this.loadMore(1)}>
-// 														加载更多...
-// 													</a>
-// 												) : (
-// 													''
-// 												)}
-// 											</div>
-// 										</TabPane>
-// 										<TabPane tab="江旅资讯" key={2}>
-// 											<div className="news-list">
-// 												{!!this.state.news.jlNews &&
-// 													!!this.state.news.jlNews &&
-// 													this.state.jlNews.list.map((item) => (
-// 														<List item={item} key={item.id} />
-// 													))}
-// 											</div>
-// 											<div className="btn-box">
-// 												{!!this.state.news.jlNews &&
-// 												this.state.jlNews.length > this.state.jlNews.current ? (
-// 													<a className="more-btn" onClick={this.loadMore(2)}>
-// 														加载更多...
-// 													</a>
-// 												) : (
-// 													''
-// 												)}
-// 											</div>
-// 										</TabPane>
-// 										<TabPane tab="投融研报" key={3}>
-// 											<div className="news-list">
-// 												{!!this.state.news.researchReports &&
-// 													this.state.researchReports.list.map((item) => (
-// 														<List item={item} key={item.id} />
-// 													))}
-// 											</div>
-// 											<div className="btn-box">
-// 												{!!this.state.news.researchReports &&
-// 												this.state.researchReports.length >
-// 													this.state.researchReports.current ? (
-// 													<a className="more-btn" onClick={this.loadMore(3)}>
-// 														加载更多...
-// 													</a>
-// 												) : (
-// 													''
-// 												)}
-// 											</div>
-// 										</TabPane>
-// 										<TabPane tab="投融学堂" key={4}>
-// 											<div className="news-list">
-// 												{!!this.state.news.schoolNews &&
-// 													this.state.schoolNews.list.map((item) => (
-// 														<List item={item} key={item.id} />
-// 													))}
-// 											</div>
-// 											<div className="btn-box">
-// 												{!!this.state.news.schoolNews &&
-// 												this.state.schoolNews.length > this.state.schoolNews.current ? (
-// 													<a className="more-btn" onClick={this.loadMore(4)}>
-// 														加载更多...
-// 													</a>
-// 												) : (
-// 													''
-// 												)}
-// 											</div>
-// 										</TabPane>
-// 									</Tabs>
-// 								</div>
-// 							</React.Fragment>
-// 						);
-// 					}}
-// 				</GlobalContext.Consumer>
-// 			</BaseLayout>
-// 		);
-// 	}
-// }

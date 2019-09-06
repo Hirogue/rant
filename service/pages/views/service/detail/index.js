@@ -27,7 +27,7 @@ export default withRouter((props) => {
 	let user = {};
 
 	try {
-		user = JSON.parse(localStorage.getItem('u_user')) || {};
+		user = JSON.parse(localStorage.getItem('u_user')) || null;
 	} catch (error) {
 		console.info('您还未登录！');
 	}

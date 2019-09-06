@@ -8,7 +8,6 @@ import { onError } from 'apollo-link-error';
 import { HttpLink } from 'apollo-link-http';
 import apolloLogger from 'apollo-link-logger';
 import { router } from 'umi';
-import { formatMessage } from 'umi-plugin-react/locale';
 
 const httpLink = new HttpLink({
   ...Config.apollo.link,
@@ -37,9 +36,6 @@ const errorHandler = onError(error => {
     Logger.log('error result:', result);
 
     const errorMsg = result.message;
-    // formatMessage({
-    //   id: result.message,
-    // });
 
     const errorCode = parseInt(result.extensions ? result.extensions.code : 0);
     Logger.log('error code:', errorCode);

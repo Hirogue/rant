@@ -43,7 +43,7 @@ export default withRouter(({ data, router }) => {
 	let user = {};
 
 	try {
-		user = JSON.parse(localStorage.getItem('u_user')) || {};
+		user = JSON.parse(localStorage.getItem('u_user')) || null;
 	} catch (error) {
 		console.info('您还未登录！');
 	}
@@ -103,7 +103,7 @@ export default withRouter(({ data, router }) => {
 						<IconFont className="iconfont" type="icon-jiantou-right" />
 					</a>
 
-					{toShowApplyButton(data)(user.apply_projects)}
+					{toShowApplyButton(data)(user && user.apply_projects)}
 				</div>
 			</div>
 		</div>

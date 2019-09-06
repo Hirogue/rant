@@ -27,7 +27,7 @@ export default ({ data, router }) => {
 	let user = {};
 
 	try {
-		user = JSON.parse(localStorage.getItem('u_user')) || {};
+		user = JSON.parse(localStorage.getItem('u_user')) || null;
 	} catch (error) {
 		console.info('您还未登录！');
 	}
@@ -39,15 +39,12 @@ export default ({ data, router }) => {
 			</a>
 			<div className="content">
 				<a as={`/service/detail/${data.id}`} href={`/service/detail?id=${data.id}`} target="_blank">
-					<h4 className="title">
-						{data.name}
-						<span>({data.slogan})</span>
-					</h4>
+					<h4 className="title">{data.name}</h4>
 				</a>
 				<p className="text">{data.summary}</p>
 			</div>
 			<div className="right">
-				{toShowApplyButton(data)(user.apply_providers)}
+				{toShowApplyButton(data)(user && user.apply_providers)}
 				<ul className="icons">
 					<li>
 						<IconFont className="iconfont" type="icon-shijian1" />

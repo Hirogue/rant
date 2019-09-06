@@ -63,7 +63,7 @@ export class AuthResolver {
             ]
         });
 
-        if (!result) throw new ApolloException('errors.invalid.auth', HttpStatus.UNAUTHORIZED);
+        if (!result) throw new ApolloException('身份验证失效', HttpStatus.UNAUTHORIZED);
 
         return result;
     }

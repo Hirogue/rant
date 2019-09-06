@@ -30,7 +30,7 @@ export default withRouter(({ data, router }) => {
 	let user = {};
 
 	try {
-		user = JSON.parse(localStorage.getItem('u_user')) || {};
+		user = JSON.parse(localStorage.getItem('u_user')) || null;
 	} catch (error) {
 		user = {};
 		console.info('您还未登录！');
@@ -67,7 +67,7 @@ export default withRouter(({ data, router }) => {
 				</li>
 			</ul>
 			<div className="btn-and-time">
-				{toShowApplyButton(data)(user.apply_capitals)}
+				{toShowApplyButton(data)(user && user.apply_capitals)}
 				<p className="time">{moment(data.release_datetime).format('YYYY-MM-DD')}</p>
 			</div>
 		</div>
