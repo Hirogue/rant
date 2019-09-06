@@ -26,21 +26,15 @@ export class UserController {
     @ApiOperation({ title: 'apply project' })
     applyProject() { }
 
-    @Post('/apply/project')
-    @ApiOperation({ title: 'apply project post' })
-    applyProjectPost() { }
+    @Get('/apply/product')
+    @Render(`${PAGE_URL}/apply/product`)
+    @ApiOperation({ title: 'apply product' })
+    applyProduct() { }
 
-    @Post('/apply/product')
-    @ApiOperation({ title: 'apply product post' })
-    applyProductPost() { }
-
-    @Post('/apply/service')
-    @ApiOperation({ title: 'apply service post' })
-    applyServicePost() { }
-
-    @Post('/apply/content')
-    @ApiOperation({ title: 'apply content post' })
-    applyContentPost() { }
+    @Get('/apply/capital')
+    @Render(`${PAGE_URL}/apply/capital`)
+    @ApiOperation({ title: 'apply capital' })
+    applyCapital() { }
 
     @Get('/apply/service')
     @Render(`${PAGE_URL}/apply/service`)
@@ -52,20 +46,10 @@ export class UserController {
     @ApiOperation({ title: 'user funding' })
     userFunding() { }
 
-    @Get('/product')
-    @Render(`${PAGE_URL}/product`)
-    @ApiOperation({ title: 'user product' })
-    userProduct() { }
-
     @Get('/project')
     @Render(`${PAGE_URL}/project`)
     @ApiOperation({ title: 'user project' })
     userProject() { }
-
-    @Get('/service')
-    @Render(`${PAGE_URL}/service`)
-    @ApiOperation({ title: 'user service' })
-    userService() { }
 
     @Get('/publish/funding')
     @Render(`${PAGE_URL}/publish/funding`)

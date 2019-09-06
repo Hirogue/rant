@@ -67,7 +67,7 @@ export class ApplyProductService extends BaseService<ApplyProduct> {
         log.own = user;
         log.target = target.id;
         log.status = target.status;
-        log.type = LogTypeEnum.EXPERT;
+        log.type = LogTypeEnum.PRODUCT;
 
         await logRepo.save(log);
         await applyProductRepo.save(applyProduct);

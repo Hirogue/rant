@@ -1,7 +1,7 @@
 import { RequestQueryBuilder } from '@nestjsx/crud-request';
 import { message, Modal } from 'antd';
 import { Fragment } from 'react';
-import { isEmpty } from 'lodash';
+import { isArray, isEmpty } from 'lodash';
 import { Q_FETCH_CURRENT_USER, Q_GET_METADATA_TREES, Q_METADATA_DESCENDANTS_TREE } from '../gql';
 import { createApolloClient } from "./apollo";
 

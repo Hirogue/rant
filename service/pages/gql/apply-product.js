@@ -15,6 +15,11 @@ export const F_APPLY_PRODUCT_FIELDS = gql`
     product {
       id
       name
+      cover
+      category {
+        id
+        title
+      }
     }
     org {
       id

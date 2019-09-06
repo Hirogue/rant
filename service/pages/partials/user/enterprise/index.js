@@ -244,8 +244,8 @@ export default Form.create()(props => {
 							title='请上传机构logo'
 							url={logo}
 							onUpload={file => {
-								if (file.size > 2 * 1024 * 1024) {
-									message.error('请上传小于2M的图片');
+								if (file.size > 5 * 1024 * 1024) {
+									message.error('请上传小于5M的图片');
 									return false;
 								}
 								onUploadLogo(file);
@@ -261,8 +261,8 @@ export default Form.create()(props => {
 					action={null}
 					showUploadList={false}
 					beforeUpload={(file) => {
-						if (file.size > 2 * 1024 * 1024) {
-							message.error('请上传小于2M的图片');
+						if (file.size > 5 * 1024 * 1024) {
+							message.error('请上传小于5M的图片');
 							return false;
 						}
 						onUpload(file);
@@ -283,7 +283,7 @@ export default Form.create()(props => {
 										<Icon type="upload" />
 									</p>
 									<p className="ant-upload-text">点击上传营业执照电子版</p>
-									<p className="ant-upload-hint">图片大小不超过2M</p>
+									<p className="ant-upload-hint">图片大小不超过5M</p>
 								</Fragment>
 							)}
 					</div>

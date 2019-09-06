@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import UserLayout from '../../../../components/Layout/UserLayout';
 import withContext, { GlobalContext } from '../../../../components/Layout/withContext';
 import StandardTable from '../../../../components/StandardTable';
-import { Q_GET_APPLY_PROJECTS } from '../../../../gql';
+import { Q_GET_APPLY_CAPITALS } from '../../../../gql';
 import { buildingQuery, jump, toFetchCurrentUser } from '../../../../lib/global';
 import './service_manage.scss';
 
@@ -22,7 +22,7 @@ export default withContext(props => {
 
 	const [variables, setVariables] = useState(defaultVariables);
 
-	const { loading, data: { queryApplyProject: res }, refetch } = useQuery(Q_GET_APPLY_PROJECTS, {
+	const { loading, data: { queryApplyCapital: res }, refetch } = useQuery(Q_GET_APPLY_CAPITALS, {
 		notifyOnNetworkStatusChange: true,
 		variables: { queryString: buildingQuery(defaultVariables) },
 	});
@@ -46,22 +46,17 @@ export default withContext(props => {
 
 	const columns = [
 		{
-			title: '封面',
-			dataIndex: 'project.cover',
-			render: val => <img src={val} width="100" />
-		},
-		{
 			title: '名称',
-			dataIndex: 'project.title',
-			render: (val, row) => <a href={`/project/detail?id=${row.project.id}`} target="_blank">{val}</a>
+			dataIndex: 'capital.title',
+			render: (val, row) => <a href={`/finance/detail?id=${row.capital.id}`} target="_blank">{val}</a>
 		},
 		{
 			title: '联系人',
-			dataIndex: 'project.creator.realname',
+			dataIndex: 'capital.creator.realname',
 		},
 		{
 			title: '联系电话',
-			dataIndex: 'project.creator.phone',
+			dataIndex: 'capital.creator.phone',
 		},
 		{
 			title: '申请时间',
@@ -75,7 +70,7 @@ export default withContext(props => {
 		<UserLayout>
 			<div className="fund-manage">
 				<p className="right-title">
-					<Button type="primary" onClick={() => jump('/project')}>
+					<Button type="primary" onClick={() => jump('/finance')}>
 						立即申请
  					</Button>
 				</p>

@@ -154,8 +154,8 @@ export default Form.create()(props => {
 					action={null}
 					showUploadList={false}
 					beforeUpload={(file) => {
-						if (file.size > 2 * 1024 * 1024) {
-							message.error('请上传小于2M的图片');
+						if (file.size > 5 * 1024 * 1024) {
+							message.error('请上传小于5M的图片');
 							return false;
 						}
 
@@ -177,7 +177,7 @@ export default Form.create()(props => {
 										<Icon type="upload" />
 									</p>
 									<p className="ant-upload-text">点击上传身份证电子版头像面</p>
-									<p className="ant-upload-hint">图片大小不超过2M</p>
+									<p className="ant-upload-hint">图片大小不超过5M</p>
 								</Fragment>
 							)}
 					</div>
@@ -187,8 +187,8 @@ export default Form.create()(props => {
 					action={null}
 					showUploadList={false}
 					beforeUpload={(file) => {
-						if (file.size > 2 * 1024 * 1024) {
-							message.error('请上传小于2M的图片');
+						if (file.size > 5 * 1024 * 1024) {
+							message.error('请上传小于5M的图片');
 							return false;
 						}
 
@@ -210,7 +210,7 @@ export default Form.create()(props => {
 										<Icon type="upload" />
 									</p>
 									<p className="ant-upload-text">点击上传身份证电子版国徽面</p>
-									<p className="ant-upload-hint">图片大小不超过2M</p>
+									<p className="ant-upload-hint">图片大小不超过5M</p>
 								</Fragment>
 							)}
 					</div>
