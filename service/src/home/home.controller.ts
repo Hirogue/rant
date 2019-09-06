@@ -8,7 +8,7 @@ export class HomeController {
     @Get()
     @Render('Index')
     @ApiOperation({ title: 'Index Page' })
-    Index() { }
+    index() { }
 
     @Get('/help')
     @Render('help')

@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import { F_METADATA_FIELDS, F_METADATA_RECURSIVE } from './metadata';
 
 export const F_PROJECT_FIELDS = gql`
   fragment ProjectFields on Project {
