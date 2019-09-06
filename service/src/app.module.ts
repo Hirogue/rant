@@ -4,8 +4,11 @@ import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import * as redisStore from 'cache-manager-redis-store';
 import { RenderModule } from 'nest-next';
 import { AccessControlModule } from './access-control';
+import { ApplyCapitalModule } from './apply-capital';
 import { ApplyExpertModule } from './apply-expert';
 import { ApplyProductModule } from './apply-product';
+import { ApplyProjectModule } from './apply-project';
+import { ApplyProviderModule } from './apply-provider';
 import { ArticleModule } from './artilce';
 import { AuthModule } from './auth';
 import { CapitalModule } from './capital';
@@ -69,7 +72,10 @@ import { VerificationModule } from './verification';
     DocumentModule,
     SeoModule,
     ApplyExpertModule,
-    ApplyProductModule
+    ApplyProductModule,
+    ApplyProviderModule,
+    ApplyProjectModule,
+    ApplyCapitalModule
   ],
   controllers: [SpaController]
 })

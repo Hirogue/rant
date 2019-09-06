@@ -25,27 +25,27 @@ export class UserResolver extends BaseResolver(User, UserPaginate) {
 
     @Mutation(returns => Boolean, { description: 'Apply product' })
     async applyProducts(@Args('id') id: string, @Me() me: User) {
-        return await this.userService.applyProducts(id, me.id);
+        return await this.userService.applyProducts(id, me);
     }
 
     @Mutation(returns => Boolean, { description: 'Apply capital' })
     async applyCapitals(@Args('id') id: string, @Me() me: User) {
-        return await this.userService.applyCapitals(id, me.id);
+        return await this.userService.applyCapitals(id, me);
     }
 
     @Mutation(returns => Boolean, { description: 'Apply project' })
     async applyProjects(@Args('id') id: string, @Me() me: User) {
-        return await this.userService.applyProjects(id, me.id);
+        return await this.userService.applyProjects(id, me);
     }
 
     @Mutation(returns => Boolean, { description: 'Apply provider' })
     async applyProviders(@Args('id') id: string, @Me() me: User) {
-        return await this.userService.applyProviders(id, me.id);
+        return await this.userService.applyProviders(id, me);
     }
 
     @Mutation(returns => Boolean, { description: 'Apply expert' })
     async applyExperts(@Args('id') id: string, @Me() me: User) {
-        return await this.userService.applyExperts(id, me.id);
+        return await this.userService.applyExperts(id, me);
     }
 
     @Mutation(returns => Boolean, { description: 'User level up' })

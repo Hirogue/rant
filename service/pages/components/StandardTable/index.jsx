@@ -1,13 +1,12 @@
-import { getTreeData, mergeParams } from '@/utils/global';
 import { CondOperator } from '@nestjsx/crud-request';
-import { Button, Card, Divider, Icon, Input, Table, TreeSelect } from 'antd';
+import { Button, Card, Icon, Input, Table, TreeSelect } from 'antd';
 import { isEmpty } from 'lodash';
 import React, { useState } from 'react';
 import Highlighter from 'react-highlight-words';
+import { getTreeData, mergeParams } from '../../lib/global';
 
 export default props => {
   const {
-    loading,
     columns,
     rowKey,
     size,
@@ -16,9 +15,7 @@ export default props => {
     pagination,
     dataSource,
     onChange,
-    hideRowSelection,
     onRowSelectionChange,
-    reset,
   } = props;
   const [searchTexts, setSearchTexts] = useState({});
   const [selectedCount, setSelectedCount] = useState(0);
@@ -147,11 +144,6 @@ export default props => {
 
   return (
     <Card bordered={false} style={{ marginTop: 10 }} bodyStyle={{ padding: '0 10px' }}>
-      {hideRowSelection ? null : (
-        <Divider orientation="left">{`已选中 ${selectedCount} 项 / 共 ${
-          dataSource ? dataSource.length : 0
-        } 项`}</Divider>
-      )}
       <Table
         size={size || 'middle'}
         rowKey={rowKey || 'id'}

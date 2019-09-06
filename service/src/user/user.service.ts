@@ -23,21 +23,21 @@ export class UserService extends BaseService<User> {
 
     @Transaction()
     async applyProducts(
-        id: string, userId: string,
-        @TransactionRepository(User) userRepo?: Repository<User>,
+        id: string, user: User,
         @TransactionRepository(Product) productRepo?: Repository<Product>,
         @TransactionRepository(ApplyProduct) applyProductRepo?: Repository<ApplyProduct>,
     ) {
-        const user = await userRepo.findOne({
-            where: { id: userId },
-            relations: ['apply_products', 'apply_products.product']
-        });
 
-        user.apply_products.forEach(item => {
-            if (item.product.id === id) {
-                throw new BadRequestException('请勿重复申请');
-            }
-        });
+        const applyCount = await applyProductRepo.createQueryBuilder('t')
+            .leftJoin('t.product', 'product')
+            .leftJoin('t.applicant', 'applicant')
+            .where('product.id = :product', { product: id })
+            .andWhere('applicant.id = :applicant', { applicant: user.id })
+            .getCount();
+
+        if (applyCount > 0) {
+            throw new BadRequestException('请勿重复申请');
+        }
 
         const product = await productRepo.findOne({ id });
 
@@ -51,25 +51,28 @@ export class UserService extends BaseService<User> {
 
     @Transaction()
     async applyCapitals(
-        id: string, userId: string,
-        @TransactionRepository(User) userRepo?: Repository<User>,
+        id: string, user: User,
         @TransactionRepository(Capital) capitalRepo?: Repository<Capital>,
         @TransactionRepository(ApplyCapital) applyCapitalRepo?: Repository<ApplyCapital>,
     ) {
-        const user = await userRepo.findOne({
-            where: { id: userId },
-            relations: ['apply_capitals', 'apply_capitals.capital']
+
+        const applyCount = await applyCapitalRepo.createQueryBuilder('t')
+            .leftJoin('t.capital', 'capital')
+            .leftJoin('t.applicant', 'applicant')
+            .where('capital.id = :capital', { capital: id })
+            .andWhere('applicant.id = :applicant', { applicant: user.id })
+            .getCount();
+
+        if (applyCount > 0) {
+            throw new BadRequestException('请勿重复申请');
+        }
+
+        const capital = await capitalRepo.findOne({
+            relations: ['creator'],
+            where: { id }
         });
 
-        user.apply_capitals.forEach(item => {
-            if (item.capital.id === id) {
-                throw new BadRequestException('请勿重复申请');
-            }
-        });
-
-        await this.checkLimit(user, 'capital');
-
-        const capital = await capitalRepo.findOne({ id });
+        await this.checkLimit(user, capital);
 
         const applyCapital = new ApplyCapital();
         applyCapital.capital = capital;
@@ -81,25 +84,27 @@ export class UserService extends BaseService<User> {
 
     @Transaction()
     async applyProjects(
-        id: string, userId: string,
-        @TransactionRepository(User) userRepo?: Repository<User>,
+        id: string, user: User,
         @TransactionRepository(Project) projectRepo?: Repository<Project>,
         @TransactionRepository(ApplyProject) applyProjectRepo?: Repository<ApplyProject>,
     ) {
-        const user = await userRepo.findOne({
-            where: { id: userId },
-            relations: ['apply_projects', 'apply_projects.project']
+        const applyCount = await applyProjectRepo.createQueryBuilder('t')
+            .leftJoin('t.project', 'project')
+            .leftJoin('t.applicant', 'applicant')
+            .where('project.id = :project', { project: id })
+            .andWhere('applicant.id = :applicant', { applicant: user.id })
+            .getCount();
+
+        if (applyCount > 0) {
+            throw new BadRequestException('请勿重复申请');
+        }
+
+        const project = await projectRepo.findOne({
+            relations: ['creator'],
+            where: { id }
         });
 
-        user.apply_projects.forEach(item => {
-            if (item.project.id === id) {
-                throw new BadRequestException('请勿重复申请');
-            }
-        });
-
-        await this.checkLimit(user, 'project');
-
-        const project = await projectRepo.findOne({ id });
+        await this.checkLimit(user, project);
 
         const applyProject = new ApplyProject();
         applyProject.project = project;
@@ -111,23 +116,25 @@ export class UserService extends BaseService<User> {
 
     @Transaction()
     async applyProviders(
-        id: string, userId: string,
-        @TransactionRepository(User) userRepo?: Repository<User>,
+        id: string, user: User,
         @TransactionRepository(Provider) providerRepo?: Repository<Provider>,
         @TransactionRepository(ApplyProvider) applyProviderRepo?: Repository<ApplyProvider>,
     ) {
-        const user = await userRepo.findOne({
-            where: { id: userId },
-            relations: ['apply_providers', 'apply_providers.provider']
-        });
+        const applyCount = await applyProviderRepo.createQueryBuilder('t')
+            .leftJoin('t.provider', 'provider')
+            .leftJoin('t.applicant', 'applicant')
+            .where('provider.id = :provider', { provider: id })
+            .andWhere('applicant.id = :applicant', { applicant: user.id })
+            .getCount();
 
-        user.apply_providers.forEach(item => {
-            if (item.provider.id === id) {
-                throw new BadRequestException('请勿重复申请');
-            }
-        });
+        if (applyCount) {
+            throw new BadRequestException('请勿重复申请');
+        }
 
-        const provider = await providerRepo.findOne({ id });
+        const provider = await providerRepo.findOne({
+            relations: ['creator'],
+            where: { id }
+        });
 
         const applyProvider = new ApplyProvider();
         applyProvider.provider = provider;
@@ -139,23 +146,25 @@ export class UserService extends BaseService<User> {
 
     @Transaction()
     async applyExperts(
-        id: string, userId: string,
-        @TransactionRepository(User) userRepo?: Repository<User>,
+        id: string, user: User,
         @TransactionRepository(Expert) expertRepo?: Repository<Expert>,
         @TransactionRepository(ApplyExpert) applyExpertRepo?: Repository<ApplyExpert>,
     ) {
-        const user = await userRepo.findOne({
-            where: { id: userId },
-            relations: ['apply_experts', 'apply_experts.expert']
-        });
+        const applyCount = await applyExpertRepo.createQueryBuilder('t')
+            .leftJoin('t.expert', 'expert')
+            .leftJoin('t.applicant', 'applicant')
+            .where('expert.id = :expert', { expert: id })
+            .andWhere('applicant.id = :applicant', { applicant: user.id })
+            .getCount();
 
-        user.apply_experts.forEach(item => {
-            if (item.expert.id === id) {
-                throw new BadRequestException('请勿重复申请');
-            }
-        });
+        if (applyCount > 0) {
+            throw new BadRequestException('请勿重复申请');
+        }
 
-        const expert = await expertRepo.findOne({ id });
+        const expert = await expertRepo.findOne({
+            relations: ['creator'],
+            where: { id }
+        });
 
         const applyExpert = new ApplyExpert();
         applyExpert.expert = expert;
@@ -312,7 +321,11 @@ export class UserService extends BaseService<User> {
         return true;
     }
 
-    private async checkLimit(user: User, type: string) {
+    private async checkLimit(user: User, target: Capital | Project) {
+
+        if (target.creator.id === user.id) {
+            throw new BadRequestException('不可投递自己发布项目或资金');
+        }
 
         const count = await this.remainderApplyCount(user.id);
 
