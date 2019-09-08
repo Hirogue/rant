@@ -1,22 +1,31 @@
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { CondOperator } from '@nestjsx/crud-request';
 import { Button, Divider, message, Spin } from 'antd';
+import gql from 'graphql-tag';
 import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
 import UserLayout from '../../../components/Layout/UserLayout';
 import withContext, { GlobalContext } from '../../../components/Layout/withContext';
 import LogReader from '../../../components/LogReader';
+import StandardConfirm from '../../../components/StandardConfirm';
 import StandardTable from '../../../components/StandardTable';
-import { M_DELETE_APPLY_PRODUCT, Q_GET_PROJECTS } from '../../../gql';
+import { Q_GET_PROJECTS } from '../../../gql';
 import { LogTypeEnum, ProjectStatusEnum } from '../../../lib/enum';
 import { buildingQuery, jump, ProjectStatusMaps, toFetchCurrentUser } from '../../../lib/global';
 import './project_manage.scss';
+
+export const M_APPROVAL_PROJECT = gql`
+  mutation approvalProject($data: ProjectInput!) {
+    approvalProject(data: $data)
+  }
+`;
 
 export default withContext(props => {
 
 	const client = useApolloClient();
 	const ctx = useContext(GlobalContext);
 	const [flag, setFlag] = useState(false);
+	const [finishedVisible, setFinishedVisible] = useState(false);
 	const [logVisible, setLogVisible] = useState(false);
 	const [current, setCurrent] = useState(null);
 
@@ -86,27 +95,17 @@ export default withContext(props => {
 			key: 'operation',
 			render: (val, row) => (
 				<>
-					{ProjectStatusEnum.CHECKED !== val ?
+					{ProjectStatusEnum.FINISHED !== row.status ?
 						<>
 							<a
 								href="javascript:;"
 								onClick={() => {
-									client.mutate({
-										mutation: M_DELETE_APPLY_PRODUCT,
-										variables: { ids: row.id },
-										update: (_, { data }) => {
-											const { deleteApplyProduct } = data;
-
-											if (deleteApplyProduct) {
-												message.success('取消成功');
-												refetch();
-											}
-										}
-									})
+									setCurrent(row);
+									setFinishedVisible(true);
 								}}
 							>
 								[完成]
-							</a>
+          					</a>
 							<Divider type="vertical" />
 						</>
 						: null}
@@ -127,6 +126,29 @@ export default withContext(props => {
 	return (
 		<UserLayout>
 			<div className="fund-manage">
+				<StandardConfirm
+					title="请输入完成总结"
+					visible={finishedVisible}
+					setVisible={setFinishedVisible}
+					onConfirm={reason => {
+						client.mutate({
+							mutation: M_APPROVAL_PROJECT,
+							variables: {
+								data: {
+									id: current.id,
+									status: ProjectStatusEnum.FINISHED,
+									reason,
+								},
+							},
+							update: (proxy, { data }) => {
+								if (data.approvalProject) {
+									message.success('操作成功');
+									refetch();
+								}
+							},
+						});
+					}}
+				/>
 				<LogReader
 					title="日志"
 					target={current ? current.id : null}
