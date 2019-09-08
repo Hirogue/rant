@@ -1,6 +1,7 @@
-import { useQuery } from '@apollo/react-hooks';
+import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { CondOperator } from '@nestjsx/crud-request';
 import { Button, Spin } from 'antd';
+import gql from 'graphql-tag';
 import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
 import UserLayout from '../../../../components/Layout/UserLayout';
@@ -10,10 +11,20 @@ import { Q_GET_APPLY_CAPITALS } from '../../../../gql';
 import { buildingQuery, jump, toFetchCurrentUser } from '../../../../lib/global';
 import './fund_manage.scss';
 
+export const M_APPROVAL_CAPITAL = gql`
+  mutation approvalCapital($data: CapitalInput!) {
+    approvalCapital(data: $data)
+  }
+`;
+
 export default withContext(props => {
 
+	const client = useApolloClient();
 	const ctx = useContext(GlobalContext);
 	const [flag, setFlag] = useState(false);
+	const [finishedVisible, setFinishedVisible] = useState(false);
+	const [logVisible, setLogVisible] = useState(false);
+	const [current, setCurrent] = useState(null);
 
 	const defaultVariables = {
 		page: 0,
@@ -73,12 +84,73 @@ export default withContext(props => {
 			dataIndex: 'create_at',
 			sorter: true,
 			render: val => moment(val).format('YYYY-MM-DD HH:mm:ss')
+		},
+		{
+			title: '操作',
+			key: 'operation',
+			render: (val, row) => (
+				<>
+					{ProjectStatusEnum.FINISHED !== row.status ?
+						<>
+							<a
+								href="javascript:;"
+								onClick={() => {
+									setCurrent(row);
+									setFinishedVisible(true);
+								}}
+							>
+								[完成]
+          					</a>
+							<Divider type="vertical" />
+						</>
+						: null}
+					<a
+						href="javascript:;"
+						onClick={() => {
+							setCurrent(row);
+							setLogVisible(true);
+						}}
+					>
+						[日志]
+			   		</a>
+				</>
+			)
 		}
 	];
 
 	return (
 		<UserLayout>
 			<div className="fund-manage">
+				<StandardConfirm
+					title="请输入完成总结"
+					visible={finishedVisible}
+					setVisible={setFinishedVisible}
+					onConfirm={reason => {
+						client.mutate({
+							mutation: M_APPROVAL_CAPITAL,
+							variables: {
+								data: {
+									id: current.id,
+									status: ProjectStatusEnum.FINISHED,
+									reason,
+								},
+							},
+							update: (proxy, { data }) => {
+								if (data.approvalProject) {
+									message.success('操作成功');
+									refetch();
+								}
+							},
+						});
+					}}
+				/>
+				<LogReader
+					title="日志"
+					target={current ? current.id : null}
+					type={LogTypeEnum.PROJECT}
+					visible={logVisible}
+					setVisible={setLogVisible}
+				/>
 				<p className="right-title">
 					<Button type="primary" onClick={() => jump('/publish/finance')}>
 						立即发布
