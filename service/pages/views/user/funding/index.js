@@ -1,156 +1,105 @@
-import React from 'react';
+import { useQuery } from '@apollo/react-hooks';
+import { CondOperator } from '@nestjsx/crud-request';
+import { Button, Spin } from 'antd';
 import moment from 'moment';
-import { Table, Button, Badge, message } from 'antd';
-import { withRouter } from 'next/router';
-import UserLayout from '../../../components/Layout/UserLayout';
-import { apiUpdateProject } from '../../../services/common';
+import React, { useContext, useEffect, useState } from 'react';
+import UserLayout from '../../../../components/Layout/UserLayout';
+import withContext, { GlobalContext } from '../../../../components/Layout/withContext';
+import StandardTable from '../../../../components/StandardTable';
+import { Q_GET_APPLY_CAPITALS } from '../../../../gql';
+import { buildingQuery, jump, toFetchCurrentUser } from '../../../../lib/global';
 import './fund_manage.scss';
 
-const orderStatus = [
-	{ value: 'PENDING', text: '待审核', icon: <Badge status="default" text="待审核" /> },
-	{ value: 'FOLLOW', text: '待跟进', icon: <Badge status="processing" text="待跟进" /> },
-	{ value: 'REJECT', text: '已驳回', icon: <Badge status="error" text="已驳回" /> },
-	{ value: 'OVER', text: '已审核', icon: <Badge status="success" text="已审核" /> }
-];
+export default withContext(props => {
 
-@withRouter
-export default class extends React.Component {
-	state = {
-		data: []
+	const ctx = useContext(GlobalContext);
+	const [flag, setFlag] = useState(false);
+
+	const defaultVariables = {
+		page: 0,
+		limit: 10,
+		sort: [{ field: 'create_at', order: 'DESC' }],
 	};
 
-	columns = [
+	let defaultFilter = null;
+	if (ctx.user) {
+		defaultFilter = [
+			{ field: 'creator.id', operator: CondOperator.EQUALS, value: ctx.user.id }
+		];
+
+		defaultVariables['filter'] = defaultFilter;
+	}
+
+	const [variables, setVariables] = useState(defaultVariables);
+
+	const { loading, data: { queryApplyCapital: res }, refetch } = useQuery(Q_GET_APPLY_CAPITALS, {
+		notifyOnNetworkStatusChange: true,
+		variables: { queryString: buildingQuery(defaultVariables) },
+	});
+
+	useEffect(() => {
+		const queryString = buildingQuery(variables);
+		refetch({ queryString });
+	}, [variables]);
+
+	useEffect(() => {
+		(async () => {
+			const currentUser = await toFetchCurrentUser();
+			ctx.setCurrentUser(currentUser);
+			setFlag(true);
+		})();
+	}, []);
+
+	if (!flag) return <Spin style={{ position: 'fixed', top: '50%', left: '50%' }} tip="loading..." />;
+
+	const { data: list, total } = res || {};
+
+	const columns = [
 		{
-			title: '标题',
-			width: 150,
-			dataIndex: 'title',
-			key: 'title'
-			// fixed: 'left'
+			title: '名称',
+			dataIndex: 'capital.title',
+			render: (val, row) => <a href={`/finance/detail?id=${row.capital.id}`} target="_blank">{val}</a>
 		},
 		{
-			title: '状态',
-			// fixed: 'left',
-			dataIndex: 'status',
-			key: 'status',
-			render: (text, row, index) => orderStatus.find((item) => item.value === row.status).icon
-		},
-		// {
-		// 	title: '投资方式',
-		// 	dataIndex: 'project_mode',
-		// 	key: 'project_mode',
-		// 	sorter: (a, b) => !!a['project_mode'] && a['project_mode'].localeCompare(b['project_mode'], 'zh-Hans-CN'),
-		// 	render: (text, row, index) => (!!text ? text.split(':').pop() : ''),
-		// 	searchable: true
-		// },
-		// {
-		// 	title: '投资阶段',
-		// 	dataIndex: 'project_stage',
-		// 	key: 'project_stage',
-		// 	sorter: (a, b) =>
-		// 		!!a['project_stage'] && a['project_stage'].localeCompare(b['project_stage'], 'zh-Hans-CN'),
-		// 	render: (text, row, index) => (!!text ? text.split(':').pop() : ''),
-		// 	searchable: true
-		// },
-		// {
-		// 	title: '金额',
-		// 	dataIndex: 'capital_amount',
-		// 	key: 'capital_amount',
-		// 	sorter: (a, b) =>
-		// 		!!a['capital_amount'] && a['capital_amount'].localeCompare(b['capital_amount'], 'zh-Hans-CN'),
-		// 	render: (text, row, index) => (!!text ? text.split(':').pop() : ''),
-		// 	searchable: true
-		// },
-		// {
-		// 	title: '投资地区',
-		// 	dataIndex: 'investment_area',
-		// 	key: 'investment_area',
-		// 	sorter: (a, b) =>
-		// 		!!a['investment_area'] && a['investment_area'].localeCompare(b['investment_area'], 'zh-Hans-CN'),
-		// 	render: (text, row, index) => (!!text ? text.split(':').pop() : ''),
-		// 	searchable: true
-		// },
-		// {
-		// 	title: '所在地区',
-		// 	dataIndex: 'area',
-		// 	key: 'area',
-		// 	sorter: (a, b) => !!a['area'] && a['area'].localeCompare(b['area'], 'zh-Hans-CN'),
-		// 	render: (text, row, index) => (!!text ? text.split(':').pop() : ''),
-		// 	searchable: true
-		// },
-		// {
-		// 	title: '行业',
-		// 	dataIndex: 'industry',
-		// 	key: 'industry',
-		// 	sorter: (a, b) => !!a['industry'] && a['industry'].localeCompare(b['industry'], 'zh-Hans-CN'),
-		// 	render: (text, row, index) => (!!text ? text.split(':').pop() : ''),
-		// 	searchable: true
-		// },
-		{
-			title: '发布时间',
-			dataIndex: 'release_datetime',
-			key: 'release_datetime',
-			sorter: (a, b) =>
-				new Date(a['release_datetime']).getTime() < new Date(b['release_datetime']).getTime() ? -1 : 1,
-			render: (text, row, index) => moment(text).format('YYYY-MM-DD HH:mm:ss')
+			title: '联系人',
+			dataIndex: 'capital.creator.realname',
 		},
 		{
-			title: '操作',
-			key: 'operation',
-			fixed: 'right',
-			width: 120,
-			render: (text, row) => (
-				<div className="tabs-btns">
-					<a as={`/user/publish/funding/${row.id}`} href={`/user/publish/funding?id=${row.id}`}>
-						<Button>编辑</Button>
-					</a>
-					<Button
-						type="danger"
-						onClick={() =>
-							this.update({
-								criteria: {
-									id: row.id
-								},
-								newvalue: {
-									is_reserved: true
-								}
-							})}
-					>
-						删除
-					</Button>
-				</div>
-			)
+			title: '联系电话',
+			dataIndex: 'capital.creator.phone',
+		},
+		{
+			title: '申请时间',
+			dataIndex: 'create_at',
+			sorter: true,
+			render: val => moment(val).format('YYYY-MM-DD HH:mm:ss')
 		}
 	];
 
-	update = (payload) => {
-		apiUpdateProject(payload)
-			.then((res) => {
-				window.location.reload();
-			})
-			.catch((err) => message.error('操作失败！'));
-	};
-
-	render() {
-		const { data } = this.props.router.query;
-
-		console.log(data);
-
-		return (
-			<UserLayout>
-				<div className="fund-manage">
-					<p className="right-title">
-						<Button type="primary" onClick={() => (window.location.href = '/user/publish/funding')}>
-							发布
-						</Button>
-					</p>
-					<Table
-						columns={this.columns}
-						dataSource={data}
-						scroll={{ x: 1200 }}
-						pagination={{ pageSize: 8, total: data.length }}
-					/>
-				</div>
-			</UserLayout>
-		);
-	}
-}
+	return (
+		<UserLayout>
+			<div className="fund-manage">
+				<p className="right-title">
+					<Button type="primary" onClick={() => jump('/publish/finance')}>
+						立即发布
+ 					</Button>
+				</p>
+				<StandardTable
+					loading={loading}
+					dataSource={list}
+					columns={columns}
+					defaultFilter={defaultFilter}
+					pagination={{
+						size: 'small',
+						total,
+						current: variables.page,
+						pageSize: variables.limit,
+						showTotal: total => `共 ${total} 条记录`,
+					}}
+					state={variables}
+					onChange={values => setVariables({ ...values })}
+				/>
+			</div>
+		</UserLayout>
+	)
+});

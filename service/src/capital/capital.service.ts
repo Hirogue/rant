@@ -85,7 +85,7 @@ export class CapitalService extends BaseService<Capital> {
         }
 
         if (ProjectStatusEnum.FINISHED === target.status) {
-            log.info = `${user.realname} 完成资金`;
+            log.info = `${user.realname} 完成资金，总结："${target.reason}"`;
         }
 
         if (ProjectStatusEnum.CANCELLED === target.status) {

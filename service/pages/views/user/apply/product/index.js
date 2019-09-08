@@ -1,4 +1,5 @@
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
+import { CondOperator } from '@nestjsx/crud-request';
 import { Button, Divider, message, Spin } from 'antd';
 import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
@@ -24,6 +25,15 @@ export default withContext(props => {
 		limit: 10,
 		sort: [{ field: 'create_at', order: 'DESC' }],
 	};
+
+	let defaultFilter = null;
+	if (ctx.user) {
+		defaultFilter = [
+			{ field: 'applicant.id', operator: CondOperator.EQUALS, value: ctx.user.id }
+		];
+
+		defaultVariables['filter'] = defaultFilter;
+	}
 
 	const [variables, setVariables] = useState(defaultVariables);
 
@@ -137,6 +147,7 @@ export default withContext(props => {
 					loading={loading}
 					dataSource={list}
 					columns={columns}
+					defaultFilter={defaultFilter}
 					pagination={{
 						size: 'small',
 						total,

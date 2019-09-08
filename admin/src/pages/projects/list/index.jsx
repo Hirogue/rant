@@ -40,7 +40,8 @@ export default () => {
   };
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [visible, setVisible] = useState(false);
+  const [rejectedVisible, setRejectedVisible] = useState(false);
+  const [finishedVisible, setFinishedVisible] = useState(false);
   const [logVisible, setLogVisible] = useState(false);
   const [followingVisible, setFollowingVisible] = useState(false);
   const [cancelledVisible, setCancelledVisible] = useState(false);
@@ -99,7 +100,7 @@ export default () => {
             href="javascript:;"
             onClick={() => {
               setCurrent(record);
-              setVisible(true);
+              setRejectedVisible(true);
             }}
           >
             [驳回]
@@ -151,28 +152,15 @@ export default () => {
             [跟进]
           </a>
           <Divider type="vertical" />
-          <Popconfirm
-            title="确定要完成吗?"
-            onConfirm={() => {
-              client.mutate({
-                mutation: M_APPROVAL_PROJECT,
-                variables: {
-                  data: {
-                    id: record.id,
-                    status: ProjectStatusEnum.FINISHED,
-                  },
-                },
-                update: (cache, { data }) => {
-                  if (data.approvalProject) {
-                    message.success('操作成功');
-                    refetch();
-                  }
-                },
-              });
+          <a
+            href="javascript:;"
+            onClick={() => {
+              setCurrent(record);
+              setFinishedVisible(true);
             }}
           >
-            <a href="#">[完成]</a>
-          </Popconfirm>
+            [完成]
+          </a>
           <Divider type="vertical" />
           <a
             href="javascript:;"
@@ -370,8 +358,8 @@ export default () => {
         />
         <StandardConfirm
           title="请输入驳回理由"
-          visible={visible}
-          setVisible={setVisible}
+          visible={rejectedVisible}
+          setVisible={setRejectedVisible}
           onConfirm={reason => {
             client.mutate({
               mutation: M_APPROVAL_PROJECT,
@@ -379,6 +367,29 @@ export default () => {
                 data: {
                   id: current.id,
                   status: ProjectStatusEnum.REJECTED,
+                  reason,
+                },
+              },
+              update: (proxy, { data }) => {
+                if (data.approvalProject) {
+                  message.success('操作成功');
+                  refetch();
+                }
+              },
+            });
+          }}
+        />
+        <StandardConfirm
+          title="请输入完成总结"
+          visible={finishedVisible}
+          setVisible={setFinishedVisible}
+          onConfirm={reason => {
+            client.mutate({
+              mutation: M_APPROVAL_PROJECT,
+              variables: {
+                data: {
+                  id: current.id,
+                  status: ProjectStatusEnum.FINISHED,
                   reason,
                 },
               },

@@ -85,7 +85,7 @@ export class ProjectService extends BaseService<Project> {
         }
 
         if (ProjectStatusEnum.FINISHED === target.status) {
-            log.info = `${user.realname} 完成项目`;
+            log.info = `${user.realname} 完成项目，总结："${target.reason}"`;
         }
 
         if (ProjectStatusEnum.CANCELLED === target.status) {
