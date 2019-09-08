@@ -90,7 +90,7 @@ export default withContext(props => {
 			key: 'operation',
 			render: (val, row) => (
 				<>
-					{ProjectStatusEnum.CHECKED !== val ?
+					{ProjectStatusEnum.CHECKED !== row.status ?
 						<>
 							<a
 								href="javascript:;"
