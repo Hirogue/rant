@@ -140,6 +140,12 @@ export default props => {
         sort: [{ field: sort, order }],
       };
 
+      if (filter.length > 0) {
+        newParams.filter = [...filter, ...filterParams];
+      } else {
+        newParams.filter = filterParams;
+      }
+
       onChange(mergeParams(state, newParams));
     }
   };
