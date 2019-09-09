@@ -25,6 +25,14 @@ export function BaseResolver<TEntity, TPaginate>(
             return await this.api.find(this.root, queryString);
         }
 
+        @Query(returns => TPaginateClass, {
+            name: 'search' + TEntityClass.name,
+            description: `Retrieve many ${TEntityClass.name}`
+        })
+        async search(@Args('queryString') queryString: string) {
+            return await this.api.search(this.root, queryString);
+        }
+
         @Query(returns => TEntityClass, {
             name: camelCase(TEntityClass.name),
             description: `Retrieve one ${TEntityClass.name}`
