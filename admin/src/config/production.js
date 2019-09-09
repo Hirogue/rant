@@ -1,9 +1,9 @@
 export default {
-  basePath: 'http://127.0.0.1:8009/',
+  basePath: '',
 
   apollo: {
     link: {
-      uri: 'http://127.0.0.1:8009/graphql',
+      uri: '/graphql',
     },
   },
 };

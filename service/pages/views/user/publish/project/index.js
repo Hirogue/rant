@@ -1,9 +1,9 @@
-import { Alert, Col, Form, Input, Row, Button } from 'antd';
+import { Alert, Button, InputNumber, Col, Form, Input, Row } from 'antd';
 import React from 'react';
+import ImageCropper from '../../../../components/ImageCropper';
 import UserLayout from '../../../../components/Layout/UserLayout';
 import { uploadOne } from '../../../../lib/fetch';
 import './releas_project.scss';
-import ImageCropper from '../../../../components/ImageCropper';
 
 export default Form.create()(props => {
 
@@ -14,6 +14,15 @@ export default Form.create()(props => {
 		margin: '5px 0',
 		padding: '5px',
 		borderBottom: '1px dashed #e8e8e8'
+	};
+
+	const labelStyle = {
+		marginRight: 15,
+		textAlign: 'right',
+		verticalAlign: 'top',
+		display: 'inline-block',
+		width: '15%',
+		color: '#108ee9'
 	};
 
 	const onUpload = async (file) => {
@@ -42,14 +51,7 @@ export default Form.create()(props => {
 						<Col>
 							<div style={rowStyle}>
 								<div
-									style={{
-										marginRight: 15,
-										textAlign: 'right',
-										verticalAlign: 'top',
-										display: 'inline-block',
-										width: '15%',
-										color: '#108ee9'
-									}}
+									style={labelStyle}
 								>
 									<span style={{ color: 'red', marginRight: '2px' }}>*</span>标题：
  								</div>
@@ -57,7 +59,11 @@ export default Form.create()(props => {
 									<Form.Item >
 										{getFieldDecorator('title', {
 											initialValue: '',
-											rules: [{ required: true, message: '标题', whitespace: true }]
+											rules: [
+												{ required: true, message: '标题', whitespace: true },
+												{ max: 35, message: '最多35个字符' },
+												{ min: 5, message: '最少5个字符' },
+											]
 										})(<Input style={{ width: 500 }} placeholder="请填写标题" />)}
 									</Form.Item>
 									<div style={{ marginTop: 3, color: 'red' }}>
@@ -66,16 +72,7 @@ export default Form.create()(props => {
 								</div>
 							</div>
 							<div style={rowStyle}>
-								<div
-									style={{
-										marginRight: 15,
-										textAlign: 'right',
-										verticalAlign: 'top',
-										display: 'inline-block',
-										width: '15%',
-										color: '#108ee9'
-									}}
-								>
+								<div style={labelStyle}>
 									<span style={{ color: 'red', marginRight: '2px' }}>*</span>项目封面：
  								</div>
 								<div style={{ display: 'inline-block', width: '80%' }}>
@@ -88,12 +85,195 @@ export default Form.create()(props => {
 												return false;
 											}
 
-											// onUploadLogo(file);
+											onUpload(file);
 											return false;
 										}}
 										width={400}
 										height={200}
 									/>
+								</div>
+							</div>
+							<div style={rowStyle}>
+								<div style={labelStyle}>
+									<span style={{ color: 'red', marginRight: '2px' }}>*</span>融资金额：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									{getFieldDecorator('amount', {
+										initialValue: '',
+										rules: [
+											{ required: true, message: '不能为空' }
+										]
+									})(<InputNumber min={1} style={{ width: 200 }} placeholder="请填写融资金额" />)}
+									{' '}万元
+								</div>
+							</div>
+							<div style={rowStyle}>
+								<div style={labelStyle}>
+									<span style={{ color: 'red', marginRight: '2px' }}>*</span>所属行业：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									{getFieldDecorator('amount', {
+										initialValue: '',
+										rules: [
+											{ required: true, message: '标题' }
+										]
+									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+								</div>
+							</div>
+							<div style={rowStyle}>
+								<div style={labelStyle}>
+									<span style={{ color: 'red', marginRight: '2px' }}>*</span>所在地区：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									{getFieldDecorator('amount', {
+										initialValue: '',
+										rules: [
+											{ required: true, message: '标题' }
+										]
+									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+								</div>
+							</div>
+							<div style={rowStyle}>
+								<div style={labelStyle}>
+									融资方式：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									{getFieldDecorator('amount', {
+										initialValue: '',
+										rules: [
+											{ required: true, message: '标题' }
+										]
+									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+								</div>
+							</div>
+							<div style={rowStyle}>
+								<div style={labelStyle}>
+									<span style={{ color: 'red', marginRight: '2px' }}>*</span>风控要求：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									{getFieldDecorator('amount', {
+										initialValue: '',
+										rules: [
+											{ required: true, message: '标题' }
+										]
+									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+								</div>
+							</div>
+							<div style={rowStyle}>
+								<div style={labelStyle}>
+									还款来源：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									{getFieldDecorator('amount', {
+										initialValue: '',
+										rules: [
+											{ required: true, message: '标题' }
+										]
+									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+								</div>
+							</div>
+							<div style={rowStyle}>
+								<div style={labelStyle}>
+									<span style={{ color: 'red', marginRight: '2px' }}>*</span>承担利息：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									{getFieldDecorator('amount', {
+										initialValue: '',
+										rules: [
+											{ required: true, message: '标题' }
+										]
+									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+								</div>
+							</div>
+							<div style={rowStyle}>
+								<div style={labelStyle}>
+									<span style={{ color: 'red', marginRight: '2px' }}>*</span>资金占用时长：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									{getFieldDecorator('amount', {
+										initialValue: '',
+										rules: [
+											{ required: true, message: '标题' }
+										]
+									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+								</div>
+							</div>
+							<div style={rowStyle}>
+								<div style={labelStyle}>
+									<span style={{ color: 'red', marginRight: '2px' }}>*</span>融资用途：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									{getFieldDecorator('amount', {
+										initialValue: '',
+										rules: [
+											{ required: true, message: '标题' }
+										]
+									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+								</div>
+							</div>
+							<div style={rowStyle}>
+								<div style={labelStyle}>
+									团队介绍：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									{getFieldDecorator('amount', {
+										initialValue: '',
+										rules: [
+											{ required: true, message: '标题' }
+										]
+									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+								</div>
+							</div>
+							<div style={rowStyle}>
+								<div style={labelStyle}>
+									项目优势：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									{getFieldDecorator('amount', {
+										initialValue: '',
+										rules: [
+											{ required: true, message: '标题' }
+										]
+									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+								</div>
+							</div>
+							<div style={rowStyle}>
+								<div style={labelStyle}>
+									<span style={{ color: 'red', marginRight: '2px' }}>*</span>项目进展：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									{getFieldDecorator('amount', {
+										initialValue: '',
+										rules: [
+											{ required: true, message: '标题' }
+										]
+									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+								</div>
+							</div>
+							<div style={rowStyle}>
+								<div style={labelStyle}>
+									<span style={{ color: 'red', marginRight: '2px' }}>*</span>项目介绍：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									{getFieldDecorator('amount', {
+										initialValue: '',
+										rules: [
+											{ required: true, message: '标题' }
+										]
+									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+								</div>
+							</div>
+							<div style={rowStyle}>
+								<div style={labelStyle}>
+									<span style={{ color: 'red', marginRight: '2px' }}>*</span>可提供资料：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									{getFieldDecorator('amount', {
+										initialValue: '',
+										rules: [
+											{ required: true, message: '标题' }
+										]
+									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
 								</div>
 							</div>
 						</Col>

@@ -150,6 +150,11 @@ let Config = {
     apply: {
         v0Limit: 1,
         v1Limit: 3
+    },
+
+    wechat: {
+        appid: '',
+        secret: '',
     }
 
 };
