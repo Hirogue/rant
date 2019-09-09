@@ -3,12 +3,13 @@ const npsUtils = require('nps-utils');
 module.exports = {
   scripts: {
 
-    start: "cd ./service && yarn build:next && yarn prod",
+    start: "cd ./service && yarn prod",
     stop: "cd ./service && yarn stop",
 
     build: {
-      default: npsUtils.concurrent.nps('build.service', 'build.admin'),
+      default: npsUtils.concurrent.nps('build.service', 'build.next', 'build.admin'),
       service: "cd ./service && yarn build:service",
+      next: "cd ./service && yarn build:next",
       admin: "cd ./admin && yarn build",
     },
 
