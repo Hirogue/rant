@@ -33,6 +33,7 @@ import { StorageModule } from './storage';
 import { SuccessCaseModule } from './success-case';
 import { UserModule } from './user';
 import { VerificationModule } from './verification';
+import { WechatModule } from './wechat';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { VerificationModule } from './verification';
     VerificationModule,
     LogModule,
     StorageModule,
+    WechatModule,
     RoleModule,
     HomeModule,
     MetadataModule,
