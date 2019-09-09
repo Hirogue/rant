@@ -1,14 +1,11 @@
-import { Injectable, BadGatewayException } from "@nestjs/common";
+import { BadGatewayException, Injectable } from "@nestjs/common";
 import * as crypto from 'crypto';
-import * as moment from 'moment';
 import { range, shuffle, take } from 'lodash';
+import * as moment from 'moment';
 import * as SuperAgent from 'superagent';
-import { Config } from "../config";
-import { Logger } from "../logger";
 import { CacheService } from "../cache";
-
-const WECHAT_ACCESS_TOKEN = 'wechat-access-token';
-const WECHAT_JS_API_TICKET = 'wechat-js-api-ticket';
+import { Config } from "../config";
+import { WechatCacheKeyEnum } from "./wechat-cache-key.enum";
 
 @Injectable()
 export class WechatService {
@@ -22,7 +19,7 @@ export class WechatService {
         // &appid=APPID
         // &secret=APPSECRET
 
-        const accessToken = await this.cache.get(WECHAT_ACCESS_TOKEN);
+        const accessToken = await this.cache.get(WechatCacheKeyEnum.WECHAT_ACCESS_TOKEN);
         if (!!accessToken) return accessToken;
 
         try {
@@ -38,7 +35,7 @@ export class WechatService {
             if (!result['access_token']) throw new BadGatewayException('获取 AccessToken 失败');
 
             await this.cache.set(
-                WECHAT_ACCESS_TOKEN,
+                WechatCacheKeyEnum.WECHAT_ACCESS_TOKEN,
                 result['access_token'],
                 result['expires_in']
             );
@@ -51,7 +48,7 @@ export class WechatService {
 
     async getJsApiTicket() {
 
-        const ticket = await this.cache.get(WECHAT_JS_API_TICKET);
+        const ticket = await this.cache.get(WechatCacheKeyEnum.WECHAT_JS_API_TICKET);
         if (!!ticket) return ticket;
 
         const accessToken = await this.getAccessToken();
@@ -69,7 +66,7 @@ export class WechatService {
             if ('ok' === result['errmsg']) throw new BadGatewayException('获取 JS API Ticket 失败');
 
             await this.cache.set(
-                WECHAT_JS_API_TICKET,
+                WechatCacheKeyEnum.WECHAT_JS_API_TICKET,
                 result['ticket'],
                 result['expires_in']
             );
