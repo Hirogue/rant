@@ -6,6 +6,7 @@ import { Metadata, Provider, ProviderCategory, User } from '../entities';
 interface IProviderSetting {
     name?: string;
     slogan?: string;
+    summary?: string;
     logo?: string;
     introduction?: string;
     category: ProviderCategory;
@@ -18,6 +19,7 @@ define(Provider, (faker: typeof Faker, settings: IProviderSetting) => {
     const instance = new Provider();
     instance.name = settings.name || faker.company.companyName();
     instance.slogan = settings.slogan || faker.lorem.sentence();
+    instance.summary = settings.summary || '';
     instance.logo = settings.logo || faker.image.imageUrl(148, 62.31);
     instance.introduction = settings.introduction || faker.lorem.text();
     instance.category = settings.category;

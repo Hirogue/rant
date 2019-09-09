@@ -6,6 +6,7 @@ import { Connection, Like } from "typeorm";
 import { Factory, Seeder } from "typeorm-seeding";
 import { ProjectStatusEnum } from "../../core";
 import { Metadata, Provider, ProviderCategory, User } from "../entities";
+import { textInterception } from "../../core";
 
 export default class implements Seeder {
     public async run(factory: Factory, connection: Connection): Promise<any> {
@@ -32,14 +33,22 @@ export default class implements Seeder {
 
                 const ex_info = item.ex_info ? JSON.parse(item.ex_info) : null;
 
+                const html = ex_info.richtext.html;
+
+                const summary = textInterception(html.replace(new RegExp('<.+?>', 'g'), ''), 40);
+                const slogan = textInterception(html.replace(new RegExp('<.+?>', 'g'), ''), 40);
+
+
                 await factory(Provider)({
                     name: item.name,
                     logo: thumbnail ? thumbnail.url : null,
                     introduction: ex_info ? ex_info.richtext ? ex_info.richtext.html : null : null,
                     area,
+                    slogan,
+                    summary,
                     creator,
                     category,
-                    status: ProjectStatusEnum.CHECKED
+                    status: item.status == 'REJECT' ? ProjectStatusEnum.REJECTED : ProjectStatusEnum.CHECKED
                 }).seed();
             }
         } else {

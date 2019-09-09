@@ -17,7 +17,7 @@ export default class implements Seeder {
           for (let item of res) {
             const apply = new ApplyProvider();
 
-            const provider = await connection.getRepository(Provider).findOne({ where: { title: item.name } });
+            const provider = await connection.getRepository(Provider).findOne({ where: { name: item.name } });
             const user = await connection.getRepository(User).findOne({ where: { account: item.credential } });
             apply.applicant = user;
             apply.provider = provider;
