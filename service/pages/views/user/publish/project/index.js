@@ -1,24 +1,132 @@
-import React, { Fragment } from 'react';
+import { Alert, Col, Form, Input, Row, Button } from 'antd';
+import React from 'react';
+import UserLayout from '../../../../components/Layout/UserLayout';
+import { uploadOne } from '../../../../lib/fetch';
 import './releas_project.scss';
+import ImageCropper from '../../../../components/ImageCropper';
 
-// import _ from 'lodash';
-// import moment from 'moment';
-// // import dynamic from 'next/dynamic';
-// import { withRouter } from 'next/router';
-// import { Row, Col, Form, Modal, Input, Button, Upload, Icon, Alert, message } from 'antd';
+export default Form.create()(props => {
 
-// import { initTree } from '../../../../lib/tree';
+	const { form } = props;
+	const { getFieldDecorator } = form;
 
-// import TreeTags from '../../../../components/TreeTags';
-// import ImageCropper from '../../../../components/ImageCropper';
-// import LoginContext from '../../../../components/context/LoginContext';
-// import UserLayout from '../../../../components/Layout/UserLayout';
-// import { apiPublishProject, apiUpdateProject, uploadFile } from '../../../../services/common';
+	const rowStyle = {
+		margin: '5px 0',
+		padding: '5px',
+		borderBottom: '1px dashed #e8e8e8'
+	};
+
+	const onUpload = async (file) => {
+		const res = await uploadOne(file);
+
+		if (!!res && res.relativePath) {
+
+		}
+	};
+
+	return (
+		<UserLayout>
+			<div className="releas-fund">
+				<p className="right-title">发布项目</p>
+				<Alert message="已驳回" description={'驳回理由：'} type="error" />
+				<Form className="form-main" onSubmit={(e) => {
+					e.preventDefault();
+
+					form.validateFields((err, values) => {
+						if (!!err) {
+							return false;
+						}
+					});
+				}}>
+					<Row>
+						<Col>
+							<div style={rowStyle}>
+								<div
+									style={{
+										marginRight: 15,
+										textAlign: 'right',
+										verticalAlign: 'top',
+										display: 'inline-block',
+										width: '15%',
+										color: '#108ee9'
+									}}
+								>
+									<span style={{ color: 'red', marginRight: '2px' }}>*</span>标题：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									<Form.Item >
+										{getFieldDecorator('title', {
+											initialValue: '',
+											rules: [{ required: true, message: '标题', whitespace: true }]
+										})(<Input style={{ width: 500 }} placeholder="请填写标题" />)}
+									</Form.Item>
+									<div style={{ marginTop: 3, color: 'red' }}>
+										参考格式：地区+某行业项目+融资方式+金额（附单位）
+ 									</div>
+								</div>
+							</div>
+							<div style={rowStyle}>
+								<div
+									style={{
+										marginRight: 15,
+										textAlign: 'right',
+										verticalAlign: 'top',
+										display: 'inline-block',
+										width: '15%',
+										color: '#108ee9'
+									}}
+								>
+									<span style={{ color: 'red', marginRight: '2px' }}>*</span>项目封面：
+ 								</div>
+								<div style={{ display: 'inline-block', width: '80%' }}>
+									<ImageCropper
+										title='请上传项目封面'
+										url={''}
+										onUpload={file => {
+											if (file.size > 5 * 1024 * 1024) {
+												message.error('请上传小于5M的图片');
+												return false;
+											}
+
+											// onUploadLogo(file);
+											return false;
+										}}
+										width={400}
+										height={200}
+									/>
+								</div>
+							</div>
+						</Col>
+					</Row>
+					<Form.Item>
+						<Button type="primary" htmlType="submit">
+							立即发布
+						</Button>
+					</Form.Item>
+				</Form>
+			</div>
+		</UserLayout>
+	)
+});
+
+			// import _ from 'lodash';
+			// import moment from 'moment';
+			// // import dynamic from 'next/dynamic';
+// import {withRouter} from 'next/router';
+// import {Row, Col, Form, Modal, Input, Button, Upload, Icon, Alert, message } from 'antd';
+
+// import {initTree} from '../../../../lib/tree';
+
+				// import TreeTags from '../../../../components/TreeTags';
+				// import ImageCropper from '../../../../components/ImageCropper';
+				// import LoginContext from '../../../../components/context/LoginContext';
+				// import UserLayout from '../../../../components/Layout/UserLayout';
+// import {apiPublishProject, apiUpdateProject, uploadFile } from '../../../../services/common';
 
 
 
-// @Form.create()
-// @withRouter
+				// @Form.create()
+				// @withRouter
 // export default class extends React.Component {
 // 	state = {
 // 		thumbnail: null

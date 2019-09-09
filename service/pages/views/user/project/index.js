@@ -157,7 +157,7 @@ export default withContext(props => {
 					setVisible={setLogVisible}
 				/>
 				<p className="right-title">
-					<Button type="primary" onClick={() => jump('/publish/project')}>
+					<Button type="primary" onClick={() => jump('/user/publish/project')}>
 						立即发布
  					</Button>
 				</p>

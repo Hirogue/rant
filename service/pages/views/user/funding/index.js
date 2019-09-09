@@ -4,11 +4,11 @@ import { Button, Spin } from 'antd';
 import gql from 'graphql-tag';
 import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
-import UserLayout from '../../../../components/Layout/UserLayout';
-import withContext, { GlobalContext } from '../../../../components/Layout/withContext';
-import StandardTable from '../../../../components/StandardTable';
-import { Q_GET_APPLY_CAPITALS } from '../../../../gql';
-import { buildingQuery, jump, toFetchCurrentUser } from '../../../../lib/global';
+import UserLayout from '../../../components/Layout/UserLayout';
+import withContext, { GlobalContext } from '../../../components/Layout/withContext';
+import StandardTable from '../../../components/StandardTable';
+import { Q_GET_APPLY_CAPITALS } from '../../../gql';
+import { buildingQuery, jump, toFetchCurrentUser } from '../../../lib/global';
 import './fund_manage.scss';
 
 export const M_APPROVAL_CAPITAL = gql`
@@ -152,7 +152,7 @@ export default withContext(props => {
 					setVisible={setLogVisible}
 				/>
 				<p className="right-title">
-					<Button type="primary" onClick={() => jump('/publish/finance')}>
+					<Button type="primary" onClick={() => jump('/user/publish/finance')}>
 						立即发布
  					</Button>
 				</p>
