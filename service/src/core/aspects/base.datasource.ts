@@ -109,6 +109,14 @@ export class BaseDataSource extends RESTDataSource {
         }
     }
 
+    async search(url: string, queryString: string) {
+        try {
+            return await this.get(`${url}?${queryString}`);
+        } catch (err) {
+            throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
+        }
+    }
+
     async findOne(url: string, id: string, queryString: string) {
         try {
             return await this.get(`${url}/${id}`, queryString);

@@ -1,9 +1,10 @@
-import { Delete, Query, UseGuards } from "@nestjs/common";
+import { Delete, Get, Query, UseGuards, UseInterceptors } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { ApiBearerAuth, ApiOperation } from "@nestjs/swagger";
-import { Crud, CrudController, CrudOptions } from "@nestjsx/crud";
+import { Crud, CrudController, CrudOptions, CrudRequest, ParsedRequest } from "@nestjsx/crud";
 import * as deepmerge from 'deepmerge';
 import { ClassType } from "type-graphql";
+import { RequestInterceptor } from "../interceptors";
 import { BaseService } from "./base.service";
 
 export const AuthDecorators = [
@@ -55,6 +56,23 @@ export function BaseController<TEntity>(
 
         get base(): CrudController<TEntity> {
             return this;
+        }
+
+        static get<T extends any>(
+            metadataKey: any,
+            target: Object,
+            propertyKey: string | symbol = undefined,
+        ): T {
+            return propertyKey
+                ? Reflect.getMetadata(metadataKey, target, propertyKey)
+                : Reflect.getMetadata(metadataKey, target);
+        }
+
+        @UseInterceptors(RequestInterceptor)
+        @Get('search')
+        @ApiOperation({ title: `Search ${TEntityClass.name}` })
+        async search(@ParsedRequest() req: CrudRequest) {
+            return this.service.getMany(req);
         }
 
         @Delete()
