@@ -1,11 +1,34 @@
-import { Alert, Button, InputNumber, Col, Form, Input, Row } from 'antd';
-import React from 'react';
+import { useQuery } from '@apollo/react-hooks';
+import { Alert, Button, Checkbox, Col, Form, Input, InputNumber, Radio, Row, Select } from 'antd';
+import React, { useState } from 'react';
 import ImageCropper from '../../../../components/ImageCropper';
 import UserLayout from '../../../../components/Layout/UserLayout';
+import withContext from '../../../../components/Layout/withContext';
+import { IFModeEnum } from '../../../../lib/enum';
 import { uploadOne } from '../../../../lib/fetch';
+import { Q_GET_PROJECT_METADATA } from '../gql';
 import './releas_project.scss';
 
-export default Form.create()(props => {
+const { TextArea } = Input;
+
+export default withContext((Form.create()(props => {
+
+	const { data: {
+		industry = [],
+		area = [],
+		stage = [],
+		withdrawal_year = [],
+		ratio = [],
+		risk = [],
+		interest = [],
+		occupancy_time = [],
+		exit_mode = [],
+		data = []
+	} } = useQuery(Q_GET_PROJECT_METADATA, {
+		notifyOnNetworkStatusChange: true
+	});
+
+	const [category, setCategory] = useState(IFModeEnum.EQUITY);
 
 	const { form } = props;
 	const { getFieldDecorator } = form;
@@ -60,7 +83,7 @@ export default Form.create()(props => {
 										{getFieldDecorator('title', {
 											initialValue: '',
 											rules: [
-												{ required: true, message: '标题', whitespace: true },
+												{ required: true, message: '请填写标题', whitespace: true },
 												{ max: 35, message: '最多35个字符' },
 												{ min: 5, message: '最少5个字符' },
 											]
@@ -101,7 +124,7 @@ export default Form.create()(props => {
 									{getFieldDecorator('amount', {
 										initialValue: '',
 										rules: [
-											{ required: true, message: '不能为空' }
+											{ required: true, message: '请填写融资金额' }
 										]
 									})(<InputNumber min={1} style={{ width: 200 }} placeholder="请填写融资金额" />)}
 									{' '}万元
@@ -112,12 +135,20 @@ export default Form.create()(props => {
 									<span style={{ color: 'red', marginRight: '2px' }}>*</span>所属行业：
  								</div>
 								<div style={{ display: 'inline-block', width: '80%' }}>
-									{getFieldDecorator('amount', {
+									{getFieldDecorator('industry', {
 										initialValue: '',
 										rules: [
-											{ required: true, message: '标题' }
+											{ required: true, message: '请选择所属行业' }
 										]
-									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+									})(<Select
+										style={{ width: 200 }}
+										placeholder="请选择所属行业">
+										{industry.map(item =>
+											<Select.Option key={item.id} value={item.id}>
+												{item.title}
+											</Select.Option>
+										)}
+									</Select>)}
 								</div>
 							</div>
 							<div style={rowStyle}>
@@ -125,12 +156,20 @@ export default Form.create()(props => {
 									<span style={{ color: 'red', marginRight: '2px' }}>*</span>所在地区：
  								</div>
 								<div style={{ display: 'inline-block', width: '80%' }}>
-									{getFieldDecorator('amount', {
+									{getFieldDecorator('area', {
 										initialValue: '',
 										rules: [
-											{ required: true, message: '标题' }
+											{ required: true, message: '请选择所在地区' }
 										]
-									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+									})(<Select
+										style={{ width: 200 }}
+										placeholder="请选择所在地区">
+										{area.map(item =>
+											<Select.Option key={item.id} value={item.id}>
+												{item.title}
+											</Select.Option>
+										)}
+									</Select>)}
 								</div>
 							</div>
 							<div style={rowStyle}>
@@ -138,77 +177,187 @@ export default Form.create()(props => {
 									融资方式：
  								</div>
 								<div style={{ display: 'inline-block', width: '80%' }}>
-									{getFieldDecorator('amount', {
-										initialValue: '',
-										rules: [
-											{ required: true, message: '标题' }
-										]
-									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+									<Radio.Group onChange={e => setCategory(e.target.value)} value={category}>
+										<Radio value={IFModeEnum.EQUITY}>股权</Radio>
+										<Radio value={IFModeEnum.CLAIM}>债权</Radio>
+									</Radio.Group>
 								</div>
 							</div>
-							<div style={rowStyle}>
-								<div style={labelStyle}>
-									<span style={{ color: 'red', marginRight: '2px' }}>*</span>风控要求：
+
+							{IFModeEnum.EQUITY === category ?
+								<>
+									<div style={rowStyle}>
+										<div style={labelStyle}>
+											<span style={{ color: 'red', marginRight: '2px' }}>*</span>所处阶段：
+ 									</div>
+										<div style={{ display: 'inline-block', width: '80%' }}>
+											{getFieldDecorator('stage', {
+												initialValue: '',
+												rules: [
+													{ required: true, message: '请选择所处阶段' }
+												]
+											})(<Select
+												style={{ width: 200 }}
+												placeholder="请选择所处阶段">
+												{stage.map(item =>
+													<Select.Option key={item.id} value={item.id}>
+														{item.title}
+													</Select.Option>
+												)}
+											</Select>)}
+										</div>
+									</div>
+									<div style={rowStyle}>
+										<div style={labelStyle}>
+											<span style={{ color: 'red', marginRight: '2px' }}>*</span>最短退出年限：
+ 									</div>
+										<div style={{ display: 'inline-block', width: '80%' }}>
+											{getFieldDecorator('withdrawal_year', {
+												initialValue: '',
+												rules: [
+													{ required: true, message: '请选择最短退出年限' }
+												]
+											})(<Select
+												style={{ width: 200 }}
+												placeholder="请选择最短退出年限">
+												{withdrawal_year.map(item =>
+													<Select.Option key={item.id} value={item.id}>
+														{item.title}
+													</Select.Option>
+												)}
+											</Select>)}
+										</div>
+									</div>
+									<div style={rowStyle}>
+										<div style={labelStyle}>
+											<span style={{ color: 'red', marginRight: '2px' }}>*</span>占股比例：
+ 									</div>
+										<div style={{ display: 'inline-block', width: '80%' }}>
+											{getFieldDecorator('ratio', {
+												initialValue: '',
+												rules: [
+													{ required: true, message: '请选择占股比例' }
+												]
+											})(<Select
+												style={{ width: 200 }}
+												placeholder="请选择占股比例">
+												{ratio.map(item =>
+													<Select.Option key={item.id} value={item.id}>
+														{item.title}
+													</Select.Option>
+												)}
+											</Select>)}
+										</div>
+									</div>
+									<div style={rowStyle}>
+										<div style={labelStyle}>
+											<span style={{ color: 'red', marginRight: '2px' }}>*</span>退出方式：
+ 									</div>
+										<div style={{ display: 'inline-block', width: '80%' }}>
+											{getFieldDecorator('exit_mode', {
+												initialValue: '',
+												rules: [
+													{ required: true, message: '请选择退出方式' }
+												]
+											})(<Checkbox.Group
+												options={exit_mode.map(item => ({
+													label: item.title,
+													value: item.id
+												}))} />)}
+										</div>
+									</div>
+								</>
+								: null}
+
+							{IFModeEnum.CLAIM === category ?
+								<>
+									<div style={rowStyle}>
+										<div style={labelStyle}>
+											<span style={{ color: 'red', marginRight: '2px' }}>*</span>风控要求：
  								</div>
-								<div style={{ display: 'inline-block', width: '80%' }}>
-									{getFieldDecorator('amount', {
-										initialValue: '',
-										rules: [
-											{ required: true, message: '标题' }
-										]
-									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
-								</div>
-							</div>
-							<div style={rowStyle}>
-								<div style={labelStyle}>
-									还款来源：
+										<div style={{ display: 'inline-block', width: '80%' }}>
+											{getFieldDecorator('risk', {
+												initialValue: '',
+												rules: [
+													{ required: true, message: '请选择风控要求' }
+												]
+											})(<Select
+												style={{ width: 200 }}
+												placeholder="请选择风控要求">
+												{risk.map(item =>
+													<Select.Option key={item.id} value={item.id}>
+														{item.title}
+													</Select.Option>
+												)}
+											</Select>)}
+										</div>
+									</div>
+									<div style={rowStyle}>
+										<div style={labelStyle}>
+											还款来源：
  								</div>
-								<div style={{ display: 'inline-block', width: '80%' }}>
-									{getFieldDecorator('amount', {
-										initialValue: '',
-										rules: [
-											{ required: true, message: '标题' }
-										]
-									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
-								</div>
-							</div>
-							<div style={rowStyle}>
-								<div style={labelStyle}>
-									<span style={{ color: 'red', marginRight: '2px' }}>*</span>承担利息：
+										<div style={{ display: 'inline-block', width: '80%' }}>
+											{getFieldDecorator('payment')(
+												<Input style={{ width: 200 }} placeholder="请填写还款来源" />
+											)}
+										</div>
+									</div>
+									<div style={rowStyle}>
+										<div style={labelStyle}>
+											<span style={{ color: 'red', marginRight: '2px' }}>*</span>承担利息：
  								</div>
-								<div style={{ display: 'inline-block', width: '80%' }}>
-									{getFieldDecorator('amount', {
-										initialValue: '',
-										rules: [
-											{ required: true, message: '标题' }
-										]
-									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
-								</div>
-							</div>
-							<div style={rowStyle}>
-								<div style={labelStyle}>
-									<span style={{ color: 'red', marginRight: '2px' }}>*</span>资金占用时长：
+										<div style={{ display: 'inline-block', width: '80%' }}>
+											{getFieldDecorator('interest', {
+												initialValue: '',
+												rules: [
+													{ required: true, message: '请选择承担利息' }
+												]
+											})(<Select
+												style={{ width: 200 }}
+												placeholder="请选择承担利息">
+												{interest.map(item =>
+													<Select.Option key={item.id} value={item.id}>
+														{item.title}
+													</Select.Option>
+												)}
+											</Select>)}
+										</div>
+									</div>
+									<div style={rowStyle}>
+										<div style={labelStyle}>
+											<span style={{ color: 'red', marginRight: '2px' }}>*</span>资金占用时长：
  								</div>
-								<div style={{ display: 'inline-block', width: '80%' }}>
-									{getFieldDecorator('amount', {
-										initialValue: '',
-										rules: [
-											{ required: true, message: '标题' }
-										]
-									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
-								</div>
-							</div>
+										<div style={{ display: 'inline-block', width: '80%' }}>
+											{getFieldDecorator('occupancy_time', {
+												initialValue: '',
+												rules: [
+													{ required: true, message: '请选择资金占用时长' }
+												]
+											})(<Select
+												style={{ width: 200 }}
+												placeholder="请选择资金占用时长">
+												{occupancy_time.map(item =>
+													<Select.Option key={item.id} value={item.id}>
+														{item.title}
+													</Select.Option>
+												)}
+											</Select>)}
+										</div>
+									</div>
+								</>
+								: null}
+
 							<div style={rowStyle}>
 								<div style={labelStyle}>
 									<span style={{ color: 'red', marginRight: '2px' }}>*</span>融资用途：
  								</div>
 								<div style={{ display: 'inline-block', width: '80%' }}>
-									{getFieldDecorator('amount', {
+									{getFieldDecorator('purposes', {
 										initialValue: '',
 										rules: [
-											{ required: true, message: '标题' }
+											{ required: true, message: '请填写融资用途' }
 										]
-									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+									})(<TextArea rows={5} placeholder="请填写融资用途" />)}
 								</div>
 							</div>
 							<div style={rowStyle}>
@@ -216,12 +365,9 @@ export default Form.create()(props => {
 									团队介绍：
  								</div>
 								<div style={{ display: 'inline-block', width: '80%' }}>
-									{getFieldDecorator('amount', {
+									{getFieldDecorator('team_info', {
 										initialValue: '',
-										rules: [
-											{ required: true, message: '标题' }
-										]
-									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+									})(<TextArea rows={5} placeholder="请填写团队介绍" />)}
 								</div>
 							</div>
 							<div style={rowStyle}>
@@ -229,12 +375,9 @@ export default Form.create()(props => {
 									项目优势：
  								</div>
 								<div style={{ display: 'inline-block', width: '80%' }}>
-									{getFieldDecorator('amount', {
-										initialValue: '',
-										rules: [
-											{ required: true, message: '标题' }
-										]
-									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+									{getFieldDecorator('advantage', {
+										initialValue: ''
+									})(<TextArea rows={5} placeholder="请填写项目优势" />)}
 								</div>
 							</div>
 							<div style={rowStyle}>
@@ -242,12 +385,12 @@ export default Form.create()(props => {
 									<span style={{ color: 'red', marginRight: '2px' }}>*</span>项目进展：
  								</div>
 								<div style={{ display: 'inline-block', width: '80%' }}>
-									{getFieldDecorator('amount', {
+									{getFieldDecorator('progress', {
 										initialValue: '',
 										rules: [
 											{ required: true, message: '标题' }
 										]
-									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+									})(<TextArea rows={5} placeholder="请填写项目进展" />)}
 								</div>
 							</div>
 							<div style={rowStyle}>
@@ -255,12 +398,12 @@ export default Form.create()(props => {
 									<span style={{ color: 'red', marginRight: '2px' }}>*</span>项目介绍：
  								</div>
 								<div style={{ display: 'inline-block', width: '80%' }}>
-									{getFieldDecorator('amount', {
+									{getFieldDecorator('info', {
 										initialValue: '',
 										rules: [
-											{ required: true, message: '标题' }
+											{ required: true, message: '请填写项目介绍' }
 										]
-									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+									})(<TextArea rows={5} placeholder="请填写项目介绍" />)}
 								</div>
 							</div>
 							<div style={rowStyle}>
@@ -268,12 +411,16 @@ export default Form.create()(props => {
 									<span style={{ color: 'red', marginRight: '2px' }}>*</span>可提供资料：
  								</div>
 								<div style={{ display: 'inline-block', width: '80%' }}>
-									{getFieldDecorator('amount', {
+									{getFieldDecorator('data', {
 										initialValue: '',
 										rules: [
-											{ required: true, message: '标题' }
+											{ required: true, message: '请选择可提供资料' }
 										]
-									})(<Input style={{ width: 200 }} placeholder="请填写融资金额" />)}
+									})(<Checkbox.Group
+										options={data.map(item => ({
+											label: item.title,
+											value: item.id
+										}))} />)}
 								</div>
 							</div>
 						</Col>
@@ -287,288 +434,4 @@ export default Form.create()(props => {
 			</div>
 		</UserLayout>
 	)
-});
-
-			// import _ from 'lodash';
-			// import moment from 'moment';
-			// // import dynamic from 'next/dynamic';
-// import {withRouter} from 'next/router';
-// import {Row, Col, Form, Modal, Input, Button, Upload, Icon, Alert, message } from 'antd';
-
-// import {initTree} from '../../../../lib/tree';
-
-				// import TreeTags from '../../../../components/TreeTags';
-				// import ImageCropper from '../../../../components/ImageCropper';
-				// import LoginContext from '../../../../components/context/LoginContext';
-				// import UserLayout from '../../../../components/Layout/UserLayout';
-// import {apiPublishProject, apiUpdateProject, uploadFile } from '../../../../services/common';
-
-
-
-				// @Form.create()
-				// @withRouter
-// export default class extends React.Component {
-// 	state = {
-// 		thumbnail: null
-// 	};
-
-// 	componentDidMount() {
-// 		const { detail } = this.props.router.query;
-
-// 		this.setState((state) => ({
-// 			...state,
-// 			thumbnail: detail.thumbnail
-// 		}));
-// 	}
-
-// 	handleSubmit = (e, user) => {
-// 		e.preventDefault();
-
-// 		const { detail } = this.props.router.query;
-
-// 		const title = this.titleRef.state.value;
-
-// 		if (!title) {
-// 			message.error('标题必填');
-// 			return false;
-// 		}
-
-// 		if (title.length > 35) {
-// 			message.error('标题长度不能超过35个字符');
-// 			return false;
-// 		}
-
-// 		const thumbnail = this.state.thumbnail;
-// 		if (!thumbnail) {
-// 			message.error('请上传项目封面');
-// 			return false;
-// 		}
-
-// 		const tags = this.tagRootRef.generateResult();
-
-// 		if (!!tags.errors) {
-// 			message.error(tags.errors.shift());
-// 			return false;
-// 		}
-
-// 		const plainText = tags.selectedTags['项目介绍'].value;
-// 		const subtitle = plainText.length >= 120 ? plainText.substr(0, 100) + '...' : plainText;
-
-// 		const payload = {
-// 			title,
-// 			subtitle,
-// 			thumbnail,
-// 			ex_info: { tags: JSON.stringify(tags) },
-// 			category: 'PRJ_FINANCING',
-// 			created_by: user.id,
-// 			contacts: user.real_name,
-// 			phone: user.phonenumber,
-// 			company: user.nick_name,
-// 			release_datetime: moment().format('YYYY-MM-DD HH:mm:ss'),
-// 			status: 'PENDING'
-// 		};
-
-// 		if (!!detail.id) {
-// 			apiUpdateProject({
-// 				criteria: {
-// 					id: detail.id
-// 				},
-// 				newvalue: payload
-// 			})
-// 				.then((res) => {
-// 					message.success('提交成功！');
-// 					window.location.replace('/user/project');
-// 				})
-// 				.catch((err) => message.error('提交失败！'));
-// 		} else {
-// 			apiPublishProject(payload)
-// 				.then((res) => {
-// 					message.success('发布成功！');
-// 					window.location.replace('/user/project');
-// 				})
-// 				.catch((err) => message.error('发布失败！'));
-// 		}
-// 	};
-
-// 	render() {
-// 		// const { getFieldDecorator } = this.props.form;
-// 		const { detail } = this.props.router.query;
-
-// 		// const html = !!detail.ex_info ? (!!detail.ex_info.richtext ? detail.ex_info.richtext.html : null) : null;
-// 		const thumbnail = this.state.thumbnail || null;
-
-// 		return (
-// 			<UserLayout>
-// 				<LoginContext.Consumer>
-// 					{(context) => {
-// 						const user = context.user;
-// 						if (!user) return '';
-
-// 						const { mainData } = context;
-// 						if (!mainData) return '';
-
-// 						const treeRoot = initTree(mainData.projectTags);
-// 						const tagRoot = _.find(treeRoot, (item) => item.name === '项目');
-// 						const tagString = !detail.ex_info ? null : detail.ex_info.tags;
-
-// 						const rowStyle = {
-// 							margin: '5px 0',
-// 							padding: '5px',
-// 							borderBottom: '1px dashed #e8e8e8'
-// 						};
-
-// 						return (
-// 							<div className="releas-fund">
-// 								<Modal
-// 									title="提示"
-// 									centered
-// 									keyboard={false}
-// 									maskClosable={false}
-// 									closable={false}
-// 									footer={null}
-// 									visible={user.vip <= 0}
-// 								>
-// 									<p style={{ textAlign: 'center' }}>如需发布项目，请先完善资料升级 VIP 等级</p>
-// 									<p style={{ textAlign: 'center', marginTop: 20 }}>
-// 										<Button type="primary" onClick={() => (window.location.href = '/user')}>
-// 											立即升级
-// 										</Button>
-// 									</p>
-// 								</Modal>
-// 								<p className="right-title">发布项目</p>
-// 								{!!detail && detail.status === 'REJECT' ? (
-// 									<Alert message="已驳回" description={'驳回理由：' + detail.reject_msg} type="error" />
-// 								) : (
-// 										''
-// 									)}
-// 								<Form className="form-main" onSubmit={(e) => this.handleSubmit(e, user)}>
-// 									<Row>
-// 										<Col>
-// 											<div style={rowStyle}>
-// 												<div
-// 													style={{
-// 														marginRight: 15,
-// 														textAlign: 'right',
-// 														verticalAlign: 'top',
-// 														display: 'inline-block',
-// 														width: '15%',
-// 														color: '#108ee9'
-// 													}}
-// 												>
-// 													<span style={{ color: 'red', marginRight: '2px' }}>*</span>标题：
-// 												</div>
-
-// 												<div style={{ display: 'inline-block', width: '80%' }}>
-// 													<Input
-// 														ref={(e) => (this.titleRef = e)}
-// 														defaultValue={detail.title}
-// 														style={{ width: 500 }}
-// 														placeholder="请填写标题"
-// 													/>
-
-// 													<div style={{ marginTop: 3, color: 'red' }}>
-// 														参考格式：地区+某行业项目+融资方式+金额（附单位）
-// 													</div>
-// 												</div>
-// 											</div>
-
-// 											<div style={rowStyle}>
-// 												<div
-// 													style={{
-// 														marginRight: 15,
-// 														textAlign: 'right',
-// 														verticalAlign: 'top',
-// 														display: 'inline-block',
-// 														width: '15%',
-// 														color: '#108ee9'
-// 													}}
-// 												>
-// 													<span style={{ color: 'red', marginRight: '2px' }}>*</span>项目封面：
-// 												</div>
-// 												<div style={{ display: 'inline-block', width: '80%' }}>
-// 													<ImageCropper
-// 														imageUrl={!thumbnail ? '' : thumbnail.url}
-// 														onUpload={(file) => {
-// 															if (file.size > 5 * 1024 * 1024) {
-// 																message.error('请上传小于5M的图片');
-// 																return false;
-// 															}
-// 															uploadFile(file).then((res) => {
-// 																this.setState((state) => ({
-// 																	...state,
-// 																	thumbnail: res
-// 																}));
-// 															});
-// 														}}
-// 													/>
-// 													{/* <Upload
-// 														action={null}
-// 														showUploadList={false}
-// 														beforeUpload={(file) => {
-// 															if (file.size > 2 * 1024 * 1024) {
-// 																message.error('请上传小于2M的图片');
-// 																return false;
-// 															}
-// 															uploadFile(file).then((res) => {
-// 																this.setState((state) => ({
-// 																	...state,
-// 																	thumbnail: res
-// 																}));
-// 															});
-// 														}}
-// 													>
-// 														<div className="upload-org">
-// 															{!!thumbnail && !!thumbnail.url ? (
-// 																<Fragment>
-// 																	<img
-// 																		style={{ maxWidth: 400 }}
-// 																		src={thumbnail.url}
-// 																	/>
-// 																	<Button className="upload-btn">
-// 																		<Icon type="upload" />重新上传
-// 																	</Button>
-// 																</Fragment>
-// 															) : (
-// 																<Fragment>
-// 																	<p
-// 																		className="ant-upload-drag-icon"
-// 																		style={{ width: 300 }}
-// 																	>
-// 																		<Icon type="upload" />
-// 																	</p>
-// 																	<p className="ant-upload-text">点击上传项目封面图</p>
-// 																	<p className="ant-upload-hint">图片大小不超过2M</p>
-// 																</Fragment>
-// 															)}
-// 														</div>
-// 													</Upload> */}
-// 												</div>
-// 											</div>
-
-// 											<TreeTags
-// 												ref={(e) => (this.tagRootRef = e)}
-// 												tagGroups={tagRoot}
-// 												tagString={tagString}
-// 												categoryName={'融资方式'}
-// 												company={user.id_type === '企业'}
-// 											/>
-// 										</Col>
-// 									</Row>
-
-// 									{/* <Form.Item label={'项目介绍：'}>{this.renderRichText(html)}</Form.Item> */}
-
-// 									<Form.Item>
-// 										<Button type="primary" htmlType="submit">
-// 											{!!detail.id ? '重新提交' : '立即发布'}
-// 										</Button>
-// 									</Form.Item>
-// 								</Form>
-// 							</div>
-// 						);
-// 					}}
-// 				</LoginContext.Consumer>
-// 			</UserLayout>
-// 		);
-// 	}
-// }
-// 
+})));

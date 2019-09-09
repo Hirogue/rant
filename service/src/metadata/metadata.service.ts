@@ -27,7 +27,7 @@ export class MetadataService extends BaseTreeService<Metadata> {
             .where('t.title = :title', { title })
             .getOne();
 
-        return result.children;
+        return result ? result.children : [];
     }
 
     async findChildrenById(id: string) {
@@ -37,6 +37,6 @@ export class MetadataService extends BaseTreeService<Metadata> {
             .where('t.id = :id', { id })
             .getOne();
 
-        return result.children;
+        return result ? result.children : [];
     }
 }
