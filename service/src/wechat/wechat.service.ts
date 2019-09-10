@@ -86,9 +86,13 @@ export class WechatService {
         const timestamp = moment().unix();
         const params = [noncestr, ticket, timestamp, url].sort().join('&');
 
-        return crypto.createHash('sha1')
-            .update(params)
-            .digest('hex');
+        return {
+            signature: crypto.createHash('sha1')
+                .update(params)
+                .digest('hex'),
+            noncestr,
+            timestamp
+        }
     }
 
     private getNonceString() {
