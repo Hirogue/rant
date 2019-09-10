@@ -223,22 +223,15 @@ export default withRouter(props => {
 
   if (loading || !data) return <Skeleton loading={loading} />;
 
-  const { capital, metadataTrees } = data;
+  const { capital } = data;
 
   const target = id ? capital : {};
   const mutation = id ? updateCapital : createCapital;
-  const trees = metadataTrees.find(item => item.title === '地区') || {};
 
   let tabList = {
     basic: {
       name: '基础信息',
-      render: () => (
-        <BasicForm
-          metadataTrees={getTreeData(trees.children || [])}
-          target={target || {}}
-          mutation={mutation}
-        />
-      ),
+      render: () => <BasicForm target={target || {}} mutation={mutation} />,
     },
   };
 

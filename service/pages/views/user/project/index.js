@@ -77,7 +77,7 @@ export default withContext(props => {
 		{
 			title: '标题',
 			dataIndex: 'title',
-			render: (val, row) => <a href={`/project/detail?id=${row.id}`} target="_blank">{val}</a>
+			render: (val, row) => <a href={`/user/publish/project?id=${row.id}`} target="_blank">{val}</a>
 		},
 		{
 			title: '状态',
@@ -95,7 +95,7 @@ export default withContext(props => {
 			key: 'operation',
 			render: (val, row) => (
 				<>
-					{ProjectStatusEnum.FINISHED !== row.status ?
+					{ProjectStatusEnum.FOLLOWING === row.status ?
 						<>
 							<a
 								href="javascript:;"

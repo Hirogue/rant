@@ -1,5 +1,6 @@
-const path = require('path');
 const withSass = require('@zeit/next-sass');
 const withCSS = require('@zeit/next-css');
 
-module.exports = withSass(withCSS());
+module.exports = withSass(withCSS({
+    useFileSystemPublicRoutes: false
+}));
