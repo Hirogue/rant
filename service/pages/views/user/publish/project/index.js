@@ -1,9 +1,9 @@
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { Alert, Button, Cascader, Checkbox, Col, Form, Input, InputNumber, message, Radio, Row, Select } from 'antd';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ImageCropper from '../../../../components/ImageCropper';
 import UserLayout from '../../../../components/Layout/UserLayout';
-import withContext, { GlobalContext } from '../../../../components/Layout/withContext';
+import withContext from '../../../../components/Layout/withContext';
 import { M_PUBLISH_PROJECT, Q_GET_PROJECT } from '../../../../gql';
 import { IFModeEnum, ProjectStatusEnum } from '../../../../lib/enum';
 import { uploadOne } from '../../../../lib/fetch';
@@ -14,7 +14,6 @@ const { TextArea } = Input;
 
 export default withContext((Form.create()(props => {
 
-	const { user } = useContext(GlobalContext);
 	const { props: { router: { query: { id } } } } = props;
 
 	const client = useApolloClient();
@@ -116,7 +115,10 @@ export default withContext((Form.create()(props => {
 	return (
 		<UserLayout>
 			<div className="releas-fund">
-				<p style={{ margin: 20 }}>{!target ? '发布项目' : '编辑项目'}</p>
+				<p style={{ margin: 20 }}>
+					{!target ? '发布项目' : '编辑项目'}
+					{!target ? '' : ProjectStatusEnum.PENDING == target.status ? ' (审核中)' : ''}
+				</p>
 				{!target ? null :
 					ProjectStatusEnum.REJECTED !== target.status ? null :
 						< Alert message="已驳回" description={`驳回理由：${target.reason}`} type="error" />

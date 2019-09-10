@@ -119,9 +119,9 @@ export class Project extends Base {
     @ApiModelProperty({ nullable: true, description: '状态' })
     status: ProjectStatusEnum;
 
-    @Field({ nullable: true, description: '分类' })
-    @Column({ default: IFModeEnum.EQUITY, comment: '分类' })
-    @ApiModelProperty({ nullable: true, description: '分类' })
+    @Field({ nullable: true, description: '融资方式' })
+    @Column({ default: IFModeEnum.EQUITY, comment: '融资方式' })
+    @ApiModelProperty({ nullable: true, description: '融资方式' })
     category: IFModeEnum;
 
     @Field(type => Metadata, { nullable: true, description: '行业' })
