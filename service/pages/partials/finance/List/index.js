@@ -55,11 +55,11 @@ export default withRouter(({ data, router }) => {
 			<ul className="icons">
 				<li>
 					<IconFont className="iconfont" type="icon-shangwuren" />
-					<span>{toSetVal(data.creator)('hideName')('未知')}</span>
+					<span>{toSetVal(data)('hideName')('未知')}</span>
 				</li>
 				<li>
 					<IconFont className="iconfont" type="icon-gongsi" />
-					<span>{toSetVal(data.creator)('hideCompany')('未知')}</span>
+					<span>{toSetVal(data)('hideCompany')('未知')}</span>
 				</li>
 				<li>
 					<IconFont className="iconfont" type="icon-liulan1" />
