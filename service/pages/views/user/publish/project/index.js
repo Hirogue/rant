@@ -1,5 +1,5 @@
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
-import { Alert, Button, Checkbox, Col, Form, Input, InputNumber, message, Radio, Row, Select } from 'antd';
+import { Alert, Button, Checkbox, Col, Form, Input, InputNumber, message, Radio, Row, Select, Cascader } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import ImageCropper from '../../../../components/ImageCropper';
 import UserLayout from '../../../../components/Layout/UserLayout';
@@ -7,7 +7,7 @@ import withContext, { GlobalContext } from '../../../../components/Layout/withCo
 import { M_PUBLISH_PROJECT, Q_GET_PROJECT } from '../../../../gql';
 import { IFModeEnum, ProjectStatusEnum } from '../../../../lib/enum';
 import { uploadOne } from '../../../../lib/fetch';
-import { jump } from '../../../../lib/global';
+import { jump, getAreaList, toGetParentArrayByChildNode } from '../../../../lib/global';
 import { Q_GET_PROJECT_METADATA } from '../gql';
 
 const { TextArea } = Input;
@@ -21,7 +21,6 @@ export default withContext((Form.create()(props => {
 
 	const { data: {
 		industry = [],
-		area = [],
 		stage = [],
 		withdrawal_year = [],
 		ratio = [],
@@ -34,12 +33,18 @@ export default withContext((Form.create()(props => {
 		notifyOnNetworkStatusChange: true
 	});
 
+	const [areaList, setAreaList] = useState([]);
+	const [area, setArea] = useState([]);
+
 	const [target, setTarget] = useState(null);
 	const [category, setCategory] = useState(IFModeEnum.EQUITY);
 	const [cover, setCover] = useState(null);
 
 	useEffect(() => {
 		(async () => {
+			const list = await getAreaList(client);
+			setAreaList(list);
+
 			if (!!id) {
 				const { data: { project } } = await client.query({
 					query: Q_GET_PROJECT,
@@ -49,10 +54,16 @@ export default withContext((Form.create()(props => {
 				setTarget(project);
 				setCategory(project.category);
 				setCover(project.cover);
+
+				const areas = target && target.area ? (
+					toGetParentArrayByChildNode(list, { id: target.area.id })
+				) : null;
+
+				setArea(areas ? areas.map(item => item.id) : null);
 			}
+
 		})();
 	}, [id]);
-
 	const { form } = props;
 	const { getFieldDecorator } = form;
 
@@ -230,20 +241,14 @@ export default withContext((Form.create()(props => {
 							</Form.Item>
 							<Form.Item {...formItemLayout} label={'所在地区'}>
 								{getFieldDecorator('area', {
-									initialValue: target ? target.area ? target.area.id : null : null,
+									initialValue: area,
 									rules: [
 										{ required: true, message: '请选择所在地区' }
 									]
-								})(<Select
+								})(<Cascader
 									disabled={disabled}
-									style={{ width: 200 }}
-									placeholder="请选择所在地区">
-									{area.map(item =>
-										<Select.Option key={item.id} value={item.id}>
-											{item.title}
-										</Select.Option>
-									)}
-								</Select>)}
+									placeholder="请选择所在地区"
+									options={areaList} />)}
 							</Form.Item>
 							<Form.Item {...formItemLayout} label={'融资方式'} required>
 								<Radio.Group disabled={disabled} onChange={e => setCategory(e.target.value)} value={category}>
