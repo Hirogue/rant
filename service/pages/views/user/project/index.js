@@ -106,10 +106,10 @@ export default withContext(props => {
 							>
 								[完成]
           					</a>
-							<Divider type="vertical" />
+							{/* <Divider type="vertical" /> */}
 						</>
 						: null}
-					<a
+					{/* <a
 						href="javascript:;"
 						onClick={() => {
 							setCurrent(row);
@@ -117,7 +117,7 @@ export default withContext(props => {
 						}}
 					>
 						[日志]
-			   		</a>
+			   		</a> */}
 				</>
 			)
 		}

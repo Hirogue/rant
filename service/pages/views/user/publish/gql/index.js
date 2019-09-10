@@ -15,10 +15,6 @@ export const Q_GET_PROJECT_METADATA = gql`
             ...MetadataItemFields
         }
 
-        area: findMetadataChildrenByTitle(title: "地区") {
-            ...MetadataItemFields
-        }
-
         stage: findMetadataChildrenByTitle(title: "阶段") {
             ...MetadataItemFields
         }
