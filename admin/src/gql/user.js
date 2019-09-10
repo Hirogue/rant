@@ -29,6 +29,7 @@ export const F_USER_FIELDS = gql`
     vip
     area_path
     isSuperAdmin
+    business_license
     providers {
       id
       name
