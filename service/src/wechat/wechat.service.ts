@@ -2,10 +2,11 @@ import { BadGatewayException, Injectable } from "@nestjs/common";
 import * as crypto from 'crypto';
 import { range, shuffle, take } from 'lodash';
 import * as moment from 'moment';
-import * as SuperAgent from 'superagent';
 import { CacheService } from "../cache";
 import { Config } from "../config";
 import { WechatCacheKeyEnum } from "./wechat-cache-key.enum";
+import fetch from 'node-fetch';
+
 
 @Injectable()
 export class WechatService {
@@ -23,14 +24,8 @@ export class WechatService {
         if (!!accessToken) return accessToken;
 
         try {
-            const res = await SuperAgent.get('https://api.weixin.qq.com/cgi-bin/token')
-                .query(`
-                    grant_type=client_credential
-                    &appid=${Config.wechat.appid}
-                    &secret=${Config.wechat.secret}
-                `);
 
-            const result = JSON.parse(res.text);
+            const result = await fetch(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${Config.wechat.appid}&secret=${Config.wechat.secret}`).then(res => res.json());
 
             if (!result['access_token']) throw new BadGatewayException('获取 AccessToken 失败');
 
@@ -55,15 +50,9 @@ export class WechatService {
         if (!accessToken) throw new BadGatewayException('获取 AccessToken 失败');
 
         try {
-            const res = await SuperAgent.get('https://api.weixin.qq.com/cgi-bin/ticket/getticket')
-                .query(`
-                    access_token=${accessToken}
-                    &type=jsapi
-                `);
+            const result = await fetch(`https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=${accessToken}&type=jsapi`).then(res => res.json());
 
-            const result = JSON.parse(res.text);
-
-            if ('ok' === result['errmsg']) throw new BadGatewayException('获取 JS API Ticket 失败');
+            if ('ok' !== result['errmsg']) throw new BadGatewayException('获取 JS API Ticket 失败');
 
             await this.cache.set(
                 WechatCacheKeyEnum.WECHAT_JS_API_TICKET,
@@ -82,16 +71,19 @@ export class WechatService {
         const ticket = await this.getJsApiTicket();
         if (!ticket) throw new BadGatewayException('获取 JS API Ticket 失败');
 
-        const noncestr = this.getNonceString();
+        const nonceStr = this.getNonceString();
         const timestamp = moment().unix();
-        const params = [noncestr, ticket, timestamp, url].sort().join('&');
+        const params = `jsapi_ticket=${ticket}&noncestr=${nonceStr}&timestamp=${timestamp}&url=${url}`;
+
+        console.log(params)
 
         return {
             signature: crypto.createHash('sha1')
                 .update(params)
                 .digest('hex'),
-            noncestr,
-            timestamp
+            nonceStr,
+            timestamp,
+            appId: Config.wechat.appid
         }
     }
 

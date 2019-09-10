@@ -163,6 +163,7 @@ export default withRouter((props) => {
 										shape="circle"
 										icon="search"
 										onClick={() => {
+											if (!state.value.trim()) return;
 											window.location.href = `/search?searchCategory=${state
 												.category}&keyword=${state.value}`;
 										}}

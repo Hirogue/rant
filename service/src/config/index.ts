@@ -153,8 +153,8 @@ let Config = {
     },
 
     wechat: {
-        appid: '',
-        secret: '',
+        appid: process.env.APPID,
+        secret: process.env.APPSECRET,
     }
 
 };
