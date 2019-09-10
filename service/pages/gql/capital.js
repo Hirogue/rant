@@ -21,6 +21,7 @@ export const F_CAPITAL_FIELDS = gql`
     discount
     pre_payment
     term
+    reason
     type {
       id
       title
