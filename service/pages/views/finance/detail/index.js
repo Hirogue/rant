@@ -69,7 +69,7 @@ export default withRouter((props) => {
 		}
 	});
 
-	const toSetVal = (val) => (key) => (def) => val ? val[key] : def;
+	const toSetVal = (val) => (key) => (def) => val && val[key] ? val[key] : def;
 
 	const toShowApplyButton = (data) => (applyArray) => {
 		if (data.status === 'finished') {
@@ -244,8 +244,8 @@ export default withRouter((props) => {
 					<div className="right-main">
 						<h4 className="title">会员名片</h4>
 						<img className="service-bg-img" src={toSetVal(capital.creator)('avatar')(DEFAULT_AVATAR)} />
-						<p className="name">{toSetVal(capital.creator)('hideName')('未知姓名')}</p>
-						<p className="text" style={{ textAlign: 'center' }}>{toSetVal(capital.creator)('hideCompany')('未知公司')}</p>
+						<p className="name">{toSetVal(capital)('hideContact')('未知姓名')}</p>
+						<p className="text" style={{ textAlign: 'center' }}>{toSetVal(capital)('hideCompany')('未知公司')}</p>
 						{toShowApplyButton(capital)(user ? user.apply_capitals : null)}
 					</div>
 				</div>

@@ -63,7 +63,7 @@ export default withRouter((props) => {
 		}
 	});
 
-	const toSetVal = (val) => (key) => (def) => val ? val[key] : def;
+	const toSetVal = (val) => (key) => (def) => val && val[key] ? val[key] : def;
 
 	const toShowApplyButton = (data) => (applyArray) => {
 		if (data.status === 'finished') {
@@ -87,8 +87,8 @@ export default withRouter((props) => {
 					<div className="right-main">
 						<h4 className="title">会员名片</h4>
 						<img className="service-bg-img" src={toSetVal(project.creator)('avatar')(DEFAULT_AVATAR)} />
-						<p className="name">{toSetVal(project.creator)('hideName')('未知姓名')}</p>
-						<p className="text" style={{ textAlign: 'center' }}>{toSetVal(project.creator)('hideCompany')('未知公司')}</p>
+						<p className="name">{toSetVal(project)('hideContact')('未知姓名')}</p>
+						<p className="text" style={{ textAlign: 'center' }}>{toSetVal(project)('hideCompany')('未知公司')}</p>
 						{toShowApplyButton(project)(user ? user.apply_projects : null)}
 					</div>
 					<div className="left-main">

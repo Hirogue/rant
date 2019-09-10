@@ -17,6 +17,8 @@ export * from './pc_project';
 export * from './pc_capital';
 export * from './pc_service';
 export * from './pc_news';
+export * from './pc_document';
+export * from './pc_search';
 export * from './apply-product';
 export * from './log';
 export * from './apply-provider';

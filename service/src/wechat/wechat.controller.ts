@@ -10,6 +10,6 @@ export class WechatController {
 
     @Get('signature')
     async signature(@Req() req) {
-        return await this.service.signature(req.url);
+        return await this.service.signature(req.get('Referer'));
     }
 }
