@@ -13,6 +13,14 @@ export const jump = (url, timeout = 0) => {
     }
 }
 
+export const goback = (timeout = 0) => {
+    if (typeof window !== 'undefined') {
+        setTimeout(() => {
+            window.history.back();
+        }, timeout)
+    }
+}
+
 export const reload = (timeout = 0) => {
     if (typeof window !== 'undefined') {
         setTimeout(() => {

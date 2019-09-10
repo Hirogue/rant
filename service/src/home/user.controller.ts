@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Render } from '@nestjs/common';
+import { Controller, Get, Post, Render, Query } from '@nestjs/common';
 import { ApiOperation, ApiUseTags } from "@nestjs/swagger";
 
 const PAGE_URL = 'user';
@@ -59,5 +59,8 @@ export class UserController {
     @Get('/publish/project')
     @Render(`${PAGE_URL}/publish/project`)
     @ApiOperation({ title: 'user publish project' })
-    userPublishProject() { }
+    userPublishProject(@Query() query) {
+
+        return { id: query.id };
+    }
 }

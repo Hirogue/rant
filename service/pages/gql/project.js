@@ -21,6 +21,7 @@ export const F_PROJECT_FIELDS = gql`
     purposes
     info
     payment
+    reason
     stage {
       id
       title
