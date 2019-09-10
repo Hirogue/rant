@@ -21,6 +21,8 @@ export const F_CAPITAL_FIELDS = gql`
     discount
     pre_payment
     term
+    hideContact
+    hideCompany
     type {
       id
       title
@@ -36,8 +38,6 @@ export const F_CAPITAL_FIELDS = gql`
     creator {
       id
       avatar
-      hideName
-      hideCompany
     }
     area {
       id

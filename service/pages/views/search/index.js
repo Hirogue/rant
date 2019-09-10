@@ -48,7 +48,7 @@ export default withRouter((props) => {
 				join: [{ field: "industry" }],
 				sort: [{ field: 'publish_at', order: 'DESC' }],
 			},
-			filter: `&filter[]=["title||cont||${keyword}","info||cont||${keyword}"]&filter[]=status||in||waitting,following,checked,finished`
+			filter: `&filter[]=["title||cont||${keyword}","info||cont||${keyword}"]&filter[]=status||in||waiting,following,checked,finished`
 		},
 		finance: {
 			gql: Q_SEARCH_CAPITAL,
@@ -58,7 +58,7 @@ export default withRouter((props) => {
 				join: [{ field: 'creator' }, { field: 'industry' }, { field: 'area' }, { field: 'stage' }, { field: 'type' }],
 				sort: [{ field: 'publish_at', order: 'DESC' }],
 			},
-			filter: `&filter[]=["title||cont||${keyword}","info||cont||${keyword}"]&filter=status||in||waitting,following,checked,finished`
+			filter: `&filter[]=["title||cont||${keyword}","info||cont||${keyword}"]&filter=status||in||waiting,following,checked,finished`
 		}
 	}
 

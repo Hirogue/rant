@@ -39,6 +39,9 @@ export const Q_GET_CAPITAL_DATA = gql`
                 pre_payment
                 term
                 area_path
+                hideContact
+                hidePhone
+                hideCompany
                 type {
                     id
                     title
