@@ -1,14 +1,17 @@
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { CondOperator } from '@nestjsx/crud-request';
-import { Button, Spin } from 'antd';
+import { Button, message, Spin } from 'antd';
 import gql from 'graphql-tag';
 import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
 import UserLayout from '../../../components/Layout/UserLayout';
 import withContext, { GlobalContext } from '../../../components/Layout/withContext';
+import LogReader from '../../../components/LogReader';
+import StandardConfirm from '../../../components/StandardConfirm';
 import StandardTable from '../../../components/StandardTable';
-import { Q_GET_APPLY_CAPITALS } from '../../../gql';
-import { buildingQuery, jump, toFetchCurrentUser } from '../../../lib/global';
+import { Q_GET_CAPITALS } from '../../../gql';
+import { LogTypeEnum, ProjectStatusEnum } from '../../../lib/enum';
+import { buildingQuery, jump, ProjectStatusMaps, toFetchCurrentUser } from '../../../lib/global';
 import './fund_manage.scss';
 
 export const M_APPROVAL_CAPITAL = gql`
@@ -43,7 +46,7 @@ export default withContext(props => {
 
 	const [variables, setVariables] = useState(defaultVariables);
 
-	const { loading, data: { queryApplyCapital: res }, refetch } = useQuery(Q_GET_APPLY_CAPITALS, {
+	const { loading, data: { queryCapital: res }, refetch } = useQuery(Q_GET_CAPITALS, {
 		notifyOnNetworkStatusChange: true,
 		variables: { queryString: buildingQuery(defaultVariables) },
 	});
@@ -67,20 +70,17 @@ export default withContext(props => {
 
 	const columns = [
 		{
-			title: '名称',
-			dataIndex: 'capital.title',
-			render: (val, row) => <a href={`/user/publish/finance?id=${row.capital.id}`}>{val}</a>
+			title: '标题',
+			dataIndex: 'title',
+			render: (val, row) => <a href={`/user/publish/funding?id=${row.id}`}>{val}</a>
 		},
 		{
-			title: '联系人',
-			dataIndex: 'capital.creator.realname',
+			title: '状态',
+			dataIndex: 'status',
+			render: val => ProjectStatusMaps[val]
 		},
 		{
-			title: '联系电话',
-			dataIndex: 'capital.creator.phone',
-		},
-		{
-			title: '申请时间',
+			title: '发布时间',
 			dataIndex: 'create_at',
 			sorter: true,
 			render: val => moment(val).format('YYYY-MM-DD HH:mm:ss')
@@ -90,7 +90,7 @@ export default withContext(props => {
 			key: 'operation',
 			render: (val, row) => (
 				<>
-					{ProjectStatusEnum.FINISHED !== row.status ?
+					{ProjectStatusEnum.FOLLOWING === row.status ?
 						<>
 							<a
 								href="javascript:;"
@@ -101,10 +101,10 @@ export default withContext(props => {
 							>
 								[完成]
           					</a>
-							<Divider type="vertical" />
+							{/* <Divider type="vertical" /> */}
 						</>
 						: null}
-					<a
+					{/* <a
 						href="javascript:;"
 						onClick={() => {
 							setCurrent(row);
@@ -112,11 +112,11 @@ export default withContext(props => {
 						}}
 					>
 						[日志]
-			   		</a>
+			   		</a> */}
 				</>
 			)
 		}
-	];
+	]
 
 	return (
 		<UserLayout>
@@ -136,7 +136,7 @@ export default withContext(props => {
 								},
 							},
 							update: (proxy, { data }) => {
-								if (data.approvalProject) {
+								if (data.approvalCapital) {
 									message.success('操作成功');
 									refetch();
 								}
@@ -147,12 +147,12 @@ export default withContext(props => {
 				<LogReader
 					title="日志"
 					target={current ? current.id : null}
-					type={LogTypeEnum.PROJECT}
+					type={LogTypeEnum.CAPITAL}
 					visible={logVisible}
 					setVisible={setLogVisible}
 				/>
 				<p className="right-title">
-					<Button type="primary" onClick={() => jump('/user/publish/finance')}>
+					<Button type="primary" onClick={() => jump('/user/publish/funding')}>
 						立即发布
  					</Button>
 				</p>
