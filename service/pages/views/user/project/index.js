@@ -77,7 +77,7 @@ export default withContext(props => {
 		{
 			title: '标题',
 			dataIndex: 'title',
-			render: (val, row) => <a href={`/user/publish/project?id=${row.id}`} target="_blank">{val}</a>
+			render: (val, row) => <a href={`/user/publish/project?id=${row.id}`}>{val}</a>
 		},
 		{
 			title: '状态',

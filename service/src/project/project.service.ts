@@ -22,6 +22,9 @@ export class ProjectService extends BaseService<Project> {
         @TransactionRepository(Project) projectRepo?: Repository<Project>
     ) {
         project.creator = currentUser;
+        project.contact = currentUser.realname;
+        project.phone = currentUser.phone;
+        project.company = currentUser.company;
         project.status = ProjectStatusEnum.PENDING;
 
         const target = await projectRepo.save(project);

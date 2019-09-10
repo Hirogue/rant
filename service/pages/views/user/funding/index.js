@@ -69,7 +69,7 @@ export default withContext(props => {
 		{
 			title: '名称',
 			dataIndex: 'capital.title',
-			render: (val, row) => <a href={`/finance/detail?id=${row.capital.id}`} target="_blank">{val}</a>
+			render: (val, row) => <a href={`/user/publish/finance?id=${row.capital.id}`}>{val}</a>
 		},
 		{
 			title: '联系人',
