@@ -11,7 +11,7 @@ import './finance_list.scss';
 
 export default withRouter(({ data, router }) => {
 
-	const toSetVal = (val) => (key) => (def) => val ? val[key] : def;
+	const toSetVal = (val) => (key) => (def) => val && val[key] ? val[key] : def;
 
 	const toShowApplyButton = (data) => (applyArray) => {
 		if (data.status === 'finished') {
@@ -55,11 +55,11 @@ export default withRouter(({ data, router }) => {
 			<ul className="icons">
 				<li>
 					<IconFont className="iconfont" type="icon-shangwuren" />
-					<span>{toSetVal(data)('hideName')('未知')}</span>
+					<span>{toSetVal(data)('hideContact')('未知')}</span>
 				</li>
 				<li>
 					<IconFont className="iconfont" type="icon-gongsi" />
-					<span>{toSetVal(data)('hideCompany')('未知')}</span>
+					<span>{toSetVal(data)('hidePhone')('未知')}</span>
 				</li>
 				<li>
 					<IconFont className="iconfont" type="icon-liulan1" />

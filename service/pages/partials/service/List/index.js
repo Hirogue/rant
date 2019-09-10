@@ -7,7 +7,7 @@ import './service_list.scss';
 
 export default ({ data, router }) => {
 	
-	const toSetVal = (val) => (key) => (def) => val ? val[key] : def;
+	const toSetVal = (val) => (key) => (def) => val && val[key] ? val[key] : def;
 
 	const toShowApplyButton = (data) => (applyArray) => {
 		if (applyArray && applyArray.find(apply => apply.id === data.id)) {

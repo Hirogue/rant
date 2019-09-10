@@ -12,7 +12,7 @@ import './list.scss';
 
 export default withRouter(({ data, router }) => {
 
-	const toSetVal = (val) => (key) => (def) => val ? val[key] : def;
+	const toSetVal = (val) => (key) => (def) => val && val[key] ? val[key] : def;
 
 	const toShowApplyButton = (data) => (applyArray) => {
 		if (data.status === 'finished') {
