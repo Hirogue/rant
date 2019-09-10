@@ -1,5 +1,5 @@
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
-import { Alert, Button, Checkbox, Col, Form, Input, InputNumber, message, Radio, Row, Select, Cascader } from 'antd';
+import { Alert, Button, Cascader, Checkbox, Col, Form, Input, InputNumber, message, Radio, Row, Select } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
 import ImageCropper from '../../../../components/ImageCropper';
 import UserLayout from '../../../../components/Layout/UserLayout';
@@ -7,7 +7,7 @@ import withContext, { GlobalContext } from '../../../../components/Layout/withCo
 import { M_PUBLISH_PROJECT, Q_GET_PROJECT } from '../../../../gql';
 import { IFModeEnum, ProjectStatusEnum } from '../../../../lib/enum';
 import { uploadOne } from '../../../../lib/fetch';
-import { jump, getAreaList, toGetParentArrayByChildNode } from '../../../../lib/global';
+import { getAreaList, jump, toGetParentArrayByChildNode } from '../../../../lib/global';
 import { Q_GET_PROJECT_METADATA } from '../gql';
 
 const { TextArea } = Input;
@@ -55,8 +55,8 @@ export default withContext((Form.create()(props => {
 				setCategory(project.category);
 				setCover(project.cover);
 
-				const areas = target && target.area ? (
-					toGetParentArrayByChildNode(list, { id: target.area.id })
+				const areas = project && project.area ? (
+					toGetParentArrayByChildNode(list, { id: project.area.id })
 				) : null;
 
 				setArea(areas ? areas.map(item => item.id) : null);
@@ -64,6 +64,7 @@ export default withContext((Form.create()(props => {
 
 		})();
 	}, [id]);
+
 	const { form } = props;
 	const { getFieldDecorator } = form;
 
@@ -139,7 +140,7 @@ export default withContext((Form.create()(props => {
 							cover,
 							amount: values.amount,
 							industry: { id: values.industry },
-							area: { id: values.area },
+							area: { id: values.area.pop() },
 							category,
 							stage: { id: values.stage },
 							withdrawal_year: { id: values.withdrawal_year },
@@ -156,10 +157,6 @@ export default withContext((Form.create()(props => {
 							info: values.info,
 							data: values.data ? values.data.map(item => ({ id: item })) : null,
 							status: ProjectStatusEnum.PENDING,
-
-							contact: user.realname,
-							phone: user.phone,
-							company: user.company,
 						};
 
 						if (!!target) {

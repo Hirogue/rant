@@ -22,6 +22,9 @@ export class CapitalService extends BaseService<Capital> {
         @TransactionRepository(Capital) capitalRepo?: Repository<Capital>
     ) {
         capital.creator = currentUser;
+        capital.contact = currentUser.realname;
+        capital.phone = currentUser.phone;
+        capital.company = currentUser.company;
         capital.status = ProjectStatusEnum.PENDING;
 
         const target = await capitalRepo.save(capital);
