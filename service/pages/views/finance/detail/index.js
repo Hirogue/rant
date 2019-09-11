@@ -61,7 +61,7 @@ export default withRouter((props) => {
 				limit: 20,
 				join: [{ field: "industry" }],
 				filter: [
-					{ field: "status", operator: CondOperator.IN, value: "checked,waitting,following" },
+					{ field: "status", operator: CondOperator.IN, value: "checked,waiting,following" },
 					{ field: "id", operator: CondOperator.NOT_EQUALS, value: id }
 				],
 				sort: [{ field: 'publish_at', order: 'DESC' }],

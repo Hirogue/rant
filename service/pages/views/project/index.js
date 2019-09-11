@@ -23,7 +23,7 @@ const defaultVariables = {
 	page: 0,
 	limit: 10,
 	join: [{ field: "industry" }],
-	filter: [{ field: "status", operator: CondOperator.IN, value: "checked,finished,waitting,following" }],
+	filter: [{ field: "status", operator: CondOperator.IN, value: "checked,finished,waiting,following" }],
 	sort: [{ field: 'create_at', order: 'DESC' }],
 };
 
@@ -100,7 +100,7 @@ export default withRouter((props) => {
 			selectedTags
 		}));
 		
-		let variablesFilter = [{ field: "status", operator: CondOperator.IN, value: "checked,finished,waitting,following" }];
+		let variablesFilter = [{ field: "status", operator: CondOperator.IN, value: "checked,finished,waiting,following" }];
 		for (let key in selectedTags) {
 			if (selectedTags.hasOwnProperty(key)) {
 				if (key === '金额' && selectedTags[key][0]) {

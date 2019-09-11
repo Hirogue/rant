@@ -5,24 +5,21 @@ import { M_CREATE_ARTICLE, M_UPDATE_ARTICLE, Q_GET_ARTICLE } from '@/gql';
 import { uploadOne } from '@/utils/fetch';
 import { buildingQuery, getTreeData } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useApolloClient, useMutation } from '@apollo/react-hooks';
 import {
   Affix,
   Button,
   Card,
   DatePicker,
-  Dropdown,
   Form,
-  Icon,
   Input,
   InputNumber,
   message,
-  Skeleton,
   Switch,
   TreeSelect,
 } from 'antd';
 import moment from 'moment';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { router, withRouter } from 'umi';
 import styles from './style.less';
 
@@ -32,19 +29,6 @@ const { TextArea } = Input;
 const action = (
   <RouteContext.Consumer>
     {({ isMobile }) => {
-      if (isMobile) {
-        return (
-          <Dropdown.Button
-            type="primary"
-            icon={<Icon type="down" />}
-            overlay={mobileMenu}
-            placement="bottomRight"
-          >
-            主操作
-          </Dropdown.Button>
-        );
-      }
-
       return (
         <Fragment>
           <Affix style={{ display: 'inline-block' }} offsetTop={80}>
@@ -215,14 +199,62 @@ const BasicForm = Form.create()(props => {
   );
 });
 
-const renderContent = (articleCategoryTrees, data, mutation, tabKey, setTabKey) => {
+export default withRouter(props => {
+  const {
+    match: {
+      params: { id },
+    },
+  } = props;
+
+  const [tabKey, setTabKey] = useState('basic');
+  const [result, setResult] = useState(null);
+
+  const client = useApolloClient();
+
+  useEffect(() => {
+    if (id) {
+      (async () => {
+        const res = await client.query({
+          query: Q_GET_ARTICLE,
+          notifyOnNetworkStatusChange: true,
+          variables: { id, queryString: buildingQuery({ join: [{ field: 'category' }] }) },
+        });
+        setResult(res);
+      })();
+    }
+  }, [id]);
+
+  const { data = {}, refetch = () => {} } = result || {};
+
+  const [createArticle] = useMutation(M_CREATE_ARTICLE, {
+    update: (proxy, { data }) => {
+      if (data && data.createArticle) {
+        message.success('保存成功');
+        router.replace(`/contents/articles/detail/${data.createArticle.id}`);
+      }
+    },
+  });
+
+  const [updateArticle] = useMutation(M_UPDATE_ARTICLE, {
+    update: (proxy, { data }) => {
+      if (data) {
+        refetch();
+        message.success('保存成功');
+      }
+    },
+  });
+
+  const { article: target, articleCategoryTrees } = data;
+
+  const mutation = id ? updateArticle : createArticle;
+
   let tabList = {
     basic: {
       name: '基础信息',
       render: () => (
         <BasicForm
-          articleCategoryTrees={getTreeData(articleCategoryTrees)}
-          target={data || {}}
+          articleCategoryTrees={getTreeData(articleCategoryTrees || [])}
+          target={target || {}}
           mutation={mutation}
         />
       ),
@@ -272,50 +304,5 @@ const renderContent = (articleCategoryTrees, data, mutation, tabKey, setTabKey) 
         </GridContent>
       </div>
     </PageHeaderWrapper>
-  );
-};
-
-export default withRouter(props => {
-  const [tabKey, setTabKey] = useState('basic');
-
-  const {
-    match: {
-      params: { id },
-    },
-  } = props;
-
-  const { loading, data, refetch } = useQuery(Q_GET_ARTICLE, {
-    notifyOnNetworkStatusChange: true,
-    variables: { id: id || '', queryString: buildingQuery({ join: [{ field: 'category' }] }) },
-  });
-
-  const [createArticle] = useMutation(M_CREATE_ARTICLE, {
-    update: (proxy, { data }) => {
-      if (data && data.createArticle) {
-        message.success('保存成功');
-        router.replace(`/contents/articles/detail/${data.createArticle.id}`);
-      }
-    },
-  });
-
-  const [updateArticle] = useMutation(M_UPDATE_ARTICLE, {
-    update: (proxy, { data }) => {
-      if (data) {
-        refetch();
-        message.success('保存成功');
-      }
-    },
-  });
-
-  if (loading || !data) return <Skeleton loading={loading} />;
-
-  const { article, articleCategoryTrees } = data;
-
-  return renderContent(
-    articleCategoryTrees,
-    id ? article : null,
-    id ? updateArticle : createArticle,
-    tabKey,
-    setTabKey,
   );
 });

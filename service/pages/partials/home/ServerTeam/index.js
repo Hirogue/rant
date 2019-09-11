@@ -52,28 +52,28 @@ export default class extends React.Component {
 									</a>
 								</div>
 								<div className="server-list">
-									<a className="server-item" href='http://www.lvyoto.com/product/detail?id=9eaf8e5d-5562-4739-a7f7-41b54e24b59c' target="_blank">
+									<a className="server-item" href='http://www.lvyoto.com/product/detail?id=92fdbc63-b9bd-40d6-8f81-39870878fc36' target="_blank">
 										<div className="icon">
 											<IconFont className="iconfont" type="icon-jinrongkehu" />
 										</div>
 										<p>江旅成员通</p>
 									</a>
 
-									<a className="server-item" href='http://www.lvyoto.com/product/detail?id=23fa7e55-2dda-4af5-ba51-1c035708002c' target="_blank">
+									<a className="server-item" href='http://www.lvyoto.com/product/detail?id=81d5762a-7cd8-4e40-b764-1dbfbeb4853d' target="_blank">
 										<div className="icon">
 											<IconFont className="iconfont" type="icon-gongyinglianjinrongfuwu" />
 										</div>
 										<p>江旅集采通</p>
 									</a>
 
-									<a className="server-item" href='http://www.lvyoto.com/product/detail?id=d6f81775-823f-47cf-84ee-558126e9134a' target="_blank">
+									<a className="server-item" href='http://www.lvyoto.com/product/detail?id=0b1b7055-ff13-4df1-a1be-5903d383b6d9' target="_blank">
 										<div className="icon">
 											<IconFont className="iconfont" type="icon-raxiconjinrong" />
 										</div>
 										<p>江旅余值通</p>
 									</a>
 
-									<a className="server-item" href='http://www.lvyoto.com/product/detail?id=fd76e0ce-fa0e-40fb-8292-f250d013b5b7' target="_blank">
+									<a className="server-item" href='http://www.lvyoto.com/product/detail?id=c291c080-1339-4f73-9b5c-c9e49a5bb3dc' target="_blank">
 										<div className="icon">
 											<IconFont className="iconfont" type="icon-jinrongzhuli" />
 										</div>

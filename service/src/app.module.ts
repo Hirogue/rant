@@ -28,7 +28,7 @@ import { ProviderModule } from './provider';
 import { RoleModule } from './role';
 import { SeoModule } from './seo';
 import { SpaController } from './spa.controller';
-import { AccessStatisticsMiddleware, ModuleAccessStatisticsMiddleware, StatisticsModule } from './statistics';
+import { ModuleAccessStatisticsMiddleware, StatisticsModule } from './statistics';
 import { StorageModule } from './storage';
 import { SuccessCaseModule } from './success-case';
 import { UserModule } from './user';
@@ -84,7 +84,7 @@ import { WechatModule } from './wechat';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(LoggerMiddleware, AccessStatisticsMiddleware)
+      .apply(LoggerMiddleware)
       .forRoutes('*')
       .apply(ModuleAccessStatisticsMiddleware)
       .forRoutes({ path: '/api/*/*-*-*/', method: RequestMethod.GET });

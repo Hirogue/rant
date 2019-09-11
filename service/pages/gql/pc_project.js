@@ -81,8 +81,6 @@ export const Q_GET_PROJECT_DATA = gql`
                 }
                 creator {
                     id
-                    hideName
-                    hideCompany
                     avatar
                 }
             }
