@@ -1,22 +1,17 @@
 import ImageCropper from '@/components/ImageCropper';
 import StandardTabList from '@/components/StandardTabList';
-import { M_CREATE_PROVIDER, M_UPDATE_PROVIDER, Q_GET_PROVIDER } from '@/gql';
+import {
+  M_CREATE_PROVIDER,
+  M_UPDATE_PROVIDER,
+  Q_GET_PROVIDER,
+  Q_GET_PROVIDER_CATEGORY_TREES,
+  Q_METADATA_DESCENDANTS_TREE,
+} from '@/gql';
 import { uploadOne } from '@/utils/fetch';
 import { buildingQuery, getTreeData } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import {
-  Affix,
-  Button,
-  Card,
-  Dropdown,
-  Form,
-  Icon,
-  Input,
-  message,
-  Skeleton,
-  TreeSelect,
-} from 'antd';
+import { Affix, Button, Card, Form, Input, message, TreeSelect } from 'antd';
 import React, { Fragment, useState } from 'react';
 import { router, withRouter } from 'umi';
 import styles from './style.less';
@@ -27,19 +22,6 @@ const { TextArea } = Input;
 const action = (
   <RouteContext.Consumer>
     {({ isMobile }) => {
-      if (isMobile) {
-        return (
-          <Dropdown.Button
-            type="primary"
-            icon={<Icon type="down" />}
-            overlay={mobileMenu}
-            placement="bottomRight"
-          >
-            主操作
-          </Dropdown.Button>
-        );
-      }
-
       return (
         <Fragment>
           <Affix style={{ display: 'inline-block' }} offsetTop={80}>
@@ -246,21 +228,32 @@ const renderContent = (
 };
 
 export default withRouter(props => {
-  const [tabKey, setTabKey] = useState('basic');
-
   const {
     match: {
       params: { id },
     },
   } = props;
 
-  const { loading, data, refetch } = useQuery(Q_GET_PROVIDER, {
-    notifyOnNetworkStatusChange: true,
-    variables: {
-      id: id || '',
-      queryString: buildingQuery({ join: [{ field: 'category' }, { field: 'area' }] }),
-      metadataRoot: '地区',
-    },
+  const [tabKey, setTabKey] = useState('basic');
+  const [areaList, setAreaList] = useState([]);
+
+  let result = {};
+
+  if (!!id) {
+    result = useQuery(Q_GET_PROVIDER, {
+      notifyOnNetworkStatusChange: true,
+      variables: {
+        id,
+        queryString: buildingQuery({ join: [{ field: 'category' }, { field: 'area' }] }),
+      },
+    });
+  }
+
+  const { data = {}, refetch = () => {} } = result;
+
+  const providerCategoryResult = useQuery(Q_GET_PROVIDER_CATEGORY_TREES);
+  const metadataDescendantsResult = useQuery(Q_METADATA_DESCENDANTS_TREE, {
+    variables: { root: '地区' },
   });
 
   const [createProvider] = useMutation(M_CREATE_PROVIDER, {
@@ -281,14 +274,16 @@ export default withRouter(props => {
     },
   });
 
-  if (loading || !data) return <Skeleton loading={loading} />;
-
-  const { provider, providerCategoryTrees, metadataDescendantsTree } = data;
+  const { providerCategoryTrees = [] } = providerCategoryResult ? providerCategoryResult.data : {};
+  const { metadataDescendantsTree = [] } = metadataDescendantsResult
+    ? metadataDescendantsResult.data
+    : {};
+  const { provider } = data;
 
   return renderContent(
     providerCategoryTrees,
     metadataDescendantsTree,
-    id ? provider : null,
+    provider,
     id ? updateProvider : createProvider,
     tabKey,
     setTabKey,

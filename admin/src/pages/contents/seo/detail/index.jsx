@@ -176,7 +176,7 @@ export default withRouter(props => {
   if (!!id) {
     result = useQuery(Q_GET_SEO, {
       notifyOnNetworkStatusChange: true,
-      variables: { id: id || '', queryString: buildingQuery({ join: [{ field: 'category' }] }) },
+      variables: { id, queryString: buildingQuery({ join: [{ field: 'category' }] }) },
     });
   }
 
