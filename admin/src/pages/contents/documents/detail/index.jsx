@@ -16,13 +16,10 @@ import {
   Button,
   Card,
   DatePicker,
-  Dropdown,
   Form,
-  Icon,
   Input,
   InputNumber,
   message,
-  Skeleton,
   Switch,
   TreeSelect,
 } from 'antd';
