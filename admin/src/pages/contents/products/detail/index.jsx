@@ -1,7 +1,12 @@
 import EditableTable from '@/components/EditableTable';
 import ImageCropper from '@/components/ImageCropper';
 import StandardTabList from '@/components/StandardTabList';
-import { M_CREATE_PRODUCT, M_UPDATE_PRODUCT, Q_GET_PRODUCT } from '@/gql';
+import {
+  M_CREATE_PRODUCT,
+  M_UPDATE_PRODUCT,
+  Q_GET_PRODUCT,
+  Q_GET_PRODUCT_CATEGORY_TREES,
+} from '@/gql';
 import { uploadOne } from '@/utils/fetch';
 import { buildingQuery, getTreeData } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
@@ -30,19 +35,6 @@ const { TextArea } = Input;
 const action = (
   <RouteContext.Consumer>
     {({ isMobile }) => {
-      if (isMobile) {
-        return (
-          <Dropdown.Button
-            type="primary"
-            icon={<Icon type="down" />}
-            overlay={mobileMenu}
-            placement="bottomRight"
-          >
-            主操作
-          </Dropdown.Button>
-        );
-      }
-
       return (
         <Fragment>
           <Affix style={{ display: 'inline-block' }} offsetTop={80}>
@@ -318,21 +310,29 @@ const renderContent = (productCategoryTrees, data, mutation, tabKey, setTabKey) 
 };
 
 export default withRouter(props => {
-  const [tabKey, setTabKey] = useState('basic');
-
   const {
     match: {
       params: { id },
     },
   } = props;
 
-  const { loading, data, refetch } = useQuery(Q_GET_PRODUCT, {
-    notifyOnNetworkStatusChange: true,
-    variables: {
-      id: id || '',
-      queryString: buildingQuery({ join: [{ field: 'category' }] }),
-    },
-  });
+  const [tabKey, setTabKey] = useState('basic');
+
+  let result = {};
+
+  if (!!id) {
+    result = useQuery(Q_GET_PRODUCT, {
+      notifyOnNetworkStatusChange: true,
+      variables: {
+        id: id,
+        queryString: buildingQuery({ join: [{ field: 'category' }] }),
+      },
+    });
+  }
+
+  const { data = {}, refetch = () => {} } = result;
+
+  const productCategoryResult = useQuery(Q_GET_PRODUCT_CATEGORY_TREES);
 
   const [createProduct] = useMutation(M_CREATE_PRODUCT, {
     update: (proxy, { data }) => {
@@ -352,13 +352,12 @@ export default withRouter(props => {
     },
   });
 
-  if (loading || !data) return <Skeleton loading={loading} />;
-
-  const { product, productCategoryTrees } = data;
+  const { productCategoryTrees = [] } = productCategoryResult ? productCategoryResult.data : {};
+  const { product } = data;
 
   return renderContent(
     productCategoryTrees,
-    id ? product : null,
+    product,
     id ? updateProduct : createProduct,
     tabKey,
     setTabKey,
