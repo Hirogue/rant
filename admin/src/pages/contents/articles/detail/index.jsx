@@ -1,11 +1,17 @@
 import ImageCropper from '@/components/ImageCropper';
 import RichText from '@/components/RichText';
 import StandardTabList from '@/components/StandardTabList';
-import { M_CREATE_ARTICLE, M_UPDATE_ARTICLE, Q_GET_ARTICLE } from '@/gql';
+import {
+  M_CREATE_ARTICLE,
+  M_UPDATE_ARTICLE,
+  Q_GET_ARTICLE,
+  Q_GET_ARTICLE_CATEGORY,
+  Q_GET_ARTICLE_CATEGORY_TREES,
+} from '@/gql';
 import { uploadOne } from '@/utils/fetch';
 import { buildingQuery, getTreeData } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
-import { useApolloClient, useMutation } from '@apollo/react-hooks';
+import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
 import {
   Affix,
   Button,
@@ -207,24 +213,23 @@ export default withRouter(props => {
   } = props;
 
   const [tabKey, setTabKey] = useState('basic');
-  const [result, setResult] = useState(null);
 
-  const client = useApolloClient();
+  let result = {};
 
-  useEffect(() => {
-    if (id) {
-      (async () => {
-        const res = await client.query({
-          query: Q_GET_ARTICLE,
-          notifyOnNetworkStatusChange: true,
-          variables: { id, queryString: buildingQuery({ join: [{ field: 'category' }] }) },
-        });
-        setResult(res);
-      })();
-    }
-  }, [id]);
+  if (!!id) {
+    result = useQuery(Q_GET_ARTICLE, {
+      notifyOnNetworkStatusChange: true,
+      variables: { id, queryString: buildingQuery({ join: [{ field: 'category' }] }) },
+    });
+  }
 
-  const { data = {}, refetch = () => {} } = result || {};
+  const { data = {}, refetch = () => {} } = result;
+  const { article: target } = data;
+
+  const categoryResult = useQuery(Q_GET_ARTICLE_CATEGORY_TREES, {
+    notifyOnNetworkStatusChange: true,
+  });
+  const { articleCategoryTrees } = categoryResult ? categoryResult.data : {};
 
   const [createArticle] = useMutation(M_CREATE_ARTICLE, {
     update: (proxy, { data }) => {
@@ -244,8 +249,6 @@ export default withRouter(props => {
     },
   });
 
-  const { article: target, articleCategoryTrees } = data;
-
   const mutation = id ? updateArticle : createArticle;
 
   let tabList = {
@@ -261,14 +264,14 @@ export default withRouter(props => {
     },
   };
 
-  if (data) {
+  if (target) {
     tabList = Object.assign(tabList, {
       cover: {
         name: '封面',
         render: () => (
           <ImageCropper
-            url={data.cover}
-            onUpload={file => onUpload(file, data, mutation)}
+            url={target.cover}
+            onUpload={file => onUpload(file, target, mutation)}
             width={441.6}
             height={270}
           />
@@ -278,8 +281,8 @@ export default withRouter(props => {
         name: '正文',
         render: () => (
           <RichText
-            html={data.text}
-            onSave={text => mutation({ variables: { id: data.id, data: { text } } })}
+            html={target.text}
+            onSave={text => mutation({ variables: { id: target.id, data: { text } } })}
           />
         ),
       },
@@ -288,7 +291,7 @@ export default withRouter(props => {
 
   return (
     <PageHeaderWrapper
-      title={data ? '编辑' : '新增'}
+      title={target ? '编辑' : '新增'}
       extra={action}
       className={styles.pageHeader}
       content={null}

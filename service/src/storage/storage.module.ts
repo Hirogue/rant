@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { MulterModule } from '@nestjs/platform-express';
-import { exists, mkdir } from "fs";
+import { accessSync, mkdir } from "fs";
 import * as moment from 'moment';
 import * as multer from 'multer';
 import { resolve } from "path";
@@ -9,7 +9,6 @@ import { promisify } from "util";
 import Config from "../config";
 import { StorageController } from "./storage.controller";
 
-const existsAsync = promisify(exists);
 const mkdirAsync = promisify(mkdir);
 
 const storage = multer.diskStorage({
@@ -21,7 +20,9 @@ const storage = multer.diskStorage({
         const dirName = moment().format('YYYY-MM-DD');
         const dirPath = resolve(`./${Config.static.root}${Config.static.uploads}`) + '/' + dirName;
 
-        if (!await existsAsync(dirPath)) {
+        try {
+            accessSync(dirPath);
+        } catch (e) {
             await mkdirAsync(dirPath);
         }
 
