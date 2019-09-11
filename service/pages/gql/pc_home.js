@@ -31,6 +31,7 @@ export const Q_GET_HOME_DATA = gql`
             data {
                 id
                 title
+                link
                 cover
                 create_at
                 sort

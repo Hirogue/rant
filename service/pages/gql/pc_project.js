@@ -40,6 +40,8 @@ export const Q_GET_PROJECT_DATA = gql`
                 purposes
                 payment
                 summary
+                hideName
+                hideCompany
                 stage {
                     id
                     title
@@ -78,8 +80,6 @@ export const Q_GET_PROJECT_DATA = gql`
                 }
                 creator {
                     id
-                    hideName
-                    hideCompany
                     avatar
                 }
             }
