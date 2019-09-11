@@ -1,24 +1,9 @@
-import ImageCropper from '@/components/ImageCropper';
 import StandardTabList from '@/components/StandardTabList';
 import { M_CREATE_SEO, M_UPDATE_SEO, Q_GET_SEO } from '@/gql';
-import { uploadOne } from '@/utils/fetch';
 import { buildingQuery } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import {
-  Affix,
-  Button,
-  Card,
-  Dropdown,
-  Form,
-  Icon,
-  Input,
-  InputNumber,
-  message,
-  Select,
-  Skeleton,
-  Switch,
-} from 'antd';
+import { Affix, Button, Card, Form, Input, message, Select } from 'antd';
 import React, { Fragment, useState } from 'react';
 import { router, withRouter } from 'umi';
 import styles from './style.less';
@@ -30,19 +15,6 @@ const { Option } = Select;
 const action = (
   <RouteContext.Consumer>
     {({ isMobile }) => {
-      if (isMobile) {
-        return (
-          <Dropdown.Button
-            type="primary"
-            icon={<Icon type="down" />}
-            overlay={mobileMenu}
-            placement="bottomRight"
-          >
-            主操作
-          </Dropdown.Button>
-        );
-      }
-
       return (
         <Fragment>
           <Affix style={{ display: 'inline-block' }} offsetTop={80}>
@@ -55,21 +27,6 @@ const action = (
     }}
   </RouteContext.Consumer>
 );
-
-const onUpload = async (file, target, mutation) => {
-  const res = await uploadOne(file);
-
-  if (!!res && res.relativePath) {
-    mutation({
-      variables: {
-        id: target.id,
-        data: {
-          avatar: res.relativePath,
-        },
-      },
-    });
-  }
-};
 
 const BasicForm = Form.create()(props => {
   const { target, mutation, form } = props;
@@ -214,10 +171,16 @@ export default withRouter(props => {
     },
   } = props;
 
-  const { loading, data, refetch } = useQuery(Q_GET_SEO, {
-    notifyOnNetworkStatusChange: true,
-    variables: { id: id || '', queryString: buildingQuery({ join: [{ field: 'category' }] }) },
-  });
+  let result = {};
+
+  if (!!id) {
+    result = useQuery(Q_GET_SEO, {
+      notifyOnNetworkStatusChange: true,
+      variables: { id: id || '', queryString: buildingQuery({ join: [{ field: 'category' }] }) },
+    });
+  }
+
+  const { data = {}, refetch = () => {} } = result;
 
   const [createSeo] = useMutation(M_CREATE_SEO, {
     update: (proxy, { data }) => {
@@ -237,9 +200,7 @@ export default withRouter(props => {
     },
   });
 
-  if (loading || !data) return <Skeleton loading={loading} />;
-
   const { seo } = data;
 
-  return renderContent(id ? seo : null, id ? updateSeo : createSeo, tabKey, setTabKey);
+  return renderContent(seo, id ? updateSeo : createSeo, tabKey, setTabKey);
 });
