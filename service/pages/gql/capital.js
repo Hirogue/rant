@@ -23,6 +23,7 @@ export const F_CAPITAL_FIELDS = gql`
     term
     hideContact
     hideCompany
+    hidePhone
     reason
     type {
       id

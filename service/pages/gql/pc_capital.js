@@ -40,8 +40,8 @@ export const Q_GET_CAPITAL_DATA = gql`
                 term
                 area_path
                 hideContact
-                hidePhone
                 hideCompany
+                hidePhone
                 type {
                     id
                     title

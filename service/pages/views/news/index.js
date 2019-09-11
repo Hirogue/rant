@@ -96,7 +96,7 @@ export default withRouter((props) => {
 				variables: {
 					newsString1: buildingQuery({
 						...newsVariables_1,
-						page: newsVariables_1.page + 1
+						page: news1.page ? news1.page + 1 : 1
 					}),
 				},
 				updateQuery: (prev, { fetchMoreResult }) => ({
@@ -114,7 +114,7 @@ export default withRouter((props) => {
 				variables: {
 					newsString2: buildingQuery({
 						...newsVariables_2,
-						page: newsVariables_2.page + 1
+						page: news2.page ? news2.page + 1 : 1
 					}),
 				},
 				updateQuery: (prev, { fetchMoreResult }) => ({
@@ -132,7 +132,7 @@ export default withRouter((props) => {
 				variables: {
 					newsString3: buildingQuery({
 						...newsVariables_3,
-						page: newsVariables_3.page + 1
+						page: news3.page ? news3.page + 1 : 1
 					}),
 				},
 				updateQuery: (prev, { fetchMoreResult }) => ({
@@ -150,7 +150,7 @@ export default withRouter((props) => {
 				variables: {
 					newsString4: buildingQuery({
 						...newsVariables_4,
-						page: newsVariables_4.page + 1
+						page: news4.page ? news4.page + 1 : 1
 					}),
 				},
 				updateQuery: (prev, { fetchMoreResult }) => ({
@@ -167,7 +167,7 @@ export default withRouter((props) => {
 				variables: {
 					newsString5: buildingQuery({
 						...newsVariables_5,
-						page: newsVariables_5.page + 1
+						page: news5.page ? news5.page + 1 : 1
 					}),
 				},
 				updateQuery: (prev, { fetchMoreResult }) => ({
@@ -194,7 +194,7 @@ export default withRouter((props) => {
 							))}
 						</div>
 						<div className="btn-box">
-							{!!news1 && !!news1.page && !!news1.pageCount && news1.page < news1.pageCount && (
+							{!loading && !!news1 && !!news1.page && !!news1.pageCount && news1.page < news1.pageCount && (
 								<a className="more-btn" onClick={loadMore(1)}>加载更多...</a>
 							)}
 						</div>
@@ -206,7 +206,7 @@ export default withRouter((props) => {
 							))}
 						</div>
 						<div className="btn-box">
-							{!!news2 && !!news2.page && !!news2.pageCount && news2.page < news2.pageCount && (
+							{!loading && !!news2 && !!news2.page && !!news2.pageCount && news2.page < news2.pageCount && (
 								<a className="more-btn" onClick={loadMore(2)}>加载更多...</a>
 							)}
 						</div>
@@ -218,7 +218,7 @@ export default withRouter((props) => {
 							))}
 						</div>
 						<div className="btn-box">
-							{!!news3 && !!news3.page && !!news3.pageCount && news3.page < news3.pageCount && (
+							{!loading && !!news3 && !!news3.page && !!news3.pageCount && news3.page < news3.pageCount && (
 								<a className="more-btn" onClick={loadMore(3)}>加载更多...</a>
 							)}
 						</div>
@@ -230,19 +230,19 @@ export default withRouter((props) => {
 							))}
 						</div>
 						<div className="btn-box">
-							{!!news4 && !!news4.page && !!news4.pageCount && news4.page < news4.pageCount && (
+							{!loading && !!news4 && !!news4.page && !!news4.pageCount && news4.page < news4.pageCount && (
 								<a className="more-btn" onClick={loadMore(4)}>加载更多...</a>
 							)}
 						</div>
 					</TabPane>
-					<TabPane tab="通知公告" key={5}>
+					<TabPane tab="政策公告" key={5}>
 						<div className="news-list">
 							{!!news5 && !!news5.data && !!news5.data.length && news5.data.map((item) => (
 								<List item={item} key={item.id} />
 							))}
 						</div>
 						<div className="btn-box">
-							{!!news5 && !!news5.page && !!news5.pageCount && news5.page < news5.pageCount && (
+							{!loading && !!news5 && !!news5.page && !!news5.pageCount && news5.page < news5.pageCount && (
 								<a className="more-btn" onClick={loadMore(5)}>加载更多...</a>
 							)}
 						</div>

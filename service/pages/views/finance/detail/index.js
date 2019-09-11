@@ -73,7 +73,7 @@ export default withRouter((props) => {
 
 	const toShowApplyButton = (data) => (applyArray) => {
 		if (data.status === 'finished') {
-			return <a className="btn-finished" href="javascript:;" style={{ background: '#ccc' }}>已结束</a>;
+			return <a className="btn btn-finished" href="javascript:;" style={{ background: '#ccc' }}>已结束</a>;
 		}
 		if (applyArray && applyArray.find(apply => apply.id === data.id)) {
 			return <a className="btn" href="javascript:;" style={{ background: '#ccc' }}>已投递</a>;
