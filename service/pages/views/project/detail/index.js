@@ -1,9 +1,10 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import _ from 'lodash';
 import { withRouter } from 'next/router';
 import { Spin } from 'antd';
 import { useQuery } from '@apollo/react-hooks';
 import { CondOperator } from '@nestjsx/crud-request';
+import QRCode from 'qrcode';
 import IconFont from '../../../components/IconFont';
 import config from '../../../config/config';
 import BaseLayout from '../../../components/Layout/BaseLayout';
@@ -11,9 +12,9 @@ import BreadCrumb from '../../../components/BreadCrumb';
 
 import './project_detail.scss';
 import { createApolloClient } from "../../../lib/apollo";
-import { buildingQuery, getUrlParam, toApplayCommonHandler } from "../../../lib/global";
+import { buildingQuery, getUrlParam, toApplayCommonHandler, asyncEffectHandler } from "../../../lib/global";
 import { Q_GET_PROJECT_DETAIL, M_APPLY_PROJECTS } from '../../../gql'
-import { IF_MODE_ENUM, DEFAULT_AVATAR } from '../../../lib/enum';
+import { IF_MODE_ENUM, DEFAULT_AVATAR, PC_2_MOBILE_MAP } from '../../../lib/enum';
 
 const client = createApolloClient();
 const defaultVariables = {
@@ -63,6 +64,16 @@ export default withRouter((props) => {
 		}
 	});
 
+	useEffect(() => {
+		asyncEffectHandler(async () => {
+			try {
+				document.querySelector('#qrcode').src = await QRCode.toDataURL(`${PC_2_MOBILE_MAP['project']}/${id}`);
+			} catch (error) {
+				console.error(error.message);
+			}
+		})
+	}, [project])
+
 	const toSetVal = (val) => (key) => (def) => val && val[key] ? val[key] : def;
 
 	const toShowApplyButton = (data) => (applyArray) => {
@@ -90,6 +101,10 @@ export default withRouter((props) => {
 						<p className="name">{toSetVal(project)('hideContact')('未知姓名')}</p>
 						<p className="text" style={{ textAlign: 'center' }}>{toSetVal(project)('hideCompany')('未知公司')}</p>
 						{toShowApplyButton(project)(user ? user.apply_projects : null)}
+						<div style={{ width: "150px", margin: "0 auto", display: "block" }}>
+							<img id="qrcode" style={{ width: "150px", height: "150px", borderRadius: '6px', display: "block" }} src={config.staticImgUrl + '移动端二维码.png'} alt='placeholder+image' />
+							<p style={{ fontSize: "14px", color: "#FFF", textAlign: "center" }}>在移动端查看此页面</p>
+						</div>
 					</div>
 					<div className="left-main">
 						<div className="project-summary">

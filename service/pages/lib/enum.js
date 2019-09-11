@@ -91,5 +91,13 @@ module.exports = {
         '投资地区': "invest_area.title",
         '机构类别': "category.title"
     },
-    DEFAULT_AVATAR: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561547251987&di=e63f4f0adfe4ffffa7ed7fa8c0fc9580&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2Fa12f24e688c1cda3ff4cc453f3486a88adaf08cc2cdb-tQvJqX_fw658'
+    DEFAULT_AVATAR: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1561547251987&di=e63f4f0adfe4ffffa7ed7fa8c0fc9580&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2Fa12f24e688c1cda3ff4cc453f3486a88adaf08cc2cdb-tQvJqX_fw658',
+    PC_2_MOBILE_MAP: {
+        project: 'https://m.lvyoto.com/home/detail',
+        finance: 'https://m.lvyoto.com/finance/funds',
+        product: 'https://m.lvyoto.com/finance/financing',
+        service: 'https://m.lvyoto.com/service/detail',
+        news: 'https://m.lvyoto.com/news/detail'
+    }
+
 }

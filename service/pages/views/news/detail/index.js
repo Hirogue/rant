@@ -4,11 +4,13 @@ import { Spin } from 'antd';
 import { withRouter } from 'next/router';
 import { CondOperator } from '@nestjsx/crud-request';
 import { useQuery } from '@apollo/react-hooks';
-
+import QRCode from 'qrcode';
 import BaseLayout from '../../../components/Layout/BaseLayout';
 import BreadCrumb from '../../../components/BreadCrumb';
 
+import config from '../../../config/config';
 import { createApolloClient } from "../../../lib/apollo";
+import { PC_2_MOBILE_MAP } from '../../../lib/enum';
 import { buildingQuery, getUrlParam, asyncEffectHandler } from "../../../lib/global";
 import { Q_GET_ARTICLE, Q_GET_NEIGHBORING_ARTICLE_NEST } from '../../../gql'
 
@@ -38,15 +40,20 @@ export default withRouter((props) => {
 		},
 	});
 
-	useEffect(() => {
-		const script = document.createElement('script');
-		script.src = "http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];";
-		script.type = 'text/javascript';
-		document.body.appendChild(script);
-	}, []);
+	// useEffect(() => {
+	// 	const script = document.createElement('script');
+	// 	script.src = "http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];";
+	// 	script.type = 'text/javascript';
+	// 	document.body.appendChild(script);
+	// }, []);
 
 	useEffect(() => {
 		asyncEffectHandler(async () => {
+			try {
+				document.querySelector('#qrcode').src = await QRCode.toDataURL(`${PC_2_MOBILE_MAP['news']}/${id}`);
+			} catch (error) {
+				console.error(error.message);
+			}
 			if (article && article.publish_at) {
 				const { data } = await client.query({
 					query: Q_GET_NEIGHBORING_ARTICLE_NEST,
@@ -116,7 +123,7 @@ export default withRouter((props) => {
 								</div>
 							</div>
 
-							<div className="share">
+							{/* <div className="share">
 								<div className="bdsharebuttonbox">
 									<a
 										href="#"
@@ -132,6 +139,11 @@ export default withRouter((props) => {
 										title="分享到微信"
 									/>
 								</div>
+							</div> */}
+
+							<div style={{ width: "150px", margin: "4vw auto 0", display: "block" }}>
+								<img id="qrcode" style={{ width: "150px", height: "150px", borderRadius: '6px', display: "block" }} src={config.staticImgUrl + '移动端二维码.png'} alt='placeholder+image' />
+								<p style={{ fontSize: "14px", color: "#999", textAlign: "center" }}>在移动端查看此页面</p>
 							</div>
 						</div>
 						<div className="flip-box clearfix">
