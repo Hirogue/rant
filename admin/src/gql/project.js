@@ -10,20 +10,65 @@ export const F_PROJECT_FIELDS = gql`
     contact
     phone
     company
-    area_path
     views
     category
     status
     update_at
     create_at
     publish_at
-    creator {
+    amount
+    progress
+    team_info
+    advantage
+    purposes
+    info
+    payment
+    reason
+    stage {
       id
-      realname
+      title
+    }
+    exit_mode {
+      id
+      title
+    }
+    withdrawal_year {
+      id
+      title
+    }
+    ratio {
+      id
+      title
+    }
+    data {
+      id
+      title
+    }
+    risk {
+      id
+      title
+    }
+    interest {
+      id
+      title
+    }
+    occupancy_time {
+      id
+      title
+    }
+    industry {
+      id
+      title
     }
     area {
       id
       title
+    }
+    creator {
+      id
+      hideName
+      hideCompany
+      avatar
     }
     org {
       id

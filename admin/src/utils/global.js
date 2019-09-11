@@ -1,4 +1,4 @@
-import { Q_FETCH_CURRENT_USER, Q_GET_ORG_DESCENDANTS } from '@/gql';
+import { Q_FETCH_CURRENT_USER, Q_GET_ORG_DESCENDANTS, Q_METADATA_DESCENDANTS_TREE } from '@/gql';
 import Auth from '@/utils/access-control';
 import client from '@/utils/apollo-client';
 import Logger from '@/utils/logger';
@@ -12,6 +12,60 @@ export const fetchCurrentUser = async () => {
     query: Q_FETCH_CURRENT_USER,
     notifyOnNetworkStatusChange: true,
   });
+};
+
+export const getAreaList = async client => {
+  const result = await client.query({
+    query: Q_METADATA_DESCENDANTS_TREE,
+    variables: { root: '地区' },
+  });
+
+  if (result && result.data && result.data.metadataDescendantsTree) {
+    return getAreaTreeData(result.data.metadataDescendantsTree);
+  } else {
+    return [];
+  }
+};
+
+export const getAreaTreeData = (data, root) =>
+  data.map(item => {
+    item.__typename && delete item.__typename;
+
+    if (item.children && item.children.length > 0) {
+      return {
+        ...item,
+        key: item.id,
+        value: item.id,
+        label: item.title,
+        root,
+        children: getAreaTreeData(item.children, root || item),
+        dataRef: item,
+      };
+    }
+
+    return {
+      ...item,
+      key: item.id,
+      value: item.id,
+      label: item.title,
+      root,
+      children: [],
+      dataRef: item,
+    };
+  });
+
+export const toGetParentArrayByChildNode = (tree, target) => {
+  let key = Object.keys(target).shift();
+  let val = Object.values(target).shift();
+  for (let treeNode of tree) {
+    if (treeNode[key] === val) return [treeNode];
+    if (treeNode.children) {
+      let childNode = toGetParentArrayByChildNode(treeNode.children, target);
+      if (childNode) {
+        return [treeNode].concat(childNode);
+      }
+    }
+  }
 };
 
 export const getOrgDescendants = async id => {
