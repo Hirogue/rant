@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { withRouter } from 'next/router';
 import { Spin } from 'antd';
 import { useQuery } from '@apollo/react-hooks';
+import QRCode from 'qrcode';
 import IconFont from '../../../components/IconFont';
 import BaseLayout from '../../../components/Layout/BaseLayout';
 import BreadCrumb from '../../../components/BreadCrumb';
 
 import './service_detail.scss';
+import config from '../../../config/config';
+import { PC_2_MOBILE_MAP } from '../../../lib/enum';
 import { createApolloClient } from "../../../lib/apollo";
-import { buildingQuery, getUrlParam, toApplayCommonHandler } from "../../../lib/global";
+import { buildingQuery, getUrlParam, toApplayCommonHandler, asyncEffectHandler } from "../../../lib/global";
 import { Q_GET_PROVIDER_DETAIL, M_APPLY_PROVIDERS } from '../../../gql'
 
 const client = createApolloClient();
@@ -40,6 +43,16 @@ export default withRouter((props) => {
 			queryString: buildingQuery(defaultVariables)
 		}
 	});	
+
+	useEffect(() => {
+		asyncEffectHandler(async () => {
+			try {
+				document.querySelector('#qrcode').src = await QRCode.toDataURL(`${PC_2_MOBILE_MAP['service']}/${id}`);
+			} catch (error) {
+				console.error(error.message);
+			}
+		})
+	}, [provider])
 
 	const toShowApplyButton = (data) => (applyArray) => {
 		if (applyArray && applyArray.find(apply => apply.id === data.id)) {
@@ -90,6 +103,10 @@ export default withRouter((props) => {
 						</div>
 					</div>
 					<div className="item-content" dangerouslySetInnerHTML={{ __html: provider.introduction || '暂无' }} />
+					<div style={{ width: "150px", margin: "4vw auto 0", display: "block" }}>
+						<img id="qrcode" style={{ width: "150px", height: "150px", borderRadius: '6px', display: "block" }} src={config.staticImgUrl + '移动端二维码.png'} alt='placeholder+image' />
+						<p style={{ fontSize: "14px", color: "#999", textAlign: "center" }}>在移动端查看此页面</p>
+					</div>
 				</div>
 			</div>
 		</BaseLayout>

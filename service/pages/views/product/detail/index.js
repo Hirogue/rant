@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { withRouter } from 'next/router';
 import { Spin, Anchor } from 'antd';
 import { useQuery } from '@apollo/react-hooks';
+import QRCode from 'qrcode';
 import IconFont from '../../../components/IconFont';
 import BaseLayout from '../../../components/Layout/BaseLayout';
 
 import './product_detail.scss';
+import config from '../../../config/config';
 import { createApolloClient } from "../../../lib/apollo";
-import { buildingQuery, getUrlParam, toApplayCommonHandler } from "../../../lib/global";
+import { PC_2_MOBILE_MAP } from '../../../lib/enum';
+import { buildingQuery, getUrlParam, toApplayCommonHandler, asyncEffectHandler } from "../../../lib/global";
 import { Q_GET_PRODUCT, M_APPLY_PRODUCTS } from '../../../gql'
 
 const { Link } = Anchor;
@@ -36,6 +39,16 @@ export default withRouter((props) => {
 			queryString: buildingQuery(defaultVariables)
 		}
 	});
+
+	useEffect(() => {
+		asyncEffectHandler(async () => {
+			try {
+				document.querySelector('#qrcode').src = await QRCode.toDataURL(`${PC_2_MOBILE_MAP['product']}/${id}`);
+			} catch (error) {
+				console.error(error.message);
+			}
+		})
+	}, [product])
 
 	const toShowApplyButton = (data) => (applyArray) => {
 		if (data.status === 'finished') {
@@ -198,6 +211,10 @@ export default withRouter((props) => {
 							</div>
 						))}
 						{toShowApplyButtonA(product)(user ? user.apply_products : null)}
+						<div style={{ width: "150px", margin: "4vw auto 0", display: "block" }}>
+							<img id="qrcode" style={{ width: "150px", height: "150px", borderRadius: '6px', display: "block" }} src={config.staticImgUrl + '移动端二维码.png'} alt='placeholder+image' />
+							<p style={{ fontSize: "14px", color: "#999", textAlign: "center" }}>在移动端查看此页面</p>
+						</div>
 					</div>
 				</div>
 				{/* <div className="img-chart">
@@ -206,6 +223,8 @@ export default withRouter((props) => {
 										src={!!detail.thumbnail ? detail.thumbnail.url : ''}
 									/>
 								</div> */}
+
+				
 			</div>
 		</BaseLayout>
 	)

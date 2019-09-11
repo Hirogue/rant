@@ -1,20 +1,21 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import _ from 'lodash';
 import { withRouter } from 'next/router';
 import { Spin } from 'antd';
 import { useQuery } from '@apollo/react-hooks';
 import { CondOperator } from '@nestjsx/crud-request';
 import moment from 'moment';
+import QRCode from 'qrcode';
 import IconFont from '../../../components/IconFont';
 import BaseLayout from '../../../components/Layout/BaseLayout';
 import BreadCrumb from '../../../components/BreadCrumb';
 
 import './finance_detail.scss';
-
+import config from '../../../config/config';
 import { createApolloClient } from "../../../lib/apollo";
-import { buildingQuery, getUrlParam, toApplayCommonHandler } from "../../../lib/global";
+import { buildingQuery, getUrlParam, toApplayCommonHandler, asyncEffectHandler } from "../../../lib/global";
 import { Q_GET_CAPITAL_DETAIL, M_APPLY_CAPITALS } from '../../../gql'
-import { IFT_MODE_ENUM, DEFAULT_AVATAR } from '../../../lib/enum';
+import { IFT_MODE_ENUM, DEFAULT_AVATAR,PC_2_MOBILE_MAP } from '../../../lib/enum';
 
 const client = createApolloClient();
 const defaultVariables = {
@@ -68,6 +69,16 @@ export default withRouter((props) => {
 			})
 		}
 	});
+
+	useEffect(() => {
+		asyncEffectHandler(async () => {
+			try {
+				document.querySelector('#qrcode').src = await QRCode.toDataURL(`${PC_2_MOBILE_MAP['finance']}/${id}`);
+			} catch (error) {
+				console.error(error.message);
+			}
+		})
+	}, [capital])
 
 	const toSetVal = (val) => (key) => (def) => val && val[key] ? val[key] : def;
 
@@ -247,6 +258,10 @@ export default withRouter((props) => {
 						<p className="name">{toSetVal(capital)('hideContact')('未知姓名')}</p>
 						<p className="text" style={{ textAlign: 'center' }}>{toSetVal(capital)('hideCompany')('未知公司')}</p>
 						{toShowApplyButton(capital)(user ? user.apply_capitals : null)}
+						<div style={{ width: "150px", margin: "0 auto", display: "block" }}>
+							<img id="qrcode" style={{ width: "150px", height: "150px", borderRadius: '6px', display: "block" }} src={config.staticImgUrl + '移动端二维码.png'} alt='placeholder+image' />
+							<p style={{ fontSize: "14px", color: "#FFF", textAlign: "center" }}>在移动端查看此页面</p>
+						</div>
 					</div>
 				</div>
 			</div>
