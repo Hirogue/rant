@@ -41,6 +41,17 @@ export const F_METADATA_RECURSIVE = gql`
   }
 `;
 
+export const Q_METADATA_DESCENDANTS_TREE = gql`
+  ${F_METADATA_FIELDS}
+  ${F_METADATA_RECURSIVE}
+
+  query metadataDescendantsTree($root: String!) {
+    metadataDescendantsTree(root: $root) {
+      ...MetadataRecursive
+    }
+  }
+`;
+
 export const Q_GET_METADATA_TREES = gql`
   ${F_METADATA_FIELDS}
   ${F_METADATA_RECURSIVE}
