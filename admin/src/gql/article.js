@@ -47,15 +47,10 @@ export const Q_GET_ARTICLES = gql`
 
 export const Q_GET_ARTICLE = gql`
   ${F_ARTICLE_FIELDS}
-  ${F_ARTICLE_CATEGORYRECURSIVE}
 
   query getArticle($id: String!, $queryString: String! = "") {
     article(id: $id, queryString: $queryString) {
       ...ArticleFields
-    }
-
-    articleCategoryTrees {
-      ...ArticleCategoryRecursive
     }
   }
 `;
