@@ -1,7 +1,5 @@
 import { BadGatewayException, Injectable } from "@nestjs/common";
 import * as crypto from 'crypto';
-import { range, shuffle, take } from 'lodash';
-import * as moment from 'moment';
 import { CacheService } from "../cache";
 import { Config } from "../config";
 import { WechatCacheKeyEnum } from "./wechat-cache-key.enum";
@@ -51,7 +49,7 @@ export class WechatService {
 
         try {
             const result = await fetch(`https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=${accessToken}&type=jsapi`).then(res => res.json());
-
+            console.log(result)
             if ('ok' !== result['errmsg']) throw new BadGatewayException('获取 JS API Ticket 失败');
 
             await this.cache.set(
@@ -72,37 +70,22 @@ export class WechatService {
         if (!ticket) throw new BadGatewayException('获取 JS API Ticket 失败');
 
         const nonceStr = this.getNonceString();
-        const timestamp = moment().unix();
+        const timestamp = this.getUnixTime();
         const params = `jsapi_ticket=${ticket}&noncestr=${nonceStr}&timestamp=${timestamp}&url=${url}`;
 
-        console.log(params)
-
         return {
-            signature: crypto.createHash('sha1')
-                .update(params)
-                .digest('hex'),
+            appId: Config.wechat.appid,
             nonceStr,
-            timestamp,
-            appId: Config.wechat.appid
+            signature: crypto.createHash('sha1').update(params).digest('hex'),
+            timestamp
         }
     }
 
+    private getUnixTime() {
+        return Math.floor(new Date().getTime() / 1000).toString();
+    }
+
     private getNonceString() {
-
-        const numbers = range(0, 9);
-        const letters = [
-            'a', 'b', 'c', 'd', 'e', 'f', 'g',
-            'h', 'i', 'j', 'k', 'l', 'm', 'n',
-            'o', 'p', 'q', 'r', 's', 't',
-            'u', 'v', 'w', 'x', 'y', 'z',
-        ];
-
-        const list = [
-            ...numbers,
-            ...letters,
-            ...letters.map(item => item.toUpperCase())
-        ];
-
-        return take(shuffle(list), 16).join('');
+        return Math.random().toString(36).substr(2, 15);
     }
 }

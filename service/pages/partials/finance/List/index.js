@@ -46,7 +46,7 @@ export default withRouter(({ data, router }) => {
 			</h5>
 			<ul className="list">
 				<li>投资方式：{IFT_MODE_ENUM[data.category]}</li>
-				<li>投资行业：{toSetVal(data.industry)('title')('未知')}</li>
+				<li>投资行业：{data.industry.length ? data.industry.map(item => item.title).join('，') : '暂无'}</li>
 				<li>投资地区：{data.invest_area && data.invest_area.map(area => area.title).join(',')}</li>
 				<li>资金类型：{data.type && data.type.map(item => item.title).join(',')}</li>
 				{IFT_MODE_ENUM[data.category] === '债权投资' ? <li>风控要求：{toSetVal(data.risk)('title')('未知')}</li> : <li>投资阶段：{toSetVal(data.stage)('title')('未知')}</li>}
@@ -74,34 +74,3 @@ export default withRouter(({ data, router }) => {
 	)
 })
 
-// export default (props) => {
-// 	const data = props.data || {};
-
-// 	const ex_info = data.ex_info || {};
-
-// 	const tags = ex_info.tags ? JSON.parse(ex_info.tags) : {};
-
-// 	const selectedTags = tags.selectedTags || {};
-
-// 	const mode = tags.selectedCategory;
-// 	const amount = selectedTags['投资金额'] ? selectedTags['投资金额'].value : '';
-// 	const capitalType = selectedTags['资金类型'] ? _.take(selectedTags['资金类型'].tags, 2).join(',') : '';
-// 	const projectStage = selectedTags['投资阶段'] ? _.take(selectedTags['投资阶段'].tags, 2).join(',') : '';
-// 	const risk = selectedTags['风控要求'] ? _.take(selectedTags['风控要求'].tags, 2).join(',') : '';
-// 	const industry = selectedTags['行业类型'] ? _.take(selectedTags['行业类型'].tags, 2).join(',') : '';
-// 	const toArea = selectedTags['投资地区'] ? selectedTags['投资地区'].tags.join(',') : '';
-// 	const fromArea = selectedTags['所在地区'] ? selectedTags['所在地区'].tags.join(',') : '';
-
-// 	return (
-// 		<GlobalContext.Consumer>
-// 			{(context) => {
-// 				const projectApplys = context.projectApplys || [];
-// 				const visits = context.visits || [];
-
-// 				return (
-					
-// 				);
-// 			}}
-// 		</GlobalContext.Consumer>
-// 	);
-// };

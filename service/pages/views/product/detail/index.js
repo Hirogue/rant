@@ -31,7 +31,7 @@ export default withRouter((props) => {
 
 	const { loading, data: { product } } = useQuery(Q_GET_PRODUCT, {
 		client: client,
-		variables: { 
+		variables: {
 			id,
 			queryString: buildingQuery(defaultVariables)
 		}

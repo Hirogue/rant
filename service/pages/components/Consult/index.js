@@ -1,5 +1,6 @@
 import { BackTop } from 'antd';
 import IconFont from '../IconFont';
+import config from '../../config/config';
 
 import './consult.scss';
 
@@ -9,7 +10,7 @@ export default (props) => (
 			<IconFont className="iconfont" type="icon-weixin1" />
 			<p>微信订阅</p>
 			<div className="saoma">
-				<img className="about-banner" src={''} />
+				<img className="about-banner" src={config.staticImgUrl + 'saoma.jpeg'} />
 			</div>
 		</div>
 		<div className="top">

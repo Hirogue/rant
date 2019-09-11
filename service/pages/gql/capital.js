@@ -21,6 +21,9 @@ export const F_CAPITAL_FIELDS = gql`
     discount
     pre_payment
     term
+    hideContact
+    hideCompany
+    hidePhone
     type {
       id
       title

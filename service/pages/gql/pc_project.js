@@ -40,6 +40,9 @@ export const Q_GET_PROJECT_DATA = gql`
                 purposes
                 payment
                 summary
+                hideContact
+                hideCompany
+                hidePhone
                 stage {
                     id
                     title
