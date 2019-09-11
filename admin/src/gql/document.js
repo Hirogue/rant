@@ -27,7 +27,6 @@ export const F_DOCUMENT_FIELDS = gql`
 
 export const Q_GET_DOCUMENTS = gql`
   ${F_DOCUMENT_FIELDS}
-  ${F_DOCUMENT_CATEGORYRECURSIVE}
 
   query queryDocument($queryString: String!) {
     queryDocument(queryString: $queryString) {
@@ -37,10 +36,6 @@ export const Q_GET_DOCUMENTS = gql`
       data {
         ...DocumentFields
       }
-    }
-
-    documentCategoryTrees {
-      ...DocumentCategoryRecursive
     }
   }
 `;

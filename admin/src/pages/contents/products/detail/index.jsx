@@ -324,7 +324,7 @@ export default withRouter(props => {
     result = useQuery(Q_GET_PRODUCT, {
       notifyOnNetworkStatusChange: true,
       variables: {
-        id: id,
+        id,
         queryString: buildingQuery({ join: [{ field: 'category' }] }),
       },
     });
