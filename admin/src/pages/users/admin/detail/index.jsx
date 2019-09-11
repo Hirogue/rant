@@ -1,9 +1,9 @@
 import ImageCropper from '@/components/ImageCropper';
 import StandardTabList from '@/components/StandardTabList';
 import { M_CREATE_USER, M_UPDATE_USER, Q_GET_USER } from '@/gql';
-import { IdentityEnum, UserStatusEnum } from '@/utils/enum';
+import { IdentityEnum } from '@/utils/enum';
 import { uploadOne } from '@/utils/fetch';
-import { buildingQuery, getTreeData, IdentityMaps, UserStatusMaps } from '@/utils/global';
+import { buildingQuery, getTreeData, IdentityMaps } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import {
@@ -13,9 +13,7 @@ import {
   Card,
   DatePicker,
   Descriptions,
-  Dropdown,
   Form,
-  Icon,
   Input,
   message,
   Select,
@@ -37,19 +35,6 @@ const PATH = '/users/admin';
 const action = (
   <RouteContext.Consumer>
     {({ isMobile }) => {
-      if (isMobile) {
-        return (
-          <Dropdown.Button
-            type="primary"
-            icon={<Icon type="down" />}
-            overlay={mobileMenu}
-            placement="bottomRight"
-          >
-            主操作
-          </Dropdown.Button>
-        );
-      }
-
       return (
         <Fragment>
           <Affix style={{ display: 'inline-block' }} offsetTop={80}>
@@ -61,12 +46,6 @@ const action = (
       );
     }}
   </RouteContext.Consumer>
-);
-
-const extra = (
-  <div className={styles.moreInfo}>
-    <Statistic title="状态" value="待审批" />
-  </div>
 );
 
 const PageHeaderContent = ({ user }) => {
@@ -316,16 +295,10 @@ export default withRouter(props => {
   return (
     <PageHeaderWrapper
       title={target ? '编辑' : '新增'}
-      extra={action}
+      extra={null}
       className={styles.pageHeader}
-      content={target ? <PageHeaderContent user={target} /> : null}
-      extraContent={
-        target ? (
-          <div className={styles.moreInfo}>
-            <Statistic title="状态" value={UserStatusMaps[target.status]} />
-          </div>
-        ) : null
-      }
+      content={id ? <PageHeaderContent user={target} /> : null}
+      extraContent={null}
     >
       <div className={styles.main}>
         <GridContent>

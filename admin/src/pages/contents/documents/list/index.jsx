@@ -1,7 +1,12 @@
 import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
-import { M_DELETE_DOCUMENT, M_UPDATE_DOCUMENT, Q_GET_DOCUMENTS } from '@/gql';
+import {
+  M_DELETE_DOCUMENT,
+  M_UPDATE_DOCUMENT,
+  Q_GET_DOCUMENTS,
+  Q_GET_DOCUMENT_CATEGORY_TREES,
+} from '@/gql';
 import { canCreateAny, canDeleteAny, canUpdateAny } from '@/utils/access-control';
 import { buildingQuery } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
@@ -28,6 +33,8 @@ export default () => {
     notifyOnNetworkStatusChange: true,
     variables: { queryString: buildingQuery(defaultVariables) },
   });
+
+  const documentCategoryResult = useQuery(Q_GET_DOCUMENT_CATEGORY_TREES);
 
   const [deleteDocument] = useMutation(M_DELETE_DOCUMENT, {
     update: (proxy, { data }) => {
@@ -56,7 +63,7 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { queryDocument, documentCategoryTrees } = data;
+  const { queryDocument } = data;
 
   if (!queryDocument) return <Skeleton loading={loading} active avatar />;
 
@@ -142,7 +149,7 @@ export default () => {
       dataIndex: 'category.id',
       render: (val, record) => (record.category ? record.category.title : ''),
       treeSelector: true,
-      treeFilters: documentCategoryTrees,
+      treeFilters: documentCategoryResult ? documentCategoryResult.data.documentCategoryTrees : [],
     },
     {
       title: '发布时间',

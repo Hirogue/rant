@@ -2,7 +2,7 @@ import StandardActions from '@/components/StandardActions';
 import StandardConfirm from '@/components/StandardConfirm';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
-import { M_DELETE_PROVIDER, Q_GET_PROVIDERS } from '@/gql';
+import { M_DELETE_PROVIDER, Q_GET_PROVIDERS, Q_GET_PROVIDER_CATEGORY_TREES } from '@/gql';
 import { canCreateAny, canDeleteAny, canReadAny, canUpdateAny } from '@/utils/access-control';
 import { ProjectStatusEnum } from '@/utils/enum';
 import { buildingQuery, ProjectStatusMaps } from '@/utils/global';
@@ -39,6 +39,8 @@ export default () => {
     },
   });
 
+  const providerCategoryResult = useQuery(Q_GET_PROVIDER_CATEGORY_TREES);
+
   const [deleteProvider] = useMutation(M_DELETE_PROVIDER, {
     update: (proxy, { data }) => {
       if (data.deleteProvider) {
@@ -56,7 +58,7 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { queryProvider, providerCategoryTrees } = data;
+  const { queryProvider } = data;
 
   if (!queryProvider) return <Skeleton loading={loading} active avatar />;
 
@@ -128,7 +130,7 @@ export default () => {
       dataIndex: 'category.id',
       render: (val, record) => (record.category ? record.category.title : ''),
       treeSelector: true,
-      treeFilters: providerCategoryTrees,
+      treeFilters: providerCategoryResult ? providerCategoryResult.data.providerCategoryTrees : [],
     },
     {
       title: '地区',
