@@ -14,170 +14,170 @@ import { User } from "./user.entity";
 @InputType('CapitalInput')
 export class Capital extends Base {
 
-    @Field({ nullable: true, description: '标题' })
-    @Column({ nullable: true, comment: '标题' })
-    @ApiModelProperty({ nullable: true, description: '标题' })
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
     title: string;
 
-    @Field(type => Int, { nullable: true, description: '浏览量' })
-    @Column({ default: 0, comment: '浏览量' })
-    @ApiModelProperty({ nullable: true, description: '浏览量' })
+    @Field(type => Int, { nullable: true })
+    @Column({ default: 0 })
+    @ApiModelProperty({ nullable: true })
     views: number;
 
-    @Field({ nullable: true, description: '联系人' })
-    @Column({ nullable: true, comment: '联系人' })
-    @ApiModelProperty({ nullable: true, description: '联系人' })
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
     contact: string;
 
-    @Field({ nullable: true, description: '联系电话' })
-    @Column({ nullable: true, comment: '联系电话' })
-    @ApiModelProperty({ nullable: true, description: '联系电话' })
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
     phone: string;
 
-    @Field({ nullable: true, description: '企业名称' })
-    @Column({ nullable: true, comment: '企业名称' })
-    @ApiModelProperty({ nullable: true, description: '企业名称' })
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
     company: string;
 
-    @Field({ nullable: true, description: '发布时间' })
-    @Column({ type: 'timestamp', comment: '发布时间', nullable: true, default: moment().format('YYYY-MM-DD HH:mm:ss') })
-    @ApiModelProperty({ nullable: true, description: '发布时间' })
+    @Field({ nullable: true })
+    @Column({ type: 'timestamp', nullable: true, default: moment().format('YYYY-MM-DD HH:mm:ss') })
+    @ApiModelProperty({ nullable: true })
     publish_at: string;
 
-    @Field({ nullable: true, description: '投资金额' })
-    @Column({ nullable: true, comment: '投资金额', type: 'int' })
-    @ApiModelProperty({ nullable: true, description: '投资金额' })
+    @Field({ nullable: true })
+    @Column({ nullable: true, type: 'int' })
+    @ApiModelProperty({ nullable: true })
     amount: number;
 
-    @Field({ nullable: true, description: '摘要' })
-    @Column({ nullable: true, comment: '摘要' })
-    @ApiModelProperty({ nullable: true, description: '摘要' })
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
     summary: string;
 
-    @Field({ nullable: true, description: '资金详情' })
-    @Column({ type: 'text', nullable: true, comment: '资金详情' })
-    @ApiModelProperty({ nullable: true, description: '资金详情' })
+    @Field({ nullable: true })
+    @Column({ type: 'text', nullable: true })
+    @ApiModelProperty({ nullable: true })
     info: string;
 
-    @Field({ nullable: true, description: '最低回报要求' })
-    @Column({ nullable: true, comment: '最低回报要求' })
-    @ApiModelProperty({ nullable: true, description: '最低回报要求' })
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
     return: string;
 
-    @Field({ nullable: true, description: '抵质押物类型' })
-    @Column({ nullable: true, comment: '抵质押物类型' })
-    @ApiModelProperty({ nullable: true, description: '抵质押物类型' })
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
     pledge: string;
 
-    @Field({ nullable: true, description: '抵质押物折扣率' })
-    @Column({ type: 'float', nullable: true, comment: '抵质押物折扣率' })
-    @ApiModelProperty({ nullable: true, description: '抵质押物折扣率' })
+    @Field({ nullable: true })
+    @Column({ type: 'float', nullable: true })
+    @ApiModelProperty({ nullable: true })
     discount: number;
 
-    @Field(type => Int, { nullable: true, description: '投资期限' })
-    @Column({ nullable: true, comment: '投资期限' })
-    @ApiModelProperty({ nullable: true, description: '投资期限' })
+    @Field(type => Int, { nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
     term: number;
 
-    @Field({ nullable: true, description: '前期费用' })
-    @Column({ nullable: true, comment: '前期费用' })
-    @ApiModelProperty({ nullable: true, description: '前期费用' })
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
     pre_payment: string;
 
-    @Field({ nullable: true, description: '驳回理由' })
-    @Column({ nullable: true, comment: '驳回理由' })
-    @ApiModelProperty({ nullable: true, description: '驳回理由' })
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
     reason: string;
 
-    @Field(type => Org, { nullable: true, description: '所属部门' })
+    @Field(type => Org, { nullable: true })
     @ManyToOne(type => Org)
-    @ApiModelProperty({ nullable: true, description: '所属部门' })
+    @ApiModelProperty({ nullable: true })
     org: Org;
 
-    @Field(type => User, { nullable: true, description: '所属业务员' })
+    @Field(type => User, { nullable: true })
     @ManyToOne(type => User)
-    @ApiModelProperty({ nullable: true, description: '所属业务员' })
+    @ApiModelProperty({ nullable: true })
     own: User;
 
-    @Field(type => User, { nullable: true, description: '创建人' })
+    @Field(type => User, { nullable: true })
     @ManyToOne(type => User, target => target.capitals)
-    @ApiModelProperty({ nullable: true, description: '创建人' })
+    @ApiModelProperty({ nullable: true })
     creator: User;
 
-    @Field({ nullable: true, description: '状态' })
-    @Column({ default: ProjectStatusEnum.PENDING, comment: '状态' })
-    @ApiModelProperty({ nullable: true, description: '状态' })
+    @Field({ nullable: true })
+    @Column({ default: ProjectStatusEnum.PENDING })
+    @ApiModelProperty({ nullable: true })
     status: ProjectStatusEnum;
 
-    @Field({ nullable: true, description: '投资方式' })
-    @Column({ default: IFModeEnum.EQUITY, comment: '投资方式' })
-    @ApiModelProperty({ nullable: true, description: '投资方式' })
+    @Field({ nullable: true })
+    @Column({ default: IFModeEnum.EQUITY })
+    @ApiModelProperty({ nullable: true })
     category: IFModeEnum;
 
-    @Field(type => Metadata, { nullable: true, description: '行业' })
+    @Field(type => Metadata, { nullable: true })
     @ManyToMany(type => Metadata, target => target.capitals_industry)
     @JoinTable()
-    @ApiModelProperty({ nullable: true, description: '行业' })
+    @ApiModelProperty({ nullable: true })
     industry: Metadata[];
 
-    @Field(type => Metadata, { nullable: true, description: '资金类型' })
+    @Field(type => Metadata, { nullable: true })
     @ManyToMany(type => Metadata, target => target.capitals_type)
     @JoinTable()
-    @ApiModelProperty({ nullable: true, description: '资金类型' })
+    @ApiModelProperty({ nullable: true })
     type: Metadata[];
 
-    @Field(type => Metadata, { nullable: true, description: '所在地区' })
+    @Field(type => Metadata, { nullable: true })
     @ManyToOne(type => Metadata, target => target.capitals)
-    @ApiModelProperty({ nullable: true, description: '所在地区' })
+    @ApiModelProperty({ nullable: true })
     area: Metadata;
 
-    @Field({ nullable: true, description: '路径' })
-    @Column({ nullable: true, comment: '路径' })
-    @ApiModelProperty({ nullable: true, description: '路径' })
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
     area_path: string;
 
-    @Field(type => Metadata, { nullable: true, description: '投资地区' })
+    @Field(type => Metadata, { nullable: true })
     @ManyToMany(type => Metadata, target => target.capitals_invest_area)
     @JoinTable()
-    @ApiModelProperty({ nullable: true, description: '投资地区' })
+    @ApiModelProperty({ nullable: true })
     invest_area: Metadata[];
 
-    @Field(type => Metadata, { nullable: true, description: '风控要求' })
+    @Field(type => Metadata, { nullable: true })
     @ManyToOne(type => Metadata, target => target.capitals)
-    @ApiModelProperty({ nullable: true, description: '风控要求' })
+    @ApiModelProperty({ nullable: true })
     risk: Metadata;
 
-    @Field(type => Metadata, { nullable: true, description: '可提供资料' })
+    @Field(type => Metadata, { nullable: true })
     @ManyToMany(type => Metadata, target => target.capitals_data)
     @JoinTable()
-    @ApiModelProperty({ nullable: true, description: '可提供资料' })
+    @ApiModelProperty({ nullable: true })
     data: Metadata[];
 
-    @Field(type => Metadata, { nullable: true, description: '参股类型' })
+    @Field(type => Metadata, { nullable: true })
     @ManyToOne(type => Metadata, target => target.capitals)
-    @ApiModelProperty({ nullable: true, description: '参股类型' })
+    @ApiModelProperty({ nullable: true })
     equity_type: Metadata;
 
-    @Field(type => Metadata, { nullable: true, description: '投资阶段' })
+    @Field(type => Metadata, { nullable: true })
     @ManyToMany(type => Metadata, target => target.capitals_stage)
     @JoinTable()
-    @ApiModelProperty({ nullable: true, description: '投资阶段' })
+    @ApiModelProperty({ nullable: true })
     stage: Metadata[];
 
-    @Field(type => Metadata, { nullable: true, description: '投资类型' })
+    @Field(type => Metadata, { nullable: true })
     @ManyToMany(type => Metadata, target => target.capitals_invest_type)
     @JoinTable()
-    @ApiModelProperty({ nullable: true, description: '投资类型' })
+    @ApiModelProperty({ nullable: true })
     invest_type: Metadata[];
 
-    @Field(type => Metadata, { nullable: true, description: '占股比例' })
+    @Field(type => Metadata, { nullable: true })
     @ManyToOne(type => Metadata, target => target.capitals)
-    @ApiModelProperty({ nullable: true, description: '占股比例' })
+    @ApiModelProperty({ nullable: true })
     ratio: Metadata;
 
-    @Field(type => ApplyCapital, { nullable: true, description: '申请人列表' })
+    @Field(type => ApplyCapital, { nullable: true })
     @OneToMany(type => ApplyCapital, target => target.capital)
-    @ApiModelProperty({ nullable: true, description: '申请人列表' })
+    @ApiModelProperty({ nullable: true })
     applicants: ApplyCapital[];
 
     @Field({ nullable: true })
