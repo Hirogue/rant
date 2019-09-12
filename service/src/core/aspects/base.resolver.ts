@@ -64,6 +64,14 @@ export function BaseResolver<TEntity, TPaginate>(
         async create(@Args({ name: 'data', type: () => TEntityClass }) data: TEntity) {
             return await this.api.create(this.root, data);
         }
+
+        @Mutation(returns => Boolean, {
+            name: 'bulk' + TEntityClass.name,
+            description: `Create many ${TEntityClass.name}`
+        })
+        async bulk(@Args({ name: 'data', type: () => [TEntityClass] }) data: TEntity[]) {
+            return await this.api.bulk(this.root, data);
+        }
     }
 
     return Resolver;
