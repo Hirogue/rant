@@ -9,6 +9,7 @@ import UserSelector from '@/components/UserSelector';
 import { Q_GET_USERS } from '@/gql';
 import { canReadAny, canUpdateAny, canUpdateOwn } from '@/utils/access-control';
 import { IdentityEnum, LogTypeEnum, UserStatusEnum, UserTypeEnum } from '@/utils/enum';
+import { ExcelHelper } from '@/utils/excel';
 import {
   buildingQuery,
   filterOrg,
@@ -229,7 +230,21 @@ export default () => {
 
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
-    { name: '导出', icon: 'export', action: () => refetch(), hide: !canReadAny(AUTH_RESOURCE) },
+    {
+      name: '导出',
+      icon: 'export',
+      action: () => {
+        const excelColumns = columns
+          .filter(item => !!item.dataIndex)
+          .map(item => ({ header: item.title, key: item.dataIndex, ...item }));
+        ExcelHelper.export(
+          dataSource,
+          excelColumns,
+          '服务商_' + moment().format('YYYY_MM_DD_HH_mm_ss'),
+        );
+      },
+      hide: !canReadAny(AUTH_RESOURCE),
+    },
   ];
 
   return (
