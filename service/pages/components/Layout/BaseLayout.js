@@ -333,7 +333,6 @@ export default class extends Component {
 			<GlobalContext.Provider value={{ ...this.state, ...this.props, ...this.props.router.query }}>
 				<Consult siteInfo={siteInfo} />
 				<Layout>
-					<Head seo={pagesSEO} />
 					<Header style={{ position: 'fixed', zIndex: 500, width: '100%' }}>
 						<HeaderMod />
 					</Header>
