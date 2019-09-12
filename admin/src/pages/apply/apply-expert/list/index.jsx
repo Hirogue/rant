@@ -28,6 +28,7 @@ import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
 import { M_APPROVAL_APPLY_EXPERT } from '../gql';
+import { ExcelHelper } from '@/utils/excel';
 
 const PATH = '/apply/apply-expert';
 const AUTH_RESOURCE = '/apply-expert';
@@ -109,36 +110,36 @@ export default () => {
       ) : null}
       {(ProjectStatusEnum.CHECKED === record.status ||
         ProjectStatusEnum.WAITING === record.status) &&
-        canUpdateAny(AUTH_RESOURCE) ? (
-          <Fragment>
-            <a
-              href="javascript:;"
-              onClick={() => {
-                setCurrent(record);
-                setOrgSelectorVisible(true);
-              }}
-            >
-              [{`${ProjectStatusEnum.CHECKED === record.status ? '' : '重新'}`}分配部门]
+      canUpdateAny(AUTH_RESOURCE) ? (
+        <Fragment>
+          <a
+            href="javascript:;"
+            onClick={() => {
+              setCurrent(record);
+              setOrgSelectorVisible(true);
+            }}
+          >
+            [{`${ProjectStatusEnum.CHECKED === record.status ? '' : '重新'}`}分配部门]
           </a>
-            <Divider type="vertical" />
-          </Fragment>
-        ) : null}
+          <Divider type="vertical" />
+        </Fragment>
+      ) : null}
       {(ProjectStatusEnum.WAITING === record.status ||
         ProjectStatusEnum.FOLLOWING === record.status) &&
-        canUpdateAny(AUTH_RESOURCE) ? (
-          <Fragment>
-            <a
-              href="javascript:;"
-              onClick={() => {
-                setCurrent(record);
-                setUserSelectorVisible(true);
-              }}
-            >
-              [{`${ProjectStatusEnum.WAITING === record.status ? '' : '重新'}`}分配业务员]
+      canUpdateAny(AUTH_RESOURCE) ? (
+        <Fragment>
+          <a
+            href="javascript:;"
+            onClick={() => {
+              setCurrent(record);
+              setUserSelectorVisible(true);
+            }}
+          >
+            [{`${ProjectStatusEnum.WAITING === record.status ? '' : '重新'}`}分配业务员]
           </a>
-            <Divider type="vertical" />
-          </Fragment>
-        ) : null}
+          <Divider type="vertical" />
+        </Fragment>
+      ) : null}
       {ProjectStatusEnum.FOLLOWING === record.status && canUpdateOwn(AUTH_RESOURCE) ? (
         <Fragment>
           <a
@@ -260,7 +261,21 @@ export default () => {
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
     { name: '导入', icon: 'import', action: () => refetch(), hide: !canCreateAny(AUTH_RESOURCE) },
-    { name: '导出', icon: 'export', action: () => refetch(), hide: !canReadAny(AUTH_RESOURCE) },
+    {
+      name: '导出',
+      icon: 'export',
+      action: () => {
+        const excelColumns = columns
+          .filter(item => !!item.dataIndex)
+          .map(item => ({ header: item.title, key: item.dataIndex, ...item }));
+        ExcelHelper.export(
+          dataSource,
+          excelColumns,
+          '约见专家_' + moment().format('YYYY_MM_DD_HH_mm_ss'),
+        );
+      },
+      hide: !canReadAny(AUTH_RESOURCE),
+    },
   ];
 
   return (

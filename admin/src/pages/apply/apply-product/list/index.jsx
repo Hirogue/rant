@@ -15,6 +15,7 @@ import { Affix, Col, Divider, message, Popconfirm, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { M_APPROVAL_APPLY_PRODUCT } from '../gql';
+import { ExcelHelper } from '@/utils/excel';
 
 const PATH = '/apply/apply-product';
 const AUTH_RESOURCE = '/apply-product';
@@ -247,7 +248,21 @@ export default () => {
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
     { name: '导入', icon: 'import', action: () => refetch(), hide: !canCreateAny(AUTH_RESOURCE) },
-    { name: '导出', icon: 'export', action: () => refetch(), hide: !canReadAny(AUTH_RESOURCE) },
+    {
+      name: '导出',
+      icon: 'export',
+      action: () => {
+        const excelColumns = columns
+          .filter(item => !!item.dataIndex)
+          .map(item => ({ header: item.title, key: item.dataIndex, ...item }));
+        ExcelHelper.export(
+          dataSource,
+          excelColumns,
+          '金融服务_' + moment().format('YYYY_MM_DD_HH_mm_ss'),
+        );
+      },
+      hide: !canReadAny(AUTH_RESOURCE),
+    },
   ];
 
   return (
