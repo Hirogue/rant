@@ -168,10 +168,16 @@ export default withRouter(props => {
     },
   } = props;
 
-  const { loading, data, refetch } = useQuery(Q_GET_ROLE, {
-    notifyOnNetworkStatusChange: true,
-    variables: { id: id || '', queryString: buildingQuery({}) },
-  });
+  let result = {};
+
+  if (!!id) {
+    result = useQuery(Q_GET_ROLE, {
+      notifyOnNetworkStatusChange: true,
+      variables: { id, queryString: buildingQuery({}) },
+    });
+  }
+
+  const { data = {}, refetch = () => {} } = result;
 
   const [createRole] = useMutation(M_CREATE_ROLE, {
     update: (proxy, { data }) => {
@@ -191,9 +197,7 @@ export default withRouter(props => {
     },
   });
 
-  if (loading || !data) return <Skeleton loading={loading} />;
-
   const { role } = data;
 
-  return renderContent(refetch, id ? role : null, id ? updateRole : createRole, tabKey, setTabKey);
+  return renderContent(refetch, role, id ? updateRole : createRole, tabKey, setTabKey);
 });

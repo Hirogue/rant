@@ -12,6 +12,12 @@ let Config = {
     serverUrl: 'http://127.0.0.1:3000',
     defaultPassword: '12345678',
 
+    seo: {
+        title: '',
+        keywords: '',
+        description: ''
+    },
+
     staticAssets: [
         { path: './static', options: { prefix: '/static' } },
         { path: '../admin/dist', options: { prefix: '/admin/' } },

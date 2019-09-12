@@ -5,13 +5,12 @@ import {
   M_CREATE_ARTICLE,
   M_UPDATE_ARTICLE,
   Q_GET_ARTICLE,
-  Q_GET_ARTICLE_CATEGORY,
   Q_GET_ARTICLE_CATEGORY_TREES,
 } from '@/gql';
 import { uploadOne } from '@/utils/fetch';
 import { buildingQuery, getTreeData } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
-import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import {
   Affix,
   Button,
@@ -25,7 +24,7 @@ import {
   TreeSelect,
 } from 'antd';
 import moment from 'moment';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { router, withRouter } from 'umi';
 import styles from './style.less';
 

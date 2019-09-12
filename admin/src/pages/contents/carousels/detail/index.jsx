@@ -5,19 +5,7 @@ import { uploadOne } from '@/utils/fetch';
 import { buildingQuery } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import {
-  Affix,
-  Button,
-  Card,
-  Dropdown,
-  Form,
-  Icon,
-  Input,
-  InputNumber,
-  message,
-  Skeleton,
-  Switch,
-} from 'antd';
+import { Affix, Button, Card, Form, Input, InputNumber, message, Switch } from 'antd';
 import React, { Fragment, useState } from 'react';
 import { router, withRouter } from 'umi';
 import styles from './style.less';
@@ -28,19 +16,6 @@ const { TextArea } = Input;
 const action = (
   <RouteContext.Consumer>
     {({ isMobile }) => {
-      if (isMobile) {
-        return (
-          <Dropdown.Button
-            type="primary"
-            icon={<Icon type="down" />}
-            overlay={mobileMenu}
-            placement="bottomRight"
-          >
-            主操作
-          </Dropdown.Button>
-        );
-      }
-
       return (
         <Fragment>
           <Affix style={{ display: 'inline-block' }} offsetTop={80}>
@@ -228,10 +203,16 @@ export default withRouter(props => {
     },
   } = props;
 
-  const { loading, data, refetch } = useQuery(Q_GET_CAROUSEL, {
-    notifyOnNetworkStatusChange: true,
-    variables: { id: id || '', queryString: buildingQuery({ join: [{ field: 'category' }] }) },
-  });
+  let result = {};
+
+  if (!!id) {
+    result = useQuery(Q_GET_CAROUSEL, {
+      notifyOnNetworkStatusChange: true,
+      variables: { id: id || '', queryString: buildingQuery({ join: [{ field: 'category' }] }) },
+    });
+  }
+
+  const { data = {}, refetch = () => {} } = result;
 
   const [createCarousel] = useMutation(M_CREATE_CAROUSEL, {
     update: (proxy, { data }) => {
@@ -251,14 +232,7 @@ export default withRouter(props => {
     },
   });
 
-  if (loading || !data) return <Skeleton loading={loading} />;
-
   const { carousel } = data;
 
-  return renderContent(
-    id ? carousel : null,
-    id ? updateCarousel : createCarousel,
-    tabKey,
-    setTabKey,
-  );
+  return renderContent(carousel, id ? updateCarousel : createCarousel, tabKey, setTabKey);
 });

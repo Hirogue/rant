@@ -1,7 +1,12 @@
 import ImageCropper from '@/components/ImageCropper';
 import RichText from '@/components/RichText';
 import StandardTabList from '@/components/StandardTabList';
-import { M_CREATE_DOCUMENT, M_UPDATE_DOCUMENT, Q_GET_DOCUMENT } from '@/gql';
+import {
+  M_CREATE_DOCUMENT,
+  M_UPDATE_DOCUMENT,
+  Q_GET_DOCUMENT,
+  Q_GET_DOCUMENT_CATEGORY_TREES,
+} from '@/gql';
 import { uploadOne } from '@/utils/fetch';
 import { buildingQuery, getTreeData } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
@@ -11,13 +16,10 @@ import {
   Button,
   Card,
   DatePicker,
-  Dropdown,
   Form,
-  Icon,
   Input,
   InputNumber,
   message,
-  Skeleton,
   Switch,
   TreeSelect,
 } from 'antd';
@@ -32,19 +34,6 @@ const { TextArea } = Input;
 const action = (
   <RouteContext.Consumer>
     {({ isMobile }) => {
-      if (isMobile) {
-        return (
-          <Dropdown.Button
-            type="primary"
-            icon={<Icon type="down" />}
-            overlay={mobileMenu}
-            placement="bottomRight"
-          >
-            主操作
-          </Dropdown.Button>
-        );
-      }
-
       return (
         <Fragment>
           <Affix style={{ display: 'inline-block' }} offsetTop={80}>
@@ -284,10 +273,18 @@ export default withRouter(props => {
     },
   } = props;
 
-  const { loading, data, refetch } = useQuery(Q_GET_DOCUMENT, {
-    notifyOnNetworkStatusChange: true,
-    variables: { id: id || '', queryString: buildingQuery({ join: [{ field: 'category' }] }) },
-  });
+  let result = {};
+
+  if (!!id) {
+    result = useQuery(Q_GET_DOCUMENT, {
+      notifyOnNetworkStatusChange: true,
+      variables: { id, queryString: buildingQuery({ join: [{ field: 'category' }] }) },
+    });
+  }
+
+  const { data = {}, refetch = () => {} } = result;
+
+  const documentCategoryResult = useQuery(Q_GET_DOCUMENT_CATEGORY_TREES);
 
   const [createDocument] = useMutation(M_CREATE_DOCUMENT, {
     update: (proxy, { data }) => {
@@ -307,13 +304,12 @@ export default withRouter(props => {
     },
   });
 
-  if (loading || !data) return <Skeleton loading={loading} />;
-
-  const { document, documentCategoryTrees } = data;
+  const { documentCategoryTrees = [] } = documentCategoryResult ? documentCategoryResult.data : {};
+  const { document } = data;
 
   return renderContent(
     documentCategoryTrees,
-    id ? document : null,
+    document,
     id ? updateDocument : createDocument,
     tabKey,
     setTabKey,

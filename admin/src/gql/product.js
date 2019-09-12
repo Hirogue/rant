@@ -46,15 +46,10 @@ export const Q_GET_PRODUCTS = gql`
 
 export const Q_GET_PRODUCT = gql`
   ${F_PRODUCT_FIELDS}
-  ${F_PRODUCT_CATEGORYRECURSIVE}
 
   query getProduct($id: String!, $queryString: String! = "") {
     product(id: $id, queryString: $queryString) {
       ...ProductFields
-    }
-
-    productCategoryTrees {
-      ...ProductCategoryRecursive
     }
   }
 `;

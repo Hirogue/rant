@@ -54,20 +54,10 @@ export const Q_GET_PROVIDERS = gql`
 
 export const Q_GET_PROVIDER = gql`
   ${F_PROVIDER_FIELDS}
-  ${F_PROVIDER_CATEGORYRECURSIVE}
-  ${F_METADATA_RECURSIVE}
 
-  query getProvider($id: String!, $queryString: String! = "", $metadataRoot: String! = "") {
+  query getProvider($id: String!, $queryString: String! = "") {
     provider(id: $id, queryString: $queryString) {
       ...ProviderFields
-    }
-
-    providerCategoryTrees {
-      ...ProviderCategoryRecursive
-    }
-
-    metadataDescendantsTree(root: $metadataRoot) {
-      ...MetadataRecursive
     }
   }
 `;
