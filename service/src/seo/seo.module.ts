@@ -11,6 +11,7 @@ import { SeoService } from "./seo.service";
     providers: [
         SeoService,
         SeoResolver
-    ]
+    ],
+    exports: [SeoService]
 })
 export class SeoModule { }

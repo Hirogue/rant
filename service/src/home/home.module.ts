@@ -9,8 +9,11 @@ import { AboutController } from './about.controller';
 import { SearchController } from './search.controller';
 import { UserController } from './user.controller';
 import { HomeController } from './home.controller';
+import { SeoMiddleware } from './seo.middleware';
+import { SeoModule } from '../seo';
 
 @Module({
+    imports: [SeoModule],
     controllers: [
         HomeController,
         ProjectController,
@@ -24,4 +27,14 @@ import { HomeController } from './home.controller';
         UserController
     ]
 })
-export class HomeModule { }
+export class HomeModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer
+            .apply(SeoMiddleware)
+            .forRoutes(
+                HomeController
+            );
+
+    }
+}
+
