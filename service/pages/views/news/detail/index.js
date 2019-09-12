@@ -81,7 +81,6 @@ export default withRouter((props) => {
 						})
 					}
 				})
-				console.log(data);
 				if (data) {
 					setState({
 						prev: data.prev.data.shift(),
@@ -94,6 +93,8 @@ export default withRouter((props) => {
 	}, [article]);
 
 	if (loading) return <Spin style={{ position: "fixed", top: "50%", left: "50%" }} tip="正在加载中" />;
+
+	if (article.title) document.title = article.title;
 
 	return (
 		<BaseLayout>
