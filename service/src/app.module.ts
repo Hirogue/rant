@@ -2,7 +2,7 @@ import { CacheModule, MiddlewareConsumer, Module, NestModule, RequestMethod } fr
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import * as redisStore from 'cache-manager-redis-store';
-import { RenderModule } from 'nest-next';
+import { RenderModule } from './render';
 import { AccessControlModule } from './access-control';
 import { ApplyCapitalModule } from './apply-capital';
 import { ApplyExpertModule } from './apply-expert';

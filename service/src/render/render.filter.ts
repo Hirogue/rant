@@ -1,29 +1,29 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
-import { ApolloError } from 'apollo-server-core';
+import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { IncomingMessage, ServerResponse } from 'http';
-import * as moment from 'moment';
 import { parse as parseUrl } from 'url';
-import * as Youch from 'youch';
-import Config from '../../config';
-import { Logger } from '../../logger';
-import { ErrorResponse, RenderService } from '../../render';
-import { ApolloException } from '../exceptions';
+import { RenderService } from './render.service';
+import { ErrorResponse } from './types';
 
 @Catch()
-export class ExceptionsFilter implements ExceptionFilter {
-
+export class RenderFilter implements ExceptionFilter {
     private readonly service: RenderService;
 
     constructor(service: RenderService) {
         this.service = service;
     }
 
-    async catch(exception: any, host: ArgumentsHost) {
+    /**
+     * Nest isn't aware of how next handles routing for the build assets, let next
+     * handle routing for any request that isn't handled by a controller
+     * @param err
+     * @param ctx
+     */
+    public async catch(err: any, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
         const request = ctx.getRequest();
         const response = ctx.getResponse();
 
-        if (response && request && request.url.startsWith(Config.ssr.prefix)) {
+        if (response && request) {
             const requestHandler = this.service.getRequestHandler();
             const errorRenderer = this.service.getErrorRenderer();
 
@@ -48,21 +48,21 @@ export class ExceptionsFilter implements ExceptionFilter {
                 // let next handle the error
                 // it's possible that the err doesn't contain a status code, if this is the case treat
                 // it as an internal server error
-                res.statusCode = exception && exception.status ? exception.status : 500;
+                res.statusCode = err && err.status ? err.status : 500;
 
                 const { pathname, query } = parseUrl(req.url, true);
 
                 const errorHandler = this.service.getErrorHandler();
 
                 if (errorHandler) {
-                    await errorHandler(exception, request, response, pathname, query);
+                    await errorHandler(err, request, response, pathname, query);
                 }
 
                 if (response.sent === true || res.headersSent) {
                     return;
                 }
 
-                const serializedErr = this.serializeError(exception);
+                const serializedErr = this.serializeError(err);
 
                 return errorRenderer(serializedErr, req, res, pathname, query);
             }
@@ -70,64 +70,9 @@ export class ExceptionsFilter implements ExceptionFilter {
             return;
         }
 
-        Logger.error('exception:', exception.toString());
-
-        const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
-
-        if (exception instanceof HttpException) {
-
-            const status = exception.getStatus();
-
-            if (!!request && !!response) {
-                return response
-                    .status(status)
-                    .send({
-                        ...exception,
-                        timestamp,
-                        path: request.url
-                    });
-            }
-
-            if (exception instanceof ApolloException) {
-                throw new ApolloError(exception.getMessage(), status.toString());
-            }
-
-            throw new ApolloError(exception.message ? exception.message.message : 'Unknown Exception', status.toString());
-
-        } else {
-
-            Logger.error('INTERNAL_SERVER_ERROR');
-
-            if (process.env.NODE_ENV !== 'production' && !!request && !request.xhr) {
-
-                const youch = new Youch(exception, request);
-                const html = await youch
-                    .addLink(({ message }) => {
-                        const url = `https://cn.bing.com/search?q=${encodeURIComponent(
-                            `[adonis.js] ${message}`
-                        )}`;
-                        return `<a href="${url}" target="_blank" title="Search on bing">Search Bing</a>`;
-                    })
-                    .toHTML();
-
-                response
-                    .type('text/html')
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .send(html);
-            } else {
-
-                response
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .send({
-                        ...exception,
-                        timestamp,
-                        path: request.url
-                    });
-            }
-        }
-
+        // if the request and/or response are undefined (as with GraphQL) rethrow the error
+        throw err;
     }
-
 
     /**
      * Serialize the error similarly to method used in Next -- parse error as Nest error type
