@@ -114,7 +114,7 @@ export class ExcelHelper {
               row[colRender.dataIndex] = item[key];
             }
           } else {
-            row[colRender.dataIndex] = item[key];
+            row[colRender.dataIndex] = ExcelHelper.deepPropety(colRender.dataIndex, item);
           }
         } else {
           row[key] = item[key];

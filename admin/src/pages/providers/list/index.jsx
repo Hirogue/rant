@@ -13,6 +13,7 @@ import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
 import { M_APPROVAL_PROVIDER } from '../gql';
+import { ExcelHelper } from '@/utils/excel';
 
 const PATH = '/providers';
 const AUTH_RESOURCE = '/provider';
@@ -209,7 +210,21 @@ export default () => {
       confirmTitle: `确定要删除吗?`,
     },
     { name: '导入', icon: 'import', action: () => refetch(), hide: !canCreateAny(AUTH_RESOURCE) },
-    { name: '导出', icon: 'export', action: () => refetch(), hide: !canReadAny(AUTH_RESOURCE) },
+    {
+      name: '导出',
+      icon: 'export',
+      action: () => {
+        const excelColumns = columns
+          .filter(item => !!item.dataIndex)
+          .map(item => ({ header: item.title, key: item.dataIndex, ...item }));
+        ExcelHelper.export(
+          dataSource,
+          excelColumns,
+          '服务商_' + moment().format('YYYY_MM_DD_HH_mm_ss'),
+        );
+      },
+      hide: !canReadAny(AUTH_RESOURCE),
+    },
   ];
 
   return (
