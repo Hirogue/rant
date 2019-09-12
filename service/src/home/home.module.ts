@@ -32,7 +32,16 @@ export class HomeModule implements NestModule {
         consumer
             .apply(SeoMiddleware)
             .forRoutes(
-                HomeController
+                HomeController,
+                ProjectController,
+                FinanceController,
+                ProductController,
+                ServiceController,
+                NewsController,
+                HelpController,
+                AboutController,
+                SearchController,
+                UserController
             );
 
     }

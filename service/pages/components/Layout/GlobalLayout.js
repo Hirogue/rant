@@ -1,5 +1,4 @@
 import { Button, Drawer, Layout } from 'antd';
-import Head from "next/head";
 import { useContext } from 'react';
 import './login_layout.scss';
 import withContext, { GlobalContext } from './withContext';
@@ -14,7 +13,6 @@ export default withContext(({ props }) => {
 
     return (
         <Layout>
-            <Head seo={{}} />
             {props.children}
             <Drawer
                 title="项目通服务协议"
