@@ -3,7 +3,7 @@ import { M_CREATE_SEO, M_UPDATE_SEO, Q_GET_SEO } from '@/gql';
 import { buildingQuery } from '@/utils/global';
 import { GridContent, PageHeaderWrapper, RouteContext } from '@ant-design/pro-layout';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Affix, Button, Card, Form, Input, message, Select } from 'antd';
+import { Affix, Button, Card, Form, Input, message, Select, InputNumber } from 'antd';
 import React, { Fragment, useState } from 'react';
 import { router, withRouter } from 'umi';
 import styles from './style.less';
@@ -112,6 +112,11 @@ const BasicForm = Form.create()(props => {
           {getFieldDecorator('keywords', {
             initialValue: target.keywords,
           })(<TextArea placeholder="请填写关键词" rows={4} />)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="排序">
+          {getFieldDecorator('sort', {
+            initialValue: target.sort || 0,
+          })(<InputNumber min={0} placeholder="请填写排序" />)}
         </FormItem>
         <FormItem {...formItemLayout} label="描述">
           {getFieldDecorator('description', {
