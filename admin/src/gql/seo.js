@@ -7,6 +7,7 @@ export const F_SEO_FIELDS = gql`
     title
     keywords
     description
+    sort
     update_at
     create_at
   }

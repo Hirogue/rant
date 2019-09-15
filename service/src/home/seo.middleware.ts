@@ -14,6 +14,9 @@ export class SeoMiddleware implements NestMiddleware {
         const seo = await this.seoService.findOne({
             where: {
                 path: Like(`%${req.query['seoPath'] || req.url}%`)
+            },
+            order: {
+                sort: 'ASC'
             }
         });
 

@@ -97,6 +97,8 @@ export default withRouter((props) => {
 
 	if (loading) return <Spin style={{ position: "fixed", top: "50%", left: "50%" }} tip="正在加载中" />;
 
+	if (capital.title) document.title = capital.title;
+
 	return (
 		<BaseLayout>
 			<div className="finance-detail-page">
