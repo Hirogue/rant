@@ -1,14 +1,16 @@
-import { Avatar, Card, Col, List, Skeleton, Row, Statistic } from 'antd';
-import React, { Component } from 'react';
-import Link from 'umi/link';
+import { Q_FETCH_CURRENT_USER } from '@/gql/common';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useQuery } from '@apollo/react-hooks';
+import { Avatar, Card, Col, List, Row, Skeleton, Tabs } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
-import Radar from './components/Radar';
+import React, { Component } from 'react';
+import Link from 'umi/link';
 import EditableLinkGroup from './components/EditableLinkGroup';
+import Radar from './components/Radar';
 import styles from './style.less';
-import { Q_FETCH_CURRENT_USER } from '@/gql/common';
+
+const { TabPane } = Tabs;
 
 const links = [
   {
@@ -70,12 +72,12 @@ const PageHeaderContent = ({ currentUser }) => {
 
 const ExtraContent = () => (
   <div className={styles.extraContent}>
-    <div className={styles.statItem}>
+    {/* <div className={styles.statItem}>
       <Statistic title="工单数" value={56} />
     </div>
     <div className={styles.statItem}>
       <Statistic title="部门排名" value={8} suffix="/ 24" />
-    </div>
+    </div> */}
   </div>
 );
 
@@ -285,20 +287,27 @@ export default () => {
       extraContent={<ExtraContent />}
     >
       <Row gutter={24}>
-        {/* <Col>
-          <Card
-            style={{
-              marginBottom: 24,
-            }}
-            title="快速开始 / 便捷导航"
-            bordered={false}
-            bodyStyle={{
-              padding: 0,
-            }}
-          >
-            <EditableLinkGroup onAdd={() => { }} links={links} linkElement={Link} />
+        <Col>
+          <Card>
+            <Tabs defaultActiveKey="1">
+              <TabPane tab="V1会员申请（30）" key="1">
+                Content of Tab Pane 1
+              </TabPane>
+              <TabPane tab="发布项目（30）" key="2">
+                Content of Tab Pane 2
+              </TabPane>
+              <TabPane tab="发布资金（30）" key="3">
+                Content of Tab Pane 3
+              </TabPane>
+              <TabPane tab="申请金融服务（30）" key="4">
+                Content of Tab Pane 3
+              </TabPane>
+              <TabPane tab="约见专家（30）" key="5">
+                Content of Tab Pane 3
+              </TabPane>
+            </Tabs>
           </Card>
-        </Col> */}
+        </Col>
       </Row>
     </PageHeaderWrapper>
   );

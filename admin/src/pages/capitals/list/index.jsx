@@ -294,7 +294,7 @@ export default () => {
       confirm: true,
       confirmTitle: `确定要删除吗?`,
     },
-    { name: '导入', icon: 'import', action: () => refetch(), hide: !canCreateAny(AUTH_RESOURCE) },
+    // { name: '导入', icon: 'import', action: () => refetch(), hide: !canCreateAny(AUTH_RESOURCE) },
     {
       name: '导出',
       icon: 'export',

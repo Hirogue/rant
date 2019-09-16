@@ -12,14 +12,14 @@ const { Item } = Menu;
 
 const menuMap = {
   base: <FormattedMessage id="settings.menuMap.basic" defaultMessage="Basic Settings" />,
-  security: <FormattedMessage id="settings.menuMap.security" defaultMessage="Security Settings" />,
-  binding: <FormattedMessage id="settings.menuMap.binding" defaultMessage="Account Binding" />,
-  notification: (
-    <FormattedMessage
-      id="settings.menuMap.notification"
-      defaultMessage="New Message Notification"
-    />
-  ),
+  // security: <FormattedMessage id="settings.menuMap.security" defaultMessage="Security Settings" />,
+  // binding: <FormattedMessage id="settings.menuMap.binding" defaultMessage="Account Binding" />,
+  // notification: (
+  //   <FormattedMessage
+  //     id="settings.menuMap.notification"
+  //     defaultMessage="New Message Notification"
+  //   />
+  // ),
 };
 
 const getMenu = () => {
