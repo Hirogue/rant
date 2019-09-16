@@ -151,7 +151,7 @@ export class BaseDataSource extends RESTDataSource {
 
     async bulk(url: string, body: any) {
         try {
-            return await this.post(url, { ...body });
+            return await this.post(url + '/bulk', { ...body });
         } catch (err) {
             throw new ApolloException(err.extensions.response.statusText, err.extensions.response.status);
         }

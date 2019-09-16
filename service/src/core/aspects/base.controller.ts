@@ -37,7 +37,10 @@ export function BaseController<TEntity>(
             }],
         },
         routes: {
-            exclude: ['createManyBase', 'replaceOneBase'],
+            exclude: ['replaceOneBase'],
+            createManyBase: {
+                decorators: AuthDecorators,
+            },
             createOneBase: {
                 decorators: AuthDecorators,
             },

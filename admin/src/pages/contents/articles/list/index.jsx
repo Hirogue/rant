@@ -10,6 +10,7 @@ import { Affix, Col, message, Row, Skeleton, Switch } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
+import { ExcelHelper } from '@/utils/excel';
 
 const PATH = '/contents/articles';
 const AUTH_RESOURCE = '/article';
@@ -193,7 +194,21 @@ export default () => {
       confirmTitle: `确定要删除吗?`,
     },
     { name: '导入', icon: 'import', action: () => refetch(), hide: !canCreateAny(AUTH_RESOURCE) },
-    { name: '导出', icon: 'export', action: () => refetch(), hide: !canReadAny(AUTH_RESOURCE) },
+    {
+      name: '导出',
+      icon: 'export',
+      action: () => {
+        const excelColumns = columns
+          .filter(item => !!item.dataIndex)
+          .map(item => ({ header: item.title, key: item.dataIndex, ...item }));
+        ExcelHelper.export(
+          dataSource,
+          excelColumns,
+          '文章_' + moment().format('YYYY_MM_DD_HH_mm_ss'),
+        );
+      },
+      hide: !canReadAny(AUTH_RESOURCE),
+    },
   ];
 
   return (

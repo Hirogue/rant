@@ -28,4 +28,8 @@ export class Seo extends Base {
     @ApiModelProperty({ nullable: true })
     description: string;
 
+    @Field(type => Int, { nullable: true })
+    @Column({ default: 0 })
+    @ApiModelProperty({ nullable: true })
+    sort: number;
 }

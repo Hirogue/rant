@@ -1,9 +1,16 @@
 import { Module } from "@nestjs/common";
-import { StatisticsService } from "./statistics.service";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { User } from "../database";
 import { TimeSeriesModule } from "../time-series";
+import { StatisticsController } from "./statistics.controller";
+import { StatisticsService } from "./statistics.service";
 
 @Module({
-    imports: [TimeSeriesModule],
+    imports: [
+        TypeOrmModule.forFeature([User]),
+        TimeSeriesModule
+    ],
+    controllers: [StatisticsController],
     providers: [StatisticsService],
     exports: [StatisticsService]
 })
