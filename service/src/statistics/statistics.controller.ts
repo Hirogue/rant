@@ -34,17 +34,17 @@ export class StatisticsController {
 
         if ('subject' === type) {
             builder.addSelect(`
-                count(*) FILTER (WHERE t.type = '${UserTypeEnum.PERSONAL}') AS personal,     
-                count(*) FILTER (WHERE t.type = '${UserTypeEnum.ENTERPRISE}') AS enterprise     
+                count(*) FILTER(WHERE t.type = '${UserTypeEnum.PERSONAL}') AS personal,     
+                count(*) FILTER(WHERE t.type = '${UserTypeEnum.ENTERPRISE}') AS enterprise     
             `);
         }
 
         if ('identity' === type) {
             builder.addSelect(`
-                count(*) FILTER (WHERE t.identity = '${IdentityEnum.FINANCER}') AS financer,     
-                count(*) FILTER (WHERE t.identity = '${IdentityEnum.INVESTOR}') AS investor,     
-                count(*) FILTER (WHERE t.identity = '${IdentityEnum.PROVIDER}') AS provider,     
-                count(*) FILTER (WHERE t.identity = '${IdentityEnum.TOURIST}') AS tourist
+                count(*) FILTER(WHERE t.identity = '${IdentityEnum.FINANCER}') AS financer,     
+                count(*) FILTER(WHERE t.identity = '${IdentityEnum.INVESTOR}') AS investor,     
+                count(*) FILTER(WHERE t.identity = '${IdentityEnum.PROVIDER}') AS provider,     
+                count(*) FILTER(WHERE t.identity = '${IdentityEnum.TOURIST}') AS tourist
             `);
         }
 
