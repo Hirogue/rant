@@ -9,6 +9,7 @@ export default class extends Document {
 
 	render() {
 		const { seo = {} } = this.props;
+
 		return (
 			<html>
 				<Head>
