@@ -52,17 +52,17 @@ export default withRouter((props) => {
 						</div>
 					</div>
 					<div className="right">
-						<p className="list-title">{data ? data.title : ''}</p>
+						<p className="list-title">{data && data.document ? data.document.title : ''}</p>
 						{loading ? (
 							<Spin style={{ margin: "10vw  45%" }} tip="正在加载中" />
 						) : (
-							data ? (
+							data.document ? (
 								<div className="content-main">
 									<div className="content-title">
-										<h4>{data.title}</h4>
-										<p>{moment(data.publish_at).format('YYYY-MM-DD HH:mm:ss')}</p>
+										<h4>{data.document.title}</h4>
+										<p>{moment(data.document.publish_at).format('YYYY-MM-DD HH:mm:ss')}</p>
 									</div>
-									<div className="content-text" dangerouslySetInnerHTML={{ __html: data.text || '' }} />
+									<div className="content-text" dangerouslySetInnerHTML={{ __html: data.document.text || '' }} />
 								</div>
 							) : (
 								<Empty style={{ margin: "10vw auto" }} description="暂无数据" />
