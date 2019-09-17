@@ -46,6 +46,7 @@
     "@ant-design/pro-layout": "^4.5.9",
     "@antv/data-set": "^0.10.2",
     "@apollo/react-hooks": "^0.1.0-beta.7",
+    "@loadable/component": "^5.10.2",
     "@nestjsx/crud-request": "^4.2.0",
     "@types/lodash.debounce": "^4.0.6",
     "accesscontrol": "^2.2.1",
