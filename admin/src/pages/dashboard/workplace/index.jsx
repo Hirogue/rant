@@ -1,43 +1,17 @@
 import { Q_FETCH_CURRENT_USER } from '@/gql/common';
+import { IdentityEnum, ProjectStatusEnum, UserStatusEnum } from '@/utils/enum';
+import { buildingQuery, IdentityMaps, UserTypeMaps } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useQuery } from '@apollo/react-hooks';
-import { Avatar, Card, Col, List, Row, Skeleton, Tabs } from 'antd';
-import { connect } from 'dva';
+import { CondOperator } from '@nestjsx/crud-request';
 import moment from 'moment';
-import React, { Component } from 'react';
-import Link from 'umi/link';
-import EditableLinkGroup from './components/EditableLinkGroup';
-import Radar from './components/Radar';
+import { List, Descriptions, Avatar, Card, Col, Row, Skeleton, Tabs } from 'antd';
+import React from 'react';
+import { Q_GET_WORKPLACE_DATA } from '../gql';
 import styles from './style.less';
+import { Link } from 'umi';
 
 const { TabPane } = Tabs;
-
-const links = [
-  {
-    title: '操作一',
-    href: '',
-  },
-  {
-    title: '操作二',
-    href: '',
-  },
-  {
-    title: '操作三',
-    href: '',
-  },
-  {
-    title: '操作四',
-    href: '',
-  },
-  {
-    title: '操作五',
-    href: '',
-  },
-  {
-    title: '操作六',
-    href: '',
-  },
-];
 
 const PageHeaderContent = ({ currentUser }) => {
   const loading = currentUser && Object.keys(currentUser).length;
@@ -70,241 +44,201 @@ const PageHeaderContent = ({ currentUser }) => {
   );
 };
 
-const ExtraContent = () => (
-  <div className={styles.extraContent}>
-    {/* <div className={styles.statItem}>
-      <Statistic title="工单数" value={56} />
-    </div>
-    <div className={styles.statItem}>
-      <Statistic title="部门排名" value={8} suffix="/ 24" />
-    </div> */}
-  </div>
-);
-
-@connect(
-  ({ dashboardWorkplace: { currentUser, projectNotice, activities, radarData }, loading }) => ({
-    currentUser,
-    projectNotice,
-    activities,
-    radarData,
-    currentUserLoading: loading.effects['dashboardWorkplace/fetchUserCurrent'],
-    projectLoading: loading.effects['dashboardWorkplace/fetchProjectNotice'],
-    activitiesLoading: loading.effects['dashboardWorkplace/fetchActivitiesList'],
-  }),
-)
-class Workplace extends Component {
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'dashboardWorkplace/init',
-    });
-  }
-
-  componentWillUnmount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'dashboardWorkplace/clear',
-    });
-  }
-
-  renderActivities = item => {
-    const events = item.template.split(/@\{([^{}]*)\}/gi).map(key => {
-      if (item[key]) {
-        return (
-          <a href={item[key].link} key={item[key].name}>
-            {item[key].name}
-          </a>
-        );
-      }
-
-      return key;
-    });
-    return (
-      <List.Item key={item.id}>
-        <List.Item.Meta
-          avatar={<Avatar src={item.user.avatar} />}
-          title={
-            <span>
-              <a className={styles.username}>{item.user.name}</a>
-              &nbsp;
-              <span className={styles.event}>{events}</span>
-            </span>
-          }
-          description={
-            <span className={styles.datetime} title={item.updatedAt}>
-              {moment(item.updatedAt).fromNow()}
-            </span>
-          }
-        />
-      </List.Item>
-    );
-  };
-
-  render() {
-    const {
-      currentUser,
-      activities,
-      projectNotice,
-      projectLoading,
-      activitiesLoading,
-      radarData,
-    } = this.props;
-    return (
-      <PageHeaderWrapper
-        content={<PageHeaderContent currentUser={currentUser} />}
-        extraContent={<ExtraContent />}
-      >
-        <Row gutter={24}>
-          <Col xl={16} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              className={styles.projectList}
-              style={{
-                marginBottom: 24,
-              }}
-              title="进行中的项目"
-              bordered={false}
-              extra={<Link to="/">全部项目</Link>}
-              loading={projectLoading}
-              bodyStyle={{
-                padding: 0,
-              }}
-            >
-              {projectNotice.map(item => (
-                <Card.Grid className={styles.projectGrid} key={item.id}>
-                  <Card
-                    bodyStyle={{
-                      padding: 0,
-                    }}
-                    bordered={false}
-                  >
-                    <Card.Meta
-                      title={
-                        <div className={styles.cardTitle}>
-                          <Avatar size="small" src={item.logo} />
-                          <Link to={item.href}>{item.title}</Link>
-                        </div>
-                      }
-                      description={item.description}
-                    />
-                    <div className={styles.projectItemContent}>
-                      <Link to={item.memberLink}>{item.member || ''}</Link>
-                      {item.updatedAt && (
-                        <span className={styles.datetime} title={item.updatedAt}>
-                          {moment(item.updatedAt).fromNow()}
-                        </span>
-                      )}
-                    </div>
-                  </Card>
-                </Card.Grid>
-              ))}
-            </Card>
-            <Card
-              bodyStyle={{
-                padding: 0,
-              }}
-              bordered={false}
-              className={styles.activeCard}
-              title="动态"
-              loading={activitiesLoading}
-            >
-              <List
-                loading={activitiesLoading}
-                renderItem={item => this.renderActivities(item)}
-                dataSource={activities}
-                className={styles.activitiesList}
-                size="large"
-              />
-            </Card>
-          </Col>
-          <Col xl={8} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              style={{
-                marginBottom: 24,
-              }}
-              title="快速开始 / 便捷导航"
-              bordered={false}
-              bodyStyle={{
-                padding: 0,
-              }}
-            >
-              <EditableLinkGroup onAdd={() => {}} links={links} linkElement={Link} />
-            </Card>
-            <Card
-              style={{
-                marginBottom: 24,
-              }}
-              bordered={false}
-              title="XX 指数"
-              loading={radarData.length === 0}
-            >
-              <div className={styles.chart}>
-                <Radar hasLegend height={343} data={radarData} />
-              </div>
-            </Card>
-            <Card
-              bodyStyle={{
-                paddingTop: 12,
-                paddingBottom: 12,
-              }}
-              bordered={false}
-              title="团队"
-              loading={projectLoading}
-            >
-              <div className={styles.members}>
-                <Row gutter={48}>
-                  {projectNotice.map(item => (
-                    <Col span={12} key={`members-item-${item.id}`}>
-                      <Link to={item.href}>
-                        <Avatar src={item.logo} size="small" />
-                        <span className={styles.member}>{item.member}</span>
-                      </Link>
-                    </Col>
-                  ))}
-                </Row>
-              </div>
-            </Card>
-          </Col>
-        </Row>
-      </PageHeaderWrapper>
-    );
-  }
-}
+const PATH = '/dashboard/workplace';
+const AUTH_RESOURCE = '/dashboard/workplace';
 
 export default () => {
-  const { loading, data } = useQuery(Q_FETCH_CURRENT_USER, {
+  const { data: userResult } = useQuery(Q_FETCH_CURRENT_USER, {
     notifyOnNetworkStatusChange: true,
   });
 
-  let currentUser = {};
+  const { me = {} } = userResult;
 
-  if (data) {
-    currentUser = data.me || {};
-  }
+  const { data } = useQuery(Q_GET_WORKPLACE_DATA, {
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      userQS: buildingQuery({
+        page: 0,
+        limit: 2,
+        filter: [
+          {
+            field: 'identity',
+            operator: CondOperator.IN,
+            value: [IdentityEnum.FINANCER, IdentityEnum.INVESTOR, IdentityEnum.PROVIDER].join(','),
+          },
+          { field: 'status', operator: CondOperator.EQUALS, value: UserStatusEnum.PENDING },
+        ],
+        sort: [{ field: 'create_at', order: 'DESC' }],
+      }),
+      projectQS: buildingQuery({
+        page: 0,
+        limit: 2,
+        filter: [
+          { field: 'status', operator: CondOperator.EQUALS, value: ProjectStatusEnum.PENDING },
+        ],
+        sort: [{ field: 'create_at', order: 'DESC' }],
+      }),
+      capitalQS: buildingQuery({
+        page: 0,
+        limit: 2,
+        filter: [
+          { field: 'status', operator: CondOperator.EQUALS, value: ProjectStatusEnum.PENDING },
+        ],
+        sort: [{ field: 'create_at', order: 'DESC' }],
+      }),
+      productQS: buildingQuery({
+        page: 0,
+        limit: 2,
+        filter: [
+          { field: 'status', operator: CondOperator.EQUALS, value: ProjectStatusEnum.PENDING },
+        ],
+        sort: [{ field: 'create_at', order: 'DESC' }],
+      }),
+      expertQS: buildingQuery({
+        page: 0,
+        limit: 2,
+        filter: [
+          { field: 'status', operator: CondOperator.EQUALS, value: ProjectStatusEnum.PENDING },
+        ],
+        sort: [{ field: 'create_at', order: 'DESC' }],
+      }),
+    },
+  });
+
+  const { user = {}, project = {}, capital = {}, product = {}, expert = {} } = data || {};
+  console.log(data);
+
+  const renderUser = list => (
+    <List
+      dataSource={list}
+      renderItem={item => (
+        <List.Item>
+          <Descriptions>
+            <Descriptions.Item label="身份">{IdentityMaps[item.identity]}</Descriptions.Item>
+            <Descriptions.Item label="主体">{UserTypeMaps[item.type]}</Descriptions.Item>
+            <Descriptions.Item label="联系人">{item.realname}</Descriptions.Item>
+            <Descriptions.Item label="联系电话">{item.phone}</Descriptions.Item>
+            <Descriptions.Item label="申请时间">
+              {moment(item.create_at).format('YYYY-MM-DD HH:mm:ss')}
+            </Descriptions.Item>
+          </Descriptions>
+        </List.Item>
+      )}
+      footer={<Link to="/users/project/list">查看更多</Link>}
+    />
+  );
+  const renderProject = list => (
+    <List
+      dataSource={list}
+      renderItem={item => (
+        <List.Item>
+          <Descriptions>
+            <Descriptions.Item label="标题">{item.title}</Descriptions.Item>
+            <Descriptions.Item label="融资金额">{item.amount}万元</Descriptions.Item>
+            <Descriptions.Item label="所在地区">{item.area_path}</Descriptions.Item>
+            <Descriptions.Item label="联系人">{item.creator.realname}</Descriptions.Item>
+            <Descriptions.Item label="联系电话">{item.creator.phone}</Descriptions.Item>
+            <Descriptions.Item label="申请时间">
+              {moment(item.create_at).format('YYYY-MM-DD HH:mm:ss')}
+            </Descriptions.Item>
+          </Descriptions>
+        </List.Item>
+      )}
+      footer={<Link to="/if/projects/list">查看更多</Link>}
+    />
+  );
+  const renderCapital = list => (
+    <List
+      dataSource={list}
+      renderItem={item => (
+        <List.Item>
+          <Descriptions>
+            <Descriptions.Item label="标题">{item.title}</Descriptions.Item>
+            <Descriptions.Item label="投资金额">{item.amount}万元</Descriptions.Item>
+            <Descriptions.Item label="所在地区">{item.area_path}</Descriptions.Item>
+            <Descriptions.Item label="联系人">{item.creator.realname}</Descriptions.Item>
+            <Descriptions.Item label="联系电话">{item.creator.phone}</Descriptions.Item>
+            <Descriptions.Item label="申请时间">
+              {moment(item.create_at).format('YYYY-MM-DD HH:mm:ss')}
+            </Descriptions.Item>
+          </Descriptions>
+        </List.Item>
+      )}
+      footer={<Link to="/if/capitals/list">查看更多</Link>}
+    />
+  );
+  const renderProduct = list => (
+    <List
+      dataSource={list}
+      renderItem={item => (
+        <List.Item>
+          <Descriptions>
+            <Descriptions.Item label="金融服务">{item.product.name}</Descriptions.Item>
+            <Descriptions.Item label="联系人">{item.applicant.realname}</Descriptions.Item>
+            <Descriptions.Item label="联系电话">{item.applicant.phone}</Descriptions.Item>
+            <Descriptions.Item label="申请时间">
+              {moment(item.create_at).format('YYYY-MM-DD HH:mm:ss')}
+            </Descriptions.Item>
+          </Descriptions>
+        </List.Item>
+      )}
+      footer={<Link to="/apply/apply-product/list">查看更多</Link>}
+    />
+  );
+  const renderExpert = list => (
+    <List
+      dataSource={list}
+      renderItem={item => (
+        <List.Item>
+          <Descriptions>
+            <Descriptions.Item label="专家姓名">{item.expert.name}</Descriptions.Item>
+            <Descriptions.Item label="联系人">{item.applicant.realname}</Descriptions.Item>
+            <Descriptions.Item label="联系电话">{item.applicant.phone}</Descriptions.Item>
+            <Descriptions.Item label="申请时间">
+              {moment(item.create_at).format('YYYY-MM-DD HH:mm:ss')}
+            </Descriptions.Item>
+          </Descriptions>
+        </List.Item>
+      )}
+      footer={<Link to="/apply/apply-product/list">查看更多</Link>}
+    />
+  );
+
+  const panes = [
+    { title: `V1会员申请（${user.total || 0}）`, content: renderUser(user.data || []), key: '1' },
+    {
+      title: `发布项目（${project.total || 0}）`,
+      content: renderProject(project.data || []),
+      key: '2',
+    },
+    {
+      title: `发布资金（${capital.total || 0}）`,
+      content: renderCapital(capital.data || []),
+      key: '3',
+    },
+    {
+      title: `申请金融服务（${product.total || 0}）`,
+      content: renderProduct(product.data || []),
+      key: '4',
+    },
+    {
+      title: `约见专家（${expert.total || 0}）`,
+      content: renderExpert(expert.data || []),
+      key: '5',
+    },
+  ];
 
   return (
-    <PageHeaderWrapper
-      content={<PageHeaderContent currentUser={currentUser} />}
-      extraContent={<ExtraContent />}
-    >
+    <PageHeaderWrapper content={<PageHeaderContent currentUser={me} />}>
       <Row gutter={24}>
         <Col>
           <Card>
             <Tabs defaultActiveKey="1">
-              <TabPane tab="V1会员申请（30）" key="1">
-                Content of Tab Pane 1
-              </TabPane>
-              <TabPane tab="发布项目（30）" key="2">
-                Content of Tab Pane 2
-              </TabPane>
-              <TabPane tab="发布资金（30）" key="3">
-                Content of Tab Pane 3
-              </TabPane>
-              <TabPane tab="申请金融服务（30）" key="4">
-                Content of Tab Pane 3
-              </TabPane>
-              <TabPane tab="约见专家（30）" key="5">
-                Content of Tab Pane 3
-              </TabPane>
+              {panes.map(pane => (
+                <TabPane tab={pane.title} key={pane.key}>
+                  {pane.content}
+                </TabPane>
+              ))}
             </Tabs>
           </Card>
         </Col>
