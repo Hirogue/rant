@@ -56,15 +56,21 @@ export default props => {
     })
       .then(res => {
         console.log(res);
-        let resData = [];
+        const resData = [];
         if (res) {
-          fieldDate.forEach(item => {
-            const resItem = _.find(res, { day: item });
+          res.forEach(item => {
             resData.push(
-              { key: item, value: resItem ? resItem.enterprise * 1 : 0, name: 'enterprise' },
-              { key: item, value: resItem ? resItem.personal * 1 : 0, name: 'personal' },
+              { key: item.day, value: item.enterprise * 1 || 0, name: '企业' },
+              { key: item.day, value: item.personal * 1 || 0, name: '个人' },
             );
           });
+          //   fieldDate.forEach(item => {
+          //     const resItem = _.find(res, { day: item });
+          //     resData.push(
+          //       { key: item, value: resItem ? resItem.enterprise * 1 : 0, name: '企业' },
+          //       { key: item, value: resItem ? resItem.personal * 1 : 0, name: '个人' },
+          //     );
+          //   });
         }
         setState(prevState => ({ ...prevState, subjectData: resData }));
       })
@@ -77,17 +83,25 @@ export default props => {
     })
       .then(res => {
         console.log(res);
-        let resData = [];
+        const resData = [];
         if (res) {
-          fieldDate.forEach(item => {
-            const resItem = _.find(res, { day: item });
+          res.forEach(item => {
             resData.push(
-              { key: item, value: resItem ? resItem.financer * 1 : 0, name: 'financer' },
-              { key: item, value: resItem ? resItem.investor * 1 : 0, name: 'investor' },
-              { key: item, value: resItem ? resItem.provider * 1 : 0, name: 'provider' },
-              { key: item, value: resItem ? resItem.tourist * 1 : 0, name: 'tourist' },
+              { key: item.day, value: item.financer * 1 || 0, name: '融资方' },
+              { key: item.day, value: item.investor * 1 || 0, name: '投资方' },
+              { key: item.day, value: item.provider * 1 || 0, name: '供应商' },
+              { key: item.day, value: item.tourist * 1 || 0, name: '普通会员' },
             );
           });
+          //   fieldDate.forEach(item => {
+          //     const resItem = _.find(res, { day: item });
+          //     resData.push(
+          //       { key: item, value: resItem ? resItem.financer * 1 : 0, name: '融资方' },
+          //       { key: item, value: resItem ? resItem.investor * 1 : 0, name: '投资方' },
+          //       { key: item, value: resItem ? resItem.provider * 1 : 0, name: '供应商' },
+          //       { key: item, value: resItem ? resItem.tourist * 1 : 0, name: '普通会员' },
+          //     );
+          //   });
         }
         setState(prevState => ({ ...prevState, identityData: resData }));
       })
@@ -96,9 +110,9 @@ export default props => {
 
   const ds = new DataSet();
   const dv = ds.createView().source(state[state.category]);
-  dv.transform({
-    fields: fieldDate,
-  });
+  //   dv.transform({
+  //     fields: fieldDate,
+  //   });
 
   const Extra = () => (
     <Fragment>
@@ -129,6 +143,24 @@ export default props => {
         }}
       >
         近一月
+      </span>
+      <span
+        onClick={() =>
+          setState(prevState => ({
+            ...prevState,
+            startDate: moment().subtract(6, 'months'),
+            groupBy: 'month',
+          }))
+        }
+        style={{
+          margin: '0 5px',
+          padding: '2px 4px',
+          border: '1px solid #999',
+          cursor: 'pointer',
+          borderRadius: '4px',
+        }}
+      >
+        近半年
       </span>
       <span
         onClick={() =>
