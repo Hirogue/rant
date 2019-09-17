@@ -9,7 +9,7 @@ export default {
   menu: {
     locale: true,
   },
-  title: 'Rant Admin',
+  title: '旅游项目通',
   pwa: false,
   iconfontUrl: '',
   collapse: true,

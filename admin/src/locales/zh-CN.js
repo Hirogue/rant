@@ -10,7 +10,7 @@ export default {
   'layout.user.link.help': '帮助',
   'layout.user.link.privacy': '隐私',
   'layout.user.link.terms': '条款',
-  'layout.user.description': '基于 Nest 和 Apollo 的中台解决方案',
+  'layout.user.description': '江西旅游项目合作通',
   'app.preview.down.block': '下载此页面到本地项目',
   ...globalHeader,
   ...menu,
