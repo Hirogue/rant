@@ -109,7 +109,7 @@ export default withRouter((props) => {
 							<div className="content-box clearfix" style={{ paddingTop: 20 }}>
 								<div className="time-left">
 									<p className="tile-p">
-										<span>{moment(article.publish_at).format('YY')}</span>
+										<span>{moment(article.publish_at).format('DD')}</span>
 										{moment(article.publish_at).format('M月')}
 									</p>
 									<p className="come-p icon-fangwen">

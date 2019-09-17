@@ -41,13 +41,13 @@ export default class extends React.Component {
 					<ul className="link-list">
 						{mainData.map(item => (
 							<li key={item.id}>
-								<a href={`/service?category=${item.title}`}>{item.title}</a>
+								<a href={`/service?category=${item.title}`} target="_blank">{item.title}</a>
 							</li>
 						))}
 					</ul>
 					<div className="service-list">
 						{providers.map(item => (
-							<a href={`/service/detail?id=${item.id}`} key={item.id}>
+							<a href={`/service/detail?id=${item.id}`} key={item.id} target="_blank">
 								<div className="service-item">
 									<img src={item.logo} />
 								</div>
@@ -60,13 +60,13 @@ export default class extends React.Component {
 						<div className="news-item">
 							<h4 className="type-title">{newsCategory[0]}</h4>
 
-							<a href={`/news/detail?id=${news1Top.id}`}>
+							<a href={`/news/detail?id=${news1Top.id}`} target="_blank">
 								<div className="thumbnail">
 									<img src={news1Top.cover} />
 									<p className="index-news-title">{news1Top.title}</p>
 								</div>
 							</a>
-							<a href={`/news/detail?id=${news1Top.id}`}>
+							<a href={`/news/detail?id=${news1Top.id}`} target="_blank">
 								<p className="index-news-content">
 									{!!news1Top.summary && news1Top.summary.length > 40 ? (
 										news1Top.summary.substr(0, 40) + '...'
@@ -77,7 +77,7 @@ export default class extends React.Component {
 							</a>
 							<ul className="news-sub-list">
 								{news1.map(item => (
-									<a href={`/news/detail?id=${item.id}`} key={item.id}>
+									<a href={`/news/detail?id=${item.id}`} key={item.id} target="_blank">
 										<li>
 											<p>
 												{!!item.title && item.title.length > 15 ? (
@@ -95,13 +95,13 @@ export default class extends React.Component {
 						<div className="news-item">
 							<h4 className="type-title">{newsCategory[1]}</h4>
 
-							<a href={`/news/detail?id=${news2Top.id}`}>
+							<a href={`/news/detail?id=${news2Top.id}`} target="_blank">
 								<div className="thumbnail">
 									<img src={news2Top.cover} />
 									<p className="index-news-title">{news2Top.title}</p>
 								</div>
 							</a>
-							<a href={`/news/detail?id=${news2Top.id}`}>
+							<a href={`/news/detail?id=${news2Top.id}`} target="_blank">
 								<p className="index-news-content">
 									{!!news2Top.summary && news2Top.summary.length > 40 ? (
 										news2Top.summary.substr(0, 40) + '...'
@@ -112,7 +112,7 @@ export default class extends React.Component {
 							</a>
 							<ul className="news-sub-list">
 								{news2.map(item => (
-									<a href={`/news/detail?id=${item.id}`} key={item.id}>
+									<a href={`/news/detail?id=${item.id}`} key={item.id} target="_blank">
 										<li>
 											<p>
 												{!!item.title && item.title.length > 15 ? (
@@ -130,13 +130,13 @@ export default class extends React.Component {
 						<div className="news-item">
 							<h4 className="type-title">{newsCategory[2]}</h4>
 
-							<a href={`/news/detail?id=${news3Top.id}`}>
+							<a href={`/news/detail?id=${news3Top.id}`} target="_blank">
 								<div className="thumbnail">
 									<img src={news3Top.cover} />
 									<p className="index-news-title">{news3Top.title}</p>
 								</div>
 							</a>
-							<a href={`/news/detail?id=${news3Top.id}`}>
+							<a href={`/news/detail?id=${news3Top.id}`} target="_blank">
 								<p className="index-news-content">
 									{!!news3Top.summary && news3Top.summary.length > 40 ? (
 										news3Top.summary.substr(0, 40) + '...'
@@ -148,7 +148,7 @@ export default class extends React.Component {
 
 							<ul className="news-sub-list">
 								{news3.map(item => (
-									<a href={`/news/detail?id=${item.id}`} key={item.id}>
+									<a href={`/news/detail?id=${item.id}`} key={item.id} target="_blank">
 										<li>
 											<p>
 												{!!item.title && item.title.length > 15 ? (

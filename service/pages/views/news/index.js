@@ -23,14 +23,24 @@ const defaultFilter = { field: 'is_published', operator: CondOperator.EQUALS, va
 const defaultVariables = {
 	page: 1,
 	join: [{ field: 'category' }],
-	sort: [{ field: 'publish_at', order: 'DESC' }, { field: 'sort', order: 'DESC' }],
+	sort: [{ field: 'publish_at', order: 'DESC' }, { field: 'sort', order: 'ASC' }],
 };
 
+const topNewsVariables = Object.assign({}, defaultVariables, {
+	limit: 10,
+	filter: [
+		{ ...defaultFilter },
+		{ field: 'is_top', operator: CondOperator.EQUALS, value: true }
+	],
+	sort: [{ field: 'sort', order: 'ASC' },{ field: 'publish_at', order: 'DESC' }],
+})
 const latestNewsVariables = Object.assign({}, defaultVariables, {
 	limit: 10,
 	filter: [
-		{ ...defaultFilter }
-	]
+		{ ...defaultFilter },
+		{ field: 'is_top', operator: CondOperator.EQUALS, value: false }
+	],
+	sort: [{ field: 'sort', order: 'ASC' },{ field: 'publish_at', order: 'DESC' }],
 })
 const newsVariables_1 = Object.assign({}, defaultVariables, {
 	limit: 6,
@@ -76,11 +86,12 @@ export default withRouter((props) => {
 
 	const [category, setCategory] = useState(getUrlParam(router, 'category') || '1');
 
-	const { loading, fetchMore, data: { latestNews, news1,  news2,  news3,  news4,  news5 } } = useQuery(Q_GET_ARTICLE_DATA, {
+	const { loading, fetchMore, data: { topNews, latestNews, news1,  news2,  news3,  news4,  news5 } } = useQuery(Q_GET_ARTICLE_DATA, {
 		fetchPolicy: "cache-first",
 		notifyOnNetworkStatusChange: true,
 		client: client,
 		variables: {
+			topNewsString: buildingQuery(topNewsVariables),
 			latestNewsString: buildingQuery(latestNewsVariables),
 			newsString1: buildingQuery(newsVariables_1),
 			newsString2: buildingQuery(newsVariables_2),
@@ -181,11 +192,18 @@ export default withRouter((props) => {
 		}
 	};
 
+	console.log(topNews, latestNews);
+
+	let topNewsCombined = [];
+	if (topNews && topNews.data && latestNews && latestNews.data) {
+		topNewsCombined = topNews.data.sort((a, b) => a.sort - b.sort).concat(latestNews.data.sort((a, b) => a.sort - b.sort));
+	}
+
 	return (
 		<BaseLayout>
 			{<div className="news-page">
 				<BreadCrumb adrname_two={categoryArray[category-1]} />
-				<LatestNews news={latestNews ? latestNews.data : []} />
+				<LatestNews news={topNewsCombined} />
 				<Tabs activeKey={category} animated={false} onChange={(key) => setCategory(key) || window.history.pushState({}, '', `${window.location.pathname}?category=${key}`)}>
 					<TabPane tab="行业快讯" key={1}>
 						<div className="news-list">

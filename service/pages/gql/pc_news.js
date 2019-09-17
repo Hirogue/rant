@@ -8,6 +8,7 @@ export const Q_GET_ARTICLE_DATA = gql`
     ${F_ARTICLE_CATEGORYRECURSIVE}
 
     query queryArticle(
+            $topNewsString: String!,
             $latestNewsString: String!, 
             $newsString1: String!,
             $newsString2: String!,
@@ -15,6 +16,14 @@ export const Q_GET_ARTICLE_DATA = gql`
             $newsString4: String!,
             $newsString5: String!,
         ) {
+        topNews: queryArticle(queryString: $topNewsString) {
+            total
+            page
+            pageCount
+            data {
+                ...ArticleFields
+            }
+        }
         latestNews: queryArticle(queryString: $latestNewsString) {
             total
             page
