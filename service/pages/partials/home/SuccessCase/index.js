@@ -43,7 +43,7 @@ export default class SuccessCase extends React.Component {
 								{data.map(item => (
 									<div className="swiper-slide" key={'swiper-slide ' + item.id}>
 										<div className="item">
-											<a href={item.link}>
+											<a href={item.link} target="_blank">
 												<img src={item.cover} />
 												<h4>{item.title}</h4>
 												<p>{item.summary}</p>
