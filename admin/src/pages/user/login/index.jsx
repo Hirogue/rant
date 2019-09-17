@@ -78,7 +78,7 @@ export default () => {
             name="account"
             placeholder={`${formatMessage({
               id: 'user-login.login.userName',
-            })}: SuperAdmin or your phone number`}
+            })}`}
             rules={[
               {
                 required: true,

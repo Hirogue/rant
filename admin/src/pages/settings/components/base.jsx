@@ -94,26 +94,6 @@ export default Form.create()(props => {
               />,
             )}
           </FormItem>
-          <FormItem
-            label={formatMessage({
-              id: 'settings.basic.address',
-            })}
-          >
-            {getFieldDecorator('address', {
-              initialValue: currentUser.address,
-              rules: [
-                {
-                  required: true,
-                  message: formatMessage(
-                    {
-                      id: 'settings.basic.address-message',
-                    },
-                    {},
-                  ),
-                },
-              ],
-            })(<Input />)}
-          </FormItem>
           <Button type="primary" onClick={handlerSubmit}>
             <FormattedMessage id="settings.basic.update" defaultMessage="Update Information" />
           </Button>

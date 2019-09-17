@@ -42,7 +42,7 @@ const UserLayout = props => {
               <div className={styles.header}>
                 <Link to="/">
                   <img alt="logo" className={styles.logo} src={logo} />
-                  <span className={styles.title}>Rant</span>
+                  <span className={styles.title}>旅游项目通</span>
                 </Link>
               </div>
               <div className={styles.desc}>

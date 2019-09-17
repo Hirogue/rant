@@ -31,7 +31,7 @@ export default (props) => {
 					<IconFont className="iconfont" type="icon-tongzhi" />
 
 					<h4>
-						<a href={`/news/detail?id=${noticeTop1.id}`}>
+						<a href={`/news/detail?id=${noticeTop1.id}`} target="_blank">
 							<span>{moment(noticeTop1.create_at).format('YYYY-MM-DD')}</span>
 							<span style={{ marginLeft: 10 }}>{noticeTop1.title}</span>
 						</a>

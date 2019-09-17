@@ -107,7 +107,7 @@ export default ({ data }) => {
 		<div className="banner-container">
 			<Carousel autoplay effect="fade">
 				{images.map(item => (
-					<a className="banner-box" href={item.link} key={item.id}>
+					<a className="banner-box" href={item.link} key={item.id} target="_blank">
 						<img src={item.url} alt="banner" />
 					</a>
 				))}

@@ -17,6 +17,7 @@ export default class implements Seeder {
 
           for (let item of res) {
             const thumbnail = item.thumbnail ? JSON.parse(item.thumbnail) : null;
+            const ex_info = item.ex_info ? JSON.parse(item.ex_info) : null;
 
             const document = new Document();
             document.title = item.title;
@@ -26,6 +27,7 @@ export default class implements Seeder {
             document.summary = item.description;
             document.views = 0;
             document.category = category;
+            document.text = ex_info ? ex_info.richtext ? ex_info.richtext.html : '' : '';
 
             await connection.getRepository(Document).save(document);
           }
