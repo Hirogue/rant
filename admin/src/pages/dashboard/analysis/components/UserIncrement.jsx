@@ -60,8 +60,8 @@ export default props => {
         if (res) {
           res.forEach(item => {
             resData.push(
-              { key: item.day, value: item.enterprise * 1 || 0, name: '企业' },
-              { key: item.day, value: item.personal * 1 || 0, name: '个人' },
+              { key: item[groupBy], value: item.enterprise * 1 || 0, name: '企业' },
+              { key: item[groupBy], value: item.personal * 1 || 0, name: '个人' },
             );
           });
           //   fieldDate.forEach(item => {
@@ -87,10 +87,10 @@ export default props => {
         if (res) {
           res.forEach(item => {
             resData.push(
-              { key: item.day, value: item.financer * 1 || 0, name: '融资方' },
-              { key: item.day, value: item.investor * 1 || 0, name: '投资方' },
-              { key: item.day, value: item.provider * 1 || 0, name: '供应商' },
-              { key: item.day, value: item.tourist * 1 || 0, name: '普通会员' },
+              { key: item[groupBy], value: item.financer * 1 || 0, name: '融资方' },
+              { key: item[groupBy], value: item.investor * 1 || 0, name: '投资方' },
+              { key: item[groupBy], value: item.provider * 1 || 0, name: '供应商' },
+              { key: item[groupBy], value: item.tourist * 1 || 0, name: '普通会员' },
             );
           });
           //   fieldDate.forEach(item => {
