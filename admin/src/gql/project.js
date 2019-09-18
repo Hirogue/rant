@@ -24,6 +24,7 @@ export const F_PROJECT_FIELDS = gql`
     info
     payment
     reason
+    area_path
     stage {
       id
       title

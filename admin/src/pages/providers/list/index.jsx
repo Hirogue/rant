@@ -2,9 +2,11 @@ import StandardActions from '@/components/StandardActions';
 import StandardConfirm from '@/components/StandardConfirm';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
+import Config from '@/config';
 import { M_DELETE_PROVIDER, Q_GET_PROVIDERS, Q_GET_PROVIDER_CATEGORY_TREES } from '@/gql';
 import { canCreateAny, canDeleteAny, canReadAny, canUpdateAny } from '@/utils/access-control';
 import { ProjectStatusEnum } from '@/utils/enum';
+import { ExcelHelper } from '@/utils/excel';
 import { buildingQuery, ProjectStatusMaps } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
@@ -13,7 +15,6 @@ import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
 import { M_APPROVAL_PROVIDER } from '../gql';
-import { ExcelHelper } from '@/utils/excel';
 
 const PATH = '/providers';
 const AUTH_RESOURCE = '/provider';
@@ -125,6 +126,11 @@ export default () => {
       title: '名称',
       dataIndex: 'name',
       search: true,
+      render: (val, row) => (
+        <a href={`${Config.basePath}/service/detail?id=${row.id}`} target="_blank">
+          {val}
+        </a>
+      ),
     },
     {
       title: '分类',

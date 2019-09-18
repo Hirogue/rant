@@ -30,7 +30,7 @@ export default props => {
     },
   };
 
-  const renderColumnSearchProps = dataIndex => ({
+  const renderColumnSearchProps = item => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
@@ -56,14 +56,17 @@ export default props => {
     filterIcon: filtered => (
       <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
     ),
-    render: text => (
-      <Highlighter
-        highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-        searchWords={[searchTexts[dataIndex]]}
-        autoEscape
-        textToHighlight={text ? text.toString() : ''}
-      />
-    ),
+    render: (text, row) => {
+      const result = (
+        <Highlighter
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          searchWords={[searchTexts[item.dataIndex]]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      );
+      return !!item.render ? item.render(result, row) : result;
+    },
   });
 
   const renderColumnTreeSelectorProps = data => ({
@@ -97,7 +100,7 @@ export default props => {
     if (item.search) {
       delete item.search;
       searchKeys.push(item.dataIndex);
-      return { ...item, ...renderColumnSearchProps(item.dataIndex) };
+      return { ...item, ...renderColumnSearchProps(item) };
     }
 
     if (item.treeSelector) {

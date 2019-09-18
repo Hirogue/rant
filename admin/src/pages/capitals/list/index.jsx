@@ -28,6 +28,7 @@ import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
 import { M_APPROVAL_CAPITAL } from '../gql';
+import Config from '@/config';
 
 const PATH = '/if/capitals';
 const AUTH_RESOURCE = '/capital';
@@ -197,6 +198,11 @@ export default () => {
       title: '名称',
       dataIndex: 'title',
       search: true,
+      render: (val, row) => (
+        <a href={`${Config.basePath}/finance/detail?id=${row.id}`} target="_blank">
+          {val}
+        </a>
+      ),
     },
     {
       title: '联系人',
