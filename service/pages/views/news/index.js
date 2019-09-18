@@ -192,11 +192,9 @@ export default withRouter((props) => {
 		}
 	};
 
-	console.log(topNews, latestNews);
-
 	let topNewsCombined = [];
 	if (topNews && topNews.data && latestNews && latestNews.data) {
-		topNewsCombined = topNews.data.sort((a, b) => a.sort - b.sort).concat(latestNews.data.sort((a, b) => a.sort - b.sort));
+		topNewsCombined = topNews.data.sort((a, b) => a.sort - b.sort).concat(latestNews.data.sort((a, b) => a.sort - b.sort)).slice(0, 10);
 	}
 
 	return (
