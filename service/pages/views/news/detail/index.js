@@ -117,6 +117,10 @@ export default withRouter((props) => {
 										作者：{article.author}
 									</p>
 									<p className="come-p icon-fangwen">来源：{article.source || '本站'}</p>
+									<div style={{ width: "100%", margin: "4vw auto 0", display: "block" }}>
+										<img id="qrcode" style={{ width: "100%", borderRadius: '6px', display: "block" }} src={config.staticImgUrl + '移动端二维码.png'} alt='placeholder+image' />
+										<p style={{ fontSize: "14px", color: "#999", textAlign: "center" }}>在移动端查看此页面</p>
+									</div>
 								</div>
 								<div className="content-text">
 									<h4 className="news-title" style={{ textAlign: 'center' }}>{article.title}</h4>
@@ -141,11 +145,6 @@ export default withRouter((props) => {
 									/>
 								</div>
 							</div> */}
-
-							<div style={{ width: "150px", margin: "4vw auto 0", display: "block" }}>
-								<img id="qrcode" style={{ width: "150px", height: "150px", borderRadius: '6px', display: "block" }} src={config.staticImgUrl + '移动端二维码.png'} alt='placeholder+image' />
-								<p style={{ fontSize: "14px", color: "#999", textAlign: "center" }}>在移动端查看此页面</p>
-							</div>
 						</div>
 						<div className="flip-box clearfix">
 							{!!prev ? (

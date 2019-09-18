@@ -41,7 +41,7 @@ export default ({ data, router }) => {
 				<a as={`/service/detail/${data.id}`} href={`/service/detail?id=${data.id}`} target="_blank">
 					<h4 className="title">{data.name}</h4>
 				</a>
-				<p className="text">{data.summary}</p>
+				<p className="text" style={{ height: "40px", overflow: "hidden", textAlign: "justify" }}>{data.summary.replace(/<\/?.+?\/?>/g, '')}</p>
 			</div>
 			<div className="right">
 				{toShowApplyButton(data)(user && user.apply_providers)}

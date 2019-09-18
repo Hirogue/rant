@@ -23,7 +23,7 @@ export class ProviderSubscriber extends BaseSubscriber<Provider> implements Enti
             if (entity.area) {
                 entity.area_path = await this.recordFullAreaPath(entity.area, manager);
             }
-            entity.summary = entity.introduction ? textInterception(entity.introduction, 40) : '';
+            entity.summary = entity.introduction ? textInterception(entity.introduction, 200) : '';
         }
     }
 }

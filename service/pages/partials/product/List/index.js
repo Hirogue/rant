@@ -47,7 +47,15 @@ export default withRouter(({ data, router }) => {
 					<img src={data.cover} />
 				</a>
 				<div className="product-text">
-					<h4 className="title">{data.name}</h4>
+					<h4 className="title">
+						<a
+							as={`/product/detail/${data.id}`}
+							href={`/product/detail?id=${data.id}`}
+							target="_blank"
+						>
+							{data.name}
+						</a>
+					</h4>
 					<p className="text-p">
 						{/* {data.category} <br />
 										<br /> */}

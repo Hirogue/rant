@@ -141,6 +141,7 @@ export default withRouter((props) => {
 										<Option value="project">项目</Option>
 										<Option value="finance">资金</Option>
 										<Option value="product">江旅金融</Option>
+										<Option value="news">资讯</Option>
 									</Select>
 
 									<Search
