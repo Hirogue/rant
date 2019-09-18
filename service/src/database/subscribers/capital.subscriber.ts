@@ -37,9 +37,8 @@ export class CapitalSubscriber extends BaseSubscriber<Capital> implements Entity
                 : '';
 
             entity.hideCompany = entity.company
-                ? entity.company
+                ? '**' + entity.company
                     .substr(entity.company.length - 2, entity.company.length)
-                    .padStart(entity.company.length, '*')
                 : '';
         }
     }
