@@ -9,14 +9,8 @@ import UserSelector from '@/components/UserSelector';
 import { Q_GET_USERS } from '@/gql';
 import { canReadAny, canUpdateAny, canUpdateOwn } from '@/utils/access-control';
 import { IdentityEnum, LogTypeEnum, UserStatusEnum, UserTypeEnum } from '@/utils/enum';
-import {
-  buildingQuery,
-  filterOrg,
-  paramsAuth,
-  UserLevelMaps,
-  UserStatusMaps,
-  UserTypeMaps,
-} from '@/utils/global';
+import { ExcelHelper } from '@/utils/excel';
+import { buildingQuery, filterOrg, IdentityMaps, paramsAuth, UserLevelMaps, UserStatusMaps, UserTypeMaps } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
 import { CondOperator } from '@nestjsx/crud-request';
@@ -25,14 +19,22 @@ import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import Zmage from 'react-zmage';
 import { M_APPROVAL_USER } from '../../gql';
-import { ExcelHelper } from '@/utils/excel';
 
-const PATH = '/users/project';
-const AUTH_RESOURCE = '/user/project';
+const PATH = '/users/customer';
+const AUTH_RESOURCE = '/user/customer';
 
 export default () => {
   const defaultFilter = [
-    { field: 'identity', operator: CondOperator.EQUALS, value: IdentityEnum.FINANCER },
+    {
+      field: 'identity',
+      operator: CondOperator.IN,
+      value: [
+        IdentityEnum.FINANCER,
+        IdentityEnum.INVESTOR,
+        IdentityEnum.PROVIDER,
+        IdentityEnum.TOURIST
+      ].join(',')
+    },
   ];
   const defaultVariables = {
     page: 0,
@@ -51,6 +53,7 @@ export default () => {
   const [orgSelectorVisible, setOrgSelectorVisible] = useState(false);
   const [userSelectorVisible, setUserSelectorVisible] = useState(false);
   const [current, setCurrent] = useState({});
+  const [provider, setProvider] = useState({});
 
   const client = useApolloClient();
 
@@ -129,6 +132,10 @@ export default () => {
         href="javascript:;"
         onClick={() => {
           setCurrent(record);
+          if (record.providers && record.providers.length > 0) {
+            const target = record.providers[0];
+            setProvider(target);
+          }
           setDetailVisible(true);
         }}
       >
@@ -176,6 +183,12 @@ export default () => {
       dataIndex: 'type',
       render: val => UserTypeMaps[val],
       filters: Object.keys(UserTypeMaps).map(key => ({ text: UserTypeMaps[key], value: key })),
+    },
+    {
+      title: '身份',
+      dataIndex: 'identity',
+      render: val => IdentityMaps[val],
+      filters: Object.keys(IdentityMaps).filter(key => key !== IdentityEnum.USER).map(key => ({ text: IdentityMaps[key], value: key })),
     },
     {
       title: '状态',
@@ -235,47 +248,86 @@ export default () => {
         ExcelHelper.export(
           dataSource,
           excelColumns,
-          '项目方_' + moment().format('YYYY_MM_DD_HH_mm_ss'),
+          '前台客户_' + moment().format('YYYY_MM_DD_HH_mm_ss'),
         );
       },
       hide: !canReadAny(AUTH_RESOURCE),
     },
   ];
 
+  const renderDetailPannel = () => {
+
+    if (UserTypeEnum.PERSONAL === current.type) {
+      return (
+        <Descriptions title="个人用户" layout="vertical">
+          <Descriptions.Item label="真实姓名">{current.realname}</Descriptions.Item>
+          <Descriptions.Item label="手机号">{current.phone}</Descriptions.Item>
+          <Descriptions.Item label="身份证号">{current.idCard}</Descriptions.Item>
+          <Descriptions.Item label="身份证头像面" span={2}>
+            <Zmage width={320} height={200} src={current.idCardA} />
+          </Descriptions.Item>
+          <Descriptions.Item label="身份证国徽面">
+            <Zmage width={320} height={200} src={current.idCardB} />
+          </Descriptions.Item>
+        </Descriptions>
+      )
+    }
+
+    if (UserTypeEnum.ENTERPRISE === current.type) {
+      if (IdentityEnum.PROVIDER === current.identity) {
+        return (
+          <Descriptions title="企业用户" layout="vertical">
+            <Descriptions.Item label="负责人姓名">{current.realname}</Descriptions.Item>
+            <Descriptions.Item label="联系电话" span={2}>
+              {current.phone}
+            </Descriptions.Item>
+            <Descriptions.Item label="企业名称" span={2}>
+              {current.company}
+            </Descriptions.Item>
+            <Descriptions.Item label="组织机构代码" span={2}>
+              {current.org_code}
+            </Descriptions.Item>
+            <Descriptions.Item label="营业执照" span={4}>
+              <Zmage width={400} height={573} src={current.business_license} />
+            </Descriptions.Item>
+            <Descriptions.Item label="机构logo">
+              <Zmage width={150} height={62} src={provider.logo} />
+            </Descriptions.Item>
+            <Descriptions.Item label="机构类型" span={2}>
+              {provider.category ? provider.category.title : ''}
+            </Descriptions.Item>
+            <Descriptions.Item label="机构简介" span={4}>
+              {provider.introduction}
+            </Descriptions.Item>
+          </Descriptions>
+        )
+      } else {
+        return (
+          <Descriptions title="企业用户" layout="vertical">
+            <Descriptions.Item label="负责人姓名">{current.realname}</Descriptions.Item>
+            <Descriptions.Item label="联系电话" span={2}>
+              {current.phone}
+            </Descriptions.Item>
+            <Descriptions.Item label="企业名称" span={2}>
+              {current.company}
+            </Descriptions.Item>
+            <Descriptions.Item label="组织机构代码" span={2}>
+              {current.org_code}
+            </Descriptions.Item>
+            <Descriptions.Item label="营业执照" span={4}>
+              <Zmage width={400} height={573} src={current.business_license} />
+            </Descriptions.Item>
+          </Descriptions>
+        )
+      }
+    }
+  }
+
   return (
     <Fragment>
       <PageHeaderWrapper>
         <DetailPanel title="详细信息" visible={detailVisible} setVisible={setDetailVisible}>
-          {UserTypeEnum.PERSONAL === current.type ? (
-            <Descriptions title="个人用户" layout="vertical">
-              <Descriptions.Item label="真实姓名">{current.realname}</Descriptions.Item>
-              <Descriptions.Item label="手机号">{current.phone}</Descriptions.Item>
-              <Descriptions.Item label="身份证号">{current.idCard}</Descriptions.Item>
-              <Descriptions.Item label="身份证头像面" span={2}>
-                <Zmage width={320} height={200} src={current.idCardA} />
-              </Descriptions.Item>
-              <Descriptions.Item label="身份证国徽面">
-                <Zmage width={320} height={200} src={current.idCardB} />
-              </Descriptions.Item>
-            </Descriptions>
-          ) : null}
-          {UserTypeEnum.ENTERPRISE === current.type ? (
-            <Descriptions title="企业用户" layout="vertical">
-              <Descriptions.Item label="负责人姓名">{current.realname}</Descriptions.Item>
-              <Descriptions.Item label="联系电话" span={2}>
-                {current.phone}
-              </Descriptions.Item>
-              <Descriptions.Item label="企业名称" span={2}>
-                {current.company}
-              </Descriptions.Item>
-              <Descriptions.Item label="组织机构代码" span={2}>
-                {current.org_code}
-              </Descriptions.Item>
-              <Descriptions.Item label="营业执照">
-                <Zmage width={400} height={573} src={current.business_license} />
-              </Descriptions.Item>
-            </Descriptions>
-          ) : null}
+          {renderDetailPannel()}
         </DetailPanel>
         <LogReader
           title="日志"
