@@ -192,7 +192,6 @@ export default props => {
         <TabPane tab="按身份" key="identityData"></TabPane>
         <TabPane tab="按主体" key="subjectData"></TabPane>
       </Tabs>
-      ,
       <Chart height={400} data={dv} forceFit scale={{ key: { type: 'timeCat' } }}>
         <Axis name="key" />
         <Axis name="value" />
