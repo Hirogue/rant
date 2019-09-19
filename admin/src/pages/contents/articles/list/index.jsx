@@ -14,7 +14,7 @@ import { ExcelHelper } from '@/utils/excel';
 import Config from '@/config';
 
 const PATH = '/contents/articles';
-const AUTH_RESOURCE = '/article';
+const AUTH_RESOURCE = '/contents/articles/list';
 
 export default () => {
   const defaultVariables = {

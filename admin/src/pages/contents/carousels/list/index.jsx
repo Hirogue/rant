@@ -12,7 +12,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
 
 const PATH = '/contents/carousels';
-const AUTH_RESOURCE = '/carousel';
+const AUTH_RESOURCE = '/contents/carousels/list';
 
 export default () => {
   const defaultVariables = {

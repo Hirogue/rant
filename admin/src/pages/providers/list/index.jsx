@@ -17,7 +17,7 @@ import { Link, router } from 'umi';
 import { M_APPROVAL_PROVIDER } from '../gql';
 
 const PATH = '/providers';
-const AUTH_RESOURCE = '/provider';
+const AUTH_RESOURCE = '/providers/list';
 
 export default () => {
   const defaultVariables = {

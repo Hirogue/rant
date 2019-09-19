@@ -18,7 +18,7 @@ import { Link, router } from 'umi';
 import Config from '@/config';
 
 const PATH = '/contents/documents';
-const AUTH_RESOURCE = '/document';
+const AUTH_RESOURCE = '/contents/documents/list';
 
 export default () => {
   const defaultVariables = {

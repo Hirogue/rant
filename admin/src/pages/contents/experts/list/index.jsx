@@ -12,7 +12,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
 
 const PATH = '/contents/experts';
-const AUTH_RESOURCE = '/expert';
+const AUTH_RESOURCE = '/contents/experts/list';
 
 export default () => {
   const defaultVariables = {

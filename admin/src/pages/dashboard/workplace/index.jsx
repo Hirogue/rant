@@ -106,7 +106,6 @@ export default () => {
   });
 
   const { user = {}, project = {}, capital = {}, product = {}, expert = {} } = data || {};
-  console.log(data);
 
   const renderUser = list => (
     <List
@@ -124,7 +123,7 @@ export default () => {
           </Descriptions>
         </List.Item>
       )}
-      footer={<Link to="/users/project/list">查看更多</Link>}
+      footer={<Link to="/users/customer/list">查看更多</Link>}
     />
   );
   const renderProject = list => (

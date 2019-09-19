@@ -12,7 +12,7 @@ import { Link, router } from 'umi';
 import { canUpdateAny, canCreateAny, canDeleteAny, canReadAny } from '@/utils/access-control';
 
 const PATH = '/contents/seo';
-const AUTH_RESOURCE = '/seo';
+const AUTH_RESOURCE = '/contents/seo/list';
 
 export default () => {
   const defaultVariables = {

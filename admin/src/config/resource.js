@@ -19,13 +19,11 @@ export default [
         children: [
           {
             name: '文章列表',
-            value: '/article',
-            route: '/contents/articles/list',
+            value: '/contents/articles/list',
           },
           {
             name: '文章分类',
-            value: '/article/category',
-            route: '/contents/articles/category',
+            value: '/contents/articles/category',
           },
         ],
       },
@@ -35,13 +33,11 @@ export default [
         children: [
           {
             name: '产品列表',
-            value: '/product',
-            route: '/contents/products/list',
+            value: '/contents/products/list',
           },
           {
             name: '产品分类',
-            value: '/product/category',
-            route: '/contents/products/category',
+            value: '/contents/products/category',
           },
         ],
       },
@@ -51,40 +47,33 @@ export default [
         children: [
           {
             name: '文档列表',
-            value: '/document',
-            route: '/contents/documents/list',
+            value: '/contents/documents/list',
           },
           {
             name: '文档分类',
-            value: '/document/category',
-            route: '/contents/documents/category',
+            value: '/contents/documents/category',
           },
         ],
       },
       {
         name: '轮播图',
-        value: '/carousel',
-        route: '/contents/carousels/list',
+        value: '/contents/carousels/list',
       },
       {
         name: '成功案例',
-        value: '/success-case',
-        route: '/contents/success-cases/list',
+        value: '/contents/success-cases/list',
       },
       {
         name: '专家团队',
-        value: '/expert',
-        route: '/contents/experts/list',
+        value: '/contents/experts/list',
       },
       {
         name: '搜索引擎优化',
-        value: '/seo',
-        route: '/contents/seo/list',
+        value: '/contents/seo/list',
       },
       {
         name: '友情链接',
-        value: '/link',
-        route: '/contents/link/list',
+        value: '/contents/link/list',
       },
     ],
   },
@@ -94,13 +83,11 @@ export default [
     children: [
       {
         name: '项目',
-        value: '/project',
-        route: '/if/projects/list',
+        value: '/if/projects/list',
       },
       {
         name: '资金',
-        value: '/capital',
-        route: '/if/capitals/list',
+        value: '/if/capitals/list',
       },
     ],
   },
@@ -110,13 +97,11 @@ export default [
     children: [
       {
         name: '金融服务',
-        value: '/apply-product',
-        route: '/apply-product/list',
+        value: '/apply/apply-product/list',
       },
       {
         name: '约见专家',
-        value: '/apply-expert',
-        route: '/apply-expert/list',
+        value: '/apply/apply-expert/list',
       },
     ],
   },
@@ -126,13 +111,11 @@ export default [
     children: [
       {
         name: '服务商列表',
-        value: '/provider',
-        route: '/providers/list',
+        value: '/providers/list',
       },
       {
         name: '服务商分类',
-        value: '/provider/category',
-        route: '/providers/category',
+        value: '/providers/category',
       },
     ],
   },
@@ -142,20 +125,17 @@ export default [
     children: [
       {
         name: '后台用户',
-        value: '/user/admin',
-        route: '/users/admin/list',
+        value: '/users/admin/list',
       },
       {
         name: '项目方',
-        value: '/user/customer',
-        route: '/users/customer/list',
+        value: '/users/customer/list',
       },
     ],
   },
   {
     name: '权限管理',
-    value: '/role',
-    route: '/role/list',
+    value: '/role/list',
   },
   {
     name: '组织架构',

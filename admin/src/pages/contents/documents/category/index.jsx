@@ -28,7 +28,7 @@ import { useEffect, useState } from 'react';
 
 import { canCreateAny, canDeleteAny, canUpdateAny } from '@/utils/access-control';
 
-const AUTH_RESOURCE = '/document/category';
+const AUTH_RESOURCE = '/contents/documents/category';
 
 const { TreeNode } = Tree;
 const FormItem = Form.Item;

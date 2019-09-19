@@ -32,7 +32,7 @@ import { Link, router } from 'umi';
 import { M_APPROVAL_PROJECT } from '../gql';
 
 const PATH = '/if/projects';
-const AUTH_RESOURCE = '/project';
+const AUTH_RESOURCE = '/if/projects/list';
 
 export default () => {
   const defaultVariables = {

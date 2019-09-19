@@ -31,7 +31,7 @@ import { M_APPROVAL_APPLY_EXPERT } from '../gql';
 import { ExcelHelper } from '@/utils/excel';
 
 const PATH = '/apply/apply-expert';
-const AUTH_RESOURCE = '/apply-expert';
+const AUTH_RESOURCE = '/apply/apply-expert/list';
 
 export default () => {
   const defaultVariables = {
