@@ -31,7 +31,7 @@ export default withRouter((props) => {
 		}
 	});
 
-	if (data && data.document && data && data.document.title) document.title = data.document.title;
+	if (data && data.document && data && data.document.title) document.title = data.document.title + "-旅游项目通";
 
 	return (
 		<BaseLayout>
