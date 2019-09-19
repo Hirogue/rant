@@ -2,7 +2,6 @@ import { CacheModule, MiddlewareConsumer, Module, NestModule, RequestMethod } fr
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import * as redisStore from 'cache-manager-redis-store';
-import { RenderModule } from './render';
 import { AccessControlModule } from './access-control';
 import { ApplyCapitalModule } from './apply-capital';
 import { ApplyExpertModule } from './apply-expert';
@@ -18,6 +17,7 @@ import { BaseDataSource, CoreModule } from './core';
 import { DocumentModule } from './document';
 import { ExpertModule } from './expert';
 import { HomeModule } from './home';
+import { LinkModule } from './link';
 import { LogModule } from './log';
 import { LoggerMiddleware, LoggerModule } from './logger';
 import { MetadataModule } from './metadata';
@@ -25,6 +25,7 @@ import { OrgModule } from './org';
 import { ProductModule } from './product';
 import { ProjectModule } from './project';
 import { ProviderModule } from './provider';
+import { RenderModule } from './render';
 import { RoleModule } from './role';
 import { SeoModule } from './seo';
 import { SpaController } from './spa.controller';
@@ -73,6 +74,7 @@ import { WechatModule } from './wechat';
     CarouselModule,
     DocumentModule,
     SeoModule,
+    LinkModule,
     ApplyExpertModule,
     ApplyProductModule,
     ApplyProviderModule,

@@ -266,6 +266,20 @@ export default {
               path: '/contents/seo/create',
               component: './contents/seo/detail',
             },
+
+            {
+              name: 'link',
+              path: '/contents/link/list',
+              component: './contents/link/list',
+            },
+            {
+              path: '/contents/link/detail/:id',
+              component: './contents/link/detail',
+            },
+            {
+              path: '/contents/link/create',
+              component: './contents/link/detail',
+            },
           ],
         },
         {

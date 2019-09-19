@@ -81,6 +81,11 @@ export default [
         value: '/seo',
         route: '/contents/seo/list',
       },
+      {
+        name: '友情链接',
+        value: '/link',
+        route: '/contents/link/list',
+      },
     ],
   },
   {

@@ -26,6 +26,7 @@ import Head from '../Head';
 import HeaderMod from '../Header';
 import FooterMod from '../Footer';
 import Consult from '../Consult';
+import { get } from '../../lib/fetch';
 
 const { Header, Footer, Content } = Layout;
 
@@ -42,10 +43,15 @@ export default class extends Component {
 		loginModalVisible: false,
 		legalModalVisible: false,
 		legalCountDown: 5,
-		isLogin: true
+		isLogin: true,
+		links: []
 	};
 
 	async componentDidMount() {
+		get('/api/link', {
+			queryString: 'sort=sort,DESC'
+		}).then(res => { this.setState(state => ({ ...state, links: res })) });
+
 		const { csrfToken } = this.props.router.query;
 		localStorage.setItem('csrf-token', csrfToken);
 

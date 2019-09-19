@@ -10,6 +10,7 @@ export * from './carousel.entity';
 export * from './document-category.entity';
 export * from './document.entity';
 export * from './expert.entity';
+export * from './link.entity';
 export * from './log.entity';
 export * from './metadata.entity';
 export * from './org.entity';
