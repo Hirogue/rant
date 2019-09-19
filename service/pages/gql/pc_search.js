@@ -1,5 +1,5 @@
 import { gql } from 'apollo-boost';
-import { F_PROJECT_FIELDS, F_CAPITAL_FIELDS, F_PRODUCT_FIELDS } from '../gql';
+import { F_PROJECT_FIELDS, F_CAPITAL_FIELDS, F_PRODUCT_FIELDS, F_ARTICLE_FIELDS } from '../gql';
 
 export const Q_SEARCH_PROJECT = gql`
     ${F_PROJECT_FIELDS}
@@ -43,6 +43,22 @@ export const Q_SEARCH_PRODUCT = gql`
             total
             data {
                 ...ProductFields
+            }
+        }
+    }
+
+`
+
+export const Q_SEARCH_ARTICLE = gql`
+    ${F_ARTICLE_FIELDS}
+
+    query searchArticle($queryString: String!) {
+        result: searchArticle(queryString: $queryString) {
+            page
+            pageCount
+            total
+            data {
+                ...ArticleFields
             }
         }
     }

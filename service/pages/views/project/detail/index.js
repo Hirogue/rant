@@ -90,7 +90,7 @@ export default withRouter((props) => {
 
 	if (loading) return <Spin style={{ position: "fixed", top: "50%", left: "50%" }} tip="正在加载中" />;
 
-	if (project.title) document.title = project.title;
+	if (project.title) document.title = project.title + "-旅游项目通";
 
 	return (
 		<BaseLayout>

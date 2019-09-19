@@ -14,7 +14,7 @@ export default ({ news }) => {
 		<div className="latest-news">
 			<div className="left">
 				<div>
-					<Carousel>
+					<Carousel autoplay>
 						{newsSwiper.map(item => (
 								<div key={item.id}>
 									<a className="img-link" href={`/news/detail?id=${item.id}`} target="_blank">

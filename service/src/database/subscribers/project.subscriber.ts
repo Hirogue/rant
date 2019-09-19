@@ -36,9 +36,8 @@ export class ProjectSubscriber extends BaseSubscriber<Project> implements Entity
                 : '';
 
             entity.hideCompany = entity.company
-                ? entity.company
+                ? '**' + entity.company
                     .substr(entity.company.length - 2, entity.company.length)
-                    .padStart(entity.company.length, '*')
                 : '';
         }
     }

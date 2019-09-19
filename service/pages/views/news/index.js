@@ -23,7 +23,7 @@ const defaultFilter = { field: 'is_published', operator: CondOperator.EQUALS, va
 const defaultVariables = {
 	page: 1,
 	join: [{ field: 'category' }],
-	sort: [{ field: 'publish_at', order: 'DESC' }, { field: 'sort', order: 'ASC' }],
+	sort: [{ field: 'publish_at', order: 'DESC' }, { field: 'sort', order: 'DESC' }],
 };
 
 const topNewsVariables = Object.assign({}, defaultVariables, {
@@ -32,7 +32,7 @@ const topNewsVariables = Object.assign({}, defaultVariables, {
 		{ ...defaultFilter },
 		{ field: 'is_top', operator: CondOperator.EQUALS, value: true }
 	],
-	sort: [{ field: 'sort', order: 'ASC' },{ field: 'publish_at', order: 'DESC' }],
+	sort: [{ field: 'sort', order: 'DESC' },{ field: 'publish_at', order: 'DESC' }],
 })
 const latestNewsVariables = Object.assign({}, defaultVariables, {
 	limit: 10,
@@ -40,7 +40,7 @@ const latestNewsVariables = Object.assign({}, defaultVariables, {
 		{ ...defaultFilter },
 		{ field: 'is_top', operator: CondOperator.EQUALS, value: false }
 	],
-	sort: [{ field: 'sort', order: 'ASC' },{ field: 'publish_at', order: 'DESC' }],
+	sort: [{ field: 'sort', order: 'DESC' },{ field: 'publish_at', order: 'DESC' }],
 })
 const newsVariables_1 = Object.assign({}, defaultVariables, {
 	limit: 6,
@@ -192,11 +192,9 @@ export default withRouter((props) => {
 		}
 	};
 
-	console.log(topNews, latestNews);
-
 	let topNewsCombined = [];
 	if (topNews && topNews.data && latestNews && latestNews.data) {
-		topNewsCombined = topNews.data.sort((a, b) => a.sort - b.sort).concat(latestNews.data.sort((a, b) => a.sort - b.sort));
+		topNewsCombined = topNews.data.sort((a, b) => b.sort - a.sort).concat(latestNews.data.sort((a, b) => b.sort - a.sort)).slice(0, 10);
 	}
 
 	return (
