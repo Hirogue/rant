@@ -22,6 +22,7 @@ export const F_CAPITAL_FIELDS = gql`
     pre_payment
     term
     reason
+    area_path
     type {
       id
       title

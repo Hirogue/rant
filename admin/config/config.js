@@ -362,56 +362,17 @@ export default {
               component: './users/admin/detail',
             },
             {
-              name: 'project.list',
-              path: '/users/project/list',
-              component: './users/project/list',
+              name: 'customer.list',
+              path: '/users/customer/list',
+              component: './users/customer/list',
             },
             {
-              path: '/users/project/detail/:id',
-              component: './users/project/detail',
+              path: '/users/customer/detail/:id',
+              component: './users/customer/detail',
             },
             {
-              path: '/users/project/create',
-              component: './users/project/detail',
-            },
-            {
-              name: 'capital.list',
-              path: '/users/capital/list',
-              component: './users/capital/list',
-            },
-            {
-              path: '/users/capital/detail/:id',
-              component: './users/capital/detail',
-            },
-            {
-              path: '/users/capital/create',
-              component: './users/capital/detail',
-            },
-            {
-              name: 'provider.list',
-              path: '/users/provider/list',
-              component: './users/provider/list',
-            },
-            {
-              path: '/users/provider/detail/:id',
-              component: './users/provider/detail',
-            },
-            {
-              path: '/users/provider/create',
-              component: './users/provider/detail',
-            },
-            {
-              name: 'tourist.list',
-              path: '/users/tourist/list',
-              component: './users/tourist/list',
-            },
-            {
-              path: '/users/tourist/detail/:id',
-              component: './users/tourist/detail',
-            },
-            {
-              path: '/users/tourist/create',
-              component: './users/tourist/detail',
+              path: '/users/customer/create',
+              component: './users/customer/detail',
             },
           ],
         },

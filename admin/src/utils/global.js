@@ -193,8 +193,9 @@ export const paramsAuth = (resource, params, defaultFilter = []) => {
   });
 };
 
-export const getTreeData = (data, root) =>
-  data.map(item => {
+export const getTreeData = (data, root) => {
+  if (!data) return null;
+  return data.map(item => {
     item.__typename && delete item.__typename;
 
     if (item.children && item.children.length > 0) {
@@ -217,6 +218,7 @@ export const getTreeData = (data, root) =>
       dataRef: item,
     };
   });
+};
 
 export const mergeParams = (params, partialParams) => {
   let newParams = { ...params };

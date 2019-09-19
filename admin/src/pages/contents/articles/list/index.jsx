@@ -11,6 +11,7 @@ import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
 import { ExcelHelper } from '@/utils/excel';
+import Config from '@/config';
 
 const PATH = '/contents/articles';
 const AUTH_RESOURCE = '/article';
@@ -80,6 +81,11 @@ export default () => {
       title: '标题',
       dataIndex: 'title',
       search: true,
+      render: (val, row) => (
+        <a href={`${Config.basePath}/news/detail?id=${row.id}`} target="_blank">
+          {val}
+        </a>
+      ),
     },
     {
       title: '作者',

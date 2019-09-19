@@ -11,6 +11,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
 import { canDeleteAny, canCreateAny, canReadAny, canUpdateAny } from '@/utils/access-control';
 import { ExcelHelper } from '@/utils/excel';
+import Config from '@/config';
 
 const PATH = '/contents/products';
 const AUTH_RESOURCE = '/product';
@@ -80,6 +81,11 @@ export default () => {
       title: '名称',
       dataIndex: 'name',
       search: true,
+      render: (val, row) => (
+        <a href={`${Config.basePath}/product/detail?id=${row.id}`} target="_blank">
+          {val}
+        </a>
+      ),
     },
     {
       title: '标语',

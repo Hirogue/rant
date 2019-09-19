@@ -15,6 +15,7 @@ import { Affix, Col, message, Row, Skeleton, Switch } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
+import Config from '@/config';
 
 const PATH = '/contents/documents';
 const AUTH_RESOURCE = '/document';
@@ -81,6 +82,11 @@ export default () => {
       title: '标题',
       dataIndex: 'title',
       search: true,
+      render: (val, row) => (
+        <a href={`${Config.basePath}/help/detail?id=${row.id}`} target="_blank">
+          {val}
+        </a>
+      ),
     },
     {
       title: '作者',

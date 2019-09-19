@@ -5,6 +5,7 @@ import StandardConfirm from '@/components/StandardConfirm';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import UserSelector from '@/components/UserSelector';
+import Config from '@/config';
 import { M_DELETE_PROJECT, Q_GET_PROJECTS } from '@/gql';
 import {
   canCreateAny,
@@ -198,6 +199,11 @@ export default () => {
       title: '名称',
       dataIndex: 'title',
       search: true,
+      render: (val, row) => (
+        <a href={`${Config.basePath}/project/detail?id=${row.id}`} target="_blank">
+          {val}
+        </a>
+      ),
     },
     {
       title: '联系人',
