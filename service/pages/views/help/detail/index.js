@@ -31,6 +31,8 @@ export default withRouter((props) => {
 		}
 	});
 
+	if (data && data.document && data && data.document.title) document.title = data.document.title;
+
 	return (
 		<BaseLayout>
 			<div className="help-detail-main">
@@ -56,7 +58,7 @@ export default withRouter((props) => {
 						{loading ? (
 							<Spin style={{ margin: "10vw  45%" }} tip="正在加载中" />
 						) : (
-							data.document ? (
+							data && data.document ? (
 								<div className="content-main">
 									<div className="content-title">
 										<h4>{data.document.title}</h4>
