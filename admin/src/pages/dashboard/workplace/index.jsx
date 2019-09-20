@@ -1,15 +1,16 @@
 import { Q_FETCH_CURRENT_USER } from '@/gql/common';
+import { canReadAny } from '@/utils/access-control';
 import { IdentityEnum, ProjectStatusEnum, UserStatusEnum } from '@/utils/enum';
 import { buildingQuery, IdentityMaps, UserTypeMaps } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useQuery } from '@apollo/react-hooks';
 import { CondOperator } from '@nestjsx/crud-request';
+import { Avatar, Card, Col, Descriptions, List, Row, Skeleton, Tabs } from 'antd';
 import moment from 'moment';
-import { List, Descriptions, Avatar, Card, Col, Row, Skeleton, Tabs } from 'antd';
 import React from 'react';
+import { Link } from 'umi';
 import { Q_GET_WORKPLACE_DATA } from '../gql';
 import styles from './style.less';
-import { Link } from 'umi';
 
 const { TabPane } = Tabs;
 
@@ -231,15 +232,17 @@ export default () => {
     <PageHeaderWrapper content={<PageHeaderContent currentUser={me} />}>
       <Row gutter={24}>
         <Col>
-          <Card>
-            <Tabs defaultActiveKey="1">
-              {panes.map(pane => (
-                <TabPane tab={pane.title} key={pane.key}>
-                  {pane.content}
-                </TabPane>
-              ))}
-            </Tabs>
-          </Card>
+          {canReadAny(AUTH_RESOURCE) ? (
+            <Card>
+              <Tabs defaultActiveKey="1">
+                {panes.map(pane => (
+                  <TabPane tab={pane.title} key={pane.key}>
+                    {pane.content}
+                  </TabPane>
+                ))}
+              </Tabs>
+            </Card>
+          ) : null}
         </Col>
       </Row>
     </PageHeaderWrapper>
