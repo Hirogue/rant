@@ -278,7 +278,7 @@ export const IFModeMaps = {
 export const ProjectStatusMaps = {
   pending: '待审核',
   rejected: '已驳回',
-  checked: '已审核',
+  checked: '已审核',
   waiting: '待分配',
   following: '待跟进',
   cancelled: '已作废',

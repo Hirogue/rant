@@ -43,6 +43,7 @@ export default {
   'menu.contents.success-cases': '成功案例',
   'menu.contents.experts': '专家团队',
   'menu.contents.seo': '搜索引擎优化',
+  'menu.contents.link': '友情链接',
   'menu.contents.articles': '文章管理',
   'menu.contents.articles.list': '文章列表',
   'menu.contents.articles.category': '文章分类',

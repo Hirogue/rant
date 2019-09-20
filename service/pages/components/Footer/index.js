@@ -10,6 +10,7 @@ export default (props) => {
 	return (
 		<GlobalContext.Consumer>
 			{(context) => {
+				const { links = [] } = context;
 				const siteInfo = context.siteInfo || {};
 				return (
 					<div className="footer">
@@ -89,54 +90,15 @@ export default (props) => {
 						<div className="links-box">
 							<ul className="links">
 								<li>友情链接：</li>
-								{siteInfo.links ? (
-									_.sortBy(siteInfo.links, [ 'sort' ]).map((item, index) => (
+								{
+									links.map((item, index) => (
 										<li key={index}>
-											<a href={item.link} target="_blank">
-												{item.value}
+											<a href={item.url} target="_blank">
+												{item.name}
 											</a>
 										</li>
 									))
-								) : (
-									<Fragment>
-										<li>
-											<a href="http://dct.jiangxi.gov.cn/" target="_blank">江西省文旅厅</a>
-										</li>
-										<li>
-											<a href="http://www.jxto.com.cn/" target="_blank">江西省旅游集团</a>
-										</li>
-										<li>
-											<a href="http://www.goyoto.com.cn/" target="_blank">江旅科技</a>
-										</li>
-										<li>
-											<a href="/finance?category=%E8%82%A1%E6%9D%83%E6%8A%95%E8%B5%84" target="_blank">股权融资</a>
-										</li>
-										<li>
-											<a href="/finance?category=%E5%80%BA%E6%9D%83%E6%8A%95%E8%B5%84" target="_blank">债权融资</a>
-										</li>
-										<li>
-											<a href="/product?category=%E4%BE%9B%E5%BA%94%E9%93%BE%E9%87%91%E8%9E%8D%E4%BA%A7%E5%93%81" target="_blank">供应链金融</a>
-										</li>
-										<li>
-											<a href="/" target="_blank">投融资平台</a>
-										</li>
-										<li>
-											<a href="/" target="_blank">投融资网</a>
-										</li>
-										<li>
-											<a href="/" target="_blank">旅游产业</a>
-										</li>
-										<li>
-											<a href="/project" target="_blank">投融资项目平台</a>
-										</li>
-										<li>
-											<a href="/project" target="_blank">项目投融资</a>
-										</li>
-										<li>
-											<a href="/" target="_blank">旅游投资</a>
-										</li>
-									</Fragment>
-								)}
+								}
 							</ul>
 						</div>
 						<p className="copy">

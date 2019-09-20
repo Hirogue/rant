@@ -1,5 +1,6 @@
 import { message } from 'antd';
 import 'antd/dist/antd.css';
+import gql from 'graphql-tag';
 import { withRouter } from 'next/router';
 import React, { Component } from 'react';
 import config from '../../config/config';
@@ -7,6 +8,7 @@ import withClient from '../../lib/client';
 import { jump } from '../../lib/global';
 import Consult from '../Consult';
 import './reset.scss';
+import { get } from '../../lib/fetch';
 
 message.config({
     top: 300,
@@ -67,6 +69,10 @@ export default App => {
             if (!!user) {
                 this.setState(state => ({ ...state, user: JSON.parse(user) }));
             }
+
+            get('/api/link', {
+                queryString: 'sort=sort,DESC'
+            }).then(res => { this.setState(state => ({ ...state, links: res })) });
         }
 
         logout() {

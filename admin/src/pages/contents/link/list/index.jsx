@@ -1,45 +1,34 @@
 import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
-import { M_DELETE_CAROUSEL, M_UPDATE_CAROUSEL, Q_GET_CAROUSELS } from '@/gql';
+import { M_DELETE_LINK, Q_GET_LINKS } from '@/gql';
 import { canCreateAny, canDeleteAny, canUpdateAny } from '@/utils/access-control';
 import { buildingQuery } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
-import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks';
-import { Affix, Col, message, Row, Skeleton, Switch } from 'antd';
+import { useApolloClient, useQuery } from '@apollo/react-hooks';
+import { Affix, Col, message, Row, Skeleton } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
 
-const PATH = '/contents/carousels';
-const AUTH_RESOURCE = '/contents/carousels/list';
+const PATH = '/contents/link';
+const AUTH_RESOURCE = '/contents/link/list';
 
 export default () => {
   const defaultVariables = {
     page: 0,
     limit: 10,
     join: [{ field: 'category' }],
-    sort: [{ field: 'sort', order: 'DESC' }, { field: 'create_at', order: 'DESC' }],
+    sort: [{ field: 'create_at', order: 'DESC' }],
   };
   const [variables, setVariables] = useState(defaultVariables);
   const [selectedRows, setSelectedRows] = useState([]);
 
   const client = useApolloClient();
 
-  const { loading, data, refetch } = useQuery(Q_GET_CAROUSELS, {
+  const { loading, data, refetch } = useQuery(Q_GET_LINKS, {
     notifyOnNetworkStatusChange: true,
     variables: { queryString: buildingQuery(defaultVariables) },
-  });
-
-  const [updateCarousel] = useMutation(M_UPDATE_CAROUSEL, {
-    update: (proxy, { data }) => {
-      if (data.updateCarousel) {
-        message.success('操作成功');
-        refetch();
-      } else {
-        message.error('操作失败');
-      }
-    },
   });
 
   useEffect(() => {
@@ -48,12 +37,12 @@ export default () => {
     refetch({ queryString });
   }, [variables]);
 
-  const { queryCarousel } = data;
+  const { queryLink } = data;
 
-  if (!queryCarousel) return <Skeleton loading={loading} active avatar />;
+  if (!queryLink) return <Skeleton loading={loading} active avatar />;
 
-  const dataSource = queryCarousel.data;
-  const total = queryCarousel.total;
+  const dataSource = queryLink.data;
+  const total = queryLink.total;
 
   const columns = [
     {
@@ -63,54 +52,24 @@ export default () => {
         canUpdateAny(AUTH_RESOURCE) ? <Link to={`${PATH}/detail/${row.id}`}>详情</Link> : '--',
     },
     {
-      title: '图片',
-      dataIndex: 'url',
-      render: val => <img src={val} width="100" height="60" />,
-    },
-    {
-      title: '标题',
-      dataIndex: 'title',
+      title: '名称',
+      dataIndex: 'name',
       search: true,
+      render: (val, row) => (
+        <a href={row.url} target="_blank">
+          {val}
+        </a>
+      ),
     },
     {
       title: '地址',
-      dataIndex: 'link',
+      dataIndex: 'url',
       search: true,
     },
     {
       title: '排序',
       dataIndex: 'sort',
       sorter: true,
-    },
-    {
-      title: '是否发布',
-      dataIndex: 'is_published',
-      render: (val, record) =>
-        canUpdateAny(AUTH_RESOURCE) ? (
-          <Switch
-            checkedChildren="是"
-            unCheckedChildren="否"
-            checked={!!val}
-            onChange={checked => {
-              client.mutate({
-                mutation: M_UPDATE_CAROUSEL,
-                variables: { id: record.id, data: { is_published: checked } },
-                update: (proxy, { data }) => {
-                  if (data.deleteCarousel) {
-                    message.success('删除成功');
-                    refetch();
-                  }
-                },
-              });
-            }}
-          />
-        ) : !!val ? (
-          '是'
-        ) : (
-          '否'
-        ),
-      filterMultiple: false,
-      filters: [{ text: '是', value: true }, { text: '否', value: false }],
     },
     {
       title: '创建时间',
@@ -143,10 +102,10 @@ export default () => {
       icon: 'delete',
       action: () => {
         client.mutate({
-          mutation: M_DELETE_CAROUSEL,
+          mutation: M_DELETE_LINK,
           variables: { ids: selectedRows.map(item => item.id).join(',') },
           update: (proxy, { data }) => {
-            if (data.deleteCarousel) {
+            if (data.deleteLink) {
               message.success('删除成功');
               refetch();
             }

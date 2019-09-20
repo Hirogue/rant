@@ -31,7 +31,7 @@ import { M_APPROVAL_CAPITAL } from '../gql';
 import Config from '@/config';
 
 const PATH = '/if/capitals';
-const AUTH_RESOURCE = '/capital';
+const AUTH_RESOURCE = '/if/capitals/list';
 
 export default () => {
   const defaultVariables = {

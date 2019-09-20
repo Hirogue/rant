@@ -27,7 +27,7 @@ import {
 } from 'antd';
 import { useEffect, useState } from 'react';
 
-const AUTH_RESOURCE = '/provider/category';
+const AUTH_RESOURCE = '/providers/category';
 
 const { TreeNode } = Tree;
 const FormItem = Form.Item;

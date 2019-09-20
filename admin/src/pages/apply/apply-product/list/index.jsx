@@ -18,7 +18,7 @@ import { M_APPROVAL_APPLY_PRODUCT } from '../gql';
 import { ExcelHelper } from '@/utils/excel';
 
 const PATH = '/apply/apply-product';
-const AUTH_RESOURCE = '/apply-product';
+const AUTH_RESOURCE = '/apply/apply-product/list';
 
 export default () => {
   const defaultVariables = {
