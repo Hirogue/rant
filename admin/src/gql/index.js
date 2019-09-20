@@ -23,3 +23,4 @@ export * from './success-case';
 export * from './user';
 export * from './apply-product';
 export * from './link';
+export * from './customer';

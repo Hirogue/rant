@@ -10,6 +10,10 @@ export default [
     value: '/dashboard/analysis',
   },
   {
+    name: '促进会报名',
+    value: '/customer',
+  },
+  {
     name: '内容管理',
     value: '/contents',
     children: [

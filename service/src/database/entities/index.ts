@@ -23,5 +23,6 @@ export * from './role.entity';
 export * from './seo.entity';
 export * from './success-case.entity';
 export * from './user.entity';
+export * from './customer.entity';
 
 

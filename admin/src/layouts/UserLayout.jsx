@@ -6,7 +6,7 @@ import React from 'react';
 import DocumentTitle from 'react-document-title';
 import { formatMessage, FormattedMessage } from 'umi-plugin-react/locale';
 import Link from 'umi/link';
-import logo from '../assets/logo.svg';
+import logo from '../assets/logo.png';
 import styles from './UserLayout.less';
 
 const UserLayout = props => {

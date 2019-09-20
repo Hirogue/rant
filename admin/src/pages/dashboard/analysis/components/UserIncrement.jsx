@@ -55,7 +55,6 @@ export default props => {
       groupBy,
     })
       .then(res => {
-        console.log(res);
         const resData = [];
         if (res) {
           res.forEach(item => {

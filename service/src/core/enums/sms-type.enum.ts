@@ -1,4 +1,5 @@
 export enum SmsTypeEnum {
     REGISTER = 'register',
-    PASSWORD = 'password'
+    PASSWORD = 'password',
+    CUSTOMER = 'customer',
 }

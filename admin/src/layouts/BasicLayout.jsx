@@ -8,7 +8,7 @@ import { connect } from 'dva';
 import React, { useEffect, useState } from 'react';
 import { formatMessage } from 'umi-plugin-react/locale';
 import Link from 'umi/link';
-import logo from '../assets/logo.svg';
+import logo from '../assets/logo-w.png';
 
 const { Footer } = Layout;
 
@@ -22,7 +22,7 @@ const menuDataRender = menuList =>
 const footerRender = (_, defaultDom) => {
   return (
     <Footer style={{ textAlign: 'center' }}>
-      Rant ©{new Date().getFullYear()} Created by Roylin
+      江西旅游项目合作通 ©{new Date().getFullYear()} 江西省旅游集团 版权所有
     </Footer>
   );
 };

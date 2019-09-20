@@ -14,6 +14,7 @@ import { CapitalModule } from './capital';
 import { CarouselModule } from './carousel';
 import { Config } from "./config";
 import { BaseDataSource, CoreModule } from './core';
+import { CustomerModule } from './customer';
 import { DocumentModule } from './document';
 import { ExpertModule } from './expert';
 import { HomeModule } from './home';
@@ -75,6 +76,7 @@ import { WechatModule } from './wechat';
     DocumentModule,
     SeoModule,
     LinkModule,
+    CustomerModule,
     ApplyExpertModule,
     ApplyProductModule,
     ApplyProviderModule,

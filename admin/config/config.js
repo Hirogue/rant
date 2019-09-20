@@ -136,6 +136,12 @@ export default {
           component: './dashboard/analysis',
         },
         {
+          name: 'customer',
+          icon: 'form',
+          path: '/customer',
+          component: './customer/list',
+        },
+        {
           name: 'contents',
           icon: 'file-text',
           path: '/contents',

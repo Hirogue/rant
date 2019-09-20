@@ -9,6 +9,7 @@ export default {
   'menu.dashboard.analysis': '数据分析',
   'menu.dashboard.monitor': '监控页',
   'menu.dashboard.workplace': '工作台',
+  'menu.customer': '促进会报名',
   'menu.providers': '服务商管理',
   'menu.providers.list': '服务商列表',
   'menu.providers.category': '服务商分类',
