@@ -40,6 +40,11 @@ export default Form.create()(props => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
+		if (!identity) {
+			message.error('请先选择会员身份');
+			return false;
+		}
+
 		form.validateFields((err, values) => {
 			if (!!err) {
 				return false;

@@ -21,7 +21,7 @@ export default withContext(props => {
 	const [area, setArea] = useState(null);
 
 	const [userType, setUserType] = useState(UserTypeEnum.ENTERPRISE);
-	const [userIdentity, setIdentity] = useState(IdentityEnum.FINANCER);
+	const [userIdentity, setIdentity] = useState(null);
 
 	useEffect(() => {
 		(async () => {
