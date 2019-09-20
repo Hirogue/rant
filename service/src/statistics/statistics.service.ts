@@ -31,9 +31,9 @@ export class StatisticsService {
                     statusCode
                 }
             }], {
-                    retentionPolicy: '1year',
-                    precision: 's'
-                });
+                retentionPolicy: '1year',
+                precision: 's'
+            });
         } catch (err) {
             Logger.error(err);
         }
@@ -64,9 +64,9 @@ export class StatisticsService {
                 id,
             }
         }], {
-                retentionPolicy: '1day',
-                precision: 's'
-            });
+            retentionPolicy: '1day',
+            precision: 's'
+        });
 
         try {
             // 修改数据库访问量
@@ -77,19 +77,19 @@ export class StatisticsService {
                 case 'product':
                     moduleClass = Product;
                     break;
-                case 'provider':
+                case 'service':
                     moduleClass = Provider;
                     break;
                 case 'project':
                     moduleClass = Project;
                     break;
-                case 'capital':
+                case 'finance':
                     moduleClass = Capital;
                     break;
-                case 'article':
+                case 'news':
                     moduleClass = Article;
                     break;
-                case 'document':
+                case 'help':
                     moduleClass = Document;
                     break;
             }
