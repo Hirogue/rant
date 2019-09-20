@@ -63,7 +63,7 @@ export default withRouter(({ data, router }) => {
 				</li>
 				<li>
 					<IconFont className="iconfont" type="icon-liulan1" />
-					<span>浏览量：{data.view || 0}次</span>
+					<span>浏览量：{data.views || 0}次</span>
 				</li>
 			</ul>
 			<div className="btn-and-time">
