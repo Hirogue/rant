@@ -116,6 +116,11 @@ export default () => {
       search: true,
     },
     {
+      title: '机构类别',
+      dataIndex: 'org_type',
+      search: true,
+    },
+    {
       title: '企业全称',
       dataIndex: 'company',
       search: true,

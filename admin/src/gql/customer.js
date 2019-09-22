@@ -10,6 +10,7 @@ export const F_CUSTOMER_FIELDS = gql`
     update_at
     realname
     phone
+    org_type
     company
     status
     area_path

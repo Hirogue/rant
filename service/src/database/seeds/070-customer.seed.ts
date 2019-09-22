@@ -13,6 +13,7 @@ export default class implements Seeder {
         const target = new Customer();
         target.phone = '18770221825';
         target.realname = '66666';
+        target.org_type = '运营机构';
         target.company = '江西旅游科技有限责任公司';
         target.source = '2019投融资促进会';
         target.area = sample(area);

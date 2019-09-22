@@ -23,6 +23,11 @@ export class Customer extends Base {
     @Field({ nullable: true })
     @Column({ nullable: true })
     @ApiModelProperty({ nullable: true })
+    org_type: string;
+
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    @ApiModelProperty({ nullable: true })
     company: string;
 
     @Field(type => Metadata, { nullable: true })
