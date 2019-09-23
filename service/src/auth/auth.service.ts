@@ -9,40 +9,43 @@ import { UserService } from '../user';
 
 @Injectable()
 export class AuthService {
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+  ) {}
 
-    constructor(
-        private readonly userService: UserService,
-        private readonly jwtService: JwtService
-    ) { }
+  async validateUser(account: string, password: string): Promise<User | null> {
+    const user = await this.userService.findOne({
+      where: { account },
+      relations: ['role', 'org'],
+    });
 
-    async validateUser(account: string, password: string): Promise<User | null> {
+    if (!user) throw new ApolloException('账户不存在');
 
-        const user = await this.userService.findOne({
-            where: { account },
-            relations: ['role', 'org']
-        });
+    const compareRes = await bcrypt.compare(password, user.password);
 
-        if (!user) throw new ApolloException('账户不存在');
+    if (!compareRes) {
+      if (
+        user.lastPassword ===
+        crypto
+          .createHash('md5')
+          .update(password)
+          .digest('hex')
+      ) {
+        return await this.userService.changePassword(user.account, password);
+      }
 
-        const compareRes = await bcrypt.compare(password, user.password);
-
-        if (!compareRes) {
-
-            if (user.lastPassword === crypto.createHash('md5').update(password).digest('hex')) {
-                return await this.userService.changePassword(user.account, password);
-            }
-
-            throw new ApolloException('密码错误');
-        }
-
-        return user;
+      throw new ApolloException('密码错误');
     }
 
-    async login(user: any) {
-        const payload = { sub: 'user_token', ...classToPlain(user) };
+    return user;
+  }
 
-        return {
-            token: this.jwtService.sign(payload),
-        };
-    }
+  async login(user: any) {
+    const payload = { sub: 'user_token', ...classToPlain(user) };
+
+    return {
+      token: this.jwtService.sign(payload),
+    };
+  }
 }

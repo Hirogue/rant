@@ -6,26 +6,26 @@ import { Role } from '../database';
 import { RoleService } from './role.service';
 
 @ObjectType()
-export class RolePaginate extends BasePaginate(Role) { }
+export class RolePaginate extends BasePaginate(Role) {}
 
 @Resolver(of => Role)
 export class RoleResolver extends BaseResolver(Role, RolePaginate) {
-    constructor(
-        private readonly roleService: RoleService,
-        @Inject(CONTEXT) context,
-    ) {
-        super(context, 'role');
-    }
+  constructor(
+    private readonly roleService: RoleService,
+    @Inject(CONTEXT) context,
+  ) {
+    super(context, 'role');
+  }
 
-    @Query(returns => [Role]!)
-    async roles() {
-        return this.roleService.findAll();
-    }
+  @Query(returns => [Role]!)
+  async roles() {
+    return this.roleService.findAll();
+  }
 
-    @Mutation(returns => Boolean, {
-        description: `Update role grants`
-    })
-    async updateGrants(@Args('id') id: string, @Args('data') data: Role) {
-        return this.roleService.updateGrants(id, data.grants);
-    }
+  @Mutation(returns => Boolean, {
+    description: `Update role grants`,
+  })
+  async updateGrants(@Args('id') id: string, @Args('data') data: Role) {
+    return this.roleService.updateGrants(id, data.grants);
+  }
 }

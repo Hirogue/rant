@@ -1,8 +1,8 @@
-import { Module } from "@nestjs/common";
-import { JsonScalar } from "./scalars";
+import { Module } from '@nestjs/common';
+import { JsonScalar } from './scalars';
 
 @Module({
-    providers: [JsonScalar],
-    exports: [JsonScalar]
+  providers: [JsonScalar],
+  exports: [JsonScalar],
 })
-export class CoreModule { }
+export class CoreModule {}

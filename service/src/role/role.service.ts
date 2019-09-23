@@ -7,23 +7,22 @@ import { Role } from '../database';
 
 @Injectable()
 export class RoleService extends BaseService<Role> {
-    constructor(
-        private readonly ac: AccessControlService,
-        @InjectRepository(Role)
-        protected readonly repo: Repository<Role>
-    ) {
-        super(repo);
-    }
+  constructor(
+    private readonly ac: AccessControlService,
+    @InjectRepository(Role)
+    protected readonly repo: Repository<Role>,
+  ) {
+    super(repo);
+  }
 
-    async findAll() {
-        return await this.repo.find();
-    }
+  async findAll() {
+    return await this.repo.find();
+  }
 
-    async updateGrants(id: string, grants: any) {
+  async updateGrants(id: string, grants: any) {
+    await this.repo.update(id, { grants });
+    await this.ac.loadGrants();
 
-        await this.repo.update(id, { grants });
-        await this.ac.loadGrants();
-
-        return true;
-    }
+    return true;
+  }
 }

@@ -12,9 +12,9 @@ import { LocalStrategy } from './local.strategy';
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register(Config.jwt as JwtModuleOptions),
-    UserModule
+    UserModule,
   ],
   providers: [JwtStrategy, LocalStrategy, AuthService, AuthResolver],
-  exports: [JwtModule, AuthService, AuthResolver]
+  exports: [JwtModule, AuthService, AuthResolver],
 })
-export class AuthModule { }
+export class AuthModule {}

@@ -6,37 +6,40 @@ import { Metadata } from '../database';
 
 @Injectable()
 export class MetadataService extends BaseTreeService<Metadata> {
-    constructor(@InjectRepository(Metadata) protected readonly repo: TreeRepository<Metadata>) {
-        super(repo);
-    }
+  constructor(
+    @InjectRepository(Metadata)
+    protected readonly repo: TreeRepository<Metadata>,
+  ) {
+    super(repo);
+  }
 
-    async findRootsAndChildren() {
+  async findRootsAndChildren() {
+    const roots = await this.repository.findRoots();
 
-        const roots = await this.repository.findRoots();
+    return await this.repo
+      .createQueryBuilder('t')
+      .leftJoinAndSelect('t.children', 'children')
+      .whereInIds(roots.map(root => root.id))
+      .getMany();
+  }
 
-        return await this.repo.createQueryBuilder('t')
-            .leftJoinAndSelect('t.children', 'children')
-            .whereInIds(roots.map(root => root.id))
-            .getMany();
-    }
+  async findChildrenByTitle(title: string) {
+    const result = await this.repo
+      .createQueryBuilder('t')
+      .leftJoinAndSelect('t.children', 'children')
+      .where('t.title = :title', { title })
+      .getOne();
 
-    async findChildrenByTitle(title: string) {
+    return result ? result.children : [];
+  }
 
-        const result = await this.repo.createQueryBuilder('t')
-            .leftJoinAndSelect('t.children', 'children')
-            .where('t.title = :title', { title })
-            .getOne();
+  async findChildrenById(id: string) {
+    const result = await this.repo
+      .createQueryBuilder('t')
+      .leftJoinAndSelect('t.children', 'children')
+      .where('t.id = :id', { id })
+      .getOne();
 
-        return result ? result.children : [];
-    }
-
-    async findChildrenById(id: string) {
-
-        const result = await this.repo.createQueryBuilder('t')
-            .leftJoinAndSelect('t.children', 'children')
-            .where('t.id = :id', { id })
-            .getOne();
-
-        return result ? result.children : [];
-    }
+    return result ? result.children : [];
+  }
 }

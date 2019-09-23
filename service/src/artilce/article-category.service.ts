@@ -6,7 +6,10 @@ import { ArticleCategory } from '../database/entities';
 
 @Injectable()
 export class ArticleCategoryService extends BaseTreeService<ArticleCategory> {
-    constructor(@InjectRepository(ArticleCategory) protected readonly repo: TreeRepository<ArticleCategory>) {
-        super(repo);
-    }
+  constructor(
+    @InjectRepository(ArticleCategory)
+    protected readonly repo: TreeRepository<ArticleCategory>,
+  ) {
+    super(repo);
+  }
 }

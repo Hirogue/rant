@@ -89,7 +89,10 @@ export class RequestQueryParser implements ParsedRequestParams {
           'filter',
           this.conditionParser.bind(this, 'filter'),
         );
-        this.or = this.parseQueryParam('or', this.conditionParser.bind(this, 'or'));
+        this.or = this.parseQueryParam(
+          'or',
+          this.conditionParser.bind(this, 'or'),
+        );
         this.join = this.parseQueryParam('join', this.joinParser.bind(this));
         this.sort = this.parseQueryParam('sort', this.sortParser.bind(this));
         this.limit = this.parseQueryParam(
@@ -121,7 +124,7 @@ export class RequestQueryParser implements ParsedRequestParams {
       if (hasLength(paramNames)) {
         this._params = params;
         this._paramsOptions = options;
-        this.paramsFilter = paramNames.map((name) => this.paramParser(name));
+        this.paramsFilter = paramNames.map(name => this.paramParser(name));
       }
     }
 
@@ -131,9 +134,11 @@ export class RequestQueryParser implements ParsedRequestParams {
   private getParamNames(
     type: keyof RequestQueryBuilderOptions['paramNamesMap'],
   ): string[] {
-    return this._paramNames.filter((p) => {
+    return this._paramNames.filter(p => {
       const name = this._options.paramNamesMap[type];
-      return isString(name) ? name === p : (name as string[]).some((m) => m === p);
+      return isString(name)
+        ? name === p
+        : (name as string[]).some(m => m === p);
     });
   }
 
@@ -143,7 +148,7 @@ export class RequestQueryParser implements ParsedRequestParams {
     }
 
     if (isArrayFull(value)) {
-      return (value as string[]).map((val) => parser(val));
+      return (value as string[]).map(val => parser(val));
     }
 
     return [];
@@ -201,14 +206,14 @@ export class RequestQueryParser implements ParsedRequestParams {
     try {
       objectData = JSON.parse(data);
       // tslint:disable-next-line
-    } catch (e) { }
+    } catch (e) {}
     if (objectData !== undefined) {
       if (Array.isArray(objectData)) {
         if (objectData.length === 1) {
           return this.conditionParser(cond, JSON.stringify(objectData[0]));
         }
 
-        return objectData.map((o) =>
+        return objectData.map(o =>
           this.conditionParser(cond, JSON.stringify(o)),
         ) as QueryFilter;
       } else {
@@ -223,13 +228,13 @@ export class RequestQueryParser implements ParsedRequestParams {
     const operator = param[1] as ComparisonOperator;
     let value = param[2] || '';
 
-    if (isArrayValue.some((name) => name === operator)) {
+    if (isArrayValue.some(name => name === operator)) {
       value = value.split(this._options.delimStr) as any;
     }
 
     value = this.parseValues(value);
 
-    if (!isEmptyValue.some((name) => name === operator) && !hasValue(value)) {
+    if (!isEmptyValue.some(name => name === operator) && !hasValue(value)) {
       throw new RequestQueryException(`Invalid ${cond} value`);
     }
 
@@ -243,7 +248,9 @@ export class RequestQueryParser implements ParsedRequestParams {
     const param = data.split(this._options.delim);
     const join: QueryJoin = {
       field: param[0],
-      select: isStringFull(param[1]) ? param[1].split(this._options.delimStr) : undefined,
+      select: isStringFull(param[1])
+        ? param[1].split(this._options.delimStr)
+        : undefined,
     };
     validateJoin(join);
 

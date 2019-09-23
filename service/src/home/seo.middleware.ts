@@ -1,27 +1,25 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
+import * as config from 'config';
 import { Request, Response } from 'express';
-import { SeoService } from '../seo/seo.service';
 import { Like } from 'typeorm';
-import Config from '../config';
+import { SeoService } from '../seo/seo.service';
 
 @Injectable()
 export class SeoMiddleware implements NestMiddleware {
+  constructor(private readonly seoService: SeoService) { }
 
-    constructor(private readonly seoService: SeoService) { }
+  async use(req: Request, res: Response, next: Function) {
+    const seo = await this.seoService.findOne({
+      where: {
+        path: Like(`%${req.query['seoPath'] || req.url}%`),
+      },
+      order: {
+        sort: 'ASC',
+      },
+    });
 
-    async use(req: Request, res: Response, next: Function) {
+    req['viewData'] = { seo: seo || config.get('seo') };
 
-        const seo = await this.seoService.findOne({
-            where: {
-                path: Like(`%${req.query['seoPath'] || req.url}%`)
-            },
-            order: {
-                sort: 'ASC'
-            }
-        });
-
-        req['viewData'] = { seo: seo || Config.seo };
-
-        next();
-    }
+    next();
+  }
 }

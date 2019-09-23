@@ -1,4 +1,4 @@
 export enum IFModeEnum {
-    EQUITY = 'equity',
-    CLAIM = 'claim'
+  EQUITY = 'equity',
+  CLAIM = 'claim',
 }

@@ -1,8 +1,8 @@
-import { Module } from "@nestjs/common";
-import { TimeSeriesService } from "./time-series.service";
+import { Module } from '@nestjs/common';
+import { TimeSeriesService } from './time-series.service';
 
 @Module({
-    providers: [TimeSeriesService],
-    exports: [TimeSeriesService]
+  providers: [TimeSeriesService],
+  exports: [TimeSeriesService],
 })
-export class TimeSeriesModule { }
+export class TimeSeriesModule {}

@@ -1,5 +1,5 @@
 export enum UserLevelEnum {
-    V0,
-    V1,
-    V2
+  V0,
+  V1,
+  V2,
 }

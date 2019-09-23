@@ -1,39 +1,32 @@
-import { Channel } from "amqplib";
+import { Channel } from 'amqplib';
 
 export class MessageChannel {
+  constructor(private readonly ch: Channel, private readonly name: string) {}
 
-    constructor(
-        private readonly ch: Channel,
-        private readonly name: string
-    ) { }
+  get Name() {
+    return this.name;
+  }
 
-    get Name() {
-        return this.name;
-    }
+  async send(content: any) {
+    await this.ch.assertQueue(this.name);
 
-    async send(content: any) {
+    content = Buffer.from(JSON.stringify(content));
 
-        await this.ch.assertQueue(this.name);
+    return await this.ch.sendToQueue(this.name, content);
+  }
 
-        content = Buffer.from(JSON.stringify(content));
+  async consume(handler) {
+    await this.ch.assertQueue(this.name);
+    await this.ch.consume(this.name, async msg => {
+      const content = JSON.parse(msg.content.toString());
 
-        return await this.ch.sendToQueue(this.name, content);
-    }
+      await handler(content);
 
-    async consume(handler) {
+      await this.ch.ack(msg);
+    });
+  }
 
-        await this.ch.assertQueue(this.name);
-        await this.ch.consume(this.name, async (msg) => {
-
-            const content = JSON.parse(msg.content.toString());
-
-            await handler(content);
-
-            await this.ch.ack(msg);
-        });
-    }
-
-    async close() {
-        await this.ch.close();
-    }
+  async close() {
+    await this.ch.close();
+  }
 }

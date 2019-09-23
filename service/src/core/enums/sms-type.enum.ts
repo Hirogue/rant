@@ -1,4 +1,4 @@
 export enum SmsTypeEnum {
-    REGISTER = 'register',
-    PASSWORD = 'password'
+  REGISTER = 'register',
+  PASSWORD = 'password',
 }

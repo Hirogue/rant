@@ -16,7 +16,6 @@ export default {
   'menu.role': '权限管理',
   'menu.role.list': '角色列表',
   'menu.apply': '审批管理',
-  'menu.apply.apply-expert': '约见专家',
   'menu.apply.apply-product': '金融服务',
   'menu.users': '用户管理',
   'menu.users.admin.list': '后台用户',

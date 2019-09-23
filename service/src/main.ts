@@ -9,42 +9,43 @@ import * as rateLimit from 'express-rate-limit';
 import * as helmet from 'helmet';
 import { RenderModule, RenderService } from './render';
 import * as Nextjs from 'next';
-import '../local';
 import { AppModule } from './app.module';
 import { Config } from './config';
 import { ExceptionsFilter, ValidationPipe } from './core';
 import { Logger } from './logger';
+import * as config from 'config';
 
 async function bootstrap() {
-  const app = Nextjs(Config.next);
+  const app = Nextjs(config.get('next'));
   await app.prepare();
 
-  const server = await NestFactory.create<NestExpressApplication>(AppModule, { logger: new Logger() });
+  const server = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: new Logger(),
+  });
 
-  (server.get(RenderModule)).register(server, app);
+  server.get(RenderModule).register(server, app);
 
   const options = new DocumentBuilder()
-    .setTitle('Rant')
-    .setDescription('The rant API description')
-    .setVersion('0.0.1')
+    .setTitle(config.get('swagger.title'))
+    .setDescription(config.get('swagger.description'))
+    .setVersion(config.get('swagger.version'))
     .build();
 
   const document = SwaggerModule.createDocument(server, options);
-  SwaggerModule.setup('docs', server, document);
+  SwaggerModule.setup(config.get('swagger.path'), server, document);
 
   server.use(cookieParser());
+  server.use(compression());
+  server.use(helmet(config.get('helmet')));
+  server.use(csurf(config.get('csrf')));
 
-  if (!Config.dev) {
-    // server.use(csurf(Config.csrf));
-    server.use(helmet(Config.helmet));
-    server.use(rateLimit(Config.rateLimit));
+  if (!config.get('dev')) {
+    server.use(rateLimit(config.get('rateLimit')));
   } else {
-    server.enableCors(Config.cors);
+    server.enableCors(config.get('cors'));
   }
 
-  server.use(compression());
-
-  for (let assets of Config.staticAssets) {
+  for (let assets of config.get('staticAssets') as any) {
     server.useStaticAssets(assets.path, assets.options);
   }
 
@@ -52,9 +53,8 @@ async function bootstrap() {
   server.useGlobalFilters(new ExceptionsFilter(server.get(RenderService)));
   server.useGlobalInterceptors(new ClassSerializerInterceptor(new Reflector()));
 
-  await server.listen(Config.port, Config.hostName, () => {
-    Logger.log(`Server run at port ${Config.port}`);
+  await server.listen(config.get('port'), config.get('host'), () => {
+    Logger.log(`Server run at ${config.get('host')}${':' + config.get('port')}`);
   });
-
 }
 bootstrap();

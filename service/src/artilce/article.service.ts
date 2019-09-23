@@ -6,7 +6,9 @@ import { Article } from '../database/entities';
 
 @Injectable()
 export class ArticleService extends BaseService<Article> {
-    constructor(@InjectRepository(Article) protected readonly repo: Repository<Article>) {
-        super(repo);
-    }
+  constructor(
+    @InjectRepository(Article) protected readonly repo: Repository<Article>,
+  ) {
+    super(repo);
+  }
 }

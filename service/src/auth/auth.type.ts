@@ -1,11 +1,7 @@
-import { ObjectType, Field } from "type-graphql";
+import { ObjectType, Field } from 'type-graphql';
 
 @ObjectType()
 export class Auth {
-
-    @Field()
-    token: String;
+  @Field()
+  token: String;
 }
-
-
-

@@ -43,13 +43,18 @@ const sortOrdersListStr = sortOrdersList.join();
 
 export function validateFields(fields: QueryFields): void {
   if (!isArrayStrings(fields)) {
-    throw new RequestQueryException('Invalid fields. Array of strings expected');
+    throw new RequestQueryException(
+      'Invalid fields. Array of strings expected',
+    );
   }
 }
 
-export function validateCondition(val: QueryFilter, cond: 'filter' | 'or'): void {
+export function validateCondition(
+  val: QueryFilter,
+  cond: 'filter' | 'or',
+): void {
   if (Array.isArray(val)) {
-    return val.forEach((v) => this.validateCondition(v, cond));
+    return val.forEach(v => this.validateCondition(v, cond));
   }
 
   if (!isObject(val) || !isStringFull(val.field)) {
@@ -71,7 +76,9 @@ export function validateJoin(join: QueryJoin): void {
     throw new RequestQueryException('Invalid join field. String expected');
   }
   if (!isUndefined(join.select) && !isArrayStrings(join.select)) {
-    throw new RequestQueryException('Invalid join select. Array of strings expected');
+    throw new RequestQueryException(
+      'Invalid join select. Array of strings expected',
+    );
   }
 }
 
@@ -83,7 +90,9 @@ export function validateSort(sort: QuerySort): void {
     !isEqual(sort.order, sortOrdersList[0]) &&
     !isEqual(sort.order, sortOrdersList[1])
   ) {
-    throw new RequestQueryException(`Invalid sort order. ${sortOrdersListStr} expected`);
+    throw new RequestQueryException(
+      `Invalid sort order. ${sortOrdersListStr} expected`,
+    );
   }
 }
 
@@ -98,7 +107,9 @@ export function validateNumeric(
 
 export function validateParamOption(options: ParamsOptions, name: string) {
   if (!isObject(options)) {
-    throw new RequestQueryException(`Invalid param ${name}. Invalid crud options`);
+    throw new RequestQueryException(
+      `Invalid param ${name}. Invalid crud options`,
+    );
   }
   const option = options[name];
   if (!isObject(option) || isNil(option.field) || isNil(option.type)) {
@@ -110,6 +121,8 @@ export function validateUUID(str: string, name: string) {
   const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   const uuidV4 = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   if (!uuidV4.test(str) && !uuid.test(str)) {
-    throw new RequestQueryException(`Invalid param ${name}. UUID string expected`);
+    throw new RequestQueryException(
+      `Invalid param ${name}. UUID string expected`,
+    );
   }
 }

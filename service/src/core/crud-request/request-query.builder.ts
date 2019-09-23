@@ -15,7 +15,13 @@ import {
   validateNumeric,
   validateSort,
 } from './request-query.validator';
-import { QueryFields, QueryFilter, QueryJoin, QueryOperation, QuerySort } from './types';
+import {
+  QueryFields,
+  QueryFilter,
+  QueryJoin,
+  QueryOperation,
+  QuerySort,
+} from './types';
 
 // tslint:disable:variable-name ban-types
 export class RequestQueryBuilder {
@@ -146,19 +152,19 @@ export class RequestQueryBuilder {
     }
     /* istanbul ignore else */
     if (isArrayFull(params.filter)) {
-      params.filter.forEach((filter) => this.setFilter(filter));
+      params.filter.forEach(filter => this.setFilter(filter));
     }
     /* istanbul ignore else */
     if (isArrayFull(params.or)) {
-      params.or.forEach((or) => this.setOr(or));
+      params.or.forEach(or => this.setOr(or));
     }
     /* istanbul ignore else */
     if (isArrayFull(params.join)) {
-      params.join.forEach((join) => this.setJoin(join));
+      params.join.forEach(join => this.setJoin(join));
     }
     /* istanbul ignore else */
     if (isArrayFull(params.sort)) {
-      params.sort.forEach((sort) => this.sortBy(sort));
+      params.sort.forEach(sort => this.sortBy(sort));
     }
     /* istanbul ignore else */
     if (!isNil(params.limit)) {
@@ -180,7 +186,9 @@ export class RequestQueryBuilder {
     return this;
   }
 
-  private getParamName(param: keyof RequestQueryBuilderOptions['paramNamesMap']): string {
+  private getParamName(
+    param: keyof RequestQueryBuilderOptions['paramNamesMap'],
+  ): string {
     const name = this.options.paramNamesMap[param];
     return isString(name) ? (name as string) : (name[0] as string);
   }
@@ -213,9 +221,9 @@ export class RequestQueryBuilder {
             // hasValue(f.value) ? d + f.value : ''
             // }`,
             `${param}${br}=${
-            Array.isArray(f)
-              ? JSON.stringify(f.map((s) => this.generateQuery(s, d)))
-              : this.generateQuery(f, d)
+              Array.isArray(f)
+                ? JSON.stringify(f.map(s => this.generateQuery(s, d)))
+                : this.generateQuery(f, d)
             }`,
         )
         .join('&') + '&'
@@ -241,7 +249,7 @@ export class RequestQueryBuilder {
         .map(
           (j: QueryJoin) =>
             `${param}${br}=${j.field}${
-            isArrayFull(j.select) ? d + j.select.join(ds) : ''
+              isArrayFull(j.select) ? d + j.select.join(ds) : ''
             }`,
         )
         .join('&') + '&'

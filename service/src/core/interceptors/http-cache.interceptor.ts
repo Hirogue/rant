@@ -1,16 +1,15 @@
-import { CacheInterceptor, ExecutionContext, Injectable } from "@nestjs/common";
+import { CacheInterceptor, ExecutionContext, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class HttpCacheInterceptor extends CacheInterceptor {
-    trackBy(context: ExecutionContext): string | undefined {
+  trackBy(context: ExecutionContext): string | undefined {
+    const request = context.switchToHttp().getRequest();
+    if (!request) return undefined;
 
-        const request = context.switchToHttp().getRequest();
-        if (!request) return undefined;
+    if (request.originalUrl.startsWith('/api/verification')) return undefined;
 
-        if (request.originalUrl.startsWith('/api/verification')) return undefined;
+    const cacheKey = `http-cache-${request.originalUrl}`;
 
-        const cacheKey = `http-cache-${request.originalUrl}`;
-
-        return cacheKey;
-    }
+    return cacheKey;
+  }
 }

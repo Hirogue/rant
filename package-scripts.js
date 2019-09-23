@@ -3,13 +3,12 @@ const npsUtils = require('nps-utils');
 module.exports = {
   scripts: {
 
-    start: "cd ./service && yarn prod",
+    start: "cd ./service && yarn start",
     stop: "cd ./service && yarn stop",
 
     build: {
-      default: npsUtils.concurrent.nps('build.service', 'build.next', 'build.admin'),
-      service: "cd ./service && yarn build:service",
-      next: "cd ./service && yarn build:next",
+      default: npsUtils.concurrent.nps('build.service', 'build.admin'),
+      service: "cd ./service && yarn build",
       admin: "cd ./admin && yarn build",
     },
 
@@ -28,6 +27,7 @@ module.exports = {
     db: {
       init: "node ./scripts/database/init-db.sh.js",
       seed: "cd ./service && yarn seed",
+      orm: "cd ./service && yarn orm",
       clear: "cd ./service && yarn orm cache:clear"
     },
 

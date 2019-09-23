@@ -5,9 +5,11 @@ import { BasePaginate, BaseResolver } from '../core';
 import { Article } from '../database';
 
 @ObjectType()
-export class ArticlePaginate extends BasePaginate(Article) { }
+export class ArticlePaginate extends BasePaginate(Article) {}
 
 @Resolver(of => Article)
 export class ArticleResolver extends BaseResolver(Article, ArticlePaginate) {
-    constructor(@Inject(CONTEXT) context) { super(context, 'article'); }
+  constructor(@Inject(CONTEXT) context) {
+    super(context, 'article');
+  }
 }

@@ -1,8 +1,0 @@
-{
-	"additionalProperties": false,
-	"type": "object",
-	"properties": {
-		"NODE_ENV": { "type": "string", "default": "production" }
-	},
-	"required": [ "NODE_ENV" ]
-}
