@@ -271,8 +271,8 @@ export default withRouter(props => {
           <ImageCropper
             url={target.cover}
             onUpload={file => onUpload(file, target, mutation)}
-            width={441.6}
-            height={270}
+            width={590}
+            height={360}
           />
         ),
       },

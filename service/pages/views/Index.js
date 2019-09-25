@@ -20,7 +20,7 @@ const commonVariables = {
     limit: 1000,
     join: [{ field: 'category' }],
     filter: [{ field: "is_published", operator: CondOperator.EQUALS, value: "true" }],
-    sort: [{ field: 'sort', order: 'ASC' }, { field: 'create_at', order: 'DESC' }],
+    sort: [{ field: 'is_top', order: 'DESC' }, { field: 'sort', order: 'DESC' }, { field: 'create_at', order: 'DESC' }],
 };
 
 const providerVariables = {
@@ -48,7 +48,7 @@ const createIteratorFetch = function* (items = []) {
                     limit: 4,
                     join: [{ field: 'category' }],
                     filter: [{ field: "category.title", operator: CondOperator.EQUALS, value: type }, { field: "is_published", operator: CondOperator.EQUALS, value: "true" }],
-                    sort: [{ field: 'sort', order: 'ASC' }, { field: 'create_at', order: 'DESC' }]
+                    sort: [{ field: 'is_top', order: 'DESC' }, { field: 'sort', order: 'DESC' }, { field: 'create_at', order: 'DESC' }]
                 })
             }
         });

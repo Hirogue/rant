@@ -226,8 +226,8 @@ const renderContent = (documentCategoryTrees, data, mutation, tabKey, setTabKey)
           <ImageCropper
             url={data.cover}
             onUpload={file => onUpload(file, data, mutation)}
-            width={441.6}
-            height={270}
+            width={590}
+            height={360}
           />
         ),
       },
