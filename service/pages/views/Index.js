@@ -20,7 +20,7 @@ const commonVariables = {
     limit: 1000,
     join: [{ field: 'category' }],
     filter: [{ field: "is_published", operator: CondOperator.EQUALS, value: "true" }],
-    sort: [{ field: 'is_top', order: 'DESC' }, { field: 'sort', order: 'DESC' }, { field: 'create_at', order: 'DESC' }],
+    sort: [{ field: 'sort', order: 'DESC' }, { field: 'create_at', order: 'DESC' }],
 };
 
 const providerVariables = {
