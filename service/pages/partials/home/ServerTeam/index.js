@@ -95,7 +95,7 @@ export default class extends React.Component {
 											<img className="avatar" src={item.avatar} />
 
 											<h4 className="name">{item.name}</h4>
-											<p className="post">{item.company}&nbsp;${item.position}</p>
+											<p className="post">{item.company}&nbsp;{item.position}</p>
 											<p className="introduce">{item.info}</p>
 
 											{contentApplys.find((apply) => apply.content_id === item.id) ? (

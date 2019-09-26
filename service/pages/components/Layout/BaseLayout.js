@@ -49,7 +49,7 @@ export default class extends Component {
 
 	async componentDidMount() {
 		get('/api/link', {
-			queryString: 'sort=sort,DESC'
+			sort: 'sort,DESC'
 		}).then(res => { this.setState(state => ({ ...state, links: res })) });
 
 		const { csrfToken } = this.props.router.query;
