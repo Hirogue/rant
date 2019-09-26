@@ -166,7 +166,7 @@ const BasicForm = Form.create()(props => {
         <FormItem {...formItemLayout} label="是否置顶">
           {getFieldDecorator('is_top', {
             initialValue: target.is_top,
-          })(<Switch checkedChildren="是" unCheckedChildren="否" defaultChecked={target.is_top} />)}
+          })(<Switch checkedChildren="是" unCheckedChildren="否" defaultChecked={target.is_top} />)}
         </FormItem>
         <FormItem {...formItemLayout} label="是否发布">
           {getFieldDecorator('is_published', {
@@ -174,7 +174,7 @@ const BasicForm = Form.create()(props => {
           })(
             <Switch
               checkedChildren="是"
-              unCheckedChildren="否"
+              unCheckedChildren="否"
               defaultChecked={target.is_published}
             />,
           )}
@@ -226,8 +226,8 @@ const renderContent = (documentCategoryTrees, data, mutation, tabKey, setTabKey)
           <ImageCropper
             url={data.cover}
             onUpload={file => onUpload(file, data, mutation)}
-            width={441.6}
-            height={270}
+            width={590}
+            height={360}
           />
         ),
       },

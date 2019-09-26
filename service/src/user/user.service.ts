@@ -293,7 +293,7 @@ export class UserService extends BaseService<User> {
         }
 
         if (UserStatusEnum.REJECTED === target.status) {
-            log.info = `${user.realname} 驳回，理由："${data.reason}"`;
+            log.info = `${user.realname} 驳回，理由："${data.reason}"`;
             target.vip = UserLevelEnum.V0;
 
             if (IdentityEnum.PROVIDER === target.identity) {

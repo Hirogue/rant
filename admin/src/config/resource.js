@@ -132,7 +132,7 @@ export default [
         value: '/users/admin/list',
       },
       {
-        name: '项目方',
+        name: '前台客户',
         value: '/users/customer/list',
       },
     ],

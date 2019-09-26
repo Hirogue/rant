@@ -99,7 +99,7 @@ export default () => {
         canUpdateAny(AUTH_RESOURCE) ? (
           <Switch
             checkedChildren="是"
-            unCheckedChildren="否"
+            unCheckedChildren="否"
             checked={!!val}
             onChange={checked =>
               updateProduct({ variables: { id: record.id, data: { is_published: checked } } })

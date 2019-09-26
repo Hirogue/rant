@@ -84,7 +84,7 @@ export class ProjectService extends BaseService<Project> {
         }
 
         if (ProjectStatusEnum.REJECTED === target.status) {
-            log.info = `${user.realname} 驳回项目，理由："${target.reason}"`;
+            log.info = `${user.realname} 驳回项目，理由："${target.reason}"`;
         }
 
         if (ProjectStatusEnum.FINISHED === target.status) {
@@ -92,7 +92,7 @@ export class ProjectService extends BaseService<Project> {
         }
 
         if (ProjectStatusEnum.CANCELLED === target.status) {
-            log.info = `${user.realname} 作废项目，理由："${project.reason}"`;
+            log.info = `${user.realname} 作废项目，理由："${project.reason}"`;
         }
 
         log.own = user;

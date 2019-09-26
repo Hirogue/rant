@@ -71,7 +71,7 @@ export default App => {
             }
 
             get('/api/link', {
-                queryString: 'sort=sort,DESC'
+                sort: 'sort=sort,DESC'
             }).then(res => { this.setState(state => ({ ...state, links: res })) });
         }
 
