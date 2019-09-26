@@ -51,4 +51,8 @@ export class CustomerService extends BaseService<Customer> {
         await customerRepo.save(target);
         return true;
     }
+
+    async importData(data: any) {
+        return true;
+    }
 }
