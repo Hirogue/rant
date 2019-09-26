@@ -77,6 +77,7 @@ export default withRouter((props) => {
 				sort: [{ field: 'create_at', order: 'DESC' }],
 			})
 		})
+		if (industry) document.title = industry + "-旅游项目通";
 	}, [])
 
 	const onPageChange = (page, pageSize) => {

@@ -5,7 +5,7 @@ import { Org } from "../entities";
 export default class implements Seeder {
     public async run(factory: Factory, connection: Connection): Promise<any> {
 
-        const org = await factory(Org)({ title: '平台运营' }).seed();
+        const org = await factory(Org)({ title: '平台运营' }).seed();
 
         const org1 = await factory(Org)({ title: '投资部', parent: org }).seed();
 

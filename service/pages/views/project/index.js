@@ -67,6 +67,7 @@ export default withRouter((props) => {
 		refetch({
 			queryString: buildingQuery(defaultVariables)
 		})
+		if (category) document.title = category + "-旅游项目通";
 	}, [])
 
 	const onPageChange = (page, pageSize) => {

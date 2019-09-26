@@ -53,7 +53,7 @@ export class ApplyProductService extends BaseService<ApplyProduct> {
         }
 
         if (ProjectStatusEnum.REJECTED === target.status) {
-            log.info = `${user.realname} 驳回申请，理由："${target.reason}"`;
+            log.info = `${user.realname} 驳回申请，理由："${target.reason}"`;
         }
 
         if (ProjectStatusEnum.FINISHED === target.status) {
@@ -61,7 +61,7 @@ export class ApplyProductService extends BaseService<ApplyProduct> {
         }
 
         if (ProjectStatusEnum.CANCELLED === target.status) {
-            log.info = `${user.realname} 作废申请，理由："${applyProduct.reason}"`;
+            log.info = `${user.realname} 作废申请，理由："${applyProduct.reason}"`;
         }
 
         log.own = user;

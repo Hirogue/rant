@@ -84,7 +84,7 @@ export class CapitalService extends BaseService<Capital> {
         }
 
         if (ProjectStatusEnum.REJECTED === target.status) {
-            log.info = `${user.realname} 驳回资金，理由："${target.reason}"`;
+            log.info = `${user.realname} 驳回资金，理由："${target.reason}"`;
         }
 
         if (ProjectStatusEnum.FINISHED === target.status) {
@@ -92,7 +92,7 @@ export class CapitalService extends BaseService<Capital> {
         }
 
         if (ProjectStatusEnum.CANCELLED === target.status) {
-            log.info = `${user.realname} 作废资金，理由："${capital.reason}"`;
+            log.info = `${user.realname} 作废资金，理由："${capital.reason}"`;
         }
 
         log.own = user;
