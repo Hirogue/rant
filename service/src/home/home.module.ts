@@ -9,6 +9,7 @@ import { AboutController } from './about.controller';
 import { SearchController } from './search.controller';
 import { UserController } from './user.controller';
 import { HomeController } from './home.controller';
+import { TopicController } from './topic.controller';
 import { SeoMiddleware } from './seo.middleware';
 import { SeoModule } from '../seo';
 
@@ -24,7 +25,8 @@ import { SeoModule } from '../seo';
         HelpController,
         AboutController,
         SearchController,
-        UserController
+        UserController,
+        TopicController,
     ]
 })
 export class HomeModule implements NestModule {
@@ -41,7 +43,8 @@ export class HomeModule implements NestModule {
                 HelpController,
                 AboutController,
                 SearchController,
-                UserController
+                UserController,
+                TopicController,
             );
 
     }
