@@ -107,13 +107,8 @@ export default () => {
 
   const columns = [
     {
-      title: '联系人',
-      dataIndex: 'realname',
-      search: true,
-    },
-    {
-      title: '手机号',
-      dataIndex: 'phone',
+      title: '企业全称',
+      dataIndex: 'company',
       search: true,
     },
     {
@@ -122,41 +117,48 @@ export default () => {
       search: true,
     },
     {
-      title: '企业全称',
-      dataIndex: 'company',
-      search: true,
-    },
-    {
       title: '地区',
       dataIndex: 'area_path',
       search: true,
     },
     {
-      title: '参会人1',
-      dataIndex: 'participant1',
+      title: '参会人姓名(主)',
+      dataIndex: 'participant1name',
       search: true,
       render: (_, row) => {
         const info = JSON.parse(row.ex_info);
         const participant = info.participants[0];
-        return participant ? (
-          <>
-            <p>姓名：{participant.realname}</p> <p>电话：{participant.phone}</p>
-          </>
-        ) : null;
+        return participant ? participant.realname : null;
       },
     },
     {
-      title: '参会人2',
-      dataIndex: 'participant2',
+      title: '参会人电话(主)',
+      dataIndex: 'participant1phone',
+      search: true,
+      render: (_, row) => {
+        const info = JSON.parse(row.ex_info);
+        const participant = info.participants[0];
+        return participant ? participant.phone : null;
+      },
+    },
+    {
+      title: '参会人姓名(陪)',
+      dataIndex: 'participant2name',
       search: true,
       render: (_, row) => {
         const info = JSON.parse(row.ex_info);
         const participant = info.participants.length >= 2 ? info.participants[1] : null;
-        return participant ? (
-          <>
-            <p>姓名：{participant.realname}</p> <p>电话：{participant.phone}</p>
-          </>
-        ) : null;
+        return participant ? participant.realname : null;
+      },
+    },
+    {
+      title: '参会人电话(陪)',
+      dataIndex: 'participant2phone',
+      search: true,
+      render: (_, row) => {
+        const info = JSON.parse(row.ex_info);
+        const participant = info.participants.length >= 2 ? info.participants[1] : null;
+        return participant ? participant.phone : null;
       },
     },
     {

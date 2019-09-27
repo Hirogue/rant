@@ -64,8 +64,6 @@ export class CustomerService extends BaseService<Customer> {
         for (let item of data) {
 
             const customer = new Customer();
-            customer.realname = item['联系人'];
-            customer.phone = item['手机号'];
             customer.org_type = item['机构类别'];
             customer.company = item['企业全称'];
             customer.source = '2019投融资促进会';
@@ -92,12 +90,16 @@ export class CustomerService extends BaseService<Customer> {
 
             const participants = [];
 
-            if (item['参会人1姓名']) {
-                participants.push({ realname: item['参会人1姓名'], phone: item['参会人1电话'] })
+            if (!item['参会人姓名(主)']) throw new BadRequestException('主要参会人信息缺失');
+
+            if (item['参会人姓名(主)']) {
+                customer.realname = item['参会人姓名(主)'];
+                customer.phone = item['参会人电话(主)'];
+                participants.push({ realname: item['参会人姓名(主)'], phone: item['参会人电话(主)'] })
             }
 
-            if (item['参会人2姓名']) {
-                participants.push({ realname: item['参会人2姓名'], phone: item['参会人2电话'] })
+            if (item['参会人姓名(陪)']) {
+                participants.push({ realname: item['参会人姓名(陪)'], phone: item['参会人电话(陪)'] })
             }
 
             const board_and_lodging = [];
