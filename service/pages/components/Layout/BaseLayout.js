@@ -48,9 +48,7 @@ export default class extends Component {
 	};
 
 	async componentDidMount() {
-		get('/api/link', {
-			sort: 'sort,DESC'
-		}).then(res => { this.setState(state => ({ ...state, links: res })) });
+		get('/api/link?sort=sort%2CDESC').then(res => { this.setState(state => ({ ...state, links: res })) });
 
 		const { csrfToken } = this.props.router.query;
 		localStorage.setItem('csrf-token', csrfToken);
