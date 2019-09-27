@@ -138,7 +138,11 @@ export default () => {
       render: (_, row) => {
         const info = JSON.parse(row.ex_info);
         const participant = info.participants[0];
-        return participant.realname + '' + participant.phone;
+        return participant ? (
+          <>
+            <p>姓名：{participant.realname}</p> <p>电话：{participant.phone}</p>
+          </>
+        ) : null;
       },
     },
     {
@@ -148,7 +152,11 @@ export default () => {
       render: (_, row) => {
         const info = JSON.parse(row.ex_info);
         const participant = info.participants.length >= 2 ? info.participants[1] : null;
-        return participant ? participant.realname + '' + participant.phone : null;
+        return participant ? (
+          <>
+            <p>姓名：{participant.realname}</p> <p>电话：{participant.phone}</p>
+          </>
+        ) : null;
       },
     },
     {
@@ -226,6 +234,7 @@ export default () => {
       } else {
         message.error('导入失败');
       }
+      refetch();
       return false;
     },
   };

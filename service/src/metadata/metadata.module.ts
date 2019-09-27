@@ -18,5 +18,6 @@ import { HttpCacheInterceptor } from "../core";
         MetadataService,
         MetadataResolver
     ],
+    exports: [MetadataService]
 })
 export class MetadataModule { }
