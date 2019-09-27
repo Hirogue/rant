@@ -11,12 +11,12 @@ import { Metadata } from './metadata.entity';
 export class Customer extends Base {
 
     @Field({ nullable: true })
-    @Column({ nullable: true })
+    @Column({ nullable: true, unique: true })
     @ApiModelProperty({ nullable: true })
     realname: string;
 
     @Field({ nullable: true })
-    @Column({ nullable: true })
+    @Column({ nullable: true, unique: true })
     @ApiModelProperty({ nullable: true })
     phone: string;
 
@@ -26,7 +26,7 @@ export class Customer extends Base {
     org_type: string;
 
     @Field({ nullable: true })
-    @Column({ nullable: true })
+    @Column({ nullable: true, unique: true })
     @ApiModelProperty({ nullable: true })
     company: string;
 

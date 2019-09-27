@@ -70,9 +70,7 @@ export default App => {
                 this.setState(state => ({ ...state, user: JSON.parse(user) }));
             }
 
-            get('/api/link', {
-                queryString: 'sort=sort,DESC'
-            }).then(res => { this.setState(state => ({ ...state, links: res })) });
+            get('/api/link?sort=sort%2CDESC').then(res => { this.setState(state => ({ ...state, links: res })) });
         }
 
         logout() {

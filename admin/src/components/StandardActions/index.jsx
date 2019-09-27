@@ -16,8 +16,14 @@ export default props => {
                 title={action.confirmTitle}
                 onConfirm={action.action}
               >
-                <Button disabled={action.disabled} icon={action.icon} />
+                {action.render ? (
+                  <span style={{ display: 'inline-block' }}>{action.render(action)}</span>
+                ) : (
+                  <Button disabled={action.disabled} icon={action.icon} />
+                )}
               </Popconfirm>
+            ) : action.render ? (
+              <span style={{ display: 'inline-block' }}>{action.render(action)}</span>
             ) : (
               <Button disabled={action.disabled} icon={action.icon} onClick={action.action} />
             )}

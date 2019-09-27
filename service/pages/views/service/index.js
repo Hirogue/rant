@@ -36,7 +36,7 @@ export default withRouter((props) => {
 	const [state, setState] = useState({
 		current: 1,
 		selectedTags: {
-			机构类别: [],
+			机构类别: !!category ? [category] : [],
 			地区: []
 		}
 	});
@@ -59,6 +59,7 @@ export default withRouter((props) => {
 		refetch({
 			queryProvider: buildingQuery(defaultVariables)
 		})
+		if (category) document.title = category + "-旅游项目通";
 	}, []);
 
 	const onPageChange = (page, pageSize) => {

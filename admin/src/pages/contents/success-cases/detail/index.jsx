@@ -130,7 +130,7 @@ const BasicForm = Form.create()(props => {
           })(
             <Switch
               checkedChildren="是"
-              unCheckedChildren="否"
+              unCheckedChildren="否"
               defaultChecked={target.is_published}
             />,
           )}

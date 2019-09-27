@@ -2,16 +2,17 @@ import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import { Q_GET_CUSTOMERS } from '@/gql';
-import { canReadAny, canUpdateOwn } from '@/utils/access-control';
-import { ProjectStatusEnum, UserStatusEnum } from '@/utils/enum';
+import { canCreateAny, canReadAny, canUpdateOwn } from '@/utils/access-control';
+import { ProjectStatusEnum } from '@/utils/enum';
 import { ExcelHelper } from '@/utils/excel';
 import { buildingQuery, paramsAuth, ProjectStatusMaps } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
-import { Affix, Checkbox, Col, Divider, Popconfirm, Row, Skeleton, message } from 'antd';
+import { Affix, Button, Col, Divider, message, Popconfirm, Row, Skeleton, Upload } from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { M_APPROVAL_CUSTOMER } from '../gql';
+import { post } from '@/utils/fetch';
 
 const PATH = '/customer';
 const AUTH_RESOURCE = '/customer';
@@ -106,13 +107,8 @@ export default () => {
 
   const columns = [
     {
-      title: '联系人',
-      dataIndex: 'realname',
-      search: true,
-    },
-    {
-      title: '手机号',
-      dataIndex: 'phone',
+      title: '企业全称',
+      dataIndex: 'company',
       search: true,
     },
     {
@@ -121,39 +117,78 @@ export default () => {
       search: true,
     },
     {
-      title: '企业全称',
-      dataIndex: 'company',
-      search: true,
-    },
-    {
       title: '地区',
       dataIndex: 'area_path',
       search: true,
     },
     {
-      title: '食宿安排',
-      dataIndex: 'board_and_lodging',
-      render: (_, row) => {
-        const info = JSON.parse(row.ex_info);
-        return (
-          <Checkbox.Group
-            options={[
-              { label: '5日晚餐', value: 'dinner5' },
-              { label: '5日住宿（含早餐）', value: 'stay5' },
-              { label: '6日午餐', value: 'lunch6' },
-            ]}
-            value={info.board_and_lodging || []}
-          />
-        );
-      },
-    },
-    {
-      title: '参会人',
-      dataIndex: 'participants',
+      title: '参会人姓名(主)',
+      dataIndex: 'participant1name',
       search: true,
       render: (_, row) => {
         const info = JSON.parse(row.ex_info);
-        return info.participants.map(item => item.realname).join(',');
+        const participant = info.participants[0];
+        return participant ? participant.realname : null;
+      },
+    },
+    {
+      title: '参会人电话(主)',
+      dataIndex: 'participant1phone',
+      search: true,
+      render: (_, row) => {
+        const info = JSON.parse(row.ex_info);
+        const participant = info.participants[0];
+        return participant ? participant.phone : null;
+      },
+    },
+    {
+      title: '参会人姓名(陪)',
+      dataIndex: 'participant2name',
+      search: true,
+      render: (_, row) => {
+        const info = JSON.parse(row.ex_info);
+        const participant = info.participants.length >= 2 ? info.participants[1] : null;
+        return participant ? participant.realname : null;
+      },
+    },
+    {
+      title: '参会人电话(陪)',
+      dataIndex: 'participant2phone',
+      search: true,
+      render: (_, row) => {
+        const info = JSON.parse(row.ex_info);
+        const participant = info.participants.length >= 2 ? info.participants[1] : null;
+        return participant ? participant.phone : null;
+      },
+    },
+    {
+      title: '5日晚餐',
+      dataIndex: 'dinner5',
+      render: (_, row) => {
+        const info = JSON.parse(row.ex_info);
+        const boardAndLodging = info.board_and_lodging || [];
+
+        return boardAndLodging.includes('dinner5') ? '需要' : '不需要';
+      },
+    },
+    {
+      title: '5日住宿（含早餐）',
+      dataIndex: 'stay5',
+      render: (_, row) => {
+        const info = JSON.parse(row.ex_info);
+        const boardAndLodging = info.board_and_lodging || [];
+
+        return boardAndLodging.includes('stay5') ? '需要' : '不需要';
+      },
+    },
+    {
+      title: '6日午餐',
+      dataIndex: 'lunch6',
+      render: (_, row) => {
+        const info = JSON.parse(row.ex_info);
+        const boardAndLodging = info.board_and_lodging || [];
+
+        return boardAndLodging.includes('lunch6') ? '需要' : '不需要';
       },
     },
     {
@@ -187,8 +222,37 @@ export default () => {
     showTotal: total => `共 ${total} 条记录`,
   };
 
+  const uploadProps = {
+    accept:
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel',
+    showUploadList: false,
+    beforeUpload: async file => {
+      message.loading('正在导入...');
+      const data = await ExcelHelper.import(file);
+      const res = await post('/api/customer/import', data);
+      message.destroy();
+      if (res) {
+        message.success('导入成功');
+      } else {
+        message.error('导入失败');
+      }
+      refetch();
+      return false;
+    },
+  };
+
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
+    {
+      name: '导入',
+      icon: 'import',
+      render: action => (
+        <Upload {...uploadProps}>
+          <Button disabled={action.disabled} icon={action.icon} />
+        </Upload>
+      ),
+      hide: !canCreateAny(AUTH_RESOURCE),
+    },
     {
       name: '导出',
       icon: 'export',

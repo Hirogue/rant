@@ -84,7 +84,7 @@ export default () => {
         canUpdateAny(AUTH_RESOURCE) ? (
           <Switch
             checkedChildren="是"
-            unCheckedChildren="否"
+            unCheckedChildren="否"
             checked={!!val}
             onChange={checked => {
               client.mutate({

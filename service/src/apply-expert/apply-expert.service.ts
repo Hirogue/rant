@@ -53,7 +53,7 @@ export class ApplyExpertService extends BaseService<ApplyExpert> {
         }
 
         if (ProjectStatusEnum.REJECTED === target.status) {
-            log.info = `${user.realname} 驳回约见，理由："${target.reason}"`;
+            log.info = `${user.realname} 驳回约见，理由："${target.reason}"`;
         }
 
         if (ProjectStatusEnum.FINISHED === target.status) {
@@ -61,7 +61,7 @@ export class ApplyExpertService extends BaseService<ApplyExpert> {
         }
 
         if (ProjectStatusEnum.CANCELLED === target.status) {
-            log.info = `${user.realname} 作废约见，理由："${applyExpert.reason}"`;
+            log.info = `${user.realname} 作废约见，理由："${applyExpert.reason}"`;
         }
 
         log.own = user;

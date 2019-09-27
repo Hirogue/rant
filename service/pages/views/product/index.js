@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import _ from 'lodash';
 import { Spin } from 'antd';
 import { withRouter } from 'next/router';
@@ -29,6 +29,7 @@ export default withRouter((props) => {
 
 	const { router } = props;
 	const [ category, setCategory ] = useState(getUrlParam(router, 'category') || '')
+	
 
 	const { loading, data: { queryProduct, productCategoryTrees } } = useQuery(Q_GET_PRODUCTS, {
 		client: client,
@@ -36,6 +37,10 @@ export default withRouter((props) => {
 			queryString: buildingQuery(defaultVariables)
 		},
 	});
+
+	useEffect(() => {
+		if (category) document.title = category + "-旅游项目通";
+	}, [])
 
 	const onChange = (nextCategory) => () => {
 		window.history.pushState({}, '', `${window.location.pathname}?category=${nextCategory}`)

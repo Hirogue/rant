@@ -379,11 +379,11 @@ const DetailForm = Form.create()(props => {
                   </Select>,
                 )}
               </Form.Item>
-              <Form.Item {...formItemLayout} label={'前期费用'}>
+              <Form.Item {...formItemLayout} label={'前期费用'}>
                 {getFieldDecorator('pre_payment', {
                   initialValue: target ? target.pre_payment : null,
                 })(
-                  <Input disabled={disabled} style={{ width: 500 }} placeholder="请填写前期费用" />,
+                  <Input disabled={disabled} style={{ width: 500 }} placeholder="请填写前期费用" />,
                 )}
               </Form.Item>
             </>
@@ -424,7 +424,7 @@ const DetailForm = Form.create()(props => {
                   <Input
                     disabled={disabled}
                     style={{ width: 500 }}
-                    placeholder="请填写抵质押物类型"
+                    placeholder="请填写抵质押物类型"
                   />,
                 )}
               </Form.Item>
