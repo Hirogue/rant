@@ -102,32 +102,34 @@ export default () => {
               <Divider type="vertical" />
             </Fragment>
           ) : null}
-          {canUpdateAny(AUTH_RESOURCE) ? (
-            <Fragment>
-              <a
-                href="javascript:;"
-                onClick={() => {
-                  setCurrent(record);
-                  setOrgSelectorVisible(true);
-                }}
-              >
-                [{`${!record.org ? '' : '重新'}`}分配部门]
-              </a>
-              <Divider type="vertical" />
-              <a
-                href="javascript:;"
-                onClick={() => {
-                  setCurrent(record);
-                  setUserSelectorVisible(true);
-                }}
-              >
-                [{`${!record.own ? '' : '重新'}`}分配业务员]
-              </a>
-              <Divider type="vertical" />
-            </Fragment>
-          ) : null}
         </Fragment>
       ) : null}
+      <Fragment>
+        {canUpdateAny(AUTH_RESOURCE) ? (
+          <Fragment>
+            <a
+              href="javascript:;"
+              onClick={() => {
+                setCurrent(record);
+                setOrgSelectorVisible(true);
+              }}
+            >
+              [{`${!record.org ? '' : '重新'}`}分配部门]
+            </a>
+            <Divider type="vertical" />
+            <a
+              href="javascript:;"
+              onClick={() => {
+                setCurrent(record);
+                setUserSelectorVisible(true);
+              }}
+            >
+              [{`${!record.own ? '' : '重新'}`}分配业务员]
+            </a>
+            <Divider type="vertical" />
+          </Fragment>
+        ) : null}
+      </Fragment>
       <a
         href="javascript:;"
         onClick={() => {
@@ -347,7 +349,7 @@ export default () => {
               variables: {
                 data: {
                   id: current.id,
-                  status: UserStatusEnum.PENDING,
+                  status: current.status,
                   own,
                 },
               },
@@ -371,7 +373,7 @@ export default () => {
               variables: {
                 data: {
                   id: current.id,
-                  status: UserStatusEnum.PENDING,
+                  status: current.status,
                   org,
                 },
               },

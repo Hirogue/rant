@@ -254,26 +254,26 @@ export class UserService extends BaseService<User> {
         target.status = data.status;
         target.reason = data.reason;
 
-        if (UserStatusEnum.PENDING === target.status) {
-            if (data.org) {
-                const org = await orgRepo.findOne(data.org.id);
-                target.org = data.org;
+        
+        if (data.org) {
+            const org = await orgRepo.findOne(data.org.id);
+            target.org = data.org;
 
-                log.info = `${user.realname} 将用户分配给 "${org.title}"`;
-            }
-
-            if (data.own) {
-
-                const own = await userRepo.findOne(data.own.id);
-                target.own = own;
-
-                log.info = `${user.realname} 将用户分配给业务员 "${own.realname}"`;
-            }
-
-            if (data.reason) {
-                log.info = `${user.realname} 跟进："${data.reason}"`;
-            }
+            log.info = `${user.realname} 将用户分配给 "${org.title}"`;
         }
+
+        if (data.own) {
+
+            const own = await userRepo.findOne(data.own.id);
+            target.own = own;
+
+            log.info = `${user.realname} 将用户分配给业务员 "${own.realname}"`;
+        }
+
+        if (data.reason) {
+            log.info = `${user.realname} 跟进："${data.reason}"`;
+        }
+        
 
         if (UserStatusEnum.CHECKED === target.status) {
             log.info = `${user.realname} 审核通过，总结："${data.reason}"`;

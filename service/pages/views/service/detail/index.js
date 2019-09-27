@@ -64,6 +64,7 @@ export default withRouter((props) => {
 	const toSetVal = (val) => (key) => (def) => val && val[key] ? val[key] : def;
 
 	if (loading) return <Spin style={{ position: "fixed", top: "50%", left: "50%" }} tip="正在加载中" />;
+	if (provider.name) document.title = provider.name + "-旅游项目通";
 
 	return (
 		<BaseLayout>
