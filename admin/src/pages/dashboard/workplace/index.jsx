@@ -7,7 +7,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { CondOperator } from '@nestjsx/crud-request';
 import { Avatar, Card, Col, Descriptions, List, Row, Skeleton, Tabs } from 'antd';
 import moment from 'moment';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'umi';
 import { Q_GET_WORKPLACE_DATA } from '../gql';
 import styles from './style.less';
@@ -55,7 +55,7 @@ export default () => {
 
   const { me = {} } = userResult;
 
-  const { data } = useQuery(Q_GET_WORKPLACE_DATA, {
+  const { data, refetch } = useQuery(Q_GET_WORKPLACE_DATA, {
     notifyOnNetworkStatusChange: true,
     variables: {
       userQS: buildingQuery({
@@ -105,6 +105,11 @@ export default () => {
       }),
     },
   });
+
+  useEffect(() => {
+
+    refetch();
+  }, []);
 
   const { user = {}, project = {}, capital = {}, product = {}, expert = {} } = data || {};
 
