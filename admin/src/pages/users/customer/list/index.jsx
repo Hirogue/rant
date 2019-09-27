@@ -21,7 +21,7 @@ import Zmage from 'react-zmage';
 import { M_APPROVAL_USER } from '../../gql';
 
 const PATH = '/users/customer';
-const AUTH_RESOURCE = '/user/customer';
+const AUTH_RESOURCE = '/users/customer/list';
 
 export default () => {
   const defaultFilter = [

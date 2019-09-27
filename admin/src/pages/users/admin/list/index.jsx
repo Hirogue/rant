@@ -15,7 +15,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Link, router } from 'umi';
 
 const PATH = '/users/admin';
-const AUTH_RESOURCE = '/user/admin';
+const AUTH_RESOURCE = '/users/admin/list';
 
 export default () => {
   const defaultFilter = [

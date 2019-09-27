@@ -1,6 +1,6 @@
 import RightContent from '@/components/GlobalHeader/RightContent';
 import BlankLayout from '@/layouts/BlankLayout';
-import { canReadAny } from '@/utils/access-control';
+import { canReadAny, canReadOwn } from '@/utils/access-control';
 import { getUserInfo } from '@/utils/global';
 import ProLayout from '@ant-design/pro-layout';
 import { Layout } from 'antd';
@@ -16,7 +16,7 @@ const menuDataRender = menuList =>
   menuList.map(item => {
     const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
 
-    return canReadAny(localItem.path) ? localItem : null;
+    return canReadAny(localItem.path) || canReadOwn(localItem.path) ? localItem : null;
   });
 
 const footerRender = (_, defaultDom) => {
