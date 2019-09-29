@@ -19,6 +19,10 @@ const formTailLayout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 18, offset: 6 },
 };
+const centerLayout = {
+    labelCol: { span: 9 },
+    wrapperCol: { span: 15, offset: 9 },
+};
 
 const toTransformAreaTreeProps = (data, map) => data.map(node => {
     let node_object = {
@@ -465,8 +469,8 @@ export default Form.create()(withRouter((props) => {
                                 </Checkbox.Group>
                             )}
                         </Form.Item>
-                        <p style={{ color: "#999", fontSize: "12px", margin: "5px 0 0", lineHeight: 1.2 }}>注：仅提供南昌市企业参会人员住宿</p>
-                        <Form.Item {...formTailLayout}>
+                        <p style={{ color: "#999", fontSize: "12px", margin: "5px 0 10px", lineHeight: 1.2 }}>注：仅提供南昌市企业参会人员住宿</p>
+                        <Form.Item {...centerLayout}>
                             <Button type="primary" htmlType="submit" disabled={hasErrors(getFieldsError())}>提交</Button>
                         </Form.Item>
                     </Form>
