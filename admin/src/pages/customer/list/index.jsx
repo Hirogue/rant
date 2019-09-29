@@ -1,8 +1,8 @@
 import StandardActions from '@/components/StandardActions';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
-import { Q_GET_CUSTOMERS } from '@/gql';
-import { canCreateAny, canReadAny, canUpdateOwn } from '@/utils/access-control';
+import { Q_GET_CUSTOMERS, M_DELETE_CUSTOMER } from '@/gql';
+import { canCreateAny, canReadAny, canUpdateOwn, canDeleteAny } from '@/utils/access-control';
 import { ProjectStatusEnum } from '@/utils/enum';
 import { ExcelHelper } from '@/utils/excel';
 import { buildingQuery, paramsAuth, ProjectStatusMaps } from '@/utils/global';
@@ -252,6 +252,26 @@ export default () => {
         </Upload>
       ),
       hide: !canCreateAny(AUTH_RESOURCE),
+    },
+    {
+      name: '删除',
+      icon: 'delete',
+      action: () => {
+        client.mutate({
+          mutation: M_DELETE_CUSTOMER,
+          variables: { ids: selectedRows.map(item => item.id).join(',') },
+          update: (proxy, { data }) => {
+            if (data.deleteCustomer) {
+              message.success('删除成功');
+              refetch();
+            }
+          },
+        });
+      },
+      disabled: selectedRows.length <= 0,
+      hide: !canDeleteAny(AUTH_RESOURCE),
+      confirm: true,
+      confirmTitle: `确定要删除吗?`,
     },
     {
       name: '导出',
