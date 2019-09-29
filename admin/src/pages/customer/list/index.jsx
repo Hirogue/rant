@@ -12,7 +12,7 @@ import { Affix, Button, Col, Divider, message, Popconfirm, Row, Skeleton, Upload
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { M_APPROVAL_CUSTOMER } from '../gql';
-import { post } from '@/utils/fetch';
+import { post } from '@/utils/super-fetch';
 
 const PATH = '/customer';
 const AUTH_RESOURCE = '/customer';
@@ -231,10 +231,10 @@ export default () => {
       const data = await ExcelHelper.import(file);
       const res = await post('/api/customer/import', data);
       message.destroy();
-      if (res) {
+      if (res.isSuccess) {
         message.success('导入成功');
       } else {
-        message.error('导入失败');
+        message.error('导入失败:' + res.message.message);
       }
       refetch();
       return false;

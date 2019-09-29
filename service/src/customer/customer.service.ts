@@ -4,6 +4,7 @@ import { Repository, Transaction, TransactionRepository } from 'typeorm';
 import { BaseService, ProjectStatusEnum, SmsTypeEnum, UserTypeEnum } from '../core';
 import { Customer, User, Metadata } from '../database';
 import { VerificationService } from '../verification';
+import { range, shuffle, take } from 'lodash';
 
 @Injectable()
 export class CustomerService extends BaseService<Customer> {
@@ -34,10 +35,14 @@ export class CustomerService extends BaseService<Customer> {
         if (ProjectStatusEnum.CHECKED === target.status) {
 
             // 注册新用户
-            const exist = await userRepo.findOne({
-                where: { account: target.phone }
-            });
+            const exist = await userRepo.createQueryBuilder("t")
+            .leftJoinAndSelect("t.area","area")
+            .where("t.account = :account", {account: target.phone})
+            .orWhere("t.phone = :phone", {phone: target.phone})
+            .orWhere("t.company = :company", {company: target.company})
+            .getOne();
 
+            const password = take(shuffle(range(0, 10)), 8).join('');
             if (!exist) {
                 const user = new User();
                 user.account = target.phone;
@@ -46,11 +51,12 @@ export class CustomerService extends BaseService<Customer> {
                 user.company = target.company;
                 user.area = target.area;
                 user.type = UserTypeEnum.ENTERPRISE;
+                user.password = password;
 
                 await userRepo.save(user);
             }
 
-            await this.verificationService.sendSms(target.phone, SmsTypeEnum.CUSTOMER);
+            await this.verificationService.sendSms(target.phone, SmsTypeEnum.CUSTOMER, password);
         }
 
         await customerRepo.save(target);
@@ -65,10 +71,10 @@ export class CustomerService extends BaseService<Customer> {
 
             const customer = new Customer();
             customer.org_type = item['机构类别'];
-            customer.company = item['企业全称'];
+            customer.company = item['企业全称'].trim();
             customer.source = '2019投融资促进会';
 
-            if (!item['地区']) throw new BadRequestException('参数[地区]缺失');
+            if (!item['地区']) throw new BadRequestException('参数[地区]缺失');
             const areaList = item['地区'].split(' ');
 
             let area = null;
@@ -93,13 +99,13 @@ export class CustomerService extends BaseService<Customer> {
             if (!item['参会人姓名(主)']) throw new BadRequestException('主要参会人信息缺失');
 
             if (item['参会人姓名(主)']) {
-                customer.realname = item['参会人姓名(主)'];
-                customer.phone = item['参会人电话(主)'];
+                customer.realname = item['参会人姓名(主)'].trim();
+                customer.phone = item['参会人电话(主)'].trim();
                 participants.push({ realname: item['参会人姓名(主)'], phone: item['参会人电话(主)'] })
             }
 
             if (item['参会人姓名(陪)']) {
-                participants.push({ realname: item['参会人姓名(陪)'], phone: item['参会人电话(陪)'] })
+                participants.push({ realname: item['参会人姓名(陪)'].trim(), phone: item['参会人电话(陪)'].trim() })
             }
 
             const board_and_lodging = [];

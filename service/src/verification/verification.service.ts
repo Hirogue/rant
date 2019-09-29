@@ -43,7 +43,8 @@ export class VerificationService implements OnModuleInit, OnModuleDestroy {
                 .forEach((item, index) => {
                     msg = msg.replace(`{$var${index + 1}}`, item)
                 });
-        }
+        } 
+
 
         Logger.log('sms content:', msg);
 
@@ -88,7 +89,7 @@ export class VerificationService implements OnModuleInit, OnModuleDestroy {
         return true;
     }
 
-    async sendSms(phone: string, type: SmsTypeEnum) {
+    async sendSms(phone: string, type: SmsTypeEnum, password?: string) {
 
         if (SmsTypeEnum.REGISTER === type) {
             const exist = await this.userService.findOneByAccount(phone);
@@ -99,13 +100,17 @@ export class VerificationService implements OnModuleInit, OnModuleDestroy {
             const exist = await this.userService.findOneByAccount(phone);
             if (!exist) throw new BadRequestException('该账户不存在');
         }
-
-        const code = take(shuffle(range(0, 10)), 4).join('');
-        const expire = Config.verification.sms.expire;
-
-        this.cache.set(`${type}-${phone}`, code, expire);
-
-        Logger.debug('code:', code);
+        let code;
+        if (SmsTypeEnum.CUSTOMER === type) {
+            code = password;
+        } else {
+            code = take(shuffle(range(0, 10)), 4).join('');
+            const expire = Config.verification.sms.expire;
+    
+            this.cache.set(`${type}-${phone}`, code, expire);
+    
+            Logger.debug('code:', code);
+        }
 
         await this.ch.send({ phone, type, code });
 
