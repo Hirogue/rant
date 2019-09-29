@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { withRouter } from 'next/router';
-import { Anchor, Form, Select, Input, Button, Cascader, Checkbox, Row, Col, message } from 'antd';
+import { Anchor, Form, Select, Input, Button, Cascader, Checkbox, Row, Col, message, Modal } from 'antd';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import config from '../../config/config';
 
@@ -74,7 +74,7 @@ export default Form.create()(withRouter((props) => {
     const [flag, setFlag] = useState(false);
     const [area, setArea] = useState(null);
 
-    const { form } = props;
+    const { router, form } = props;
     const { getFieldDecorator, getFieldsError, validateFields } = form;
 
     useEffect(() => {
@@ -88,7 +88,6 @@ export default Form.create()(withRouter((props) => {
         } else {
             setArea(JSON.parse(sessionStorage.getItem('area')));
         }
-        // validateFields();
     }, [])
 
     const hasErrors = (fieldsError) => Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -102,6 +101,9 @@ export default Form.create()(withRouter((props) => {
                         participants: []
                     }
                 };
+                if (values.area.find((item => item === '南昌市')) && values.board_and_lodging) {
+                    return message.error('很抱歉，无法提供南昌市企业人员的住宿需求！');
+                }
                 let area_item = toGetParentArrayByChildNode(area, { title: values.area[2] })[2];
                 let user_1 = values.participants_1 ? values.participants_1.split(",") : null;
                 let user_2 = values.participants_2 ? values.participants_2.split(",") : null;
@@ -132,7 +134,22 @@ export default Form.create()(withRouter((props) => {
                     }).then(res => res.json());
 
                     if (res && res.id) {
-                        message.success('报名成功！');
+                        Modal.confirm({
+                            title: '提交成功！',
+                            content: (
+                                <Fragment>
+                                    <p>您的参会申请已提交成功，我们的工作人员将在2个工作日之内通过电话联系您，请保持电话畅通。</p>
+                                    <p>您如果有融资或者投资需求，欢迎访问旅游项目平台，我们提供专业的投融资指导和前沿的金融政策资讯。</p>
+                                    <p>（点击空白处可返回）</p>
+                                </Fragment>
+                            ),
+                            okText: '我要投资',
+                            cancelText: '我要融资',
+                            onOk: () => router.push('/project'),
+                            onCancel: () => router.push('/finance'),
+                            maskClosable: true,
+                            centered: true
+                        });
                     } else {
                         message.error('报名失败！');
                     }

@@ -292,12 +292,10 @@ a {
 }
 
 @media screen and (min-width: 750px) {
-    body {
-        width: 750px;
-        margin: 0 auto;
-    }
 
     #topic-page {
+        width: 750px;
+        margin: 0 auto;
         overflow: hidden;
         font-size: 10px;
     }

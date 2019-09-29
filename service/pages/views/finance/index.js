@@ -13,7 +13,7 @@ import List from '../../partials/finance/List';
 
 import '../../partials/finance/finance.scss';
 import { createApolloClient } from "../../lib/apollo";
-import { buildingQuery, getUrlParam } from "../../lib/global";
+import { buildingQuery, getUrlParam, checkMobile } from "../../lib/global";
 import { Q_GET_CAPITAL_DATA } from '../../gql'
 import { METADATA_TITLE_CN, IF_MODE_ENUM_R, IFT_MODE_ENUM_R } from '../../lib/enum';
 
@@ -67,6 +67,9 @@ export default withRouter((props) => {
 	});
 
 	useEffect(() => {
+		if (checkMobile) {
+			window.location.href = "https://m.lvyoto.com/finance"
+		}
 		!!industry && defaultVariables.filter.push({ field: "industry.title", operator: CondOperator.EQUALS, value: industry });
 		!!category && defaultVariables.filter.push({ field: "category", operator: CondOperator.EQUALS, value: IF_MODE_ENUM_R[category] });
 		refetch({
