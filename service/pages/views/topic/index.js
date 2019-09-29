@@ -105,7 +105,7 @@ export default Form.create()(withRouter((props) => {
                         participants: []
                     }
                 };
-                if (values.area.find((item => item === '南昌市')) && values.board_and_lodging) {
+                if (values.area.find((item => item === '南昌市')) && values.board_and_lodging && values.board_and_lodging.find(item => item === 'stay5')) {
                     return message.error('很抱歉，无法提供南昌市企业人员的住宿需求！');
                 }
                 let area_item = toGetParentArrayByChildNode(area, { title: values.area[2] })[2];
@@ -149,10 +149,11 @@ export default Form.create()(withRouter((props) => {
                             ),
                             okText: '我要投资',
                             cancelText: '我要融资',
-                            onOk: () => router.push('/project'),
-                            onCancel: () => router.push('/finance'),
+                            onOk: () => window.location.href = ('/project'),
+                            onCancel: () => window.location.href = ('/finance'),
                             maskClosable: true,
-                            centered: true
+                            centered: true,
+                            zIndex: 999999
                         });
                     } else {
                         message.error('报名失败！');
