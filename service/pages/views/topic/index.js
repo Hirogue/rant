@@ -88,7 +88,7 @@ export default Form.create()(withRouter((props) => {
         } else {
             setArea(JSON.parse(sessionStorage.getItem('area')));
         }
-        validateFields();
+        // validateFields();
     }, [])
 
     const hasErrors = (fieldsError) => Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -114,25 +114,30 @@ export default Form.create()(withRouter((props) => {
                 if (user_2) {
                     req_obj.ex_info.participants.push({ realname: user_2[0], phone: user_2[1] });
                 }
+                if (!user_1 && !user_1 || !values.company) return;
                 req_obj.area = area_item;
                 req_obj.company = values.company;
                 req_obj.org_type = values.org_type;
                 if (values.board_and_lodging) {
                     req_obj.ex_info.board_and_lodging = values.board_and_lodging;
                 }
-                
-                const res = await fetch('/api/customer', {
-                    method: "POST",
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    body: JSON.stringify(req_obj)
-                }).then(res => res.json());
 
-                if (res && res.id) {
-                    message.success('报名成功！');
-                } else {
-                    message.fail('报名失败！');
+                try {
+                    const res = await fetch('/api/customer', {
+                        method: "POST",
+                        headers: {
+                            'content-type': 'application/json'
+                        },
+                        body: JSON.stringify(req_obj)
+                    }).then(res => res.json());
+
+                    if (res && res.id) {
+                        message.success('报名成功！');
+                    } else {
+                        message.error('报名失败！');
+                    }
+                } catch (error) {
+                    message.error('服务器错误，报名失败！');
                 }
                 
             }
@@ -403,11 +408,10 @@ export default Form.create()(withRouter((props) => {
                             )}
                         </Form.Item>
                         <Form.Item label="企业名称" {...formItemLayout}>
-                            {getFieldDecorator('company', {
-                                rules: [{ required: true, message: '请填写企业全称' }],
-                            })(
+                            {getFieldDecorator('company')(
                                 <Input placeholder="一 请填写企业全称 一" />
                             )}
+                            <p style={{ color: "red", fontSize: "12px", letterSpacing: 0, margin: "5px 0 0", lineHeight: 1.2 }}>需填写单位全称</p>
                         </Form.Item>
                         <Form.Item label="企业地址" {...formItemLayout}>
                             {getFieldDecorator('area', {
@@ -417,20 +421,13 @@ export default Form.create()(withRouter((props) => {
                             })(<Cascader placeholder="一 请选择企业地址 一" options={area ? toTransformAreaTreeProps(area, { key: 'title', value: 'title' }) : []} />)}
                         </Form.Item>
                         <Form.Item label="参会人" {...formItemLayout}>
-                            {getFieldDecorator('participants_1', {
-                                rules: [
-                                    { required: true, message: '第一位参会人作为会议联系人，允许最多2位参会人' },
-                                ],
-                            })(
+                            {getFieldDecorator('participants_1')(
                                 <DoubleInput extra={flag} set={setFlag} />
                             )}
+                            <p style={{ color: "red", fontSize: "12px", letterSpacing: 0, margin: "5px 0 0", lineHeight: 1.2 }}>此参会人作为会议联系人，允许最多2位参会人</p>
                         </Form.Item>
                         {flag && <Form.Item label="参会人" {...formItemLayout}>
-                            {getFieldDecorator('participants_2', {
-                                rules: [
-                                    { required: true, message: '第一位参会人作为会议联系人，允许最多2位参会人' },
-                                ],
-                            })(
+                            {getFieldDecorator('participants_2')(
                                 <DoubleInput extra={flag} set={setFlag} />
                             )}
                         </Form.Item>}
@@ -451,6 +448,7 @@ export default Form.create()(withRouter((props) => {
                                 </Checkbox.Group>
                             )}
                         </Form.Item>
+                        <p style={{ color: "#999", fontSize: "12px", margin: "5px 0 0", lineHeight: 1.2 }}>注：仅提供南昌市企业参会人员住宿</p>
                         <Form.Item {...formTailLayout}>
                             <Button type="primary" htmlType="submit" disabled={hasErrors(getFieldsError())}>提交</Button>
                         </Form.Item>

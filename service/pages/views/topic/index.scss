@@ -219,6 +219,10 @@ a {
     .topic-form {
         padding: 8vw;
 
+        .ant-form-item {
+            margin: 0;
+        }
+
         .ant-form-item-required {
             &:before {
                 display: none;
@@ -249,7 +253,7 @@ a {
     width: 18.4vw;
     height: auto;
     position: fixed;
-    top: 400px;
+    top: 30%;
     left: 0;
     z-index: 9999;
 
