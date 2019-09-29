@@ -12,7 +12,7 @@ import ScreenMod from '../../components/ScreenMod';
 
 import List from '../../partials/project/List';
 import { createApolloClient } from "../../lib/apollo";
-import { buildingQuery, getUrlParam } from "../../lib/global";
+import { buildingQuery, getUrlParam, checkMobile } from "../../lib/global";
 import { Q_GET_PROJECT_DATA } from '../../gql'
 import { METADATA_TITLE_CN, IF_MODE_ENUM_R } from '../../lib/enum';
 
@@ -62,6 +62,9 @@ export default withRouter((props) => {
 	})
 
 	useEffect(() => {
+		if (checkMobile) {
+			window.location.href = "https://m.lvyoto.com/home"
+		}
 		!!industry && defaultVariables.filter.push({ field: "industry.title", operator: CondOperator.EQUALS, value: industry });
 		!!category && defaultVariables.filter.push({ field: "category", operator: CondOperator.EQUALS, value: IF_MODE_ENUM_R[category] });
 		refetch({
