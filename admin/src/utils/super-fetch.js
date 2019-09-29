@@ -1,0 +1,66 @@
+import { message } from 'antd';
+import { merge } from 'lodash';
+import { router } from 'umi';
+import { formatMessage } from 'umi-plugin-locale';
+import Logger from './logger';
+import Config from '@/config';
+import { isObject } from 'util';
+
+export const createFetch = (url, config) => {
+  let defaultConfig = {
+    headers: {
+      authorization: 'Bearer ' + localStorage.getItem('token'),
+    },
+  };
+  return fetch(Config.basePath + url, merge(defaultConfig, config))
+    .then(res => {
+      const data = !!res ? res.json() : {};
+      return data;
+    })
+    .then(data => {
+      if (401 === data.status) {
+        message.error(formatMessage({ id: 'errors.invalid.auth' }));
+        router.replace('/user/login');
+        return {isSuccess: false, code: data.status, message: data.message};
+      }
+
+      if (400 === data.status) {
+        message.error(
+          data.message ? data.message.message : data.response ? data.response.message : '未知错误',
+        );
+        return {isSuccess: false, code: data.status, message: data.message};
+      }
+
+      return {isSuccess: true, ...data};
+    })
+    .catch(error => Logger.error(error));
+};
+
+export const get = async (url, params) => {
+  let queryString = null;
+
+  if (params) {
+    const searchParams = new URLSearchParams();
+
+    Object.keys(params).forEach(key => searchParams.append(key, params[key]));
+
+    queryString = searchParams.toString();
+  }
+
+  return createFetch(`${url}${queryString ? '?' + queryString : ''}`, { method: 'GET' });
+};
+
+export const post = async (url, data) =>
+  createFetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+export const uploadOne = async (file, fileName) => {
+  const data = new FormData();
+  data.append('fileName', fileName || file.name);
+  data.append('file', file);
+
+  return await createFetch('/api/storage', { method: 'POST', body: data });
+};
