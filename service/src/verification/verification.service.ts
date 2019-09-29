@@ -37,13 +37,13 @@ export class VerificationService implements OnModuleInit, OnModuleDestroy {
 
         let msg = Config.verification.sms.templates[type];
 
-        if (type === SmsTypeEnum.PASSWORD || type === SmsTypeEnum.REGISTER) {
+        //if (type === SmsTypeEnum.PASSWORD || type === SmsTypeEnum.REGISTER) {
 
             [code, Config.verification.sms.expire / 60]
                 .forEach((item, index) => {
                     msg = msg.replace(`{$var${index + 1}}`, item)
                 });
-        } 
+        //} 
 
 
         Logger.log('sms content:', msg);
