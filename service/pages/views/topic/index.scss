@@ -291,6 +291,18 @@ a {
     }
 }
 
+.modal-close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    display: inline-flex;
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
 @media screen and (min-width: 750px) {
 
     #topic-page {

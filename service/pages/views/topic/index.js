@@ -106,7 +106,12 @@ export default Form.create()(withRouter((props) => {
                     }
                 };
                 if (values.area.find((item => item === '南昌市')) && values.board_and_lodging && values.board_and_lodging.find(item => item === 'stay5')) {
-                    return message.error('很抱歉，无法提供南昌市企业人员的住宿需求！');
+                    return Modal.info({
+                        title: '注意',
+                        content: '很抱歉，无法提供南昌市企业人员的住宿需求！',
+                        centered: true,
+                        maskClosable: true
+                    });
                 }
                 let area_item = toGetParentArrayByChildNode(area, { title: values.area[2] })[2];
                 let user_1 = values.participants_1 ? values.participants_1.split(",") : null;
@@ -115,9 +120,25 @@ export default Form.create()(withRouter((props) => {
                 if (user_1) {
                     req_obj.realname = user_1[0];
                     req_obj.phone = user_1[1];
+                    if (user_1[1].length !== 11) {
+                        return Modal.info({
+                            title: '注意',
+                            content: '请正确填写第一位参会人的手机号！',
+                            centered: true,
+                            maskClosable: true
+                        });
+                    }
                     req_obj.ex_info.participants.push({ realname: user_1[0], phone: user_1[1] });
                 }
                 if (user_2) {
+                    if (user_2[1].length !== 11) {
+                        return Modal.info({
+                            title: '注意',
+                            content: '请正确填写第二位参会人的手机号！',
+                            centered: true,
+                            maskClosable: true
+                        });
+                    }
                     req_obj.ex_info.participants.push({ realname: user_2[0], phone: user_2[1] });
                 }
                 if (!user_1 && !user_1 || !values.company) return;
@@ -144,13 +165,18 @@ export default Form.create()(withRouter((props) => {
                                 <Fragment>
                                     <p>您的参会申请已提交成功，我们的工作人员将在2个工作日之内通过电话联系您，请保持电话畅通。</p>
                                     <p>您如果有融资或者投资需求，欢迎访问旅游项目平台，我们提供专业的投融资指导和前沿的金融政策资讯。</p>
-                                    <p>（点击空白处可返回）</p>
+                                    <span className="modal-close" onClick={() => Modal.destroyAll()}>
+                                        <svg t="1569808793246" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2479" width="200" height="200">
+                                            <path d="M155.252 943.825c-19.213 0-38.429-7.332-53.089-21.988-29.317-29.321-29.317-76.855 0-106.175l713.494-713.494c29.317-29.321 76.853-29.321 106.175 0 29.317 29.317 29.317 76.855 0 106.175l-713.494 713.494c-14.66 14.66-33.874 21.988-53.089 21.988z" fill="#999999" p-id="2480"></path>
+                                            <path d="M868.749 943.824c-19.213 0-38.428-7.332-53.089-21.988l-713.494-713.493c-29.317-29.317-29.317-76.857 0-106.175 29.316-29.317 76.855-29.321 106.174 0l713.494 713.492c29.317 29.321 29.317 76.855 0 106.175-14.657 14.661-33.871 21.993-53.087 21.993z" fill="#999999" p-id="2481"></path>
+                                        </svg>
+                                    </span>
                                 </Fragment>
                             ),
                             okText: '我要投资',
                             cancelText: '我要融资',
-                            onOk: () => window.location.href = ('/project'),
-                            onCancel: () => window.location.href = ('/finance'),
+                            onOk: () => { window.location.href = ('/project'); Modal.destroyAll() },
+                            onCancel: () => { window.location.href = ('/finance'); Modal.destroyAll() },
                             maskClosable: true,
                             centered: true,
                             zIndex: 999999
