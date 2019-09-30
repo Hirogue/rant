@@ -349,3 +349,37 @@ export const checkMobile = () => {
     }
     return false;
 }
+
+export const toSetWeChatShareConfig = async (title, desc, img) => {
+    const result = await fetch(`/api/wechat/signature`).then(res => res.json());
+    if (result.signature) {
+        const {
+            nonceStr,
+            signature,
+            timestamp,
+            appId
+        } = result;
+        window.wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId, // 必填，公众号的唯一标识
+            timestamp, // 必填，生成签名的时间戳
+            nonceStr, // 必填，生成签名的随机串
+            signature, // 必填，签名，见附录1
+            jsApiList: ["checkJsApi", "updateAppMessageShareData", "updateTimelineShareData"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+        window.wx.ready(function () {
+            window.wx.updateAppMessageShareData({
+                title: title || '旅游项目通', // 分享标题
+                link: window.location.href, // 分享链接
+                imgUrl: img || 'https://www.lvyoto.com/static/logo.png', // 分享图标
+                desc: desc || document.querySelector('meta[name="description"]').content, // 分享描述
+            });
+            //朋友
+            window.wx.updateTimelineShareData({
+                title: title || '旅游项目通', // 分享标题
+                link: window.location.href, // 分享链接
+                imgUrl: img || 'https://www.lvyoto.com/static/logo.png', // 分享图标
+            });
+        });
+    }
+}
