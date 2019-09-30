@@ -13,8 +13,8 @@ const { Link } = Anchor;
 const { Option } = Select;
 
 const formItemLayout = {
-    labelCol: { span: 5 },
-    wrapperCol: { span: 18, offset: 1 },
+    labelCol: { span: 6 },
+    wrapperCol: { span: 17, offset: 1 },
 };
 const formTailLayout = {
     labelCol: { span: 6 },
@@ -84,7 +84,7 @@ export default Form.create()(withRouter((props) => {
 
     useEffect(() => {
         if (!sessionStorage.getItem('area')) {
-            fetch('http://192.168.30.224:3000/api/metadata/tree/descendantsTree/%E5%9C%B0%E5%8C%BA').then(res => res.json()).then((res) => {
+            fetch('/api/metadata/tree/descendantsTree/%E5%9C%B0%E5%8C%BA').then(res => res.json()).then((res) => {
                 if (res && res.length > 0) {
                     setArea(res);
                     sessionStorage.setItem('area', JSON.stringify(res));

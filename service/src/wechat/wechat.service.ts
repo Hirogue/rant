@@ -25,6 +25,8 @@ export class WechatService {
 
             const result = await fetch(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${Config.wechat.appid}&secret=${Config.wechat.secret}`).then(res => res.json());
 
+            console.log(result)
+
             if (!result['access_token']) throw new BadGatewayException('获取 AccessToken 失败');
 
             await this.cache.set(
