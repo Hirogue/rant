@@ -466,7 +466,7 @@ export default Form.create()(withRouter((props) => {
                                 rules: [
                                     { type: 'array', required: true, message: '请选择企业所在的地址' },
                                 ],
-                            })(<Cascader placeholder="一 请选择企业地址 一" options={area ? toTransformAreaTreeProps(area, { key: 'title', value: 'title' }) : []} />)}
+                            })(<Cascader placeholder="一 请选择企业地址 一" options={area ? toTransformAreaTreeProps(area.sort((a, b) => a.title === '江西省' ? -1 : 1), { key: 'title', value: 'title' }) : []} />)}
                         </Form.Item>
                         <Form.Item label="参会人" {...formItemLayout}>
                             {getFieldDecorator('participants_1')(
