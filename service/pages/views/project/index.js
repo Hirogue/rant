@@ -62,7 +62,7 @@ export default withRouter((props) => {
 	})
 
 	useEffect(() => {
-		if (checkMobile) {
+		if (checkMobile()) {
 			window.location.href = "https://m.lvyoto.com/home"
 		}
 		!!industry && defaultVariables.filter.push({ field: "industry.title", operator: CondOperator.EQUALS, value: industry });
