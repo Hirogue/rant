@@ -3,6 +3,7 @@ import { withRouter } from 'next/router';
 import { Anchor, Form, Select, Input, Button, Cascader, Checkbox, Row, Col, message, Modal } from 'antd';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import config from '../../config/config';
+import { toSetWeChatShareConfig } from '../../lib/global';
 
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import 'antd/dist/antd.min.css';
@@ -12,8 +13,8 @@ const { Link } = Anchor;
 const { Option } = Select;
 
 const formItemLayout = {
-    labelCol: { span: 6 },
-    wrapperCol: { span: 18 },
+    labelCol: { span: 5 },
+    wrapperCol: { span: 18, offset: 1 },
 };
 const formTailLayout = {
     labelCol: { span: 6 },
@@ -191,6 +192,8 @@ export default Form.create()(withRouter((props) => {
             }
         });
     };
+
+    toSetWeChatShareConfig('【报名啦】2019江西省第三届文化旅游投资发展促进会火热报名中，欢迎各大优秀旅游企业共襄盛会！', config.staticImgUrl + `topic/topic@small.jpg`);
 
     return (
         <div id="topic-page">
@@ -434,7 +437,7 @@ export default Form.create()(withRouter((props) => {
                 </p>
                 <div className="intro-content topic-form">
                     <Form onSubmit={handleSubmit}>
-                        <Form.Item label="企业类别" {...formItemLayout}>
+                        <Form.Item label={<p><span>企</span><span>业</span><span>类</span><span>别</span></p>} {...formItemLayout}>
                             {getFieldDecorator('org_type', {
                                 rules: [{ required: true, message: '请选择企业类别' }],
                             })(
@@ -455,31 +458,31 @@ export default Form.create()(withRouter((props) => {
                                 </Select>
                             )}
                         </Form.Item>
-                        <Form.Item label="企业名称" {...formItemLayout}>
+                        <Form.Item label={<p><span>企</span><span>业</span><span>名</span><span>称</span></p>} {...formItemLayout}>
                             {getFieldDecorator('company')(
                                 <Input placeholder="一 请填写企业全称 一" />
                             )}
                             <p style={{ color: "red", fontSize: "12px", letterSpacing: 0, margin: "5px 0 0", lineHeight: 1.2 }}>需填写单位全称</p>
                         </Form.Item>
-                        <Form.Item label="企业地址" {...formItemLayout}>
+                        <Form.Item label={<p><span>企</span><span>业</span><span>地</span><span>址</span></p>} {...formItemLayout}>
                             {getFieldDecorator('area', {
                                 rules: [
                                     { type: 'array', required: true, message: '请选择企业所在的地址' },
                                 ],
                             })(<Cascader placeholder="一 请选择企业地址 一" options={area ? toTransformAreaTreeProps(area.sort((a, b) => a.title === '江西省' ? -1 : 1), { key: 'title', value: 'title' }) : []} />)}
                         </Form.Item>
-                        <Form.Item label="参会人" {...formItemLayout}>
+                        <Form.Item label={<p><span>参</span><span>会</span><span>人</span></p>} {...formItemLayout}>
                             {getFieldDecorator('participants_1')(
                                 <DoubleInput extra={flag} set={setFlag} />
                             )}
-                            <p style={{ color: "red", fontSize: "12px", letterSpacing: 0, margin: "5px 0 0", lineHeight: 1.2 }}>此参会人作为会议联系人，允许最多2位参会人</p>
+                            <p style={{ color: "red", fontSize: "12px", letterSpacing: 0, margin: "5px 0 0", lineHeight: 1.2 }}>↑ 此参会人作为会议联系人，允许最多2位参会人</p>
                         </Form.Item>
-                        {flag && <Form.Item label="参会人" {...formItemLayout}>
+                        {flag && <Form.Item label={<p><span>参</span><span>会</span><span>人</span></p>} {...formItemLayout}>
                             {getFieldDecorator('participants_2')(
                                 <DoubleInput extra={flag} set={setFlag} />
                             )}
                         </Form.Item>}
-                        <Form.Item label="食宿" {...formItemLayout}>
+                        <Form.Item label={<p><span>食</span><span>宿</span></p>} {...formItemLayout}>
                             {getFieldDecorator('board_and_lodging')(
                                 <Checkbox.Group>
                                     <Row>
@@ -496,7 +499,7 @@ export default Form.create()(withRouter((props) => {
                                 </Checkbox.Group>
                             )}
                         </Form.Item>
-                        <p style={{ color: "#999", fontSize: "12px", margin: "5px 0 10px", lineHeight: 1.2 }}>注：仅提供南昌市企业参会人员住宿</p>
+                        <p style={{ color: "#999", fontSize: "12px", margin: "5px 0 10px", lineHeight: 1.2 }}>注：南昌市企业参会人员不提供住宿</p>
                         <Form.Item {...centerLayout}>
                             <Button type="primary" htmlType="submit" disabled={hasErrors(getFieldsError())}>提交</Button>
                         </Form.Item>
