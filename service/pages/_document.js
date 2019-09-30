@@ -45,6 +45,7 @@ export default class extends Document {
 						window.BMap = BMap;
 						window.BMapLib = BMapLib;
 					</script>
+					<script src="https://res2.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 					<link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
 					<link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
 				</Head>
