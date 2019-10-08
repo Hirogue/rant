@@ -219,6 +219,14 @@ a {
     .topic-form {
         padding: 8vw;
 
+        .ant-col-6 {
+            width: 25% !important;
+        }
+
+        .ant-col-17 {
+            width: 70.83333333%!important;
+        }
+
         .ant-form-item {
             .ant-form-item-label {
                 margin-top: 10px;
