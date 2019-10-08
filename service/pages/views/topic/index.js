@@ -81,9 +81,9 @@ export default Form.create()(withRouter((props) => {
 
     const { router, form } = props;
     const { getFieldDecorator, getFieldsError, validateFields } = form;
-
+    
     useEffect(() => {
-        toSetWeChatShareConfig('【报名啦】2019江西省第三届文化旅游投资发展促进会火热报名中，欢迎各大优秀旅游企业共襄盛会！', config.staticImgUrl + `topic/topic@small.jpg`);
+        toSetWeChatShareConfig('第三届文化旅游投资发展促进会', '【报名啦】2019江西省第三届文化旅游投资发展促进会火热报名中，欢迎各大优秀旅游企业共襄盛会！', window.location.origin + config.staticImgUrl + `topic/topic@small.jpg`);
         if (!sessionStorage.getItem('area')) {
             fetch('/api/metadata/tree/descendantsTree/%E5%9C%B0%E5%8C%BA').then(res => res.json()).then((res) => {
                 if (res && res.length > 0) {
