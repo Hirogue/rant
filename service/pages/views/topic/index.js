@@ -67,7 +67,7 @@ const DoubleInput = (props) => {
 
     return (
         <div className="double-input" style={{ position: "relative" }}>
-            <Input type="text" placeholder="姓名" onChange={onChangeHandler(0)}/>
+            <Input type="text" placeholder="姓名" style={{width: "65%"}} onChange={onChangeHandler(0)}/>
             <Input type="number" placeholder="手机号码" onChange={onChangeHandler(1)} pattern="[0-9]"/>
             {!extra && <img onClick={() => set(true)} style={{ width: "25px", position: "absolute", right: "-28px", top: "3px", }} src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wgARCAAvAC8DASIAAhEBAxEB/8QAGwABAAEFAQAAAAAAAAAAAAAABgABAwQFBwL/xAAYAQEBAQEBAAAAAAAAAAAAAAADBAIBBf/aAAwDAQACEAMQAAABf0ros7vbPlSobl8ko86Y3sEdN1UB6MVWZDKV4CBbplkbgi3O2PTBNfWRsv/EAB8QAAICAgIDAQAAAAAAAAAAAAIDAQQABRASERMVMf/aAAgBAQABBQLPzC2VYTAxYPO1Mgq5pjLvy9IvUWtODpVBqr4a0Urs32vlcExseuunXWSMonzG4bPfKxdLNnWg46dKLRV0xXSyohxfPq58+rkDAitK08f/xAAdEQADAAMBAAMAAAAAAAAAAAABAgMABBIRECFh/9oACAEDAQE/AZp2wXL6aonS/GvB6H1c3C4AQnKzM25OR3JzQL5ltvpg0/rL7BqfzP/EABsRAAIDAQEBAAAAAAAAAAAAAAECAAMREjEQ/9oACAECAQE/AWODYlpJw/HcL7Ks9it0Nj1Mx2JVgwxE5n//xAAjEAABAwMEAgMAAAAAAAAAAAABAAIRAxIxEBMhQSAzQlFx/9oACAEBAAY/AtLb1c0yPCG9nR7PjE+Bpu7UCoyP1ZlxydS92Ajzaz6Ca2clWBw4Cq7tTviVwm0usnSm49FOq7hTwXkWoUwZhXVKYJXpC9QVowjttic6f//EAB8QAQACAgIDAQEAAAAAAAAAAAEAESExEEEgUWHxwf/aAAgBAQABPyGKC1oJZCX2GIJG+k8LSViX5xlP+jw1u9vUuc+ySIaHNGvqA8PogaVdW4qEOO2GdgbEC5CfIobgUcHrUaVql1ufOQzcVGOzMRjq1Z+6z95hEMCgj1W+6d8f/9oADAMBAAIAAwAAABD7HzRLwlMz/8QAHREBAAICAgMAAAAAAAAAAAAAAQARMUEQcZGh0f/aAAgBAwEBPxBjdsds2Zvi/wBQbllG9BXmLNEuKszj7AsSCnGPceA9J//EABsRAAMAAgMAAAAAAAAAAAAAAAABERAhMVFh/9oACAECAQE/EK3QmznC6bUV21UgiAaaRQ2oWvp//8QAIxABAAIBAwMFAQAAAAAAAAAAAQARITFBYRBxwSBRgZHwof/aAAgBAQABPxCOTAtXaKiBpv8A2hbptdj6L+BVv4+einpBJsWDz6A4xYGq2SP7ooaV2W4YVojo8HHUUYr7vtLmypVWcsVZJa0sDVTOoasqCY0sWun0QI16KsjujlRdPPTTwiy6tdYDBswvygEnUniPc5d9uN0sUjB2Z+T8wBs/fzKZl6N40rMUF7BOXz0//9k=" alt="add" />}
         </div>
@@ -83,8 +83,8 @@ export default Form.create()(withRouter((props) => {
     const { getFieldDecorator, getFieldsError, validateFields } = form;
     
     useEffect(() => {
-        if (category) document.title = '2019江西省文化旅游投资发展促进会开始报名了';
-        toSetWeChatShareConfig('2019江西省文化旅游投资发展促进会开始报名了', '【报名啦】2019江西省第三届文化旅游投资发展促进会火热报名中，欢迎各大优秀旅游企业共襄盛会！', window.location.origin + config.staticImgUrl + `topic/topic@small.jpg`);
+        if (document) document.title = '2019江西省第三届文化旅游投资发展促进会开始报名了';
+        toSetWeChatShareConfig('2019江西省第三届文化旅游投资发展促进会开始报名了', '【报名啦】2019江西省第三届文化旅游投资发展促进会火热报名中，欢迎各大优秀旅游企业共襄盛会！', window.location.origin + config.staticImgUrl + `topic/topic@small.jpg`);
         if (!sessionStorage.getItem('area')) {
             fetch('/api/metadata/tree/descendantsTree/%E5%9C%B0%E5%8C%BA').then(res => res.json()).then((res) => {
                 if (res && res.length > 0) {
@@ -484,7 +484,7 @@ export default Form.create()(withRouter((props) => {
                                 <DoubleInput extra={flag} set={setFlag} />
                             )}
                         </Form.Item>}
-                        <Form.Item label={<p>食&nbsp;&nbsp;&nbsp;&nbsp;宿</p>} {...formItemLayout}>
+                        <Form.Item label={<p>食　　宿</p>} {...formItemLayout}>
                             {getFieldDecorator('board_and_lodging')(
                                 <Checkbox.Group>
                                     <Row>
