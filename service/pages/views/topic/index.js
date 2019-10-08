@@ -83,7 +83,8 @@ export default Form.create()(withRouter((props) => {
     const { getFieldDecorator, getFieldsError, validateFields } = form;
     
     useEffect(() => {
-        toSetWeChatShareConfig('第三届文化旅游投资发展促进会', '【报名啦】2019江西省第三届文化旅游投资发展促进会火热报名中，欢迎各大优秀旅游企业共襄盛会！', window.location.origin + config.staticImgUrl + `topic/topic@small.jpg`);
+        if (category) document.title = '2019江西省文化旅游投资发展促进会开始报名了';
+        toSetWeChatShareConfig('2019江西省文化旅游投资发展促进会开始报名了', '【报名啦】2019江西省第三届文化旅游投资发展促进会火热报名中，欢迎各大优秀旅游企业共襄盛会！', window.location.origin + config.staticImgUrl + `topic/topic@small.jpg`);
         if (!sessionStorage.getItem('area')) {
             fetch('/api/metadata/tree/descendantsTree/%E5%9C%B0%E5%8C%BA').then(res => res.json()).then((res) => {
                 if (res && res.length > 0) {
@@ -491,7 +492,7 @@ export default Form.create()(withRouter((props) => {
                                             <Checkbox value="dinner5">11月5日晚餐</Checkbox>
                                         </Col>
                                         <Col span={24}>
-                                            <Checkbox value="stay5">11月5日住宿（含次日早餐）</Checkbox>
+                                            <Checkbox value="stay5">11月5日住宿(含次日早餐)</Checkbox>
                                         </Col>
                                         <Col span={24}>
                                             <Checkbox value="lunch6">11月6日午餐</Checkbox>

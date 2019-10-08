@@ -54,9 +54,12 @@ export class CustomerService extends BaseService<Customer> {
                 user.password = password;
 
                 await userRepo.save(user);
+
+                await this.verificationService.sendSms(target.phone, SmsTypeEnum.CUSTOMER, password);
+            } else {
+                await this.verificationService.sendSms(target.phone, SmsTypeEnum.USER, password);
             }
 
-            await this.verificationService.sendSms(target.phone, SmsTypeEnum.CUSTOMER, password);
         }
 
         await customerRepo.save(target);
