@@ -459,31 +459,31 @@ export default Form.create()(withRouter((props) => {
                                 </Select>
                             )}
                         </Form.Item>
-                        <Form.Item label={<p><span>企</span><span>业</span><span>名</span><span>称</span></p>} {...formItemLayout}>
+                        <Form.Item label={<p>企业名称</p>} {...formItemLayout}>
                             {getFieldDecorator('company')(
                                 <Input placeholder="一 请填写企业全称 一" />
                             )}
                             <p style={{ color: "red", fontSize: "12px", letterSpacing: 0, margin: "5px 0 0", lineHeight: 1.2 }}>需填写单位全称</p>
                         </Form.Item>
-                        <Form.Item label={<p><span>企</span><span>业</span><span>地</span><span>址</span></p>} {...formItemLayout}>
+                        <Form.Item label={<p>企业地址</p>} {...formItemLayout}>
                             {getFieldDecorator('area', {
                                 rules: [
                                     { type: 'array', required: true, message: '请选择企业所在的地址' },
                                 ],
                             })(<Cascader placeholder="一 请选择企业地址 一" options={area ? toTransformAreaTreeProps(area.sort((a, b) => a.title === '江西省' ? -1 : 1), { key: 'title', value: 'title' }) : []} />)}
                         </Form.Item>
-                        <Form.Item label={<p><span>参</span><span>会</span><span>人</span></p>} {...formItemLayout}>
+                        <Form.Item label={<p>参 会 人</p>} {...formItemLayout}>
                             {getFieldDecorator('participants_1')(
                                 <DoubleInput extra={flag} set={setFlag} />
                             )}
                             <p style={{ color: "red", fontSize: "12px", letterSpacing: 0, margin: "5px 0 0", lineHeight: 1.2 }}>↑ 此参会人作为会议联系人，允许最多2位参会人</p>
                         </Form.Item>
-                        {flag && <Form.Item label={<p><span>参</span><span>会</span><span>人</span></p>} {...formItemLayout}>
+                        {flag && <Form.Item label={<p>参 会 人</p>} {...formItemLayout}>
                             {getFieldDecorator('participants_2')(
                                 <DoubleInput extra={flag} set={setFlag} />
                             )}
                         </Form.Item>}
-                        <Form.Item label={<p><span>食</span><span>宿</span></p>} {...formItemLayout}>
+                        <Form.Item label={<p>食&nbsp;&nbsp;&nbsp;&nbsp;宿</p>} {...formItemLayout}>
                             {getFieldDecorator('board_and_lodging')(
                                 <Checkbox.Group>
                                     <Row>
