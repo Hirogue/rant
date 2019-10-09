@@ -518,10 +518,10 @@ export default Form.create()(withRouter((props) => {
                     <i></i>
                 </p>
                 <div className="intro-content sponsor-list">
-                    <img src='http://dummyimage.com/800x600/4d494d/686a82.gif&text=赞助单位' alt='赞助单位' />
-                    <img src='http://dummyimage.com/800x600/4d494d/686a82.gif&text=赞助单位' alt='赞助单位' />
-                    <img src='http://dummyimage.com/800x600/4d494d/686a82.gif&text=赞助单位' alt='赞助单位' />
-                    <img src='http://dummyimage.com/800x600/4d494d/686a82.gif&text=赞助单位' alt='赞助单位' />
+                    <img src={config.staticImgUrl + `topic/sponsor_1.jpg`} alt='赞助单位' />
+                    <img src={config.staticImgUrl + `topic/sponsor_2.jpg`} alt='赞助单位' />
+                    <img src={config.staticImgUrl + `topic/sponsor_3.jpg`} alt='赞助单位' />
+                    <img src={config.staticImgUrl + `topic/sponsor_4.jpg`} alt='赞助单位' />
                 </div>
                 <div className="empty-divider"></div>
                 <div className="empty-divider"></div>
