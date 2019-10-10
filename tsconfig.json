@@ -10,7 +10,14 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "paths": {}
+    "paths": {
+      "@rant/logger": [
+        "libs/logger/src"
+      ],
+      "@rant/logger/*": [
+        "libs/logger/src/*"
+      ]
+    }
   },
   "exclude": [
     "node_modules",
