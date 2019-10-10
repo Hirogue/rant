@@ -257,7 +257,7 @@ export default Form.create()(withRouter((props) => {
                     <i></i>
                     <i></i>
                     <i></i>
-                    <span>重要嘉宾</span>
+                    <span>重要嘉宾（排名不分先后）</span>
                     <i></i>
                     <i></i>
                     <i></i>
@@ -268,14 +268,13 @@ export default Form.create()(withRouter((props) => {
                             width="100%"
                             height="100%"
                             effect="blur"
-                            placeholderSrc={config.staticImgUrl + `topic/guest-1@small.jpg`}
-                            src={config.staticImgUrl + `topic/guest-1@large.jpg`} // use normal <img> attributes as props
+                            placeholderSrc={config.staticImgUrl + `topic/hxy-80.png`}
+                            src={config.staticImgUrl + `topic/hxy-533.png`} // use normal <img> attributes as props
                             alt="banner"
                         />
-                        <p>石杰</p>
-                        <p>【互联网金融服务】</p>
-                        <p>百度中国</p>
-                        <p>首席产品官</p>
+                        <p>何新跃</p>
+                        <p>江西省旅游集团股份有限公司</p>
+                        <p>党委委员、副总经理</p>
                     </div>
                     <div>
                         <LazyLoadImage
@@ -286,24 +285,22 @@ export default Form.create()(withRouter((props) => {
                             src={config.staticImgUrl + `topic/guest-2@large.jpg`} // use normal <img> attributes as props
                             alt="banner"
                         />
-                        <p>沈斌</p>
-                        <p>【供应链金融服务】</p>
-                        <p>南京丰盛康旅有限公司</p>
-                        <p>CEO</p>
+                        <p>戴斌</p>
+                        <p>中国旅游研究院</p>
+                        <p>院长</p>
                     </div>
                     <div>
                         <LazyLoadImage
                             width="100%"
                             height="100%"
                             effect="blur"
-                            placeholderSrc={config.staticImgUrl + `topic/guest-3@small.jpg`}
-                            src={config.staticImgUrl + `topic/guest-3@large.jpg`} // use normal <img> attributes as props
+                            placeholderSrc={config.staticImgUrl + `topic/guest-1@small.jpg`}
+                            src={config.staticImgUrl + `topic/guest-1@large.jpg`} // use normal <img> attributes as props
                             alt="banner"
                         />
-                        <p>王未召</p>
-                        <p>【全球旅游服务】</p>
-                        <p>联谊假期</p>
-                        <p>CEO</p>
+                        <p>何进</p>
+                        <p>浙江黄龙体育投资管理有限公司</p>
+                        <p>总经理</p>
                     </div>
                     <div>
                         <LazyLoadImage
@@ -314,38 +311,22 @@ export default Form.create()(withRouter((props) => {
                             src={config.staticImgUrl + `topic/guest-4@large.jpg`} // use normal <img> attributes as props
                             alt="banner"
                         />
-                        <p>刘国平</p>
-                        <p>【线上旅游营销】</p>
-                        <p>八爪鱼日本株式会社</p>
-                        <p>CEO</p>
+                        <p>夏晗</p>
+                        <p>上海景域旅游发展有限公司</p>
+                        <p>副总裁</p>
                     </div>
                     <div>
                         <LazyLoadImage
                             width="100%"
                             height="100%"
                             effect="blur"
-                            placeholderSrc={config.staticImgUrl + `topic/guest-5@small.jpg`}
-                            src={config.staticImgUrl + `topic/guest-5@large.jpg`} // use normal <img> attributes as props
-                            alt="banner"
-                        />
-                        <p>高宏久</p>
-                        <p>【线上旅游营销】</p>
-                        <p>久柏易游创始人</p>
-                        <p>原驴妈妈CEO</p>
-                    </div>
-                    <div>
-                        <LazyLoadImage
-                            width="100%"
-                            height="100%"
-                            effect="blur"
-                            placeholderSrc={config.staticImgUrl + `topic/guest-6@small.jpg`}
-                            src={config.staticImgUrl + `topic/guest-6@large.jpg`} // use normal <img> attributes as props
+                            placeholderSrc={config.staticImgUrl + `topic/bjj-80.png`}
+                            src={config.staticImgUrl + `topic/bjj-533.png`} // use normal <img> attributes as props
                             alt="banner"
                         />
                         <p>鲍将军</p>
-                        <p>【景区投资及运营】</p>
-                        <p>金马克文旅董事长</p>
-                        <p>CEO</p>
+                        <p>杭州金马克文化旅游发展有限公司</p>
+                        <p>执行董事兼总经理</p>
                     </div>
                 </div>
                 <div id="agenda" className="intro-meeting">
@@ -519,9 +500,9 @@ export default Form.create()(withRouter((props) => {
                     <i></i>
                 </p>
                 <div className="intro-content sponsor-list">
-                    <img src={config.staticImgUrl + `topic/sponsor_1.jpg`} alt='赞助单位' />
-                    <img src={config.staticImgUrl + `topic/sponsor_2.jpg`} alt='赞助单位' />
-                    <img src={config.staticImgUrl + `topic/sponsor_3.jpg`} alt='赞助单位' />
+                    <img src={config.staticImgUrl + `topic/sponsor_1.jpg`} alt='江西银行' />
+                    <img src={config.staticImgUrl + `topic/bjyh.jpg`} alt='北京银行' />
+                    <img src={config.staticImgUrl + `topic/msyh.jpg`} alt='民生银行' />
                     <img src={config.staticImgUrl + `topic/sponsor_4.jpg`} alt='赞助单位' />
                 </div>
                 <div className="empty-divider"></div>
