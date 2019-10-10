@@ -11,7 +11,7 @@
     "start": "nest start",
     "dev": "nest start --watch",
     "debug": "nest start --debug --watch",
-    "prod": "node dist/main",
+    "prod": "node dist/apps/server/main.js",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "jest",
     "test:watch": "jest --watch",

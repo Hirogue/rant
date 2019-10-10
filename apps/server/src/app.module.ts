@@ -5,14 +5,14 @@ import { AppService } from './app.service';
 import { transports } from 'winston';
 
 @Module({
-  imports: [
-    LoggerModule.forRoot({
-      level: LoggerLevel.DEBUG,
-      format: LoggerFormat.createFormat(),
-      transports: [new transports.Console()],
-    }),
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        LoggerModule.forRoot({
+            level: LoggerLevel.DEBUG,
+            format: LoggerFormat.createFormat(),
+            transports: [new transports.Console()]
+        })
+    ],
+    controllers: [AppController],
+    providers: [AppService]
 })
 export class AppModule {}
