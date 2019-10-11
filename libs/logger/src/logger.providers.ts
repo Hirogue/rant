@@ -7,7 +7,7 @@ import { LOGGER_MODULE_NEST_PROVIDER, LOGGER_MODULE_OPTIONS, LOGGER_MODULE_PROVI
 import { LoggerModuleAsyncOptions, LoggerModuleOptions } from './logger.interfaces';
 
 class WinstionLogger {
-    constructor(private readonly logger: Logger) { }
+    constructor(private readonly logger: Logger) {}
 
     public info(message: any, context?: string) {
         return this.logger.info(message, this.getStackTrace(context));
