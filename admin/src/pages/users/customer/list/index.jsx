@@ -6,8 +6,8 @@ import StandardConfirm from '@/components/StandardConfirm';
 import StandardRow from '@/components/StandardRow';
 import StandardTable from '@/components/StandardTable';
 import UserSelector from '@/components/UserSelector';
-import { Q_GET_USERS } from '@/gql';
-import { canReadAny, canUpdateAny, canUpdateOwn } from '@/utils/access-control';
+import { M_DELETE_USER, Q_GET_USERS } from '@/gql';
+import { canReadAny, canUpdateAny, canDeleteAny, canUpdateOwn } from '@/utils/access-control';
 import { IdentityEnum, LogTypeEnum, UserStatusEnum, UserTypeEnum } from '@/utils/enum';
 import { ExcelHelper } from '@/utils/excel';
 import { buildingQuery, filterOrg, IdentityMaps, paramsAuth, UserLevelMaps, UserStatusMaps, UserTypeMaps } from '@/utils/global';
@@ -241,6 +241,26 @@ export default () => {
   const actions = [
     { name: '刷新', icon: 'reload', action: () => refetch() },
     {
+      name: '删除',
+      icon: 'delete',
+      action: () => {
+        client.mutate({
+          mutation: M_DELETE_USER,
+          variables: { ids: selectedRows.map(item => item.id).join(',') },
+          update: (proxy, { data }) => {
+            if (data.deleteUser) {
+              message.success('删除成功');
+              refetch();
+            }
+          },
+        });
+      },
+      disabled: selectedRows.length <= 0,
+      hide: !canDeleteAny(AUTH_RESOURCE),
+      confirm: true,
+      confirmTitle: `确定要删除吗?`,
+    },
+    {
       name: '导出',
       icon: 'export',
       action: () => {
@@ -258,7 +278,6 @@ export default () => {
   ];
 
   const renderDetailPannel = () => {
-
     if (UserTypeEnum.PERSONAL === current.type) {
       return (
         <Descriptions title="个人用户" layout="vertical">

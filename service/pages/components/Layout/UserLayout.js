@@ -67,6 +67,9 @@ export default withContext(({ props }) => {
 										<Button type="primary" onClick={() => jump('/user')}>
 											{user.vip <= 0 ? '升级VIP' : '我的资料'}
 										</Button>
+										{user.vip <= 0 ? (
+											<p>升级等级后可以发布项目、资金或者分享名片。</p>
+										) : null}
 									</div>
 									<div className="left-bottom">
 										<div className={`navitem ${asPath === '/user/apply/product'

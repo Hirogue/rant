@@ -1,6 +1,8 @@
 import gql from 'graphql-tag';
+import { F_USER_FIELDS } from './user';
 
 export const F_APPLY_PRODUCT_FIELDS = gql`
+  ${F_USER_FIELDS}
   fragment ApplyProductFields on ApplyProduct {
     id
     reason
@@ -8,9 +10,7 @@ export const F_APPLY_PRODUCT_FIELDS = gql`
     update_at
     create_at
     applicant {
-      id
-      realname
-      phone
+      ...UserFields
     }
     product {
       id

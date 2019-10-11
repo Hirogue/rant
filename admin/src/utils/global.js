@@ -6,6 +6,7 @@ import { CondOperator, RequestQueryBuilder } from '@nestjsx/crud-request';
 import { isArray, isEmpty } from 'lodash';
 import moment from 'moment';
 import { router } from 'umi';
+import { sync } from 'glob';
 
 export const fetchCurrentUser = async () => {
   return await client.query({
@@ -116,6 +117,16 @@ export const getUserInfo = async () => {
   }
 
   return null;
+};
+
+export const getCustomerInfo = async id => {
+  return await client.query(Q_GET_USER, {
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      id: id || '',
+      queryString: buildingQuery({ join: [{ field: 'role' }, { field: 'org' }] }),
+    },
+  })
 };
 
 export const logout = () => {

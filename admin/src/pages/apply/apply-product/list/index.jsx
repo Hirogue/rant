@@ -1,4 +1,5 @@
 import LogReader from '@/components/LogReader';
+import DetailPanel from '@/components/DetailPanel';
 import OrgSelector from '@/components/OrgSelector';
 import StandardActions from '@/components/StandardActions';
 import StandardConfirm from '@/components/StandardConfirm';
@@ -7,15 +8,16 @@ import StandardTable from '@/components/StandardTable';
 import UserSelector from '@/components/UserSelector';
 import { Q_GET_APPLY_PRODUCTS } from '@/gql';
 import { canCreateAny, canReadAny, canUpdateAny, canUpdateOwn } from '@/utils/access-control';
-import { LogTypeEnum, ProjectStatusEnum } from '@/utils/enum';
+import { LogTypeEnum, ProjectStatusEnum, IdentityEnum, UserStatusEnum, UserTypeEnum } from '@/utils/enum';
 import { buildingQuery, filterOrg, paramsAuth, ProjectStatusMaps } from '@/utils/global';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { useApolloClient, useQuery } from '@apollo/react-hooks';
-import { Affix, Col, Divider, message, Popconfirm, Row, Skeleton } from 'antd';
+import { Affix, Col, Divider, message, Popconfirm, Row, Skeleton, Descriptions} from 'antd';
 import moment from 'moment';
 import React, { Fragment, useEffect, useState } from 'react';
 import { M_APPROVAL_APPLY_PRODUCT } from '../gql';
 import { ExcelHelper } from '@/utils/excel';
+import Zmage from 'react-zmage';
 
 const PATH = '/apply/apply-product';
 const AUTH_RESOURCE = '/apply/apply-product/list';
@@ -34,7 +36,10 @@ export default () => {
   const [cancelledVisible, setCancelledVisible] = useState(false);
   const [orgSelectorVisible, setOrgSelectorVisible] = useState(false);
   const [userSelectorVisible, setUserSelectorVisible] = useState(false);
-  const [current, setCurrent] = useState(null);
+  const [current, setCurrent] = useState({});
+  //const [currentApplicant, setCurrentApplicant] = useState(null);
+  const [provider, setProvider] = useState({});
+  const [detailVisible, setDetailVisible] = useState(false);
 
   const client = useApolloClient();
 
@@ -127,6 +132,22 @@ export default () => {
           <Divider type="vertical" />
         </Fragment>
       ) : null}
+      <Fragment>
+        <a
+          href="javascript:;"
+          onClick={() => {
+            setCurrent(record);
+            if (record.applicant.providers && record.applicant.providers.length > 0) {
+              const target = record.applicant.providers[0];
+              setProvider(target);
+            }
+            setDetailVisible(true);
+          }}
+        >
+          [详情]
+        </a>
+        <Divider type="vertical" />
+      </Fragment>
       {ProjectStatusEnum.FOLLOWING === record.status && canUpdateOwn(AUTH_RESOURCE) ? (
         <Fragment>
           <a
@@ -265,9 +286,80 @@ export default () => {
     },
   ];
 
+  const renderDetailPannel = () => {
+    if (!current.applicant) return;
+    if (UserTypeEnum.PERSONAL === current.applicant.type) {
+      return (
+        <Descriptions title="个人用户" layout="vertical">
+          <Descriptions.Item label="真实姓名">{current.applicant.realname}</Descriptions.Item>
+          <Descriptions.Item label="手机号">{current.applicant.phone}</Descriptions.Item>
+          <Descriptions.Item label="身份证号">{current.applicant.idCard}</Descriptions.Item>
+          <Descriptions.Item label="身份证头像面" span={2}>
+            <Zmage width={320} height={200} src={current.applicant.idCardA} />
+          </Descriptions.Item>
+          <Descriptions.Item label="身份证国徽面">
+            <Zmage width={320} height={200} src={current.applicant.idCardB} />
+          </Descriptions.Item>
+        </Descriptions>
+      )
+    }
+
+    if (UserTypeEnum.ENTERPRISE === current.applicant.type) {
+      if (IdentityEnum.PROVIDER === current.applicant.identity) {
+        return (
+          <Descriptions title="企业用户" layout="vertical">
+            <Descriptions.Item label="负责人姓名">{current.applicant.realname}</Descriptions.Item>
+            <Descriptions.Item label="联系电话" span={2}>
+              {current.applicant.phone}
+            </Descriptions.Item>
+            <Descriptions.Item label="企业名称" span={2}>
+              {current.applicant.company}
+            </Descriptions.Item>
+            <Descriptions.Item label="组织机构代码" span={2}>
+              {current.applicant.org_code}
+            </Descriptions.Item>
+            <Descriptions.Item label="营业执照" span={4}>
+              <Zmage width={400} height={573} src={current.applicant.business_license} />
+            </Descriptions.Item>
+            <Descriptions.Item label="机构logo">
+              <Zmage width={150} height={62} src={provider.logo} />
+            </Descriptions.Item>
+            <Descriptions.Item label="机构类型" span={2}>
+              {provider.category ? provider.category.title : ''}
+            </Descriptions.Item>
+            <Descriptions.Item label="机构简介" span={4}>
+              {provider.introduction}
+            </Descriptions.Item>
+          </Descriptions>
+        )
+      } else {
+        return (
+          <Descriptions title="企业用户" layout="vertical">
+            <Descriptions.Item label="负责人姓名">{current.applicant.realname}</Descriptions.Item>
+            <Descriptions.Item label="联系电话" span={2}>
+              {current.applicant.phone}
+            </Descriptions.Item>
+            <Descriptions.Item label="企业名称" span={2}>
+              {current.applicant.company}
+            </Descriptions.Item>
+            <Descriptions.Item label="组织机构代码" span={2}>
+              {current.applicant.org_code}
+            </Descriptions.Item>
+            <Descriptions.Item label="营业执照" span={4}>
+              <Zmage width={400} height={573} src={current.applicant.business_license} />
+            </Descriptions.Item>
+          </Descriptions>
+        )
+      }
+    }
+  }
+
   return (
     <Fragment>
       <PageHeaderWrapper>
+        <DetailPanel title="详细信息" visible={detailVisible} setVisible={setDetailVisible}>
+          {renderDetailPannel()}
+        </DetailPanel>
         <LogReader
           title="日志"
           target={current ? current.id : null}

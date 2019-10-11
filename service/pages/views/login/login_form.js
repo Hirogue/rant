@@ -2,7 +2,7 @@ import { useMutation, useApolloClient } from '@apollo/react-hooks';
 import { Button, Checkbox, Form, Icon, Input } from 'antd';
 import React from 'react';
 import { M_LOGIN } from '../../gql';
-import { jump, toFetchCurrentUser } from '../../lib/global';
+import { jump, toFetchCurrentUser, goback } from '../../lib/global';
 
 export default Form.create()((props) => {
 	const { form } = props;
@@ -19,7 +19,8 @@ export default Form.create()((props) => {
 
 				await toFetchCurrentUser(client);
 
-				jump('/user');
+				//jump('/user');
+				goback();
 			}
 		},
 	});

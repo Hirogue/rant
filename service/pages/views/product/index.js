@@ -43,8 +43,14 @@ export default withRouter((props) => {
 	}, [])
 
 	const onChange = (nextCategory) => () => {
-		window.history.pushState({}, '', `${window.location.pathname}?category=${nextCategory}`)
-		setCategory(nextCategory);
+		if (nextCategory === '旅游产业投资基金') {
+			window.location.href = '/news/detail?id=dfba0ee3-fea2-4af1-8cde-de74f8b5f61a';
+		} else if (nextCategory === '策略投资') {
+			window.location.href = '/news/detail?id=32ea9776-250e-420d-9fbd-6bdff649e1dd';
+		} else {
+			window.history.pushState({}, '', `${window.location.pathname}?category=${nextCategory}`)
+			setCategory(nextCategory);
+		}
 	};
 
 	return (
