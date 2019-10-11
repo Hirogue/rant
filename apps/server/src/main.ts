@@ -16,11 +16,10 @@ async function bootstrap() {
     const config = app.get(ConfigService);
     const logger = app.get(LoggerService);
 
-    logger.log(`Loading environment variables from ${envPath}`);
-
     app.useLogger(logger);
 
     await app.listen(config.get('app.port'), () => {
+        logger.log(`Loading environment variables from ${envPath}`);
         logger.log(`Server is running in ${config.get('app.env')} mode on port ${config.get('app.port')} 🚀`);
     });
 }

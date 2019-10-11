@@ -7,7 +7,7 @@ import { LOGGER_MODULE_NEST_PROVIDER, LOGGER_MODULE_OPTIONS, LOGGER_MODULE_PROVI
 import { LoggerModuleAsyncOptions, LoggerModuleOptions } from './logger.interfaces';
 
 class WinstionLogger {
-    constructor(private readonly logger: Logger) {}
+    constructor(private readonly logger: Logger) { }
 
     public info(message: any, context?: string) {
         return this.logger.info(message, this.getStackTrace(context));
@@ -32,9 +32,9 @@ class WinstionLogger {
         return this.logger.verbose(message, this.getStackTrace(context));
     }
 
-    private getStackTrace(context?: string, deep: number = 2) {
+    private getStackTrace(context?: string, depth: number = 3) {
         const stackList = StackTrace.getSync();
-        const stackInfo = stackList[deep];
+        const stackInfo = stackList[depth];
 
         const fileName = stackInfo.fileName;
 
