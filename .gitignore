@@ -33,5 +33,9 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# lock
+package-lock.json
+yarn.lock
+
 # docker
 /.docker
