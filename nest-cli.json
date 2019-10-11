@@ -4,7 +4,7 @@
   "monorepo": true,
   "root": "apps/server",
   "compilerOptions": {
-    "webpack": true,
+    "webpack": false,
     "tsConfigPath": "apps/server/tsconfig.app.json"
   },
   "projects": {
@@ -24,6 +24,15 @@
       "sourceRoot": "libs/logger/src",
       "compilerOptions": {
         "tsConfigPath": "libs/logger/tsconfig.lib.json"
+      }
+    },
+    "config": {
+      "type": "library",
+      "root": "libs/config",
+      "entryFile": "index",
+      "sourceRoot": "libs/config/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/config/tsconfig.lib.json"
       }
     }
   }

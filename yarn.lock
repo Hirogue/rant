@@ -525,6 +525,13 @@
   resolved "https://registry.npm.taobao.org/@types/cookiejar/download/@types/cookiejar-2.1.1.tgz#90b68446364baf9efd8e8349bb36bd3852b75b80"
   integrity sha1-kLaERjZLr579joNJuza9OFK3W4A=
 
+"@types/dotenv@^6.1.1":
+  version "6.1.1"
+  resolved "https://registry.npm.taobao.org/@types/dotenv/download/@types/dotenv-6.1.1.tgz#f7ce1cc4fe34f0a4373ba99fefa437b0bec54b46"
+  integrity sha1-984cxP408KQ3O6mf76Q3sL7FS0Y=
+  dependencies:
+    "@types/node" "*"
+
 "@types/events@*":
   version "3.0.0"
   resolved "https://registry.npm.taobao.org/@types/events/download/@types/events-3.0.0.tgz?cache=0&sync_timestamp=1567532284800&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fevents%2Fdownload%2F%40types%2Fevents-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
@@ -2219,6 +2226,11 @@ domexception@^1.0.1:
   integrity sha1-k3RCZEymoxJh7zbj7Gd/6AVYLJA=
   dependencies:
     webidl-conversions "^4.0.2"
+
+dotenv@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.npm.taobao.org/dotenv/download/dotenv-8.1.0.tgz#d811e178652bfb8a1e593c6dd704ec7e90d85ea2"
+  integrity sha1-2BHheGUr+4oeWTxt1wTsfpDYXqI=
 
 duplexify@^3.4.2, duplexify@^3.6.0:
   version "3.7.1"

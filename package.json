@@ -9,7 +9,7 @@
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
-    "dev": "nest start --watch",
+    "dev": "NODE_ENV=development nest start --watch",
     "debug": "nest start --debug --watch",
     "prod": "node dist/apps/server/main.js",
     "lint": "tslint -p tsconfig.json -c tslint.json",
@@ -24,6 +24,7 @@
     "@nestjs/core": "^6.7.2",
     "@nestjs/platform-express": "^6.7.2",
     "chalk": "^2.4.2",
+    "dotenv": "^8.1.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "reflect-metadata": "^0.1.13",
@@ -36,6 +37,7 @@
     "@nestjs/cli": "^6.9.0",
     "@nestjs/schematics": "^6.7.0",
     "@nestjs/testing": "^6.7.1",
+    "@types/dotenv": "^6.1.1",
     "@types/express": "^4.17.1",
     "@types/jest": "^24.0.18",
     "@types/lodash": "^4.14.144",
@@ -76,7 +78,8 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "@rant/logger/(.*)": "<rootDir>/libs/logger/src/$1"
+      "@rant/logger/(.*)": "<rootDir>/libs/logger/src/$1",
+      "@rant/config/(.*)": "<rootDir>/libs/config/src/$1"
     }
   },
   "config": {

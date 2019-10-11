@@ -16,6 +16,12 @@
       ],
       "@rant/logger/*": [
         "libs/logger/src/*"
+      ],
+      "@rant/config": [
+        "libs/config/src"
+      ],
+      "@rant/config/*": [
+        "libs/config/src/*"
       ]
     }
   },
