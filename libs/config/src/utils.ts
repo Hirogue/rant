@@ -1,10 +1,6 @@
-import { ConfigService } from "./config.service";
+import { ConfigService } from './config.service';
 
-export function applyParamsMetadataDecorator(
-    paramsMetadata: any[],
-    args: any[],
-    fn: (key: string, def?: string) => string,
-): any[] {
+export function applyParamsMetadataDecorator(paramsMetadata: any[], args: any[], fn: (key: string, def?: string) => string): any[] {
     if (paramsMetadata.length) {
         // Override the original parameter value
         // with the expected property of the value even a deep property.

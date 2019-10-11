@@ -1,13 +1,22 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@rant/config';
 import { LoggerService } from '@rant/logger';
+import { config as dotenv } from 'dotenv';
+import * as path from 'path';
 import { AppModule } from './app.module';
 
+const ENV = process.env.NODE_ENV || 'development';
+
 async function bootstrap() {
+    const envPath = path.resolve(process.cwd(), 'env', !ENV ? '.env' : `.env.${ENV}`);
+    dotenv({ path: envPath });
+
     const app = await NestFactory.create(AppModule);
 
     const config = app.get(ConfigService);
     const logger = app.get(LoggerService);
+
+    logger.log(`Loading environment variables from ${envPath}`);
 
     app.useLogger(logger);
 

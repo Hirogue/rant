@@ -51,10 +51,7 @@ export class ConfigService {
      * @param {DotenvOptions} options
      * @returns {Promise<any>}
      */
-    static async load(
-        glob: string,
-        options?: ConfigOptions | false,
-    ): Promise<ConfigService> {
+    static async load(glob: string, options?: ConfigOptions | false): Promise<ConfigService> {
         const configs = await this.loadConfigAsync(glob, options);
         return new ConfigService(configs);
     }
@@ -125,7 +122,7 @@ export class ConfigService {
     async merge(glob: string, options?: ConfigOptions): Promise<void> {
         const config = await ConfigService.loadConfigAsync(glob, options);
 
-        Object.keys(config).forEach(configName => {
+        Object.keys(config).forEach((configName) => {
             ConfigService.config[configName] = config[configName];
         });
     }
@@ -139,7 +136,7 @@ export class ConfigService {
     mergeSync(glob: string, options?: ConfigOptions): ConfigService {
         const config = ConfigService.loadConfigSync(glob, options);
 
-        Object.keys(config).forEach(configName => {
+        Object.keys(config).forEach((configName) => {
             ConfigService.config[configName] = config[configName];
         });
 
@@ -162,8 +159,7 @@ export class ConfigService {
      * @returns {string}
      */
     public static root(dir: string = ''): string {
-        const rootPath =
-            this.rootPath || this.srcPath || path.resolve(process.cwd());
+        const rootPath = this.rootPath || this.srcPath || path.resolve(process.cwd());
         return path.resolve(rootPath, dir);
     }
 
@@ -174,10 +170,7 @@ export class ConfigService {
      * @deprecated use configService.root() instead
      */
     public static src(dir: string = ''): string {
-        console.log(
-            `\x1b[33m%s\x1b[0m`,
-            `WARNING: Method 'src' has been deprecated. Please use 'root'`,
-        );
+        console.log(`\x1b[33m%s\x1b[0m`, `WARNING: Method 'src' has been deprecated. Please use 'root'`);
         return this.root(dir);
     }
 
@@ -187,10 +180,7 @@ export class ConfigService {
      *  The path for search starting. Can be any path under app sources path.
      */
     public static resolveRootPath(startPath: string): typeof ConfigService {
-        assert.ok(
-            path.isAbsolute(startPath),
-            'Start path must be an absolute path.',
-        );
+        assert.ok(path.isAbsolute(startPath), 'Start path must be an absolute path.');
 
         if (!this.rootPath) {
             const root = this.root();
@@ -216,10 +206,7 @@ export class ConfigService {
      * @deprecated use configService.resolveRootPath() instead
      */
     public static resolveSrcPath(startPath: string): typeof ConfigService {
-        console.log(
-            `\x1b[33m%s\x1b[0m`,
-            `WARNING: Method 'resolveSrcPath' has been deprecated. Please use 'resolveRootPath'`,
-        );
+        console.log(`\x1b[33m%s\x1b[0m`, `WARNING: Method 'resolveSrcPath' has been deprecated. Please use 'resolveRootPath'`);
         return this.resolveRootPath(startPath);
     }
 
@@ -228,10 +215,7 @@ export class ConfigService {
      * @param {DotenvOptions | false} options
      * @returns {Promise<Config>}
      */
-    protected static loadConfigAsync(
-        glob: string,
-        options?: ConfigOptions | false,
-    ): Promise<Config> {
+    protected static loadConfigAsync(glob: string, options?: ConfigOptions | false): Promise<Config> {
         glob = this.root(glob);
         return new Promise((resolve, reject) => {
             new Glob(glob, {}, (err, matches) => {
@@ -241,10 +225,7 @@ export class ConfigService {
                 } else {
                     this.loadEnv(options);
 
-                    const configs = this.configGraph(
-                        matches,
-                        options && options.modifyConfigName,
-                    );
+                    const configs = this.configGraph(matches, options && options.modifyConfigName);
 
                     resolve(configs);
                 }
@@ -258,10 +239,7 @@ export class ConfigService {
      * @param {DotenvOptions | false} options
      * @returns {Config}
      */
-    protected static loadConfigSync(
-        glob: string,
-        options?: ConfigOptions | false,
-    ): Config {
+    protected static loadConfigSync(glob: string, options?: ConfigOptions | false): Config {
         glob = this.root(glob);
         const matches = globSync(glob);
         this.loadEnv(options);
@@ -275,16 +253,11 @@ export class ConfigService {
      * @param modifyConfigName
      * @returns {any}
      */
-    protected static configGraph(
-        configPaths: string[],
-        modifyConfigName?: (name: string) => string,
-    ) {
+    protected static configGraph(configPaths: string[], modifyConfigName?: (name: string) => string) {
         return configPaths.reduce((configs: Config, file: string) => {
             const module = require(file);
             const config = module.default || module;
-            const configName = modifyConfigName
-                ? modifyConfigName(this.getConfigName(file))
-                : this.getConfigName(file);
+            const configName = modifyConfigName ? modifyConfigName(this.getConfigName(file)) : this.getConfigName(file);
 
             configs[configName] = config;
 
@@ -304,10 +277,7 @@ export class ConfigService {
                 this.helpers[`_${configName}`] = helper;
             }
 
-            if (
-                typeof configObj[configName] === 'object' &&
-                configObj[configName] !== null
-            ) {
+            if (typeof configObj[configName] === 'object' && configObj[configName] !== null) {
                 configObj[configName] = this.bindCustomHelpers(configObj[configName]);
             }
 
@@ -342,7 +312,7 @@ export class ConfigService {
      */
     protected static defaultDotenvConfig() {
         return {
-            path: path.join(process.cwd(), '.env'),
+            path: path.join(process.cwd(), '.env')
         };
     }
 }

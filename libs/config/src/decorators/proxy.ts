@@ -4,9 +4,7 @@
  * @constructor
  */
 export const ProxyProperty = (propertyName: string) =>
-    function classDecorator<T extends { new(...args: any[]): {} }>(
-        constructor: T,
-    ) {
+    function classDecorator<T extends { new (...args: any[]): {} }>(constructor: T) {
         return class extends constructor {
             constructor(...args: any[]) {
                 super(...args);
@@ -18,7 +16,7 @@ export const ProxyProperty = (propertyName: string) =>
                         } else if (target[propertyName].hasOwnProperty(prop)) {
                             return target[propertyName][prop];
                         }
-                    },
+                    }
                 });
             }
         };
