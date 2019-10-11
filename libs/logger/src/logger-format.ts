@@ -5,7 +5,7 @@ import { format } from 'winston';
 import { LoggerLevel } from './logger-level.enum';
 
 export class LoggerFormat {
-    public static createFormat(label: string = 'Rant') {
+    public static createFormat(label: string = 'Nest') {
         return format.combine(
             format.label({ label }),
             format.timestamp(),
