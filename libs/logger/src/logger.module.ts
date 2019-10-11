@@ -1,9 +1,13 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import { LoggerModuleAsyncOptions, LoggerModuleOptions } from './logger.interfaces';
 import { createProviders, createAsyncProviders } from './logger.providers';
+import { LoggerService } from './logger.service';
 
 @Global()
-@Module({})
+@Module({
+    providers: [LoggerService],
+    exports: [LoggerService]
+})
 export class LoggerModule {
     public static forRoot(options: LoggerModuleOptions): DynamicModule {
         const providers = createProviders(options);

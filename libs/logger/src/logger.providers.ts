@@ -1,4 +1,4 @@
-import { LoggerService, Provider } from '@nestjs/common';
+import { Provider } from '@nestjs/common';
 import * as _ from 'lodash';
 import * as path from 'path';
 import * as StackTrace from 'stacktrace-js';
@@ -6,10 +6,10 @@ import { createLogger, Logger, LoggerOptions } from 'winston';
 import { LOGGER_MODULE_NEST_PROVIDER, LOGGER_MODULE_OPTIONS, LOGGER_MODULE_PROVIDER } from './logger.constants';
 import { LoggerModuleAsyncOptions, LoggerModuleOptions } from './logger.interfaces';
 
-class WinstonLogger implements LoggerService {
+class WinstionLogger {
     constructor(private readonly logger: Logger) {}
 
-    public log(message: any, context?: string) {
+    public info(message: any, context?: string) {
         return this.logger.info(message, this.getStackTrace(context));
     }
 
@@ -57,7 +57,7 @@ export function createProviders(loggerOpts: LoggerModuleOptions): Provider[] {
         {
             provide: LOGGER_MODULE_NEST_PROVIDER,
             useFactory: (logger: Logger) => {
-                return new WinstonLogger(logger);
+                return new WinstionLogger(logger);
             },
             inject: [LOGGER_MODULE_PROVIDER]
         }
@@ -79,7 +79,7 @@ export function createAsyncProviders(options: LoggerModuleAsyncOptions): Provide
         {
             provide: LOGGER_MODULE_NEST_PROVIDER,
             useFactory: (logger: Logger) => {
-                return new WinstonLogger(logger);
+                return new WinstionLogger(logger);
             },
             inject: [LOGGER_MODULE_PROVIDER]
         }
