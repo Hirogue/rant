@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { CacheModule } from '@rant/cache';
 import { ConfigModule, ConfigService } from '@rant/config';
 import { LoggerMiddleware, LoggerModule } from '@rant/logger';
 import { QueueModule } from '@rant/queue';
@@ -12,6 +13,10 @@ import { TaskModule } from './task';
         ConfigModule.load(path.resolve(__dirname, 'config', '**/!(*.d).{ts,js}')),
         LoggerModule.registerAsync({
             useFactory: async (config: ConfigService) => config.get('logger'),
+            inject: [ConfigService]
+        }),
+        CacheModule.registerAsync({
+            useFactory: async (config: ConfigService) => config.get('cache'),
             inject: [ConfigService]
         }),
         QueueModule.registerAsync({

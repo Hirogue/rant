@@ -34,6 +34,12 @@
       ],
       "@rant/queue/*": [
         "libs/queue/src/*"
+      ],
+      "@rant/cache": [
+        "libs/cache/src"
+      ],
+      "@rant/cache/*": [
+        "libs/cache/src/*"
       ]
     }
   },
