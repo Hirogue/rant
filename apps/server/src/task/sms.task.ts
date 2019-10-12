@@ -1,6 +1,6 @@
 import { LoggerService } from '@rant/logger';
+import { BullQueueEvents, InjectQueue, OnQueueActive, OnQueueEvent, Process, Processor } from '@rant/queue';
 import { Job, Queue } from 'bull';
-import { BullQueueEvents, InjectQueue, OnQueueActive, OnQueueEvent, Process, Processor } from 'nest-bull';
 
 @Processor()
 export class SmsTask {
@@ -8,7 +8,7 @@ export class SmsTask {
         private readonly logger: LoggerService,
         @InjectQueue()
         private readonly queue: Queue
-    ) {}
+    ) { }
 
     async send(data: any) {
         await this.queue.add('register', data);
