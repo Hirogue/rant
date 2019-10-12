@@ -22,6 +22,12 @@
       ],
       "@rant/config/*": [
         "libs/config/src/*"
+      ],
+      "@rant/collection": [
+        "libs/collection/src"
+      ],
+      "@rant/collection/*": [
+        "libs/collection/src/*"
       ]
     }
   },

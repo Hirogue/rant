@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@rant/config';
 import { LoggerService } from '@rant/logger';
+import { collect } from '@rant/collection';
 import { config as dotenv } from 'dotenv';
 import * as path from 'path';
 import { AppModule } from './app.module';

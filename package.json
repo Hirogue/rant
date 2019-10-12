@@ -24,8 +24,8 @@
     "@nestjs/core": "^6.7.2",
     "@nestjs/platform-express": "^6.7.2",
     "chalk": "^2.4.2",
+    "collect.js": "^4.18.1",
     "dotenv": "^8.1.0",
-    "jsonfile": "^5.0.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "reflect-metadata": "^0.1.13",
@@ -82,7 +82,8 @@
     ],
     "moduleNameMapper": {
       "@rant/logger/(.*)": "<rootDir>/libs/logger/src/$1",
-      "@rant/config/(.*)": "<rootDir>/libs/config/src/$1"
+      "@rant/config/(.*)": "<rootDir>/libs/config/src/$1",
+      "@rant/collection/(.*)": "<rootDir>/libs/collection/src/$1"
     }
   },
   "config": {
