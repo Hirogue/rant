@@ -7,6 +7,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
+    "cli": "node dist/apps/server/apps/server/src/cli.js",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "dev": "nest start --watch",
@@ -26,6 +27,7 @@
     "bull": "^3.11.0",
     "chalk": "^2.4.2",
     "collect.js": "^4.18.1",
+    "commander": "^3.0.2",
     "dotenv": "^8.1.0",
     "ioredis": "^4.14.1",
     "lodash": "^4.17.15",
