@@ -116,7 +116,7 @@ export default withRouter((props) => {
 				} else if (key === '融资方式' && selectedTags[key].length) {
 					variablesFilter.push({ field: 'category', operator: CondOperator.EQUALS, value: IF_MODE_ENUM_R[selectedTags[key][0]] })
 				} else {
-					selectedTags[key].length && variablesFilter.push({ field: METADATA_TITLE_CN[key], operator: CondOperator.IN, value: selectedTags[key].join(',') })
+					selectedTags[key].length && variablesFilter.push({ field: METADATA_TITLE_CN[key], operator: CondOperator.IN, value: encodeURIComponent(selectedTags[key].join(',')) })
 				}
 			}
 		}
