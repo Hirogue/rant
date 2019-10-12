@@ -8,7 +8,7 @@ import { AppService } from './app.service';
 @Module({
     imports: [
         ConfigModule.load(path.resolve(__dirname, 'config', '**/!(*.d).{ts,js}')),
-        LoggerModule.forRootAsync({
+        LoggerModule.registerAsync({
             useFactory: async (config: ConfigService) => config.get('logger'),
             inject: [ConfigService]
         })

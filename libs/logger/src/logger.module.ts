@@ -10,7 +10,7 @@ import { LoggerService } from './logger.service';
     exports: [LoggerService, LoggerMiddleware]
 })
 export class LoggerModule {
-    public static forRoot(options: LoggerModuleOptions): DynamicModule {
+    public static register(options: LoggerModuleOptions): DynamicModule {
         const providers = createProviders(options);
 
         return {
@@ -20,7 +20,7 @@ export class LoggerModule {
         };
     }
 
-    public static forRootAsync(options: LoggerModuleAsyncOptions): DynamicModule {
+    public static registerAsync(options: LoggerModuleAsyncOptions): DynamicModule {
         const providers = createAsyncProviders(options);
 
         return {
