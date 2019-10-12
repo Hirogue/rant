@@ -8,7 +8,7 @@ export class SmsTask {
         private readonly logger: LoggerService,
         @InjectQueue()
         private readonly queue: Queue
-    ) { }
+    ) {}
 
     async send(data: any) {
         await this.queue.add('register', data);
