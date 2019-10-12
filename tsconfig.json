@@ -28,6 +28,12 @@
       ],
       "@rant/collection/*": [
         "libs/collection/src/*"
+      ],
+      "@rant/queue": [
+        "libs/queue/src"
+      ],
+      "@rant/queue/*": [
+        "libs/queue/src/*"
       ]
     }
   },

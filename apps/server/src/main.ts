@@ -4,6 +4,7 @@ import { LoggerService } from '@rant/logger';
 import { config as dotenv } from 'dotenv';
 import * as path from 'path';
 import { AppModule } from './app.module';
+import { SmsTask } from './task';
 
 const ENV = process.env.NODE_ENV || 'development';
 
@@ -15,6 +16,9 @@ async function bootstrap() {
 
     const config = app.get(ConfigService);
     const logger = app.get(LoggerService);
+    const task = app.get(SmsTask);
+
+    task.send('1qqqq');
 
     app.useLogger(logger);
 
