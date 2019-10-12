@@ -68,7 +68,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn format"
+      "pre-commit": "yarn test"
     }
   },
   "jest": {
@@ -89,10 +89,15 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
+      "@rant/logger": "<rootDir>/libs/logger/src",
       "@rant/logger/(.*)": "<rootDir>/libs/logger/src/$1",
+      "@rant/config": "<rootDir>/libs/config/src",
       "@rant/config/(.*)": "<rootDir>/libs/config/src/$1",
+      "@rant/collection": "<rootDir>/libs/collection/src",
       "@rant/collection/(.*)": "<rootDir>/libs/collection/src/$1",
+      "@rant/queue": "<rootDir>/libs/queue/src",
       "@rant/queue/(.*)": "<rootDir>/libs/queue/src/$1",
+      "@rant/cache": "<rootDir>/libs/cache/src",
       "@rant/cache/(.*)": "<rootDir>/libs/cache/src/$1"
     }
   },
