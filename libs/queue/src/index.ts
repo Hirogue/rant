@@ -4,4 +4,3 @@ export * from './queue.interfaces';
 export * from './queue.module';
 export * from './queue.types';
 export * from './queue.utils';
-

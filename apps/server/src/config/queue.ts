@@ -2,7 +2,7 @@ export default {
     name: 'rant',
     options: {
         redis: {
-            port: 6379,
-        },
-    },
-}
+            port: 6379
+        }
+    }
+};

@@ -2,13 +2,9 @@ import { DoneCallback, Job } from 'bull';
 import { BullQueueAdvancedProcessor, BullQueueAdvancedSeparateProcessor } from './queue.interfaces';
 
 // @see https://stackoverflow.com/a/49725198
-export type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<
-    T,
-    Exclude<keyof T, Keys>
-> &
+export type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
     {
-        [K in Keys]-?: Required<Pick<T, K>> &
-        Partial<Record<Exclude<Keys, K>, undefined>>
+        [K in Keys]-?: Required<Pick<T, K>> & Partial<Record<Exclude<Keys, K>, undefined>>;
     }[Keys];
 
 export type BullQueueProcessor =
@@ -17,22 +13,15 @@ export type BullQueueProcessor =
     | BullQueueSeparateProcessor
     | BullQueueAdvancedSeparateProcessor;
 
-export type BullQueueProcessorCallback = (
-    job: Job,
-    done?: DoneCallback,
-) => void;
+export type BullQueueProcessorCallback = (job: Job, done?: DoneCallback) => void;
 
 export type BullQueueSeparateProcessor = string;
 
-export function isProcessorCallback(
-    processor: BullQueueProcessor,
-): processor is BullQueueProcessorCallback {
+export function isProcessorCallback(processor: BullQueueProcessor): processor is BullQueueProcessorCallback {
     return 'function' === typeof processor;
 }
 
-export function isAdvancedProcessor(
-    processor: BullQueueProcessor,
-): processor is BullQueueAdvancedProcessor {
+export function isAdvancedProcessor(processor: BullQueueProcessor): processor is BullQueueAdvancedProcessor {
     return (
         'object' === typeof processor &&
         !!(processor as BullQueueAdvancedProcessor).callback &&
@@ -40,15 +29,11 @@ export function isAdvancedProcessor(
     );
 }
 
-export function isSeparateProcessor(
-    processor: BullQueueProcessor,
-): processor is BullQueueSeparateProcessor {
+export function isSeparateProcessor(processor: BullQueueProcessor): processor is BullQueueSeparateProcessor {
     return 'string' === typeof processor;
 }
 
-export function isAdvancedSeparateProcessor(
-    processor: BullQueueProcessor,
-): processor is BullQueueAdvancedSeparateProcessor {
+export function isAdvancedSeparateProcessor(processor: BullQueueProcessor): processor is BullQueueAdvancedSeparateProcessor {
     return (
         'object' === typeof processor &&
         !!(processor as BullQueueAdvancedSeparateProcessor).path &&
@@ -91,7 +76,4 @@ export type BullQueueEventOptions = RequireOnlyOne<
     'id' | 'name'
 >;
 
-export type QueueEventDecoratorOptions = RequireOnlyOne<
-    { id?: string; name?: string },
-    'id' | 'name'
->;
+export type QueueEventDecoratorOptions = RequireOnlyOne<{ id?: string; name?: string }, 'id' | 'name'>;

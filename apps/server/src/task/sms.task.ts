@@ -1,15 +1,14 @@
-import { LoggerService } from "@rant/logger";
-import { Job, Queue } from "bull";
-import { BullQueueEvents, InjectQueue, OnQueueActive, OnQueueEvent, Process, Processor } from "nest-bull";
+import { LoggerService } from '@rant/logger';
+import { Job, Queue } from 'bull';
+import { BullQueueEvents, InjectQueue, OnQueueActive, OnQueueEvent, Process, Processor } from 'nest-bull';
 
 @Processor()
 export class SmsTask {
-
     constructor(
         private readonly logger: LoggerService,
         @InjectQueue()
         private readonly queue: Queue
-    ) { }
+    ) {}
 
     async send(data: any) {
         await this.queue.add('register', data);
@@ -32,7 +31,3 @@ export class SmsTask {
         this.logger.debug(job.returnvalue);
     }
 }
-
-
-
-

@@ -12,14 +12,11 @@ export interface BullOptionsFactory {
     createBullOptions(): Promise<BullModuleOptions> | BullModuleOptions;
 }
 
-export interface BullModuleAsyncOptions
-    extends Pick<ModuleMetadata, 'imports'> {
+export interface BullModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
     name?: string;
     useExisting?: Type<BullOptionsFactory>;
     useClass?: Type<BullOptionsFactory>;
-    useFactory?: (
-        ...args: any[]
-    ) => Promise<BullModuleOptions> | BullModuleOptions;
+    useFactory?: (...args: any[]) => Promise<BullModuleOptions> | BullModuleOptions;
     inject?: any[];
 }
 

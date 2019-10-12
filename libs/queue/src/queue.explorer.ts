@@ -14,13 +14,11 @@ export class BullExplorer {
         private readonly moduleRef: ModuleRef,
         private readonly modulesContainer: ModulesContainer,
         private readonly logger: Logger,
-        private readonly reflector: Reflector,
-    ) { }
+        private readonly reflector: Reflector
+    ) {}
 
     explore() {
-        const components = BullExplorer.getQueueComponents([
-            ...this.modulesContainer.values(),
-        ]);
+        const components = BullExplorer.getQueueComponents([...this.modulesContainer.values()]);
         components.map((wrapper: InstanceWrapper) => {
             const { instance, metatype } = wrapper;
             const queueName = BullExplorer.getQueueComponentMetadata(metatype).name;
@@ -32,40 +30,24 @@ export class BullExplorer {
                 this.logger.error(
                     queueName
                         ? `No Queue was found with the given name (${queueName}). Check your configuration.`
-                        : 'No Queue was found. Check your configuration.',
+                        : 'No Queue was found. Check your configuration.'
                 );
                 throw err;
             }
-            new MetadataScanner().scanFromPrototype(
-                instance,
-                Object.getPrototypeOf(instance),
-                (key: string) => {
-                    if (BullExplorer.isProcessor(instance[key], this.reflector)) {
-                        BullExplorer.handleProcessor(
-                            instance,
-                            key,
-                            queue,
-                            BullExplorer.getProcessorMetadata(instance[key], this.reflector),
-                        );
-                    } else if (BullExplorer.isListener(instance[key], this.reflector)) {
-                        BullExplorer.handleListener(
-                            instance,
-                            key,
-                            queue,
-                            BullExplorer.getListenerMetadata(instance[key], this.reflector),
-                        );
-                    }
-                },
-            );
+            new MetadataScanner().scanFromPrototype(instance, Object.getPrototypeOf(instance), (key: string) => {
+                if (BullExplorer.isProcessor(instance[key], this.reflector)) {
+                    BullExplorer.handleProcessor(instance, key, queue, BullExplorer.getProcessorMetadata(instance[key], this.reflector));
+                } else if (BullExplorer.isListener(instance[key], this.reflector)) {
+                    BullExplorer.handleListener(instance, key, queue, BullExplorer.getListenerMetadata(instance[key], this.reflector));
+                }
+            });
         });
     }
 
     static handleProcessor(instance, key, queue, options?) {
-        const args = [
-            options ? options.name : undefined,
-            options ? options.concurrency : undefined,
-            instance[key].bind(instance),
-        ].filter(arg => !!arg);
+        const args = [options ? options.name : undefined, options ? options.concurrency : undefined, instance[key].bind(instance)].filter(
+            (arg) => !!arg
+        );
         queue.process(...args);
     }
 
@@ -73,9 +55,7 @@ export class BullExplorer {
         if (options.name || options.id) {
             queue.on(options.eventName, async (jobOrJobId: Job | string, ...args) => {
                 const job: Job =
-                    typeof jobOrJobId === 'string'
-                        ? (await queue.getJob(jobOrJobId)) || { name: false, id: false }
-                        : jobOrJobId;
+                    typeof jobOrJobId === 'string' ? (await queue.getJob(jobOrJobId)) || { name: false, id: false } : jobOrJobId;
                 if (job.name === options.name || job.id === options.id) {
                     return instance[key].apply(instance, [job, ...args]);
                 }
@@ -85,45 +65,27 @@ export class BullExplorer {
         }
     }
 
-    static isQueueComponent(
-        target: Type<any> | Function,
-        reflector: Reflector = new Reflector(),
-    ): boolean {
+    static isQueueComponent(target: Type<any> | Function, reflector: Reflector = new Reflector()): boolean {
         return !!reflector.get(BULL_MODULE_QUEUE, target);
     }
 
-    static getQueueComponentMetadata(
-        target: Type<any> | Function,
-        reflector: Reflector = new Reflector(),
-    ): any {
+    static getQueueComponentMetadata(target: Type<any> | Function, reflector: Reflector = new Reflector()): any {
         return reflector.get(BULL_MODULE_QUEUE, target);
     }
 
-    static isProcessor(
-        target: Type<any> | Function,
-        reflector: Reflector = new Reflector(),
-    ): boolean {
+    static isProcessor(target: Type<any> | Function, reflector: Reflector = new Reflector()): boolean {
         return !!reflector.get(BULL_MODULE_QUEUE_PROCESS, target);
     }
 
-    static isListener(
-        target: Type<any> | Function,
-        reflector: Reflector = new Reflector(),
-    ): boolean {
+    static isListener(target: Type<any> | Function, reflector: Reflector = new Reflector()): boolean {
         return !!reflector.get(BULL_MODULE_ON_QUEUE_EVENT, target);
     }
 
-    static getProcessorMetadata(
-        target: Type<any> | Function,
-        reflector: Reflector = new Reflector(),
-    ): any {
+    static getProcessorMetadata(target: Type<any> | Function, reflector: Reflector = new Reflector()): any {
         return reflector.get(BULL_MODULE_QUEUE_PROCESS, target);
     }
 
-    static getListenerMetadata(
-        target: Type<any> | Function,
-        reflector: Reflector = new Reflector(),
-    ): any {
+    static getListenerMetadata(target: Type<any> | Function, reflector: Reflector = new Reflector()): any {
         return reflector.get(BULL_MODULE_ON_QUEUE_EVENT, target);
     }
 
@@ -138,9 +100,6 @@ export class BullExplorer {
                 acc.push(...map.values());
                 return acc;
             }, [])
-            .filter(
-                (wrapper: InstanceWrapper) =>
-                    wrapper.metatype && BullExplorer.isQueueComponent(wrapper.metatype),
-            );
+            .filter((wrapper: InstanceWrapper) => wrapper.metatype && BullExplorer.isQueueComponent(wrapper.metatype));
     }
 }

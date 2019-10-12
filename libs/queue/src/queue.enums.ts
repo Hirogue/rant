@@ -10,7 +10,7 @@ export enum BullQueueEvents {
     RESUMED = 'resumed',
     CLEANED = 'cleaned',
     DRAINED = 'drained',
-    REMOVED = 'removed',
+    REMOVED = 'removed'
 }
 
 export enum BullQueueGlobalEvents {
@@ -25,5 +25,5 @@ export enum BullQueueGlobalEvents {
     RESUMED = 'global:resumed',
     CLEANED = 'global:cleaned',
     DRAINED = 'global:drained',
-    REMOVED = 'global:removed',
+    REMOVED = 'global:removed'
 }
