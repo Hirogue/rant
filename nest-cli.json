@@ -52,6 +52,24 @@
       "compilerOptions": {
         "tsConfigPath": "libs/queue/tsconfig.lib.json"
       }
+    },
+    "cache": {
+      "type": "library",
+      "root": "libs/cache",
+      "entryFile": "index",
+      "sourceRoot": "libs/cache/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/cache/tsconfig.lib.json"
+      }
+    },
+    "search": {
+      "type": "library",
+      "root": "libs/search",
+      "entryFile": "index",
+      "sourceRoot": "libs/search/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/search/tsconfig.lib.json"
+      }
     }
   }
 }

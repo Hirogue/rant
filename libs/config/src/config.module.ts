@@ -1,5 +1,7 @@
-import { DynamicModule, Module, Global } from '@nestjs/common';
-import { ConfigService, ConfigOptions } from './config.service';
+import { DynamicModule, Global, Logger, Module } from '@nestjs/common';
+import { config as dotenv } from 'dotenv';
+import * as path from 'path';
+import { ConfigOptions, ConfigService } from './config.service';
 
 @Global()
 @Module({
@@ -7,6 +9,13 @@ import { ConfigService, ConfigOptions } from './config.service';
     exports: [ConfigService]
 })
 export class ConfigModule {
+    static initEnvironment(env: string = process.env.NODE_ENV || 'development') {
+        const envPath = path.resolve(process.cwd(), 'env', !env ? '.env' : `.env.${env}`);
+        dotenv({ path: envPath });
+
+        Logger.log(`Loading environment variables from ${envPath}`, ConfigModule.name);
+    }
+
     /**
      * @param startPath
      * @deprecated
