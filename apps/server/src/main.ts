@@ -1,9 +1,12 @@
 import { NestFactory } from '@nestjs/core';
-import { ConfigService } from '@rant/config';
+import { ConfigService, ConfigModule } from '@rant/config';
 import { LoggerService } from '@rant/logger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
+
+    ConfigModule.initEnvironment();
+
     const app = await NestFactory.create(AppModule);
 
     const config = app.get(ConfigService);
