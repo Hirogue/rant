@@ -9,7 +9,6 @@ import { ConfigOptions, ConfigService } from './config.service';
     exports: [ConfigService]
 })
 export class ConfigModule {
-
     static initEnvironment(env: string = process.env.NODE_ENV || 'development') {
         const envPath = path.resolve(process.cwd(), 'env', !env ? '.env' : `.env.${env}`);
         dotenv({ path: envPath });

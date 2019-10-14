@@ -101,6 +101,7 @@
       "@rant/queue/(.*)": "<rootDir>/libs/queue/src/$1",
       "@rant/cache": "<rootDir>/libs/cache/src",
       "@rant/cache/(.*)": "<rootDir>/libs/cache/src/$1",
+      "@rant/search": "<rootDir>/libs/search/src",
       "@rant/search/(.*)": "<rootDir>/libs/search/src/$1"
     }
   },

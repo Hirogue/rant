@@ -1,10 +1,28 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Action, AddApiKeyTask, ApiKey, ApiKeyOptions, BatchTask, Client, DeleteApiKeyTask, Index, Log, LogsOptions, MultiResponse, QueryParameters, SearchForFacetValues, SecuredApiOptions, Task, UpdateApiKeyTask, UpdateIndexTask } from 'algoliasearch';
+import {
+    Action,
+    AddApiKeyTask,
+    ApiKey,
+    ApiKeyOptions,
+    BatchTask,
+    Client,
+    DeleteApiKeyTask,
+    Index,
+    Log,
+    LogsOptions,
+    MultiResponse,
+    QueryParameters,
+    SearchForFacetValues,
+    SecuredApiOptions,
+    Task,
+    UpdateApiKeyTask,
+    UpdateIndexTask
+} from 'algoliasearch';
 import { ALGOLIA_CLIENT } from './search.constants';
 
 @Injectable()
 export class SearchService {
-    constructor(@Inject(ALGOLIA_CLIENT) private readonly algoliaClient: Client) { }
+    constructor(@Inject(ALGOLIA_CLIENT) private readonly algoliaClient: Client) {}
 
     /**
      * Initialization of the index
@@ -23,7 +41,7 @@ export class SearchService {
             indexName: string;
             query: string;
             params: QueryParameters;
-        }[],
+        }[]
     ): Promise<MultiResponse<T>> {
         return this.algoliaClient.search(queries);
     }
@@ -32,7 +50,7 @@ export class SearchService {
      * Query for facet values of a specific facet
      */
     searchForFacetValues(
-        queries: [{ indexName: string; params: SearchForFacetValues.Parameters }],
+        queries: [{ indexName: string; params: SearchForFacetValues.Parameters }]
     ): Promise<SearchForFacetValues.Response[]> {
         return this.algoliaClient.searchForFacetValues(queries);
     }
@@ -94,11 +112,7 @@ export class SearchService {
      * Copy settings of an index from a specific index to a new one
      * https://github.com/algolia/algoliasearch-client-js#copy-index---copyindex
      */
-    copyIndex(
-        from: string,
-        to: string,
-        scope?: ('settings' | 'synonyms' | 'rules')[],
-    ): Promise<UpdateIndexTask> {
+    copyIndex(from: string, to: string, scope?: ('settings' | 'synonyms' | 'rules')[]): Promise<UpdateIndexTask> {
         return this.algoliaClient.copyIndex(from, to, scope);
     }
 
@@ -145,11 +159,7 @@ export class SearchService {
      * Update global API key
      * https://github.com/algolia/algoliasearch-client-js#update-user-key---updateapikey
      */
-    updateApiKey(
-        key: string,
-        scopes: string[],
-        options?: ApiKeyOptions,
-    ): Promise<UpdateApiKeyTask> {
+    updateApiKey(key: string, scopes: string[], options?: ApiKeyOptions): Promise<UpdateApiKeyTask> {
         return this.algoliaClient.updateApiKey(key, scopes, options);
     }
 

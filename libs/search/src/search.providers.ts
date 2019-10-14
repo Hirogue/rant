@@ -5,7 +5,9 @@ import { AlgoliaModuleOptions } from './search.interfaces';
 
 export const createAlgoliaClient = (): Provider => ({
     provide: ALGOLIA_CLIENT,
-    useFactory: (options: AlgoliaModuleOptions): algoliasearch.Client =>
-        algoliasearch(options.applicationId, options.apiKey, options.clientOptions),
-    inject: [ALGOLIA_MODULE_OPTIONS],
+    useFactory: (options: AlgoliaModuleOptions): algoliasearch.Client => {
+        if (!options.applicationId || !options.apiKey) return null;
+        return algoliasearch(options.applicationId, options.apiKey, options.clientOptions);
+    },
+    inject: [ALGOLIA_MODULE_OPTIONS]
 });

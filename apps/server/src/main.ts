@@ -4,7 +4,6 @@ import { LoggerService } from '@rant/logger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-
     ConfigModule.initEnvironment();
 
     const app = await NestFactory.create(AppModule);
@@ -15,8 +14,6 @@ async function bootstrap() {
     app.useLogger(logger);
 
     await app.listen(config.get('app.port'), () => {
-        logger.log(config.get('app'))
-        logger.log(config.get('search'))
         logger.log(`Server is running in ${config.get('app.env')} mode on port ${config.get('app.port')} 🚀`);
     });
 }

@@ -6,16 +6,13 @@ import { SearchService } from './search.service';
 
 @Module({
     providers: [SearchService],
-    exports: [SearchService],
+    exports: [SearchService]
 })
 export class SearchModule {
     static register(options: AlgoliaModuleOptions): DynamicModule {
         return {
             module: SearchModule,
-            providers: [
-                createAlgoliaClient(),
-                { provide: ALGOLIA_MODULE_OPTIONS, useValue: options },
-            ],
+            providers: [createAlgoliaClient(), { provide: ALGOLIA_MODULE_OPTIONS, useValue: options }]
         };
     }
 
@@ -23,13 +20,11 @@ export class SearchModule {
         return {
             module: SearchModule,
             imports: options.imports || [],
-            providers: [createAlgoliaClient(), ...this.createAsyncProviders(options)],
+            providers: [createAlgoliaClient(), ...this.createAsyncProviders(options)]
         };
     }
 
-    private static createAsyncProviders(
-        options: AlgoliaModuleAsyncOptions,
-    ): Provider[] {
+    private static createAsyncProviders(options: AlgoliaModuleAsyncOptions): Provider[] {
         if (options.useExisting || options.useFactory) {
             return [this.createAsyncOptionsProvider(options)];
         }
@@ -38,27 +33,24 @@ export class SearchModule {
             this.createAsyncOptionsProvider(options),
             {
                 provide: options.useClass,
-                useClass: options.useClass,
-            },
+                useClass: options.useClass
+            }
         ];
     }
 
-    private static createAsyncOptionsProvider(
-        options: AlgoliaModuleAsyncOptions,
-    ): Provider {
+    private static createAsyncOptionsProvider(options: AlgoliaModuleAsyncOptions): Provider {
         if (options.useFactory) {
             return {
                 provide: ALGOLIA_MODULE_OPTIONS,
                 useFactory: options.useFactory,
-                inject: options.inject || [],
+                inject: options.inject || []
             };
         }
 
         return {
             provide: ALGOLIA_MODULE_OPTIONS,
-            useFactory: async (optionsFactory: AlgoliaOptionsFactory) =>
-                await optionsFactory.createAlgoliaOptions(),
-            inject: [options.useExisting || options.useClass],
+            useFactory: async (optionsFactory: AlgoliaOptionsFactory) => await optionsFactory.createAlgoliaOptions(),
+            inject: [options.useExisting || options.useClass]
         };
     }
 }

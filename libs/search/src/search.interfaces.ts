@@ -11,12 +11,9 @@ export interface AlgoliaOptionsFactory {
     createAlgoliaOptions(): Promise<AlgoliaModuleOptions> | AlgoliaModuleOptions;
 }
 
-export interface AlgoliaModuleAsyncOptions
-    extends Pick<ModuleMetadata, 'imports'> {
+export interface AlgoliaModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
     useExisting?: Type<AlgoliaOptionsFactory>;
     useClass?: Type<AlgoliaOptionsFactory>;
-    useFactory?: (
-        ...args: any[]
-    ) => Promise<AlgoliaModuleOptions> | AlgoliaModuleOptions;
+    useFactory?: (...args: any[]) => Promise<AlgoliaModuleOptions> | AlgoliaModuleOptions;
     inject?: any[];
 }
