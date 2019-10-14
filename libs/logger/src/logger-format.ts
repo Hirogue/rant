@@ -37,7 +37,7 @@ export class LoggerFormat {
                 const dataOutput = colorRender(util.isObject(message) ? util.inspect(message, false, 3, true) : message);
                 const positionOutput = lineNumber && columnNumber ? ` [${lineNumber}, ${columnNumber}]` : '';
 
-                return `${chalk.green(`[${label}]`)} ${timestamp}  ${contextOutput} ${dataOutput} ${positionOutput}`;
+                return `${chalk.green(`[${label}] ${process.pid}   -`)} ${timestamp}   ${contextOutput} ${dataOutput} ${positionOutput}`;
             })
         );
     }

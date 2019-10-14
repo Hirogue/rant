@@ -40,6 +40,12 @@
       ],
       "@rant/cache/*": [
         "libs/cache/src/*"
+      ],
+      "@rant/search": [
+        "libs/search/src"
+      ],
+      "@rant/search/*": [
+        "libs/search/src/*"
       ]
     }
   },

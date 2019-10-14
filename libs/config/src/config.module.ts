@@ -1,12 +1,23 @@
-import { DynamicModule, Module, Global } from '@nestjs/common';
-import { ConfigService, ConfigOptions } from './config.service';
+import { DynamicModule, Global, Logger, Module, OnModuleInit } from '@nestjs/common';
+import { config as dotenv } from 'dotenv';
+import * as path from 'path';
+import { ConfigOptions, ConfigService } from './config.service';
 
 @Global()
 @Module({
     providers: [ConfigService],
     exports: [ConfigService]
 })
-export class ConfigModule {
+export class ConfigModule implements OnModuleInit {
+
+    onModuleInit() {
+        const ENV = process.env.NODE_ENV || 'development';
+        const envPath = path.resolve(process.cwd(), 'env', !ENV ? '.env' : `.env.${ENV}`);
+        dotenv({ path: envPath });
+
+        Logger.log(`Loading environment variables from ${envPath}`, ConfigModule.name);
+    }
+
     /**
      * @param startPath
      * @deprecated
