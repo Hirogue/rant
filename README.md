@@ -13,7 +13,8 @@ A Nest.js Framework with Multiple Infrastructures
 - [ ] Search
 - [ ] Storage
 - [ ] Event
-- [ ] Notication
+- [ ] Notification
+- [ ] Schedule
 
 ## Stay in touch
 * Author - [Roy Lin](https://github.com/ZhiXiao-Lin)
