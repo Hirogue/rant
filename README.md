@@ -1,7 +1,6 @@
-# RANT
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-## What is RANT?
+## What is Rant?
 A Nest.js Framework with Multiple Infrastructures
 
 ## Features & Roadmap
@@ -19,7 +18,7 @@ A Nest.js Framework with Multiple Infrastructures
 - [ ] Notification
 - [ ] Broadcast
 - [ ] Console
-...
+- [ ] Cashier
 
 ## Stay in touch
 * Author - [Roy Lin](https://github.com/ZhiXiao-Lin)
