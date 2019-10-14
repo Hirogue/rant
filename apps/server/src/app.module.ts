@@ -7,6 +7,7 @@ import * as path from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TaskModule } from './task';
+import { SearchModule } from '@rant/search';
 
 @Module({
     imports: [
@@ -23,6 +24,10 @@ import { TaskModule } from './task';
             useFactory: async (config: ConfigService) => config.get('queue'),
             inject: [ConfigService]
         }),
+        // SearchModule.registerAsync({
+        //     useFactory: async (config: ConfigService) => config.get('search'),
+        //     inject: [ConfigService]
+        // }),
         TaskModule
     ],
     controllers: [AppController],

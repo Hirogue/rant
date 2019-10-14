@@ -1,0 +1,2 @@
+export const ALGOLIA_CLIENT = Symbol('ALGOLIA_CLIENT');
+export const ALGOLIA_MODULE_OPTIONS = Symbol('ALGOLIA_MODULE_OPTIONS');
