@@ -10,11 +10,16 @@ A Nest.js Framework with Multiple Infrastructures
 - [x] Cache  
 - [x] Queue
 - [x] Collection
+- [ ] CRUD
 - [ ] Search
 - [ ] Storage
-- [ ] Event
-- [ ] Notification
 - [ ] Schedule
+- [ ] Event
+- [ ] Mail
+- [ ] Notification
+- [ ] Broadcast
+- [ ] Console
+...
 
 ## Stay in touch
 * Author - [Roy Lin](https://github.com/ZhiXiao-Lin)
