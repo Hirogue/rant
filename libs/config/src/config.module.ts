@@ -9,7 +9,6 @@ import { ConfigOptions, ConfigService } from './config.service';
     exports: [ConfigService]
 })
 export class ConfigModule implements OnModuleInit {
-
     onModuleInit() {
         const ENV = process.env.NODE_ENV || 'development';
         const envPath = path.resolve(process.cwd(), 'env', !ENV ? '.env' : `.env.${ENV}`);
